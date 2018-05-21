@@ -16,12 +16,12 @@ class DisplayPanel extends JLayeredPane{
   }
   public void paintComponent(Graphics g){
     super.paintComponent(g);
-    Image map = Toolkit.getDefaultToolkit().getImage("MAP.png");
-    Image left = Toolkit.getDefaultToolkit().getImage("METALL.png");
-    Image right = Toolkit.getDefaultToolkit().getImage("METALR.png");
-    Image middle = Toolkit.getDefaultToolkit().getImage("METALM.png");
-    Image hp = Toolkit.getDefaultToolkit().getImage("HpBar.png");
-    Image exp = Toolkit.getDefaultToolkit().getImage("ExpBar.png");
+    Image map = Toolkit.getDefaultToolkit().getImage("../res/MAP.png");
+    Image left = Toolkit.getDefaultToolkit().getImage("../res/METALL.png");
+    Image right = Toolkit.getDefaultToolkit().getImage("../res/METALR.png");
+    Image middle = Toolkit.getDefaultToolkit().getImage("../res/METALM.png");
+    Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
+    Image exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     g.setColor (currentCol);
     if (draw==0){
       g.fillRect (0,0, xVal,yVal);
