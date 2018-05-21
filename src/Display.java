@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 class Display extends JFrame{
   private DisplayPanel mediumPanel;
@@ -12,11 +13,11 @@ class Display extends JFrame{
   private DisplayPanel accessoryPanel;
   private DisplayPanel menuPanel;
   
-  private Button continueButton = new Button("Continue");
-  private Button newGameButton = new Button("New");
-  private Button loadGameButton = new Button("Load");
-  private Button settingsButton = new Button("Settings");
-  private Button scoreboardButton = new Button("Scoreboard");
+  private JButton continueButton = new JButton("Continue");
+  private JButton newGameButton = new JButton("New");
+  private JButton loadGameButton = new JButton("Load");
+  private JButton settingsButton = new JButton("Settings");
+  private JButton scoreboardButton = new JButton("Scoreboard");
   
   private int draw =0;
   private int maxX;
@@ -42,8 +43,14 @@ class Display extends JFrame{
     menuPanel.add(settingsButton);
     menuPanel.add(scoreboardButton);
     
-    continueButton.addActionListener(new ClickButtonListener());
     menuPanel.animate();
+    
+    continueButton.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent e){
+        menuPanel.setVisible(false);
+        start();
+      }
+    });
   }
   public void start(){
     this.setLayout(new BorderLayout());
@@ -73,4 +80,5 @@ class Display extends JFrame{
     botPanel.animate();
     mapPanel.animate();
   }
+
 }
