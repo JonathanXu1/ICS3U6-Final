@@ -22,6 +22,7 @@ class DisplayPanel extends JLayeredPane{
     Image middle = Toolkit.getDefaultToolkit().getImage("../res/METALM.png");
     Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     Image exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
+    Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.setColor (currentCol);
     if (draw==0){
       g.fillRect (0,0, xVal,yVal);
@@ -41,6 +42,12 @@ class DisplayPanel extends JLayeredPane{
       g.fillRect (8,8, xVal-17,(int)((yVal-16.0)/2.0)+1);
       g.setColor (new Color (143,188,143));
       g.fillRect (8,8+(int)((yVal-16.0)/2.0), xVal-17,(int)((yVal-16.0)/2.0)+1);
+    }else if (draw==5){ //Menu bg
+      g.drawImage(menuBg,0,0,xVal,yVal,this);
+    }else if (draw==6){ //Transparent panel
+      g.setColor(getBackground());
+      Rectangle r = g.getClipBounds();
+      g.fillRect(0,0, xVal,yVal);
     }
   }
   public void animate(){

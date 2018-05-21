@@ -3,21 +3,24 @@ import java.awt.*;
 import java.awt.event.*;
 
 class Display extends JFrame{
-  private DisplayPanel mediumPanel;
+  //private DisplayPanel mediumPanel;
   private DisplayPanel botPanel;
   private DisplayPanel rightPanel;
   private DisplayPanel gamePanel;
   private DisplayPanel mapPanel;
   private DisplayPanel hpPanel;
   private DisplayPanel expPanel;
-  private DisplayPanel accessoryPanel;
+  //private DisplayPanel accessoryPanel;
   private DisplayPanel menuPanel;
+  private DisplayPanel menuBg;
   
-  private JButton continueButton = new JButton("Continue");
-  private JButton newGameButton = new JButton("New");
-  private JButton loadGameButton = new JButton("Load");
-  private JButton settingsButton = new JButton("Settings");
-  private JButton scoreboardButton = new JButton("Scoreboard");
+  private CustomButton continueButton = new CustomButton("Continue",1);
+  private CustomButton newGameButton = new CustomButton("New",1);
+  private CustomButton loadGameButton = new CustomButton("Load",1);
+  private CustomButton settingsButton = new CustomButton("Settings",1);
+  private CustomButton scoreboardButton = new CustomButton("Scoreboard",1);
+  
+  private JLabel title = new JLabel("CONCORDIA");
   
   private int draw =0;
   private int maxX;
@@ -33,24 +36,32 @@ class Display extends JFrame{
   }
   public void menu(){
     this.setLayout(new BorderLayout());
-    JLabel title = new JLabel("CONCORDIA");
-    menuPanel = new DisplayPanel(300, 300, Color.GRAY, 0);
-    this.add(menuPanel, BorderLayout.WEST);
+    menuBg = new DisplayPanel(maxX, maxY, Color.GRAY, 5);
+    
+    this.add(menuBg, BorderLayout.CENTER);
+    menuBg.setLayout(new BorderLayout());
+    menuPanel = new DisplayPanel(300, 100, Color.GRAY, 6);
+    menuBg.add(title, BorderLayout.NORTH);
+    menuBg.add(menuPanel, BorderLayout.WEST);
+    
     menuPanel.setLayout(new GridLayout(5, 1));
+
     menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
     menuPanel.add(loadGameButton);
     menuPanel.add(settingsButton);
     menuPanel.add(scoreboardButton);
     
-    menuPanel.animate();
-    
     continueButton.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e){
         menuPanel.setVisible(false);
+        menuBg.setVisible(false);
+        title.setVisible(false);
         start();
       }
     });
+    
+    menuPanel.animate();
   }
   public void start(){
     this.setLayout(new BorderLayout());
