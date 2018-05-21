@@ -4,58 +4,50 @@ import java.awt.*;
 class DisplayPanel extends JLayeredPane{
   private int xVal;
   private int yVal;
-  private int [] quadX = new int [4];
-  private int [] quadY = new int [4];
-  private int [] hexX = new int [6];
-  private int [] hexY = new int [6];
-  private int polygon;
+  private int draw;
   private Color currentCol;
-  DisplayPanel(int xVal, int yVal, Color currentCol, int polygon){
+  DisplayPanel(int xVal, int yVal, Color currentCol, int draw){
     this.xVal = xVal;
     this.yVal = yVal;
     this.currentCol = currentCol;
-    this.polygon = polygon;
+    this.draw = draw;
     Dimension gamePanelSize= new Dimension (xVal, yVal);
     this.setPreferredSize(gamePanelSize);
   }
   public void paintComponent(Graphics g){
     super.paintComponent(g);
-    //Image metal = Toolkit.getDefaultToolkit().getImage("METAL.png");
+    Image map = Toolkit.getDefaultToolkit().getImage("../res/MAP.png");
+    Image left = Toolkit.getDefaultToolkit().getImage("../res/METALL.png");
+    Image right = Toolkit.getDefaultToolkit().getImage("../res/METALR.png");
+    Image middle = Toolkit.getDefaultToolkit().getImage("../res/METALM.png");
+    Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
+    Image exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
+    Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.setColor (currentCol);
-    if (polygon==0){
+    if (draw==0){
       g.fillRect (0,0, xVal,yVal);
-    }else if (polygon==1){
-      quadX[0]=0;
-      quadX[1]=0;
-      quadX[2]=xVal-yVal;
-      quadX[3]=xVal;
-      quadY[0]=0;
-      quadY[1]=yVal;
-      quadY[2]=yVal;
-      quadY[3]=0;
-      g.fillPolygon (quadX, quadY, 4);
-    }else if (polygon==2){
-      g.fillRect (0,0, xVal,yVal);
-//      for (int i=0;i<xVal;i=i+(int)(yVal*6.0)){
-//        g.drawImage(metal,i,0,(int)(yVal*6.0), yVal,this);
-//      }
-    }else{
-      hexX[0]=0;
-      hexX[1]=0;
-      hexX[2]=(int)(xVal/6.0);
-      hexX[3]=xVal-(int)(xVal/6.0);
-      hexX[4]=xVal ;
-      hexX[5]=xVal;
-      hexY[0]=yVal;
-      hexY[1]=(int)(yVal/2.0);
-      hexY[2]=0;
-      hexY[3]=0;
-      hexY[4]=(int)(yVal/2.0);
-      hexY[5]=yVal;
-      g.fillPolygon (hexX, hexY, 6);
-//      for (int i=0;i<xVal;i=i+(int)(yVal*6.0)){
-//        g.drawImage(metal,i,0,(int)(yVal*6.0), yVal,this);
-//      }
+    }else if (draw==1){
+      g.drawImage(left,100,0,(int)(yVal*1.05), yVal,this);
+      g.drawImage(middle,(int)(yVal*1.05)+100,0,xVal-(int)(yVal*1.05*2)-200, yVal,this);
+      g.drawImage(right,xVal-(int)(yVal*1.05)-100,0,(int)(yVal*1.05), yVal,this);
+    }else if (draw==2){
+      g.drawImage(map,0,0,xVal, yVal,this);
+    }else if (draw==3){
+      g.drawImage(hp,0,0,xVal, yVal,this);
+      g.fillRect (10,10, xVal-20,(int)((yVal-20.0)/2.0));
+      g.setColor (new Color (230, 0,0));
+      g.fillRect (10,10+(int)((yVal-20.0)/2.0), xVal-20,(int)((yVal-20.0)/2.0));
+    }else if (draw==4){
+      g.drawImage(exp,0,0,xVal, yVal,this);
+      g.fillRect (8,8, xVal-17,(int)((yVal-16.0)/2.0)+1);
+      g.setColor (new Color (143,188,143));
+      g.fillRect (8,8+(int)((yVal-16.0)/2.0), xVal-17,(int)((yVal-16.0)/2.0)+1);
+    }else if (draw==5){ //Menu bg
+      g.drawImage(menuBg,0,0,xVal,yVal,this);
+    }else if (draw==6){ //Transparent panel
+      g.setColor(getBackground());
+      Rectangle r = g.getClipBounds();
+      g.fillRect(0,0, xVal,yVal);
     }
   }
   public void animate(){
