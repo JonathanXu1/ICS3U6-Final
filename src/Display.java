@@ -11,6 +11,13 @@ class Display extends JFrame{
   private DisplayPanel expPanel;
   private DisplayPanel accessoryPanel;
   private DisplayPanel menuPanel;
+  
+  private Button continueButton = new Button("Continue");
+  private Button newGameButton = new Button("New");
+  private Button loadGameButton = new Button("Load");
+  private Button settingsButton = new Button("Settings");
+  private Button scoreboardButton = new Button("Scoreboard");
+  
   private int draw =0;
   private int maxX;
   private int maxY;
@@ -29,11 +36,13 @@ class Display extends JFrame{
     menuPanel = new DisplayPanel(300, 300, Color.GRAY, 0);
     this.add(menuPanel, BorderLayout.WEST);
     menuPanel.setLayout(new GridLayout(5, 1));
-    menuPanel.add(new Button("Continue"));
-    menuPanel.add(new Button("New"));
-    menuPanel.add(new Button("Load"));
-    menuPanel.add(new Button("Settings"));
-    menuPanel.add(new Button("Scoreboard"));
+    menuPanel.add(continueButton);
+    menuPanel.add(newGameButton);
+    menuPanel.add(loadGameButton);
+    menuPanel.add(settingsButton);
+    menuPanel.add(scoreboardButton);
+    
+    continueButton.addActionListener(new ClickButtonListener());
     menuPanel.animate();
   }
   public void start(){
