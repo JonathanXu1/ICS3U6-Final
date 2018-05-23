@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Concordia" company="" webLink="http://" view-date="2018-05-16" view-index="0" gantt-divider-location="403" resource-divider-location="300" version="2.8.7" locale="en_CA">
+    <description><![CDATA[Created May 16th 2018
+This is a program for our final computer science summative]]></description>
+    <view zooming-state="default:2" id="gantt-chart">
+        <field id="tpd3" name="Name" width="155" order="0"/>
+        <field id="tpd4" name="Begin date" width="115" order="1"/>
+        <field id="tpd5" name="End date" width="114" order="2"/>
+        <option id="color.recent"><![CDATA[#0000ff #ff0000 #ffff00 #00cc00 #f4f4f4]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Name" width="148" order="0"/>
+        <field id="1" name="Default role" width="148" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="0" mon="0" tue="0" wed="0" thu="0" fri="0" sat="0"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+        <date year="2018" month="5" date="24" type="HOLIDAY"><![CDATA[Holiday on 24/05/18 12:00 AM]]></date>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="Game proposal" color="#8cb6ce" meeting="false" start="2018-05-16" duration="1" complete="0" thirdDate="2018-05-16" thirdDate-constraint="0" expand="true">
+            <depend id="2" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="7" name="Defining basic requirements" color="#8cb6ce" meeting="false" start="2018-05-16" duration="1" complete="0" thirdDate="2018-05-16" thirdDate-constraint="0" expand="true" cost-manual-value="0.0" cost-calculated="true">
+            <depend id="2" type="2" difference="0" hardness="Strong"/>
+            <depend id="645" type="2" difference="0" hardness="Strong"/>
+            <depend id="651" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="2" name="Game design, as well as basic sketches, concepts, etc." color="#8cb6ce" meeting="false" start="2018-05-17" duration="2" complete="0" thirdDate="2018-05-17" thirdDate-constraint="0" expand="true">
+            <depend id="577" type="2" difference="0" hardness="Strong"/>
+            <depend id="579" type="2" difference="0" hardness="Strong"/>
+            <depend id="642" type="2" difference="0" hardness="Strong"/>
+            <depend id="645" type="2" difference="0" hardness="Strong"/>
+            <depend id="651" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="11" name="Creation of Violet UML Editor" color="#8cb6ce" meeting="false" start="2018-05-17" duration="2" complete="0" thirdDate="2018-05-17" thirdDate-constraint="0" expand="true">
+            <depend id="579" type="2" difference="0" hardness="Strong"/>
+            <depend id="645" type="2" difference="0" hardness="Strong"/>
+            <depend id="651" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="642" name="Logic and interactions" color="#ff0000" meeting="false" start="2018-05-19" duration="19" complete="0" priority="4" expand="true">
+            <task id="645" name="Map generation algorithim" color="#ff0000" meeting="false" start="2018-05-19" duration="6" complete="0" thirdDate="2018-05-19" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[This will create a completed randomized map]]></notes>
+                <depend id="686" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="651" name="Basic menu design" color="#ff0000" meeting="false" start="2018-05-19" duration="3" complete="0" thirdDate="2018-05-19" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The main menu panel will be created, and the button action listeners will be set up. Planning of the visuals and all the functional features (background, continue and new buttons, settings, etc).]]></notes>
+            </task>
+            <task id="647" name="Complete item mechanics" color="#ff0000" meeting="false" start="2018-05-28" duration="3" complete="0" thirdDate="2018-05-26" thirdDate-constraint="0" expand="true">
+                <depend id="648" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="648" name="Balance and create logic for items" color="#ff0000" meeting="false" start="2018-05-31" duration="3" complete="0" thirdDate="2018-05-31" thirdDate-constraint="0" expand="true">
+                <depend id="649" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="649" name="Add random generation" color="#ff0000" meeting="false" start="2018-06-03" duration="3" complete="0" thirdDate="2018-06-02" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The random generation will be able to balance the game]]></notes>
+                <depend id="694" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="657" name="Combat mechanics" color="#ff0000" meeting="false" start="2018-05-28" duration="3" complete="0" thirdDate="2018-05-26" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The logic for the code will be written and tested with the graphics
+]]></notes>
+                <depend id="658" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="658" name="Enemy creation" color="#ff0000" meeting="false" start="2018-05-31" duration="3" complete="0" thirdDate="2018-05-29" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Enemies will be created and designed]]></notes>
+                <depend id="659" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="659" name="Enemy movement" color="#ff0000" meeting="false" start="2018-06-03" duration="3" complete="0" thirdDate="2018-06-01" thirdDate-constraint="0" expand="true">
+                <depend id="694" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="660" name="Creation of shop, item drop rates" color="#ff0000" meeting="false" start="2018-06-06" duration="2" complete="0" thirdDate="2018-06-04" thirdDate-constraint="0" expand="true"/>
+        </task>
+        <task id="577" name="Visuals" color="#0000ff" meeting="false" start="2018-05-19" duration="21" complete="0" expand="true">
+            <task id="579" name="Visual setup" color="#0000ff" meeting="false" start="2018-05-19" duration="1" complete="0" thirdDate="2018-05-19" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[This includes defining a proper fps cap, creating all the neccessary classes from the violet UML.]]></notes>
+                <depend id="580" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="580" name="Implementation of basic visual components" color="#0000ff" meeting="false" start="2018-05-20" duration="4" complete="0" thirdDate="2018-05-20" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[ A basic interface between the menu and main game will be made from a button as well.
+Implementation of key listeners, mouse listeners, and creation of a minimap
+These will be set up so that the implementation of other features will be easier]]></notes>
+                <depend id="587" type="2" difference="0" hardness="Strong"/>
+                <depend id="588" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="587" name="Creation of all basic sprites" color="#0000ff" meeting="false" start="2018-05-25" duration="3" complete="0" thirdDate="2018-05-25" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Basic, non-animated PNGs are created as placeholders. General sprites will be made for floors, walls, and doors. Special sprites (NPCs, character, interactive items) will have a special placholder with a number in them.]]></notes>
+                <depend id="656" type="2" difference="0" hardness="Strong"/>
+                <depend id="657" type="2" difference="0" hardness="Strong"/>
+                <depend id="686" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="656" name="Visual output of map" color="#0000ff" meeting="false" start="2018-05-28" duration="3" complete="0" thirdDate="2018-05-22" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[This will just be the visuals of the map. By now we should be able to display placholder sprites from an array.]]></notes>
+            </task>
+            <task id="588" name="Interactions with the panel" color="#0000ff" meeting="false" start="2018-05-25" duration="3" complete="0" thirdDate="2018-05-26" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Creation of animations, working inventory with drag, and zooming minimap]]></notes>
+                <depend id="597" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="597" name="Implement sprites" color="#0000ff" meeting="false" start="2018-05-28" duration="4" complete="0" thirdDate="2018-05-31" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[This covers sprites needed for passive tiles, including:
+- Floor tiles
+- Doors
+- Voids (open spaces to the next level)
+- Textured floor tiles (moss, wet, fire, etc)
+
+Active tiles (interactable) are also needed, including:
+- Ladders/stairs
+- Trap tiles
+- Chests
+- Consoles (hacking minigame/storytelling)
+- Switches and maps
+
+Character sprites are also needed, including:
+- Main character
+- Enemy characters
+- Bosses
+- Passive mobs in the future (eg bats flying in the void)
+
+Sprites for items are also needed, including:
+- Weapons
+- Armor
+- Effect items
+- Quest items
+]]></notes>
+                <depend id="595" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="595" name="Combat Animations" color="#0000ff" meeting="false" start="2018-06-01" duration="3" complete="0" thirdDate="2018-05-28" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[All the weapon animations will be created]]></notes>
+                <depend id="596" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="596" name="Polishing the main menu" color="#0000ff" meeting="false" start="2018-06-04" duration="2" complete="0" thirdDate="2018-05-29" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Create the proper visuals and an interactive menu]]></notes>
+                <depend id="598" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="598" name="Clean display" color="#0000ff" meeting="false" start="2018-06-06" duration="4" complete="0" thirdDate="2018-06-04" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Add any final visual touches to the game]]></notes>
+                <depend id="698" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="661" name="Other" color="#ffff00" meeting="false" start="2018-05-28" duration="15" complete="0" priority="0" expand="true">
+            <task id="664" name="Bug fixing" color="#ffff00" meeting="false" start="2018-05-28" duration="7" complete="0" thirdDate="2018-06-04" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Fix any bugs in the logic and complete any delayed features]]></notes>
+                <depend id="678" type="2" difference="0" hardness="Strong"/>
+                <depend id="698" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="665" name="Implement sound and story" color="#ffff00" meeting="false" start="2018-06-06" duration="2" complete="0" thirdDate="2018-06-06" thirdDate-constraint="0" expand="true">
+                <depend id="698" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="678" name="Final revisions" color="#ffff00" meeting="false" start="2018-06-06" duration="6" complete="0" thirdDate="2018-06-08" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Everyone will be working to make the game more enjoyable and employing any last minute bug fixes]]></notes>
+            </task>
+        </task>
+        <task id="679" name="Milestones" color="#00cc00" meeting="false" start="2018-05-28" duration="13" complete="0" expand="true">
+            <task id="686" name="DRAFT 1" color="#00cc00" meeting="true" start="2018-05-28" duration="0" complete="0" thirdDate="2018-05-26" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The first periodic compilation, to ensure that classes and all are set up correctly and basic visuals work]]></notes>
+                <depend id="647" type="2" difference="0" hardness="Strong"/>
+                <depend id="661" type="2" difference="0" hardness="Strong"/>
+                <depend id="664" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="694" name="DRAFT 2" color="#00cc00" meeting="true" start="2018-06-06" duration="0" complete="0" thirdDate="2018-06-04" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The second compilation, now with updated graphics, more controls, and different features
+]]></notes>
+                <depend id="660" type="2" difference="0" hardness="Strong"/>
+                <depend id="665" type="2" difference="0" hardness="Strong"/>
+                <depend id="678" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="698" name="FINAL" color="#00cc00" meeting="true" start="2018-06-10" duration="0" complete="0" thirdDate="2018-06-08" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[The final compilation of code]]></notes>
+            </task>
+        </task>
+    </tasks>
+    <resources>
+        <resource id="0" name="Will Jeong" function="SoftwareDevelopment:10" contacts="" phone=""/>
+        <resource id="1" name="Artem Sotnikov" function="SoftwareDevelopment:10" contacts="" phone=""/>
+        <resource id="2" name="Jonathan Xu" function="SoftwareDevelopment:10" contacts="" phone=""/>
+    </resources>
+    <allocations>
+        <allocation task-id="0" resource-id="0" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="7" resource-id="0" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="11" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="50.0"/>
+        <allocation task-id="2" resource-id="0" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="579" resource-id="0" function="SoftwareDevelopment:5" responsible="true" load="100.0"/>
+        <allocation task-id="580" resource-id="0" function="SoftwareDevelopment:5" responsible="true" load="100.0"/>
+        <allocation task-id="587" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="588" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="596" resource-id="0" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="597" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="598" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="656" resource-id="0" function="SoftwareDevelopment:5" responsible="true" load="100.0"/>
+        <allocation task-id="678" resource-id="0" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
+        <allocation task-id="686" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="694" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="698" resource-id="0" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="0" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="7" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="2" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="645" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="647" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="648" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="649" resource-id="1" function="SoftwareDevelopment:4" responsible="false" load="50.0"/>
+        <allocation task-id="664" resource-id="1" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
+        <allocation task-id="678" resource-id="1" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
+        <allocation task-id="686" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="694" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="698" resource-id="1" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="0" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="7" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="2" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="587" resource-id="2" function="SoftwareDevelopment:5" responsible="false" load="100.0"/>
+        <allocation task-id="595" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="50.0"/>
+        <allocation task-id="651" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="657" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
+        <allocation task-id="658" resource-id="2" function="SoftwareDevelopment:10" responsible="true" load="100.0"/>
+        <allocation task-id="659" resource-id="2" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="660" resource-id="2" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="665" resource-id="2" function="SoftwareDevelopment:10" responsible="true" load="100.0"/>
+        <allocation task-id="678" resource-id="2" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
+        <allocation task-id="686" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="694" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+        <allocation task-id="698" resource-id="2" function="SoftwareDevelopment:10" responsible="false" load="100.0"/>
+    </allocations>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles roleset-name="SoftwareDevelopment"/>
+</project>

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileInputStream;
 
 class Display extends JFrame{
   //Main game
@@ -17,7 +18,7 @@ class Display extends JFrame{
   private JLabel title = new JLabel("CONCORDIA");
   private MenuPanel menuPanel;
   private MenuBGPanel menuBgPanel;
-  private StartListener menuStartListener;
+  private StartListener menuStartListener;  
   
   Display(){
     super ("Concordia");
@@ -35,6 +36,7 @@ class Display extends JFrame{
     this.add(menuBgPanel);
     menuBgPanel.setLayout(new BorderLayout());
     menuPanel = new MenuPanel(300,100);
+    title.setFont(new Font("sansserif", Font.BOLD, 72));
     menuBgPanel.add(title, BorderLayout.NORTH);
     menuBgPanel.add(menuPanel, BorderLayout.WEST);
     menuPanel.setLayout(new GridLayout(5, 1));
