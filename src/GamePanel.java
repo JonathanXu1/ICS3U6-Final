@@ -24,6 +24,8 @@ class GamePanel extends JLayeredPane implements MouseWheelListener{
   public void paintComponent(Graphics g){
     g.setColor (Color.BLACK);
     g.fillRect (0,0, xVal,yVal);
+    g.setColor (Color.BLUE);
+    g.fillRect (100,100, length,length);
   }
   public void refresh(){
     this.repaint();

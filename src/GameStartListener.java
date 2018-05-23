@@ -1,8 +1,8 @@
 import java.awt.event.*;
 
-class GameStartListener implements ActionListener{
+class StartListener implements ActionListener{
   private boolean startCondition;
-  GameStartListener(){
+  StartListener(){
     this.startCondition = false;
   }
   public void actionPerformed(ActionEvent e){

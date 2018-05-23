@@ -11,22 +11,25 @@ class Display extends JFrame{
   private ExpPanel expPanel;
   private int maxX;
   private int maxY;
+  private CustomButton inventoryButton = new CustomButton("Inventory");
+  private StartListener inventoryStartListener;
   //Menu
-  private CustomButton continueButton = new CustomButton("Continue",1);
-  private CustomButton newGameButton = new CustomButton("New",1);
-  private CustomButton loadGameButton = new CustomButton("Load",1);
-  private CustomButton settingsButton = new CustomButton("Settings",1);
-  private CustomButton scoreboardButton = new CustomButton("Scoreboard",1);
+  private CustomButton continueButton = new CustomButton("Continue");
+  private CustomButton newGameButton = new CustomButton("New");
+  private CustomButton loadGameButton = new CustomButton("Load");
+  private CustomButton settingsButton = new CustomButton("Settings");
+  private CustomButton scoreboardButton = new CustomButton("Scoreboard");
+  
   private JLabel title = new JLabel("CONCORDIA");
   private MenuPanel menuPanel;
   private MenuBGPanel menuBgPanel;
-  private GameStartListener gameStartListener;
+  private StartListener menuStartListener;
   
   Display(){
     super ("Concordia");
-    //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    this.maxX = 1400;//Toolkit.getDefaultToolkit().getScreenSize().width;
-    this.maxY = 1000;//Toolkit.getDefaultToolkit().getScreenSize().height;
+    this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    this.maxX = Toolkit.getDefaultToolkit().getScreenSize().width;
+    this.maxY = Toolkit.getDefaultToolkit().getScreenSize().height;
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
@@ -45,8 +48,8 @@ class Display extends JFrame{
     menuPanel.add(settingsButton);
     menuPanel.add(scoreboardButton);
     this.setVisible(true);
-    gameStartListener = new GameStartListener();
-    continueButton.addActionListener(gameStartListener);
+    menuStartListener = new StartListener();
+    continueButton.addActionListener(menuStartListener);
   }
   public void refreshAll(){
     itemPanel.refresh();
@@ -62,6 +65,10 @@ class Display extends JFrame{
     title.setVisible(false);
     //Creation of all the panels
     itemPanel = new ItemPanel(maxX, (int)(maxY*2.5/10.0));
+    itemPanel.setLayout(new BorderLayout());
+    itemPanel.add(inventoryButton, BorderLayout.CENTER);
+    inventoryStartListener = new StartListener();
+    inventoryButton.addActionListener(inventoryStartListener);
     gamePanel = new GamePanel(maxX, maxY);
     this.setLayout(new BorderLayout());
     this.add (itemPanel, BorderLayout.SOUTH);
@@ -79,6 +86,6 @@ class Display extends JFrame{
     this.setVisible(true);
   }
   public boolean getListen (){
-    return (gameStartListener.getStart());
+    return (menuStartListener.getStart());
   } 
 }

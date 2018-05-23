@@ -1,13 +1,12 @@
 import javax.swing.*;
 
 class CustomButton extends JButton{
-  CustomButton(String name, int type){
+  CustomButton(String name){
     super(name);
     //Transparent button
-    if (type==1){
-      this.setOpaque(false);
-      this.setContentAreaFilled(false);
-      this.setBorderPainted(false);
-    }
+//Uneeded     
+  // this.setOpaque(false);
+    this.setContentAreaFilled(false);
+    this.setBorderPainted(false);
   }
 }
