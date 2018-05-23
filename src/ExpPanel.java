@@ -12,10 +12,10 @@ class ExpPanel extends JLayeredPane{
     this.setPreferredSize(panelSize);
   }
   public void paintComponent(Graphics g){
-    Image exp = Toolkit.getDefaultToolkit().getImage("../res/Exp.png");
+    Image exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     g.setColor (new Color (152,251,152));
     g.drawImage(exp,0,0,xVal, yVal,this);
-    g.fillRect (10,10, xVal-20,yVal-20);
+    g.fillRect (8,8, xVal-16,yVal-16);
   }
   public void refresh(){
     this.repaint();

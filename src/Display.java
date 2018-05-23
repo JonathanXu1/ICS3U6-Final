@@ -24,9 +24,9 @@ class Display extends JFrame{
   
   Display(){
     super ("Concordia");
-    this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    this.maxX = Toolkit.getDefaultToolkit().getScreenSize().width;
-    this.maxY = Toolkit.getDefaultToolkit().getScreenSize().height;
+    //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    this.maxX = 1400;//Toolkit.getDefaultToolkit().getScreenSize().width;
+    this.maxY = 1000;//Toolkit.getDefaultToolkit().getScreenSize().height;
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
@@ -61,7 +61,7 @@ class Display extends JFrame{
     menuBgPanel.setVisible(false);
     title.setVisible(false);
     //Creation of all the panels
-    itemPanel = new ItemPanel(maxX, (int)(maxY*3.0/10.0));
+    itemPanel = new ItemPanel(maxX, (int)(maxY*2.5/10.0));
     gamePanel = new GamePanel(maxX, maxY);
     this.setLayout(new BorderLayout());
     this.add (itemPanel, BorderLayout.SOUTH);
