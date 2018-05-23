@@ -3,16 +3,10 @@ import java.awt.*;
 
 class Display extends JFrame{
   //Main game
-  private ItemPanel itemPanel;
-  private EmptyPanel rightPanel;
   private GamePanel gamePanel;
-  private MapPanel mapPanel;
-  private HpPanel hpPanel;
-  private ExpPanel expPanel;
+  private int gameState= 0;
   private int maxX;
   private int maxY;
-  private CustomButton inventoryButton = new CustomButton("Inventory");
-  private StartListener inventoryStartListener;
   //Menu
   private CustomButton continueButton = new CustomButton("Continue");
   private CustomButton newGameButton = new CustomButton("New");
@@ -32,11 +26,13 @@ class Display extends JFrame{
     this.maxY = Toolkit.getDefaultToolkit().getScreenSize().height;
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  }
-  public void menu(){
-    this.setLayout(new BorderLayout());
+    this.setVisible (true);
+    //Creation of the basic game display
+    gamePanel = new GamePanel(maxX, maxY);
+      this.add (gamePanel);
+    //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
-    this.add(menuBgPanel, BorderLayout.CENTER);
+    this.add(menuBgPanel);
     menuBgPanel.setLayout(new BorderLayout());
     menuPanel = new MenuPanel(300,100);
     menuBgPanel.add(title, BorderLayout.NORTH);
@@ -47,45 +43,29 @@ class Display extends JFrame{
     menuPanel.add(loadGameButton);
     menuPanel.add(settingsButton);
     menuPanel.add(scoreboardButton);
-    this.setVisible(true);
     menuStartListener = new StartListener();
     continueButton.addActionListener(menuStartListener);
+    //Necessary to start with
+    menuPanel.setVisible (true);
   }
   public void refreshAll(){
-    itemPanel.refresh();
-    gamePanel.refresh();
-    mapPanel.refresh();
-    hpPanel.refresh();
-    expPanel.refresh();
+    if (gameState==0){ 
+      menuPanel.setVisible(true);
+      menuBgPanel.setVisible(true);
+      title.setVisible(true);
+    }else if (gameState==1){
+      this.add (gamePanel);
+      menuPanel.setVisible(false);
+      menuBgPanel.setVisible(false);
+      title.setVisible(false);
+      gamePanel.setVisible(true);
+      gamePanel.refresh();
+    }
   }
-  public void start(){
-    //Hide everything
-    menuPanel.setVisible(false);
-    menuBgPanel.setVisible(false);
-    title.setVisible(false);
-    //Creation of all the panels
-    itemPanel = new ItemPanel(maxX, (int)(maxY*2.5/10.0));
-    itemPanel.setLayout(new BorderLayout());
-    itemPanel.add(inventoryButton, BorderLayout.CENTER);
-    inventoryStartListener = new StartListener();
-    inventoryButton.addActionListener(inventoryStartListener);
-    gamePanel = new GamePanel(maxX, maxY);
-    this.setLayout(new BorderLayout());
-    this.add (itemPanel, BorderLayout.SOUTH);
-    this.add (gamePanel, BorderLayout.NORTH);
-    gamePanel.setLayout(new BorderLayout());
-    mapPanel = new MapPanel((int)(maxX*1.0/5.0),(int)(maxX*1.0/5.0));
-    rightPanel = new EmptyPanel((int)(maxX*1.7/5.0),(int)(maxY*1.0/20.0));
-    gamePanel.add (mapPanel, BorderLayout.EAST);
-    gamePanel.add (rightPanel, BorderLayout.WEST);
-    rightPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
-    hpPanel = new HpPanel((int)(maxX*1.5/5.0),(int)(maxX*1.5/5.0/200.0*14.0));
-    expPanel = new ExpPanel((int)(maxX*1.5/5.0),(int)(maxX*1.5/5.0/200.0*10.0));
-    rightPanel.add (hpPanel);
-    rightPanel.add (expPanel);
-    this.setVisible(true);
-  }
-  public boolean getListen (){
-    return (menuStartListener.getStart());
+  public void getListen (){
+    if (menuStartListener.getStart()){
+      gameState=1;
+      menuStartListener.setStart (false);
+    }
   } 
 }

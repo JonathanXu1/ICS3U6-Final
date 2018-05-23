@@ -7,7 +7,6 @@ class StartListener implements ActionListener{
   }
   public void actionPerformed(ActionEvent e){
     this.startCondition = true;
-    System.out.print (startCondition);
   }
   public boolean getStart(){
     return (startCondition);
