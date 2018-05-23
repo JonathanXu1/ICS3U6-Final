@@ -35,13 +35,12 @@ class Display extends JFrame{
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
   public void menu(){
-    title.setFont(new Font("sansserif", Font.BOLD, 72));
-    
     this.setLayout(new BorderLayout());
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     this.add(menuBgPanel, BorderLayout.CENTER);
     menuBgPanel.setLayout(new BorderLayout());
     menuPanel = new MenuPanel(300,100);
+    title.setFont(new Font("sansserif", Font.BOLD, 72));
     menuBgPanel.add(title, BorderLayout.NORTH);
     menuBgPanel.add(menuPanel, BorderLayout.WEST);
     menuPanel.setLayout(new GridLayout(5, 1));
