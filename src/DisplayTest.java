@@ -1,11 +1,3 @@
-//Keyboard imports
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-//Mouse imports
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
-
 class DisplayTest{
   public static void main (String[] args) throws Exception{
     Display disp = new Display ();

@@ -35,6 +35,7 @@ class Display extends JFrame{
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible (true);
+    this.setFocusable(true);
     //Creates keylistener object
     keyListener = new CustomKeyListener();
     this.addKeyListener(keyListener);
@@ -79,17 +80,16 @@ class Display extends JFrame{
       title.setVisible(false);
       gamePanel.refresh();
     }
-    /* can't work without keylistener set up
-    if (debugState){
+    if (keyListener.getDebugState()){
       this.add(debugPanel);
+      menuPanel.setVisible(false);
+      menuBgPanel.setVisible(false);
+      title.setVisible(false);
       debugPanel.repaint();
-      debugPanel.setVisible(true);
     }
     else{
       debugPanel.setVisible(false);
     }
-    //System.out.println(debugState);
-    */
   }
   
   public void getListen (){
