@@ -68,6 +68,7 @@ class Display extends JFrame{
     if (menuStartListener.getStart()){
       gameState=1;
       menuStartListener.setStart (false);
+      
     }
-  } 
+  }
 }

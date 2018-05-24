@@ -13,7 +13,6 @@ class GamePanel extends JPanel{
   }
   public void paintComponent(Graphics g){
     //Main 
-
     g.setColor (Color.BLACK);
     g.fillRect (0,0, maxX,maxY);
     Image left = Toolkit.getDefaultToolkit().getImage("../res/MetalL.png");
