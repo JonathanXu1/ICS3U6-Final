@@ -11,6 +11,7 @@ class GamePanel extends JPanel{
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
   }
+  @Override
   public void paintComponent(Graphics g){
     //Main 
     g.setColor (Color.BLACK);

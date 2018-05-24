@@ -6,6 +6,7 @@ class Display extends JFrame{
   //Main game
   private GamePanel gamePanel;
   private int gameState= 0;
+  private boolean debugState = false;
   private int maxX;
   private int maxY;
   //Menu
@@ -15,10 +16,16 @@ class Display extends JFrame{
   private CustomButton settingsButton = new CustomButton("Settings");
   private CustomButton scoreboardButton = new CustomButton("Scoreboard");
   
-  private JLabel title = new JLabel("CONCORDIA");
   private MenuPanel menuPanel;
-  private MenuBGPanel menuBgPanel;
-  private StartListener menuStartListener;  
+  private MenuBGPanel menuBgPanel;  
+  private JLabel title = new JLabel("CONCORDIA");
+  //Debug Panel
+  private DebugPanel debugPanel;
+  private JLabel frames;
+  private int fps = 0;
+  //Start Listener
+  private StartListener menuStartListener;
+  private CustomKeyListener keyListener;
   
   Display(){
     super ("Concordia");
@@ -28,9 +35,12 @@ class Display extends JFrame{
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible (true);
+    //Creates keylistener object
+    keyListener = new CustomKeyListener();
+    this.addKeyListener(keyListener);
+    
     //Creation of the basic game display
     gamePanel = new GamePanel(maxX, maxY);
-      this.add (gamePanel);
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     this.add(menuBgPanel);
@@ -47,9 +57,16 @@ class Display extends JFrame{
     menuPanel.add(scoreboardButton);
     menuStartListener = new StartListener();
     continueButton.addActionListener(menuStartListener);
+    //Creation of debug panel
+    debugPanel = new DebugPanel(300,100);
+    debugPanel.setLayout(new BoxLayout(debugPanel, BoxLayout.Y_AXIS));
+    frames = new JLabel("Fps: " + Integer.toString(fps));
+    frames.setAlignmentX(Component.LEFT_ALIGNMENT);
+    debugPanel.add(frames);
     //Necessary to start with
     menuPanel.setVisible (true);
   }
+  
   public void refreshAll(){
     if (gameState==0){ 
       menuPanel.setVisible(true);
@@ -60,15 +77,28 @@ class Display extends JFrame{
       menuPanel.setVisible(false);
       menuBgPanel.setVisible(false);
       title.setVisible(false);
-      gamePanel.setVisible(true);
       gamePanel.refresh();
     }
+    /* can't work without keylistener set up
+    if (debugState){
+      this.add(debugPanel);
+      debugPanel.repaint();
+      debugPanel.setVisible(true);
+    }
+    else{
+      debugPanel.setVisible(false);
+    }
+    //System.out.println(debugState);
+    */
   }
+  
   public void getListen (){
     if (menuStartListener.getStart()){
       gameState=1;
       menuStartListener.setStart (false);
-      
     }
+  }
+  public void setfps(int fps){
+    this.fps = fps;
   }
 }

@@ -1,6 +1,15 @@
+//Keyboard imports
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+//Mouse imports
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+
 class DisplayTest{
   public static void main (String[] args) throws Exception{
     Display disp = new Display ();
+    
     long oldTime = System.nanoTime();
     long secondTime = System.nanoTime();
     long currentTime = System.nanoTime();
@@ -18,6 +27,7 @@ class DisplayTest{
       if ((currentTime-secondTime)>=SECOND_LIMIT){
         secondTime = currentTime;
         System.out.println (frame);
+        disp.setfps(frame);
         frame =0;
       }
     }
