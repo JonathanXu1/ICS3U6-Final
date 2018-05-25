@@ -5,7 +5,9 @@ class GamePanel extends JPanel{
   private int maxX;
   private int maxY;
   private boolean debugState;
+  private int stringLength;
   private String fps;
+    private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private double totalMem, memUsed, memPercent;
 
   GamePanel(int maxX, int maxY){
@@ -46,12 +48,14 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
     if(debugState){
+      stringLength = ("FPS: "+fps).length();
       g.setColor(Color.decode("#565656"));
-      g.fillRect(25, 15, 100, 20);
-      g.fillRect(maxX - 300, 25, 250, 20);
+      g.fillRect(30, 15, 12*stringLength, 20);
+      g.setFont (menuFont);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
-      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
+     // g.fillRect(maxX - 300, 25, 250, 20);
+    //  g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
     }
     this.setVisible(true);
   }
