@@ -13,7 +13,11 @@ class MenuBGPanel extends JLayeredPane{
   }
   @Override
   public void paintComponent(Graphics g){
+    super.paintComponent(g);
     Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.drawImage(menuBg,0,0,xVal,yVal,this);
+  }
+    public void refresh(){
+    this.repaint();
   }
 }

@@ -19,6 +19,7 @@ class GamePanel extends JPanel{
   }
   @Override
   public void paintComponent(Graphics g){
+    super.paintComponent(g);
     //Main 
     g.setColor (Color.BLACK);
     g.fillRect (0,0, maxX,maxY);
@@ -34,11 +35,11 @@ class GamePanel extends JPanel{
     Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     g.setColor (new Color (69,218,215));
     g.drawImage(hp,10,10, ((int)(maxX*1.0/5.0)),  ((int)(maxX*1.0/5.0/200.0*14.0)),this);
-    g.fillRect (18,18, ((int)(maxX*1.0/5.0))-16, ((int)(maxX*1.0/5.0/200.0*14.0))-16);
+    g.fillRect (16,16, ((int)(maxX*1.0/5.0))-12, ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     Image exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     g.setColor (new Color (152,251,152));
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
-    g.fillRect (18,23+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-16,((int)(maxX*1.0/5.0/200.0*10.0))-16);
+    g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
     if(debugState){
       g.setColor(Color.decode("#565656"));
       g.fillRect(25, 15, 100, 20);
