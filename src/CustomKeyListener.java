@@ -9,11 +9,13 @@ class CustomKeyListener implements KeyListener {
   }
   
   public void keyPressed(KeyEvent e) {
-    System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
+    //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
     
     if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {  //If 'F1' is pressed
       this.debugState = true;
-    } /*else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {  //If ESC is pressed
+    } 
+    //Add keylisteners for other things here
+    /*else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {  //If ESC is pressed
       System.out.println("YIKES ESCAPE KEY!"); //close frame & quit
     }*/
   }   

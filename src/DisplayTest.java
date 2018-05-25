@@ -18,7 +18,7 @@ class DisplayTest{
       }
       if ((currentTime-secondTime)>=SECOND_LIMIT){
         secondTime = currentTime;
-        System.out.println (frame);
+        //System.out.println (frame);
         disp.setfps(frame);
         frame =0;
       }

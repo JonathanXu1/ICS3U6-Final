@@ -9,11 +9,11 @@ class DebugPanel extends JLayeredPane{
     this.maxY = maxY;
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
-    //Transparent panel
-    this.setOpaque(false);
-    /* Getting errors for this
-    this.setContentAreaFilled(false);
-    this.setBorderPainted(false);
-    */
+    this.setBackground(new Color(0,0,0,0));
+  }
+  @Override
+  public void paintComponent(Graphics g){
+    g.setColor(Color.RED);
+    g.fillRect(0,0,maxX,maxY);
   }
 }

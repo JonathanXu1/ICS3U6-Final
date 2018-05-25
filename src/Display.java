@@ -58,12 +58,6 @@ class Display extends JFrame{
     menuPanel.add(scoreboardButton);
     menuStartListener = new StartListener();
     continueButton.addActionListener(menuStartListener);
-    //Creation of debug panel
-    debugPanel = new DebugPanel(300,100);
-    debugPanel.setLayout(new BoxLayout(debugPanel, BoxLayout.Y_AXIS));
-    frames = new JLabel("Fps: " + Integer.toString(fps));
-    frames.setAlignmentX(Component.LEFT_ALIGNMENT);
-    debugPanel.add(frames);
     //Necessary to start with
     menuPanel.setVisible (true);
   }
@@ -74,21 +68,18 @@ class Display extends JFrame{
       menuBgPanel.setVisible(true);
       title.setVisible(true);
     }else if (gameState==1){
+      if (keyListener.getDebugState()){
+        gamePanel.setDebugState(true, fps);
+      }
+      else{
+        gamePanel.setDebugState(false, fps);
+        //debugPanel.setVisible(false);
+      }
       this.add (gamePanel);
       menuPanel.setVisible(false);
       menuBgPanel.setVisible(false);
       title.setVisible(false);
       gamePanel.refresh();
-    }
-    if (keyListener.getDebugState()){
-      this.add(debugPanel);
-      menuPanel.setVisible(false);
-      menuBgPanel.setVisible(false);
-      title.setVisible(false);
-      debugPanel.repaint();
-    }
-    else{
-      debugPanel.setVisible(false);
     }
   }
   

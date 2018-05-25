@@ -4,12 +4,18 @@ import java.awt.*;
 class GamePanel extends JPanel{
   private int maxX;
   private int maxY;
+  private boolean debugState;
+  private String fps;
   GamePanel(int maxX, int maxY){
     setFocusable(true);
     this.maxX= maxX;
     this.maxY = maxY;
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
+  }
+  public void setDebugState(boolean debugState, int fps){
+    this.debugState = debugState;
+    this.fps = Integer.toString(fps);
   }
   @Override
   public void paintComponent(Graphics g){
@@ -33,6 +39,12 @@ class GamePanel extends JPanel{
     g.setColor (new Color (152,251,152));
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
     g.fillRect (18,23+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-16,((int)(maxX*1.0/5.0/200.0*10.0))-16);
+    if(debugState){
+      g.setColor(Color.decode("#565656"));
+      g.fillRect(25, 15, 100, 20);
+      g.setColor(Color.WHITE);
+      g.drawString("FPS: " + fps, 30, 30);
+    }
     this.setVisible(true);
   }
   public void refresh(){
