@@ -7,8 +7,8 @@ class Display extends JFrame{
   private GamePanel gamePanel;
   private int gameState= 0;
   private boolean debugState = false;
-  private int maxX;
-  private int maxY;
+  private int maxX, maxY;
+  private double totalMem, memUsed;
   //Menu
   private CustomButton continueButton = new CustomButton("Continue");
   private CustomButton newGameButton = new CustomButton("New");
@@ -69,10 +69,10 @@ class Display extends JFrame{
       title.setVisible(true);
     }else if (gameState==1){
       if (keyListener.getDebugState()){
-        gamePanel.setDebugState(true, fps);
+        gamePanel.setDebugState(true, fps, totalMem, memUsed);
       }
       else{
-        gamePanel.setDebugState(false, fps);
+        gamePanel.setDebugState(false, fps, totalMem, memUsed);
         //debugPanel.setVisible(false);
       }
       this.add (gamePanel);
@@ -91,5 +91,9 @@ class Display extends JFrame{
   }
   public void setfps(int fps){
     this.fps = fps;
+  }
+  public void setMem(double totalMem, double memUsed){
+    this.totalMem = totalMem;
+    this.memUsed = memUsed;
   }
 }

@@ -6,6 +6,8 @@ class GamePanel extends JPanel{
   private int maxY;
   private boolean debugState;
   private String fps;
+  private double totalMem, memUsed, memPercent;
+
   GamePanel(int maxX, int maxY){
     setFocusable(true);
     this.maxX= maxX;
@@ -13,9 +15,12 @@ class GamePanel extends JPanel{
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
   }
-  public void setDebugState(boolean debugState, int fps){
+  public void setDebugState(boolean debugState, int fps, double totalMem, double memUsed){
     this.debugState = debugState;
     this.fps = Integer.toString(fps);
+    this.totalMem = totalMem;
+    this.memUsed = memUsed;
+    memPercent = (memUsed/totalMem)*100;
   }
   @Override
   public void paintComponent(Graphics g){
@@ -42,8 +47,10 @@ class GamePanel extends JPanel{
     if(debugState){
       g.setColor(Color.decode("#565656"));
       g.fillRect(25, 15, 100, 20);
+      g.fillRect(maxX - 300, 25, 250, 20);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
+      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
     }
     this.setVisible(true);
   }
