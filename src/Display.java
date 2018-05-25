@@ -20,7 +20,7 @@ class Display extends JFrame{
   private MenuBGPanel menuBgPanel;  
   private JLabel title = new JLabel("CONCORDIA");
   //Debug Panel
-  private DebugPanel debugPanel;
+  private DebugPanel debugPanel=  new DebugPanel (200,200);
   private JLabel frames;
   private int fps = 0;
   //Start Listener
@@ -34,7 +34,6 @@ class Display extends JFrame{
     this.maxY = Toolkit.getDefaultToolkit().getScreenSize().height;
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setVisible (true);
     this.setFocusable(true);
     //Creates keylistener object
     keyListener = new CustomKeyListener();
@@ -59,7 +58,10 @@ class Display extends JFrame{
     menuStartListener = new StartListener();
     continueButton.addActionListener(menuStartListener);
     //Necessary to start with
+    menuBgPanel.setVisible (true);
     menuPanel.setVisible (true);
+    title.setVisible(true);
+    this.setVisible (true);
   }
   
   public void refreshAll(){
@@ -73,7 +75,6 @@ class Display extends JFrame{
       }
       else{
         gamePanel.setDebugState(false, fps, totalMem, memUsed);
-        //debugPanel.setVisible(false);
       }
       this.add (gamePanel);
       menuPanel.setVisible(false);
