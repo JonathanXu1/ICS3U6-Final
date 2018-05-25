@@ -21,7 +21,9 @@ class CustomKeyListener implements KeyListener {
   }   
   
   public void keyReleased(KeyEvent e) {
-    this.debugState = false;
+    if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {  //If 'F1' is pressed
+      this.debugState = false;
+    } 
   }
   
   public boolean getDebugState(){
