@@ -76,6 +76,7 @@ class Display extends JFrame{
       else{
         gamePanel.setDebugState(false, fps, totalMem, memUsed);
       }
+      gamePanel.setDirection (keyListener.getDirection());
       this.add (gamePanel);
       menuPanel.setVisible(false);
       menuBgPanel.setVisible(false);

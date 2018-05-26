@@ -7,9 +7,10 @@ class GamePanel extends JPanel{
   private boolean debugState;
   private int stringLength;
   private String fps;
-    private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
+  private int direction=0;
+  private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private double totalMem, memUsed, memPercent;
-
+  
   GamePanel(int maxX, int maxY){
     setFocusable(true);
     this.maxX= maxX;
@@ -54,10 +55,24 @@ class GamePanel extends JPanel{
       g.setFont (menuFont);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
-     // g.fillRect(maxX - 300, 25, 250, 20);
-    //  g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
+      // g.fillRect(maxX - 300, 25, 250, 20);
+      //  g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
+    }
+    if (direction!=0){
+      if (direction==1){
+        System.out.print ("Up");
+      }else if (direction==2){
+        System.out.print ("Down");
+      }else if (direction==3){
+        System.out.print ("Left");
+      }else if (direction==4){
+        System.out.print ("Right");
+      }
     }
     this.setVisible(true);
+  }
+  public void setDirection (int direction){
+    this.direction = direction;
   }
   public void refresh(){
     this.repaint();
