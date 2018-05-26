@@ -1,18 +1,18 @@
+/////////////////////
 import javax.swing.*;
 import java.awt.*;
 
+/////////////////////
 class GamePanel extends JPanel{
   private int maxX;
   private int maxY;
   private boolean debugState;
   private int stringLength;
   private String fps;
-  private int [] mouseXy;
   private int direction=0;
-  private double totalMem, memUsed, memPercent;
-
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
-
+  private double totalMem, memUsed, memPercent;
+  
   GamePanel(int maxX, int maxY){
     setFocusable(true);
     this.maxX= maxX;
@@ -20,18 +20,29 @@ class GamePanel extends JPanel{
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
   }
-  public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, int[] mouseXy){
+  /**
+   *setDebugState
+   *
+   *@param: The boolean debugState, the int fps, the double totalMem, and the double memUsed
+   *@return: 
+   */
+  public void setDebugState(boolean debugState, int fps, double totalMem, double memUsed){
     this.debugState = debugState;
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
-    this.mouseXy = mouseXy;
     memPercent = (memUsed/totalMem)*100;
   }
   @Override
-  public void paintComponent(Graphics g){
+  /**
+   *paintComponent
+   *
+   *@param: Graphics g
+   *@return: 
+   */
+    public void paintComponent(Graphics g){
     super.paintComponent(g);
-    //Main 
+//Main 
     g.setColor (Color.BLACK);
     g.fillRect (0,0, maxX,maxY);
     Image left = Toolkit.getDefaultToolkit().getImage("../res/MetalL.png");
@@ -40,7 +51,7 @@ class GamePanel extends JPanel{
     g.drawImage(left,0,maxY-(int)(maxY*2.5/10.0),(int)((int)(maxY*2.5/10.0)*208.0/87.0),(int)(maxY*2.5/10.0),this);
     g.drawImage(middle,(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0),maxX -(int)((int)(maxY*2.5/10.0)*208.0/87.0*2.0)+5, (int)(maxY*2.5/10.0),this);
     g.drawImage(right,maxX-(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0), (int)((int)(maxY*2.5/10.0)*208.0/87.0), (int)(maxY*2.5/10.0),this);
-    //Continue
+//Continue
     Image map = Toolkit.getDefaultToolkit().getImage("../res/Map.png");
     g.drawImage(map,maxX-(int)(maxX*1.0/5.0),0,(int)(maxX*1.0/5.0), (int)(maxX*1.0/5.0),this);
     Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
@@ -52,19 +63,14 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
     if(debugState){
-      g.setColor(Color.decode("#565656"));
       stringLength = ("FPS: "+fps).length();
+      g.setColor(Color.decode("#565656"));
       g.fillRect(30, 15, 12*stringLength, 20);
-      stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem)).length();
-      g.fillRect(maxX - 600, 15, 12*stringLength, 20);
-      stringLength = ("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
-      g.fillRect(maxX-300, 45, 12*stringLength, 20);
-      
       g.setFont (menuFont);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
-      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-600, 30);
-      g.drawString("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
+// g.fillRect(maxX - 300, 25, 250, 20);
+//  g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
     }
     if (direction!=0){
       if (direction==1){
@@ -79,9 +85,21 @@ class GamePanel extends JPanel{
     }
     this.setVisible(true);
   }
+  /**
+   *setDirection 
+   *
+   *@param: int direction
+   *@return: 
+   */
   public void setDirection (int direction){
     this.direction = direction;
   }
+  /**
+   *refresh
+   *
+   *@param: 
+   *@return: 
+   */
   public void refresh(){
     this.repaint();
   }
