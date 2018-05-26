@@ -8,6 +8,7 @@ class Display extends JFrame{
   private int gameState= 0;
   private boolean debugState = false;
   private int maxX, maxY;
+  private int[] mouseXy;
   private double totalMem, memUsed;
   //Menu
   private CustomButton continueButton = new CustomButton("Continue");
@@ -23,9 +24,10 @@ class Display extends JFrame{
   private DebugPanel debugPanel=  new DebugPanel (200,200);
   private JLabel frames;
   private int fps = 0;
-  //Start Listener
+  //Start Listeners
   private StartListener menuStartListener;
-  private CustomKeyListener keyListener;
+  private CustomKeyListener keyListener = new CustomKeyListener();
+  private CustomMouseListener mouseListener = new CustomMouseListener();
   
   Display(){
     super ("Concordia");
@@ -35,9 +37,9 @@ class Display extends JFrame{
     this.setSize(maxX, maxY);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setFocusable(true);
-    //Creates keylistener object
-    keyListener = new CustomKeyListener();
+    //Adds keylistener object
     this.addKeyListener(keyListener);
+    this.addMouseListener(mouseListener);
     
     //Creation of the basic game display
     gamePanel = new GamePanel(maxX, maxY);
@@ -65,16 +67,17 @@ class Display extends JFrame{
   }
   
   public void refreshAll(){
+    mouseXy = mouseListener.getMouseXy();
     if (gameState==0){ 
       menuPanel.setVisible(true);
       menuBgPanel.setVisible(true);
       title.setVisible(true);
     }else if (gameState==1){
       if (keyListener.getDebugState()){
-        gamePanel.setDebugState(true, fps, totalMem, memUsed);
+        gamePanel.setDebugInfo(true, fps, totalMem, memUsed, mouseXy);
       }
       else{
-        gamePanel.setDebugState(false, fps, totalMem, memUsed);
+        gamePanel.setDebugInfo(false, fps, totalMem, memUsed, mouseXy);
       }
       this.add (gamePanel);
       menuPanel.setVisible(false);

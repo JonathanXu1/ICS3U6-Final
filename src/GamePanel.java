@@ -7,9 +7,10 @@ class GamePanel extends JPanel{
   private boolean debugState;
   private int stringLength;
   private String fps;
-    private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
+  private int [] mouseXy;
   private double totalMem, memUsed, memPercent;
 
+  private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   GamePanel(int maxX, int maxY){
     setFocusable(true);
     this.maxX= maxX;
@@ -17,11 +18,12 @@ class GamePanel extends JPanel{
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
   }
-  public void setDebugState(boolean debugState, int fps, double totalMem, double memUsed){
+  public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, int[] mouseXy){
     this.debugState = debugState;
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
+    this.mouseXy = mouseXy;
     memPercent = (memUsed/totalMem)*100;
   }
   @Override
@@ -48,14 +50,19 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
     if(debugState){
-      stringLength = ("FPS: "+fps).length();
       g.setColor(Color.decode("#565656"));
+      stringLength = ("FPS: "+fps).length();
       g.fillRect(30, 15, 12*stringLength, 20);
+      stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem)).length();
+      g.fillRect(maxX - 600, 15, 12*stringLength, 20);
+      stringLength = ("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
+      g.fillRect(maxX-300, 45, 12*stringLength, 20);
+      
       g.setFont (menuFont);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
-     // g.fillRect(maxX - 300, 25, 250, 20);
-    //  g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-295, 30);
+      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-600, 30);
+      g.drawString("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     }
     this.setVisible(true);
   }
