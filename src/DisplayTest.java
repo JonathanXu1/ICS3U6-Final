@@ -1,8 +1,10 @@
 class DisplayTest{
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
-    double beforeUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-    double afterUsedMem, actualMemUsed;
+    int mb = 1024*1024;
+    Runtime runtime = Runtime.getRuntime();
+    double maxMem = runtime.maxMemory();
+    double usedMem;
     
     Display disp = new Display ();
     
@@ -15,9 +17,8 @@ class DisplayTest{
     while (true){
       currentTime= System.nanoTime();
       //Finds memory usage after code execution
-      afterUsedMem = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-      actualMemUsed = afterUsedMem - beforeUsedMem;
-      disp.setMem(Runtime.getRuntime().totalMemory(), actualMemUsed);
+      usedMem = runtime.totalMemory() - runtime.freeMemory();
+      disp.setMem(maxMem/mb, usedMem/mb);
       
       if ((currentTime-oldTime)>=DELTA_LIMIT){
         disp.getListen();

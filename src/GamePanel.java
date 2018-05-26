@@ -52,10 +52,10 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
     if(debugState){
-      g.setColor(Color.decode("#565656"));
+      g.setColor(new Color(80, 80, 80, 127)); //Translucent grey
       stringLength = ("FPS: "+fps).length();
       g.fillRect(30, 15, 12*stringLength, 20);
-      stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem)).length();
+      stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)").length();
       g.fillRect(maxX - 600, 15, 12*stringLength, 20);
       stringLength = ("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
       g.fillRect(maxX-300, 45, 12*stringLength, 20);
@@ -63,7 +63,7 @@ class GamePanel extends JPanel{
       g.setFont (menuFont);
       g.setColor(Color.WHITE);
       g.drawString("FPS: " + fps, 30, 30);
-      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + Double.toString(memUsed) + " out of " + Double.toString(totalMem), maxX-600, 30);
+      g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)", maxX-600, 30);
       g.drawString("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     }
     if (direction!=0){

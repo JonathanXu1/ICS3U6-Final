@@ -16,9 +16,11 @@ class CustomKeyListener implements KeyListener {
   public void keyPressed(KeyEvent e) {
     //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
     
-    if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {  //If 'F1' is pressed
+    if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && !debugState) {  //If 'F1' is pressed
       debugState = true;
-    } 
+    } else if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && debugState) {  //If 'F1' is pressed again
+      debugState = false;
+    }
     if ((KeyEvent.getKeyText(e.getKeyCode()).equals("W"))&&((direction==0)||(direction==1))) {
       direction =1;
     }
@@ -34,9 +36,6 @@ class CustomKeyListener implements KeyListener {
   }   
   
   public void keyReleased(KeyEvent e) {
-    if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {
-      debugState = false;
-    }
     if ((KeyEvent.getKeyText(e.getKeyCode()).equals("W"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("S"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("A"))|| (KeyEvent.getKeyText(e.getKeyCode()).equals("D"))){ 
       direction = 0;
     }
