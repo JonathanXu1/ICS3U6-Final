@@ -1,6 +1,8 @@
+/////////////////////
 import javax.swing.*;
 import java.awt.*;
 
+/////////////////////
 class MenuBGPanel extends JLayeredPane{
   private int xVal;
   private int yVal;
@@ -12,11 +14,23 @@ class MenuBGPanel extends JLayeredPane{
     this.setPreferredSize(panelSize);
   }
   @Override
+  /**
+   *paintComponent
+   *
+   *@param: Graphics g
+   *@return: 
+   */
     public void paintComponent(Graphics g){
     super.paintComponent(g);
     Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.drawImage(menuBg,0,0,xVal,yVal,this);
   }
+  /**
+   *refresh
+   *
+   *@param: 
+   *@return: 
+   */
   public void refresh(){
     this.repaint();
   }

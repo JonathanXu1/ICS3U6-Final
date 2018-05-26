@@ -1,5 +1,7 @@
+/////////////////////
 import javax.swing.*;
 
+/////////////////////
 class CustomButton extends JButton{
   CustomButton(String name){
     super(name);

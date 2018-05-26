@@ -1,7 +1,9 @@
 //Keyboard imports
+/////////////////////
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/////////////////////
 class CustomKeyListener implements KeyListener {
   boolean debugState = false;
   boolean moveUp = false;
@@ -10,11 +12,23 @@ class CustomKeyListener implements KeyListener {
   boolean moveRight = false;
   int direction = 0;
   
+  /**
+   *keyTyped
+   *
+   *@param: KeyEvent e
+   *@return: 
+   */
   public void keyTyped(KeyEvent e) {
   }
   
+  /**
+   *keyPressed
+   *
+   *@param: KeyEvent e
+   *@return: 
+   */
   public void keyPressed(KeyEvent e) {
-    //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
+//System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
     
     if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {  //If 'F1' is pressed
       debugState = true;
@@ -33,17 +47,35 @@ class CustomKeyListener implements KeyListener {
     }
   }   
   
+  /**
+   *keyReleased
+   *
+   *@param: KeyEvent e
+   *@return: 
+   */
   public void keyReleased(KeyEvent e) {
     if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1")) {
       debugState = false;
     }
-    if ((KeyEvent.getKeyText(e.getKeyCode()).equals("W"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("S"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("A"))|| (KeyEvent.getKeyText(e.getKeyCode()).equals("D"))){ 
+    if ((KeyEvent.getKeyText(e.getKeyCode()).equals("W"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("S"))||(KeyEvent.getKeyText(e.getKeyCode()).equals("A"))||( (KeyEvent.getKeyText(e.getKeyCode())).equals("D"))){ 
       direction = 0;
     }
   }
+  /**
+   *getDirection
+   *
+   *@param: 
+   *@return: An int
+   */
   public int getDirection(){
     return (direction);
   }
+  /**
+   *getDebugState
+   *
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getDebugState(){
     return debugState;
   }

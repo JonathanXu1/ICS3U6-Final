@@ -1,6 +1,7 @@
 /**
  * {Editor.java}
  * This program will read a java file and edit it
+ * IMPORTANT: This program does not yet work with abstract
  * 5/14/2018
  * Will Jeong
  */
@@ -19,14 +20,16 @@ class Editor{
    *@param: The String[]args
    *@return: void
    */
-  public static void main (String[]args){
-    try{
+  public static void main (String[]args) throws Exception{
+    String [] fileNames = {"CustomButton.java","CustomKeyListener.java","DebugPanel.java","Display.java","DisplayTest.java","GamePanel.java","MenuBGPanel.java","MenuPanel.java","StartListener.java"};
+    for (int i=0;i<fileNames.length;i++){
       String currentLine="";
       String previousLine;
       String tempString;
-      File edit= new File ("Editor.java");
+      String fileName = fileNames[i];
+      File edit= new File (fileName);
       Scanner input = new Scanner (edit);
-      File create= new File ("Edited.java");
+      File create= new File ("Edited"+fileName);
       PrintWriter output = new PrintWriter (create);
       String title;
       String paramStr= "";
@@ -34,6 +37,7 @@ class Editor{
       boolean noSpacesLeft =false;
       int count = 0;
       boolean workWithArrays = false;
+      String firstLetter;
       while(input.hasNext()){
         previousLine = currentLine;
         currentLine = input.nextLine();
@@ -69,7 +73,11 @@ class Editor{
                     currentLine = currentLine.substring (1);
                   }
                   tempString = currentLine;
-                  tempString = tempString.substring (14);
+                  if (tempString.indexOf("static")!=-1){
+                    tempString = tempString.substring (14);
+                  }else{
+                    tempString = tempString.substring (tempString.indexOf("public")+7);
+                  }
                   if ((tempString.indexOf ("]")!=-1)&&((tempString.indexOf ("]")<(tempString.indexOf ("("))))){
                     tempString = eliminateSpace (tempString);
                     workWithArrays = true;
@@ -99,41 +107,54 @@ class Editor{
                     }
                   }
                   String [] paramArray = new String [count+1];
-                  paramStr = "";
-                  for (int j=0;j<paramArray.length;j++){
-                    paramArray[j]=null;
-                  }
-                  for (int j=0;j<paramArray.length;j++){
-                    if (j==paramArray.length-1){
-                      paramArray[j]= tempString.substring(0,tempString.indexOf(")"));
-                    }else{
-                      paramArray[j]=tempString.substring(0,tempString.indexOf(","));
-                      tempString= tempString.substring(tempString.indexOf(",")+1);
+                  if (paramArray.length!=1){
+                    paramStr = "";
+                    for (int j=0;j<paramArray.length;j++){
+                      paramArray[j]=null;
                     }
-                  }
-                  for (int j=0;j<paramArray.length;j++){
-                    if ((paramArray[j].substring (0,1).equals(" "))){
-                      paramArray[j]=paramArray[j].substring(1);
-                    }
-                  }
-                  for (int j=0;j<paramArray.length;j++){
-                    if (paramArray.length!=1){
-                      if (j==0){
-                        paramStr = paramStr +"The "+  paramArray[j]+", ";
-                      }else if (j!=paramArray.length-1){
-                        paramStr = paramStr +"the "+  paramArray[j]+", ";
+                    for (int j=0;j<paramArray.length;j++){
+                      if (j==paramArray.length-1){
+                        paramArray[j]= tempString.substring(0,tempString.indexOf(")"));
                       }else{
-                        paramStr = paramStr +"and the "+  paramArray[j];
+                        paramArray[j]=tempString.substring(0,tempString.indexOf(","));
+                        tempString= tempString.substring(tempString.indexOf(",")+1);
                       }
-                    }else{
-                      paramStr = "The "+  paramArray[j];
                     }
+                    for (int j=0;j<paramArray.length;j++){
+                      if ((paramArray[j].substring (0,1).equals(" "))){
+                        paramArray[j]=paramArray[j].substring(1);
+                      }
+                    }
+                    for (int j=0;j<paramArray.length;j++){
+                      if (paramArray.length!=1){
+                        if (j==0){
+                          paramStr = paramStr +"The "+  paramArray[j]+", ";
+                        }else if (j!=paramArray.length-1){
+                          paramStr = paramStr +"the "+  paramArray[j]+", ";
+                        }else{
+                          paramStr = paramStr +"and the "+  paramArray[j];
+                        }
+                      }else{
+                        paramStr = "The "+  paramArray[j];
+                      }
+                    }
+                  }else{
+                    paramStr = tempString.substring(0,tempString.indexOf(")"));;
                   }
                   output.println ("/**");
                   output.println ("*"+title);
                   output.println ("*");
                   output.println ("*"+"@param: "+paramStr);
-                  output.println ("*"+"@return: "+returnStr);
+                  if (returnStr.indexOf("void")!=-1){
+                    output.println ("*"+"@return: ");
+                  }else{
+                    firstLetter  = ((returnStr.substring(0,1)).toLowerCase());
+                    if (firstLetter.equals("a")||firstLetter.equals("e")||firstLetter.equals("i")||firstLetter.equals("o")||firstLetter.equals("u")){
+                      output.println ("*"+"@return: "+"An "+returnStr);
+                    }else{
+                      output.println ("*"+"@return: "+"A "+returnStr);
+                    }
+                  }
                   output.println ("*/");
                 }
               }
@@ -144,10 +165,9 @@ class Editor{
       }
       input.close();
       output.close();
-    }catch (Exception E){
-      System.out.print ("ERROR");
     }
   }
+  
 /////////////////////
   /**
    *eliminateSpace 
