@@ -2,12 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 
 class Background{
-  private static int x = 200;
-  private static int y  =200;
+  private static int x = 0;
+  private static int y  =0;
   private static int xDirection = 0;
   private static int yDirection  =0;
   private static boolean onTile = true;
+  private static int tileSize;
   
+  Background(int tileSize){
+    this.tileSize = tileSize;
+  }
   Background(){
   }
   public int getXDirection(){
@@ -31,17 +35,23 @@ class Background{
   public int getX(){
     return (x);
   }
-  public  int getY(){  
+  public int getY(){  
     return (y);
   }
   public boolean getOnTile(){
     return (onTile);
   }
   public void setOnTile (){
-    if ((x%100==0)&&(y%100==0)){
+    if ((x%tileSize==0)&&(y%tileSize==0)){
       this.onTile =true;
     }else{
       this.onTile =false;
     }
+  }
+  public void setTileSize(int tileSize){
+    this.tileSize = tileSize;
+  }
+  public int getTileSize(){
+    return (tileSize);
   }
 }

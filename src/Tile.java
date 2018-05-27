@@ -1,6 +1,6 @@
 import java.awt.Color;
 
-public class Tile {
+abstract class Tile {
   private Color minimapColor;
   private boolean viewed = false;
   

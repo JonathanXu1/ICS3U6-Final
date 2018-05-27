@@ -1,7 +1,7 @@
 import java.awt.Color;
 
-public class WallTile extends Tile{
-  WallTile(){
-    super(Color.BLACK);
+class WallTile extends Tile{
+  WallTile(Color minimapColor){
+    super(minimapColor);
   }
 }

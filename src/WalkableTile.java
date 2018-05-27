@@ -1,9 +1,9 @@
 import java.awt.Color;
 
-public class WalkableTile extends Tile{
+abstract class WalkableTile extends Tile{
   private boolean steppedOn = false;
-  WalkableTile(){
-    super(Color.WHITE);
+  WalkableTile(Color minimapColor){
+    super(minimapColor);
   }
   
   public void stepped(){

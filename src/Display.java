@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 class Display extends JFrame{
   //Main game stats
@@ -28,7 +29,7 @@ class Display extends JFrame{
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
   //Game logic
-  //File mapFile;
+  private Tile[][] map;
   
   Display(){
     super ("Concordia");
@@ -41,7 +42,6 @@ class Display extends JFrame{
     //Adds keylistener object
     this.addKeyListener(keyListener);
     this.addMouseListener(mouseListener);
-    
     //Creation of the basic game display
     gamePanel = new GamePanel(maxX, maxY);
     //Creation of the menu
@@ -79,6 +79,10 @@ class Display extends JFrame{
       }else{
         gamePanel.setDebugInfo(false, fps, totalMem, memUsed, mouseXy);
       }
+      if (gamePanel.getNewFloor()){
+        gamePanel.setNewFloor(false);
+        gamePanel.createMap (map);
+      }
       keyListener.setAllDirection();
       this.add (gamePanel);
       menuPanel.setVisible(false);
@@ -94,11 +98,9 @@ class Display extends JFrame{
       menuStartListener.setStart (false);
     }
   }
-  /*
-  public void setMap(File map){
-    this.mapFile = map;
+  public void setMap(Tile[][] map){
+    this.map = map;
   }
-  */
   public void setFps(int fps){
     this.fps = fps;
   }
