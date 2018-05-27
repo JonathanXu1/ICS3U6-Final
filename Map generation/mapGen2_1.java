@@ -4,7 +4,10 @@
  * Generates a mazelike map, with rooms that are radomly sized, equally dispersed. Also, unecessary dead ends are removed,
  * doors are generated, along with stairs going up and down. 
  * 
- * Version cleaned up and commented, now with OOP;
+ * Version cleaned up and commented, now with OOP
+ * 
+ * NOTE: Dynamic room scaling does not work, and needs to be adjusted within the generateMao method to work for different map sizes
+ * expirementation has yielded no better method of getting at the optimal room size than doing it by hand. 
  * 
  * Author: Artem Sotnikov
  * Date: May 27th, 2018
