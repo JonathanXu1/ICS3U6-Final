@@ -75,11 +75,10 @@ class Display extends JFrame{
     }else if (gameState==1){
       if (keyListener.getDebugState()){
         gamePanel.setDebugInfo(true, fps, totalMem, memUsed, mouseXy);
-      }
-      else{
+      }else{
         gamePanel.setDebugInfo(false, fps, totalMem, memUsed, mouseXy);
       }
-      gamePanel.setDirection (keyListener.getDirection());
+      keyListener.setAllDirection();
       this.add (gamePanel);
       menuPanel.setVisible(false);
       menuBgPanel.setVisible(false);
@@ -94,7 +93,7 @@ class Display extends JFrame{
       menuStartListener.setStart (false);
     }
   }
-  public void setfps(int fps){
+  public void setFps(int fps){
     this.fps = fps;
   }
   public void setMem(double totalMem, double memUsed){

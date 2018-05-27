@@ -8,9 +8,11 @@ class GamePanel extends JPanel{
   private int stringLength;
   private String fps;
   private int [] mouseXy;
+  private int bgX=100;
+  private int bgY=100;
   private int direction=0;
   private double totalMem, memUsed, memPercent;
-
+  private Background bg = new Background();
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
 
   GamePanel(int maxX, int maxY){
@@ -66,17 +68,22 @@ class GamePanel extends JPanel{
       g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)", maxX-600, 30);
       g.drawString("Mouse Click: " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     }
-    if (direction!=0){
-      if (direction==1){
-        System.out.print ("Up");
-      }else if (direction==2){
-        System.out.print ("Down");
-      }else if (direction==3){
-        System.out.print ("Left");
-      }else if (direction==4){
-        System.out.print ("Right");
-      }
-    }
+    bg.setOnTile();
+    bg.move();
+    repaint();
+    g.setColor(Color.BLUE);
+    g.fillRect (bg.getX(),bg.getY(), 100, 100);
+    g.setColor(Color.WHITE);
+    g.drawLine(100,0,100,1080);
+    g.drawLine(200,0,200,1080);
+    g.drawLine(300,0,300,1080);
+    g.drawLine(400,0,400,1080);
+    g.drawLine(500,0,500,1080);
+    g.drawLine(0,100,1080,100);
+    g.drawLine(0,200,1080,200);
+    g.drawLine(0,300,1080,300);
+    g.drawLine(0,400,1080,400);
+    g.drawLine(0,500,1080,500);
     this.setVisible(true);
   }
   public void setDirection (int direction){
