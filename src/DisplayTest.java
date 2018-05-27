@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+import java.awt.Color;
 
 class DisplayTest{
   public static void main (String[] args) throws Exception{
@@ -9,11 +10,32 @@ class DisplayTest{
     double maxMem = runtime.maxMemory();
     double usedMem;
     
-    File map = new File("../res/testMap.txt");
-    
+    File fileMap = new File("../res/testMap.txt");
+    Scanner input = new Scanner (fileMap);
+    int arrayRow =0;
+    int arrayColumn = 0;
+    while (input.hasNext()){
+      arrayColumn=(input.nextLine()).length();
+      arrayRow++;
+    }
+    Tile [][] map = new Tile [arrayRow][arrayColumn];
+    int arrayNavigate = 0;
+    String tempLine;
+    Scanner inputNew = new Scanner (fileMap);
+    for (int i = 0;i<arrayRow;i++){
+      tempLine = inputNew.nextLine();
+      for(int j = 0;j<arrayColumn;j++){
+        if (tempLine.charAt (j)=='X'){
+          map[i][j]= new FloorTile(Color.WHITE);
+        }else{
+          map[i][j]= new WallTile(Color.BLACK);
+        }
+      }
+    }
+    input.close();
+    inputNew.close();
     Display disp = new Display ();
-    //disp.setMap(map);
-    
+    disp.setMap(map);
     long oldTime = System.nanoTime();
     long secondTime = System.nanoTime();
     long currentTime = System.nanoTime();

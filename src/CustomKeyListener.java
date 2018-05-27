@@ -13,13 +13,15 @@ class CustomKeyListener implements KeyListener {
   private boolean tileLeft = false;
   private boolean tileRight = false;
   private boolean tiling = false;
+  private int tileMoved;
+  private Tile [][] map;
   private Background bg = new Background();
   public void keyTyped(KeyEvent e) {
   }
   
   public void keyPressed(KeyEvent e) {
     //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
-    
+
     if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && !debugState) {  //If 'F1' is pressed
       debugState = true;
     } else if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && debugState) {  //If 'F1' is pressed again
@@ -27,7 +29,6 @@ class CustomKeyListener implements KeyListener {
     }
     if (!tiling){
       if (e.getKeyChar() =='w'&&((moveUp)||!(getMoving()))){
-        System.out.println ("w");
         moveUp =true;
         moveDown =false;
         moveLeft =false;
@@ -85,18 +86,19 @@ class CustomKeyListener implements KeyListener {
     return debugState;
   }
   public void setAllDirection (){
+    tileMoved=  (int)(bg.getTileSize()/10.0);
     bg.setOnTile();
     if (moveUp||(tileUp)){
-      bg.setYDirection (-5);
+      bg.setYDirection (-tileMoved);
       bg.setXDirection (0);
     }else if (moveDown||(tileDown)){
-      bg.setYDirection (5);
+      bg.setYDirection (tileMoved);
       bg.setXDirection (0);
     }else if (moveLeft||(tileLeft)){
-      bg.setXDirection (-5);
+      bg.setXDirection (-tileMoved);
       bg.setYDirection (0);
     }else if (moveRight||(tileRight)){
-      bg.setXDirection (5);
+      bg.setXDirection (tileMoved);
       bg.setYDirection (0);
     }else{
       bg.setYDirection (0);
@@ -122,5 +124,8 @@ class CustomKeyListener implements KeyListener {
     }else{
       return (true);
     }
+  }
+  public void setTileMap(Tile [][] map){
+    this.map = map;
   }
 }
