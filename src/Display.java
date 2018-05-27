@@ -1,15 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
 
 class Display extends JFrame{
-  //Main game
+  //Main game stats
   private GamePanel gamePanel;
   private int gameState= 0;
   private boolean debugState = false;
   private int maxX, maxY;
   private int[] mouseXy;
-  private double totalMem, memUsed;
+  
   //Menu
   private CustomButton continueButton = new CustomButton("Continue");
   private CustomButton newGameButton = new CustomButton("New");
@@ -21,13 +20,15 @@ class Display extends JFrame{
   private MenuBGPanel menuBgPanel;  
   private JLabel title = new JLabel("CONCORDIA");
   //Debug Panel
-  private DebugPanel debugPanel=  new DebugPanel (200,200);
+  private double totalMem, memUsed;
   private JLabel frames;
   private int fps = 0;
   //Start Listeners
   private StartListener menuStartListener;
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
+  //Game logic
+  //File mapFile;
   
   Display(){
     super ("Concordia");
@@ -93,6 +94,11 @@ class Display extends JFrame{
       menuStartListener.setStart (false);
     }
   }
+  /*
+  public void setMap(File map){
+    this.mapFile = map;
+  }
+  */
   public void setFps(int fps){
     this.fps = fps;
   }

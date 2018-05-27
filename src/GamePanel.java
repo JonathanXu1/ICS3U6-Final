@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 class GamePanel extends JPanel{
   private int maxX;
@@ -14,6 +15,7 @@ class GamePanel extends JPanel{
   private double totalMem, memUsed, memPercent;
   private Background bg = new Background();
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
+  private Tile[] map;
 
   GamePanel(int maxX, int maxY){
     setFocusable(true);
@@ -21,6 +23,7 @@ class GamePanel extends JPanel{
     this.maxY = maxY;
     Dimension panelSize= new Dimension (maxX, maxY);
     this.setPreferredSize(panelSize);
+    
   }
   public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, int[] mouseXy){
     this.debugState = debugState;

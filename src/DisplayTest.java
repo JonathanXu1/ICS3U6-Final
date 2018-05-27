@@ -1,3 +1,6 @@
+import java.io.*;
+import java.util.Scanner;
+
 class DisplayTest{
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
@@ -6,7 +9,10 @@ class DisplayTest{
     double maxMem = runtime.maxMemory();
     double usedMem;
     
+    File map = new File("../res/testMap.txt");
+    
     Display disp = new Display ();
+    //disp.setMap(map);
     
     long oldTime = System.nanoTime();
     long secondTime = System.nanoTime();
