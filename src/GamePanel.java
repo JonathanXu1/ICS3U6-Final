@@ -12,7 +12,9 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   
   private Tile[][] map;
-  private int maxX, maxY, minimapX, minimapY, miniTileSize; //minimapX = minimapY, may remove one later
+  private int maxX, maxY;
+  private int minimapX, minimapY, minimapArrayX, minimapArrayY; //minimapX = minimapY, may remove one later
+  private double miniTileSize;
   private int minimapFactor = 10;
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
@@ -98,7 +100,7 @@ class GamePanel extends JPanel{
     g.drawImage(middle,(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0),maxX -(int)((int)(maxY*2.5/10.0)*208.0/87.0*2.0)+5, (int)(maxY*2.5/10.0),this);
     g.drawImage(right,maxX-(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0), (int)((int)(maxY*2.5/10.0)*208.0/87.0), (int)(maxY*2.5/10.0),this);
     //Minimap
-    Image map = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png");
+    Image map = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
     g.drawImage(map,maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY,this);
     //Hp and exp bars
     Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
@@ -121,7 +123,7 @@ class GamePanel extends JPanel{
       Background.move();
     }
     for (int i = 0;i<map.length;i++){
-      for (int j=0;j<map[0].length;j++){
+      for (int j = 0;j<map[0].length;j++){
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
         map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
@@ -130,13 +132,16 @@ class GamePanel extends JPanel{
     }
   }
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
+    //Minimap bg
+    g.setColor(Color.BLACK);
+    g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
-    if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1 && !minimapUp && minimapFactor < 100){ //Clicked on top button
-      minimapFactor += 10;
+    if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1 && !minimapUp && minimapFactor > 10){ //Clicked on top button
+      minimapFactor -= 10;
       minimapUp = true;
       minimapDown = false;
-    } else if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 75 && mouseXy[1] < 95 && mouseXy[2] == 1 && !minimapDown && minimapFactor > 10){ //Clicked on bottom button
-      minimapFactor -= 10;
+    } else if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 75 && mouseXy[1] < 95 && mouseXy[2] == 1 && !minimapDown && minimapFactor < 100){ //Clicked on bottom button
+      minimapFactor += 10;
       minimapDown = true;
       minimapUp = false;
     }
@@ -145,18 +150,24 @@ class GamePanel extends JPanel{
       minimapUp = false;
     }
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
-    
+    //Draws minimap contents
     miniTileSize = minimapX/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
-        g.setColor(map[i][j].getMinimapColor());
-        g.fillRect(maxX-(int)(maxX*1.0/5.0) + i*miniTileSize, j * miniTileSize, miniTileSize, miniTileSize);
+        minimapArrayY = Character.getArrayY() + i - minimapFactor/2;
+        minimapArrayX = Character.getArrayX() + j - minimapFactor/2;
+        if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
+          g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+          g.fillRect(maxX-(int)(maxX*1.0/5.0) + j*miniTileSize, i*miniTileSize, miniTileSize, miniTileSize);
+        }
       }
     }
-    
+    //Draws buttons for zoom in and out
     g.setColor(Color.BLUE);
     g.fillRect(maxX-40, 50, 20, 20);
     g.fillRect(maxX-40, 75, 20, 20);
+    g.setColor(Color.RED);
+    g.fillRect(maxX-(int)(maxX*1.0/5.0) + (minimapFactor/2)*miniTileSize, (minimapFactor/2)* miniTileSize, miniTileSize, miniTileSize); //Character square
   }
   public void drawCharacter(Graphics g){
     g.setColor(Color.BLUE);
