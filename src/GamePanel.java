@@ -12,7 +12,7 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   
   private Tile[][] map;
-  private int maxX, maxY, minimapX, minimapY;
+  private int maxX, maxY, minimapX, minimapY, miniTileSize; //minimapX = minimapY, may remove one later
   private int minimapFactor = 10;
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
@@ -130,11 +130,7 @@ class GamePanel extends JPanel{
     }
   }
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
-    g.setColor(Color.RED);
-    g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
-    g.setColor(Color.BLUE);
-    g.fillRect(maxX-40, 50, 20, 20);
-    g.fillRect(maxX-40, 75, 20, 20);
+    //User clicks zoom in and out buttons
     if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1 && !minimapUp && minimapFactor < 100){ //Clicked on top button
       minimapFactor += 10;
       minimapUp = true;
@@ -150,6 +146,17 @@ class GamePanel extends JPanel{
     }
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
     
+    miniTileSize = minimapX/minimapFactor;
+    for(int i = 0; i < minimapFactor; i++){
+      for(int j = 0; j < minimapFactor; j++){
+        g.setColor(map[i][j].getMinimapColor());
+        g.fillRect(maxX-(int)(maxX*1.0/5.0) + i*miniTileSize, j * miniTileSize, miniTileSize, miniTileSize);
+      }
+    }
+    
+    g.setColor(Color.BLUE);
+    g.fillRect(maxX-40, 50, 20, 20);
+    g.fillRect(maxX-40, 75, 20, 20);
   }
   public void drawCharacter(Graphics g){
     g.setColor(Color.BLUE);
