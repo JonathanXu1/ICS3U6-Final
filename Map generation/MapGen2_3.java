@@ -1,10 +1,10 @@
 /*
- * [MapGen2_1.java]
+ * [MapGen2_3.java]
  * 
  * Generates a mazelike map, with rooms that are radomly sized, equally dispersed. Also, unecessary dead ends are removed,
  * doors are generated, along with stairs going up and down. 
  * 
- * Version cleaned up and commented, now with OOP
+ * Version cleaned up and commented, now with imporved OOP, fixed rooms, and unique room ID. 
  * 
  * NOTE: Dynamic room scaling does not work, and needs to be adjusted within the generateMao method to work for different map sizes
  * expirementation has yielded no better method of getting at the optimal room size than doing it by hand. 
@@ -15,7 +15,7 @@
  */ 
 
 
-class mapGen2_1{
+class MapGen2_3{    
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
   public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {
@@ -264,6 +264,32 @@ class mapGen2_1{
       }
     }
     
+    for (int i = 6; i < map.length - 6; i++) {
+      for (int j = 6; j < map[0].length - 6; j++) {
+        if (map[i][j] == 0) {
+          numAdj = 0; // number is reset for every new tile
+          
+          // number is determined
+          if (map[i + 1][j]  == -1) {
+            numAdj++;
+          }
+          if (map[i - 1][j]  == -1) {
+            numAdj++;
+          }
+          if (map[i][j + 1]  == -1) {
+            numAdj++;
+          }
+          if (map[i][j - 1]  == -1) {
+            numAdj++;
+          }
+          
+          if (numAdj == 1) { // if there is only one adjacent room tile, the currnt tile is set to be a door tile
+            map[i][j] = -2;
+          }        
+        }
+      }
+    }
+    
     return map;
   }
   
@@ -313,6 +339,73 @@ class mapGen2_1{
     return map;
   }
   
+  public static int[][] designateWalls(int[][] map) {
+    int numAdj;        
+    
+    for (int i = 5; i < map.length - 5; i++) {
+      for (int j = 5; j < map[0].length - 5; j++) {
+        if (map[i][j] == 1) {
+          numAdj = 0; // number is reset for every new tile
+          
+          // number is determined
+          if (map[i + 1][j]  == 0) {
+            numAdj++;
+          }
+          if (map[i - 1][j]  == 0) {
+            numAdj++;
+          }
+          if (map[i][j + 1]  == 0) {
+            numAdj++;
+          }
+          if (map[i][j - 1]  == 0) {
+            numAdj++;
+          }    
+          
+          if (j == 5 || j == map[0].length - 6) {
+            numAdj--;
+          }
+          
+          if (i == 5 || i == map.length - 6) {
+            numAdj--;
+          } 
+          
+          if (numAdj >= 1) { // if there is only one adjacent room tile, the currnt tile is set to be a a hallway wall
+            map[i][j] = 2;
+          }        
+        }
+      }
+    }
+    
+    for (int i = 5; i < map.length - 5; i++) {
+      for (int j = 5; j < map[0].length - 5; j++) {
+        if (map[i][j] == 1 || map[i][j] == 2) {
+          numAdj = 0; // number is reset for every new tile
+          
+          // number is determined
+          if (map[i + 1][j]  == -1 || map[i + 1][j]  == -2) {
+            numAdj++;
+          }
+          if (map[i - 1][j]  == -1 || map[i - 1][j]  == -2) {
+            numAdj++;
+          }
+          if (map[i][j + 1]  == -1 || map[i][j + 1]  == -2) {
+            numAdj++;
+          }
+          if (map[i][j - 1]  == -1 || map[i][j - 1]  == -2) {
+            numAdj++;
+          }
+          
+          if (numAdj >= 1) { // if there is only one adjacent room tile, the currnt tile is set to be a room wall
+            map[i][j] = 3;
+          }        
+        }
+      }
+    }
+    
+    
+    return map;
+  }
+  
   // Main method that uses the the previously created methods in conjuction to generate a complete map
   public static int[][] generateMap(int effMapSizeW, int effMapSizeD) {   
     int mapSizeW = (effMapSizeW-1)*6 + 3; // Initalizes map size
@@ -348,6 +441,8 @@ class mapGen2_1{
     
     result = insertStairs(result);
     
+    result = designateWalls(result);           
+    
     return result;             
   }
   
@@ -356,7 +451,11 @@ class mapGen2_1{
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
-        if (result[i][j] == 1) {
+        if (result[i][j] == 3) {
+          resultProc[i][j] = '|';
+        } else if (result[i][j] == 2) {
+          resultProc[i][j] = '~';
+        } else if (result[i][j] == 1) {
           resultProc[i][j] = '-';
         } else if (result[i][j] == -2) {
           resultProc[i][j] = 'D';
@@ -373,6 +472,33 @@ class mapGen2_1{
     }
     
     printArrayCharComp(resultProc);   
+  }
+  
+  public static char[][] charMap(int[][] result) {
+    char[][] resultProc = new char[result.length][result[0].length];
+    for (int i = 0; i < result.length; i++) {
+      for (int j = 0; j < result[0].length; j++) {
+        if (result[i][j] == 3) {
+          resultProc[i][j] = '|';
+        } else if (result[i][j] == 2) {
+          resultProc[i][j] = '~';
+        } else if (result[i][j] == 1) {
+          resultProc[i][j] = '-';
+        } else if (result[i][j] == -2) {
+          resultProc[i][j] = 'D';
+        } else if (result[i][j] == -1) {
+          resultProc[i][j] = 'R';
+        } else if (result[i][j] == -3) {
+          resultProc[i][j] = '@';
+        } else if (result[i][j] == -4) {
+          resultProc[i][j] = '#';
+        } else {
+          resultProc[i][j] = 'X';
+        }
+      }
+    }
+    
+    return resultProc;
   }
   
   public static void main(String[] args) {
