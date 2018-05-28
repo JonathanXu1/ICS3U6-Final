@@ -38,9 +38,9 @@ class Display extends JFrame{
     this.setFocusable(true);
     //Adds keylistener object
     this.addKeyListener(keyListener);
-	 this.addMouseListener(mouseListener);
     //Creation of the basic game display
     gamePanel = new GamePanel(maxX, maxY);
+    gamePanel.addMouseListener(mouseListener);
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     this.add(menuBgPanel);
