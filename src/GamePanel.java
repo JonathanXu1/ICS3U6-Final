@@ -17,8 +17,8 @@ class GamePanel extends JPanel{
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
   private int tileSize= 100;
-  private int playerXInitial = 10;
-  private int playerYInitial = 7;
+  private int playerXInitial = Character.getArrayX();
+  private int playerYInitial = Character.getArrayY();
   /////Set up the character coordinates on the map
   private boolean [] blocked = new boolean [4];
   GamePanel(int maxX, int maxY){
