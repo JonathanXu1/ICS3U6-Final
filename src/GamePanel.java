@@ -135,11 +135,11 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
-    if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1 && !minimapUp && minimapFactor > 10){ //Clicked on top button
+    if((mouseXy[0] > maxX-40)&&(mouseXy[0] < maxX-20)&&(mouseXy[1] > 50)&&(mouseXy[1] < 70)&&(mouseXy[2] == 1)&&(!minimapUp)&&(minimapFactor > 10)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
       minimapDown = false;
-    } else if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 75 && mouseXy[1] < 95 && mouseXy[2] == 1 && !minimapDown && minimapFactor < 100){ //Clicked on bottom button
+    } else if((mouseXy[0] > maxX-40)&&(mouseXy[0] < maxX-20)&&(mouseXy[1] > 75)&&(mouseXy[1] < 95)&&(mouseXy[2] == 1)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
       minimapFactor += 10;
       minimapDown = true;
       minimapUp = false;
@@ -148,7 +148,7 @@ class GamePanel extends JPanel{
       minimapDown = false;
       minimapUp = false;
     }
-    debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
+    debugMessage = "Minimap factor: " + Integer.toString(minimapFactor) + String.valueOf(minimapUp);
 
     //Draws minimap contents
     miniTileSize = minimapX/minimapFactor;
