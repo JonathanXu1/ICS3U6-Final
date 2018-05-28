@@ -14,8 +14,6 @@ class CustomKeyListener implements KeyListener {
   private boolean tileRight = false;
   private boolean tiling = false;
   private int tileMoved;
-  private Tile [][] map;
-  private Background bg = new Background();
   public void keyTyped(KeyEvent e) {
   }
   
@@ -86,25 +84,25 @@ class CustomKeyListener implements KeyListener {
     return debugState;
   }
   public void setAllDirection (){
-    tileMoved=  (int)(bg.getTileSize()/10.0);
-    bg.setOnTile();
+    tileMoved=  (int)(Background.getTileSize()/10.0);
+    Background.setOnTile();
     if (moveUp||(tileUp)){
-      bg.setYDirection (-tileMoved);
-      bg.setXDirection (0);
+      Background.setYDirection (-tileMoved);
+      Background.setXDirection (0);
     }else if (moveDown||(tileDown)){
-      bg.setYDirection (tileMoved);
-      bg.setXDirection (0);
+      Background.setYDirection (tileMoved);
+      Background.setXDirection (0);
     }else if (moveLeft||(tileLeft)){
-      bg.setXDirection (-tileMoved);
-      bg.setYDirection (0);
+      Background.setXDirection (-tileMoved);
+      Background.setYDirection (0);
     }else if (moveRight||(tileRight)){
-      bg.setXDirection (tileMoved);
-      bg.setYDirection (0);
+      Background.setXDirection (tileMoved);
+      Background.setYDirection (0);
     }else{
-      bg.setYDirection (0);
-      bg.setXDirection (0);
+      Background.setYDirection (0);
+      Background.setXDirection (0);
     }
-    if ((bg.getOnTile())&&((tileUp)||(tileDown)||(tileLeft)||(tileRight))){
+    if ((Background.getOnTile())&&((tileUp)||(tileDown)||(tileLeft)||(tileRight))){
       moveUp = false;
       moveDown = false;
       moveLeft = false;
@@ -114,8 +112,8 @@ class CustomKeyListener implements KeyListener {
       tileLeft = false;
       tileRight = false;
       tiling = false;
-      bg.setYDirection (0);
-      bg.setXDirection (0);
+      Background.setYDirection (0);
+      Background.setXDirection (0);
     }
   }
   public boolean getMoving(){
@@ -124,8 +122,5 @@ class CustomKeyListener implements KeyListener {
     }else{
       return (true);
     }
-  }
-  public void setTileMap(Tile [][] map){
-    this.map = map;
   }
 }

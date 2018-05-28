@@ -1,5 +1,5 @@
 import java.awt.Color;
-
+import java.awt.Graphics;
 abstract class Tile {
   private Color minimapColor;
   private boolean viewed = false;
@@ -23,4 +23,5 @@ abstract class Tile {
   public boolean getViewed(){
     return viewed;
   }
+  abstract void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }

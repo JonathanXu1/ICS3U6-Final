@@ -2,18 +2,19 @@
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 class CustomMouseListener implements MouseListener {
-  int[] xy = new int [2];
+  int[] xy = new int [3];
   public void mouseClicked(MouseEvent e) {
-    System.out.println("Mouse Clicked");
-    System.out.println("X:"+e.getX() + " y:"+e.getY());
-    xy[0] = e.getX();
-    xy[1] = e.getY();
+    //Have to manually change the coordinates to sync up with windows, must realign to mouse listener to fix.
+    xy[0] = e.getX() - 15;
+    xy[1] = e.getY() - 30;
   }
   
   public void mousePressed(MouseEvent e) {
+    xy[2] = 1;
   }
   
   public void mouseReleased(MouseEvent e) {
+    xy[2] = 0;
   }
   
   public void mouseEntered(MouseEvent e) {
