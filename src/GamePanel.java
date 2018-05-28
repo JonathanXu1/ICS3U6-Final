@@ -1,15 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 class GamePanel extends JPanel{
   private boolean debugState;
   private int stringLength;
   private String fps;
   private int [] mouseXy;
-  private int xMove;
-  private int yMove;
-  private int direction=0;
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
   
@@ -21,10 +17,8 @@ class GamePanel extends JPanel{
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
   private int tileSize= 100;
-  private Background bg = new Background(tileSize);
   private int playerXInitial = 10;
   private int playerYInitial = 7;
-  private Character player = new Character (playerXInitial,playerYInitial, tileSize);
   /////Set up the character coordinates on the map
   private boolean [] blocked = new boolean [4];
   GamePanel(int maxX, int maxY){
@@ -35,6 +29,9 @@ class GamePanel extends JPanel{
     this.setPreferredSize(panelSize);
     this.minimapX = (int)(maxX*1.0/5.0);
     this.minimapY = (int)(maxX*1.0/5.0);
+    Background.setTileSize(tileSize);
+    Character.setArrayX (playerXInitial);
+    Character.setArrayY (playerYInitial);
   }
   public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, int[] mouseXy){
     this.debugState = debugState;
@@ -47,8 +44,7 @@ class GamePanel extends JPanel{
   @Override
   public void paintComponent(Graphics g){
     super.paintComponent(g);
-    player.setTileSize(tileSize);
-    bg.setTileSize(tileSize);
+    Background.setTileSize(tileSize);
     //Draw the map
     drawMap(g);
     drawMinimap(g);
@@ -61,9 +57,6 @@ class GamePanel extends JPanel{
       drawDebugPanel(g);
     }
     this.setVisible(true);
-  }
-  public void setDirection (int direction){
-    this.direction = direction;
   }
   public void refresh(){
     this.repaint();
@@ -118,21 +111,21 @@ class GamePanel extends JPanel{
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
   }
   public void drawMap (Graphics g){
-    bg.setOnTile();
-    if (bg.getOnTile()){
-      player.setArrayY(playerYInitial+bg.getY()/tileSize);
-      player.setArrayX(playerXInitial+bg.getX()/tileSize);
+    Background.setOnTile();
+    if (Background.getOnTile()){
+      Character.setArrayY(playerYInitial+Background.getY()/tileSize);
+      Character.setArrayX(playerXInitial+Background.getX()/tileSize);
       findBlocked ();
     }
-    if ((!(blocked[0])&&(bg.getYDirection()<0))||(!(blocked[1])&&(bg.getYDirection()>0))||(!(blocked[2])&&(bg.getXDirection()<0))||(!(blocked[3])&&(bg.getXDirection()>0))){
-      bg.move();
+    if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
+      Background.move();
     }
     for (int i = 0;i<map.length;i++){
       for (int j=0;j<map[0].length;j++){
-        g.setColor (map[i][j].getMinimapColor());
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
-        g.fillRect (maxX/2+j*tileSize-bg.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-bg.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+        map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+        //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
       }
     }
   }
@@ -163,22 +156,22 @@ class GamePanel extends JPanel{
     g.fillRect (maxX/2-(tileSize/2),maxY/2-(tileSize/2),tileSize, tileSize);
   }
   public void findBlocked(){
-    if (map[player.getArrayY()-1][player.getArrayX()]  instanceof WalkableTile){
+    if (map[Character.getArrayY()-1][Character.getArrayX()]  instanceof WalkableTile){
       blocked[0] = false;
     }else{
       blocked[0] = true;
     }
-    if (map[player.getArrayY()+1][player.getArrayX()]  instanceof WalkableTile){
+    if (map[Character.getArrayY()+1][Character.getArrayX()]  instanceof WalkableTile){
       blocked[1] = false;
     }else{
       blocked[1] = true;
     }
-    if (map[player.getArrayY()][player.getArrayX()-1]  instanceof WalkableTile){
+    if (map[Character.getArrayY()][Character.getArrayX()-1]  instanceof WalkableTile){
       blocked[2] = false;
     }else{
       blocked[2] = true;
     }
-    if (map[player.getArrayY()][player.getArrayX()+1]  instanceof WalkableTile){
+    if (map[Character.getArrayY()][Character.getArrayX()+1]  instanceof WalkableTile){
       blocked[3] = false;
     }else{
       blocked[3] = true;

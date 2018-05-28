@@ -20,7 +20,6 @@ class DisplayTest{
       arrayRow++;
     }
     Tile [][] map = new Tile [arrayRow][arrayColumn];
-    int arrayNavigate = 0;
     String tempLine;
     input = new Scanner (fileMap);
     for (int i = 0;i<arrayRow;i++){

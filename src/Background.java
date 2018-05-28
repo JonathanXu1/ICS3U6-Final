@@ -1,6 +1,3 @@
-import javax.swing.*;
-import java.awt.*;
-
 class Background{
   private static int x = 0;
   private static int y  =0;
@@ -9,49 +6,49 @@ class Background{
   private static boolean onTile = true;
   private static int tileSize;
   
-  Background(int tileSize){
-    this.tileSize = tileSize;
+  Background(int tSize){
+    tileSize = tSize;
   }
   Background(){
   }
-  public int getXDirection(){
+  public static int getXDirection(){
     return (xDirection);
   }
-  public void setXDirection(int xDirection){
-    this.xDirection = xDirection;
+  public static void setXDirection(int xDire){
+    xDirection = xDire;
   }
   
-  public int getYDirection(){
+  public static int getYDirection(){
     return (yDirection);
   }
-  public void setYDirection(int yDirection){
-    this.yDirection = yDirection;
+  public static void setYDirection(int yDire){
+    yDirection = yDire;
   }
   
-  public void move(){
+  public static void move(){
     x=x + xDirection;
     y=y + yDirection;
   }
-  public int getX(){
+  public static int getX(){
     return (x);
   }
-  public int getY(){  
+  public static int getY(){  
     return (y);
   }
-  public boolean getOnTile(){
+  public static boolean getOnTile(){
     return (onTile);
   }
-  public void setOnTile (){
+  public static void setOnTile (){
     if ((x%tileSize==0)&&(y%tileSize==0)){
-      this.onTile =true;
+      onTile =true;
     }else{
-      this.onTile =false;
+      onTile =false;
     }
   }
-  public void setTileSize(int tileSize){
-    this.tileSize = tileSize;
+  public static void setTileSize(int tSize){
+    tileSize = tSize;
   }
-  public int getTileSize(){
+  public static int getTileSize(){
     return (tileSize);
   }
 }
