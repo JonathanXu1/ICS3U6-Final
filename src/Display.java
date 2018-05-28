@@ -1,12 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 
 class Display extends JFrame{
   //Main game stats
   private GamePanel gamePanel;
   private int gameState= 0;
-  private boolean debugState = false;
   private int maxX, maxY;
   private int[] mouseXy;
   
@@ -22,7 +20,6 @@ class Display extends JFrame{
   private JLabel title = new JLabel("CONCORDIA");
   //Debug Panel
   private double totalMem, memUsed;
-  private JLabel frames;
   private int fps = 0;
   //Start Listeners
   private StartListener menuStartListener;

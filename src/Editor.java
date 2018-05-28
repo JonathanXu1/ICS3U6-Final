@@ -34,7 +34,6 @@ class Editor{
       String title;
       String paramStr= "";
       String returnStr;
-      boolean noSpacesLeft =false;
       int count = 0;
       boolean workWithArrays = false;
       String firstLetter;
