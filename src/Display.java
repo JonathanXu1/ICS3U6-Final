@@ -69,10 +69,12 @@ class Display extends JFrame{
   
   public void refreshAll(){
     mouseXy = mouseListener.getMouseXy();
+    //Menu state
     if (gameState==0){ 
       menuPanel.setVisible(true);
       menuBgPanel.setVisible(true);
       title.setVisible(true);
+      // Main game state
     }else if (gameState==1){
       if (keyListener.getDebugState()){
         gamePanel.setDebugInfo(true, fps, totalMem, memUsed, mouseXy);

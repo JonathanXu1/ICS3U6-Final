@@ -10,6 +10,7 @@ class DisplayTest{
     double maxMem = runtime.maxMemory();
     double usedMem;
     
+    //Very messy code, may have to reformat later
     File fileMap = new File("../res/testMap.txt");
     Scanner input = new Scanner (fileMap);
     int arrayRow =0;
@@ -21,9 +22,9 @@ class DisplayTest{
     Tile [][] map = new Tile [arrayRow][arrayColumn];
     int arrayNavigate = 0;
     String tempLine;
-    Scanner inputNew = new Scanner (fileMap);
+    input = new Scanner (fileMap);
     for (int i = 0;i<arrayRow;i++){
-      tempLine = inputNew.nextLine();
+      tempLine = input.nextLine();
       for(int j = 0;j<arrayColumn;j++){
         if (tempLine.charAt (j)=='X'){
           map[i][j]= new FloorTile(Color.WHITE);
@@ -33,7 +34,7 @@ class DisplayTest{
       }
     }
     input.close();
-    inputNew.close();
+    
     Display disp = new Display ();
     disp.setMap(map);
     long oldTime = System.nanoTime();
