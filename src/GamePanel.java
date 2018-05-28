@@ -135,14 +135,14 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLUE);
     g.fillRect(maxX-40, 50, 20, 20);
     g.fillRect(maxX-40, 75, 20, 20);
-    if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1 && !minimapUp){ //Clicked on top button
+    if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 50 && mouseXy[1] < 70 && mouseXy[2] == 1){ //Clicked on top button
       minimapFactor += 10;
-      minimapUp = true;
-      minimapDown = false;
-    } else if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 75 && mouseXy[1] < 95 && mouseXy[2] == 1 && !minimapDown){ //Clicked on bottom button
+      //minimapUp = true;
+      //minimapDown = false;
+    } else if(mouseXy[0] > maxX-40 && mouseXy[0] < maxX-20 && mouseXy[1] > 75 && mouseXy[1] < 95 && mouseXy[2] == 1){ //Clicked on bottom button
       minimapFactor -= 10;
-      minimapDown = true;
-      minimapUp = false;
+      //minimapDown = true;
+      //minimapUp = false;
     }
     if(mouseXy[2] == 0){
       minimapDown = false;

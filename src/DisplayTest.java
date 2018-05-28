@@ -9,7 +9,6 @@ class DisplayTest{
     Runtime runtime = Runtime.getRuntime();
     double maxMem = runtime.maxMemory();
     double usedMem;
-    
     //Very messy code, may have to reformat later
     File fileMap = new File("../res/testMap.txt");
     Scanner input = new Scanner (fileMap);
