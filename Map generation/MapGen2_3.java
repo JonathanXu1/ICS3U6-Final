@@ -1,5 +1,5 @@
 /*
- * [MapGen2_2.java]
+ * [MapGen2_3.java]
  * 
  * Generates a mazelike map, with rooms that are radomly sized, equally dispersed. Also, unecessary dead ends are removed,
  * doors are generated, along with stairs going up and down. 
@@ -15,7 +15,7 @@
  */ 
 
 
-class mapGen2_2{    
+class MapGen2_3{    
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
   public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {

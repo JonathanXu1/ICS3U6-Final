@@ -13,8 +13,7 @@ class GamePanel extends JPanel{
   
   private Tile[][] map;
   private int maxX, maxY;
-  private int minimapX, minimapY, minimapArrayX, minimapArrayY; //minimapX = minimapY, may remove one later
-  private double miniTileSize;
+  private int minimapX, minimapY, minimapArrayX, miniTileSize, minimapArrayY; //minimapX = minimapY, may remove one later
   private int minimapFactor = 10;
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
@@ -150,6 +149,7 @@ class GamePanel extends JPanel{
       minimapUp = false;
     }
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
+
     //Draws minimap contents
     miniTileSize = minimapX/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
