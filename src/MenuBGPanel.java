@@ -1,5 +1,8 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLayeredPane;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 class MenuBGPanel extends JLayeredPane{
   private int xVal;

@@ -1,5 +1,5 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLayeredPane;
+import java.awt.Dimension;
 
 class MenuPanel extends JLayeredPane{
   MenuPanel(int xVal, int yVal){

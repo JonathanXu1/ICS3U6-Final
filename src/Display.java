@@ -1,5 +1,10 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Toolkit;
 
 class Display extends JFrame{
   //Main game stats
@@ -39,7 +44,7 @@ class Display extends JFrame{
     //Adds keylistener object
     this.addKeyListener(keyListener);
     //Creation of the basic game display
-    gamePanel = new GamePanel(maxX, maxY);
+    gamePanel = new GamePanel();
     gamePanel.addMouseListener(mouseListener);
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);

@@ -1,4 +1,4 @@
-import javax.swing.*;
+import javax.swing.JButton;
 
 class CustomButton extends JButton{
   CustomButton(String name){
