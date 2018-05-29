@@ -18,8 +18,8 @@ class GamePanel extends JPanel{
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
   private int tileSize= 100;
-  private int playerXInitial = 10;
-  private int playerYInitial = 7;
+  private int playerXInitial = Character.getArrayX();
+  private int playerYInitial = Character.getArrayY();
   /////Set up the character coordinates on the map
   private boolean [] blocked = new boolean [4];
   GamePanel(int maxX, int maxY){
@@ -98,9 +98,6 @@ class GamePanel extends JPanel{
     g.drawImage(left,0,maxY-(int)(maxY*2.5/10.0),(int)((int)(maxY*2.5/10.0)*208.0/87.0),(int)(maxY*2.5/10.0),this);
     g.drawImage(middle,(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0),maxX -(int)((int)(maxY*2.5/10.0)*208.0/87.0*2.0)+5, (int)(maxY*2.5/10.0),this);
     g.drawImage(right,maxX-(int)((int)(maxY*2.5/10.0)*208.0/87.0),maxY-(int)(maxY*2.5/10.0), (int)((int)(maxY*2.5/10.0)*208.0/87.0), (int)(maxY*2.5/10.0),this);
-    //Minimap
-    Image map = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
-    g.drawImage(map,maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY,this);
     //Hp and exp bars
     Image hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     g.setColor (new Color (69,218,215));
@@ -168,6 +165,9 @@ class GamePanel extends JPanel{
     g.fillRect(maxX-40, 75, 20, 20);
     g.setColor(Color.RED);
     g.fillRect(maxX-(int)(maxX*1.0/5.0) + (minimapFactor/2)*miniTileSize, (minimapFactor/2)* miniTileSize, miniTileSize, miniTileSize); //Character square
+    //Minimap
+    Image map = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
+    g.drawImage(map,maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY,this);
   }
   public void drawCharacter(Graphics g){
     g.setColor(Color.BLUE);

@@ -3,9 +3,7 @@ class Character{
   //We should probably make everything here static
   private static int x;
   private static int y;
-  Character(int newX, int newY){
-    x= newX;
-    y=newY;
+  Character(){
   }
   public static int getArrayX(){
     return (x);

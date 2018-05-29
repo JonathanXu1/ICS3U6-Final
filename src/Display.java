@@ -62,6 +62,7 @@ class Display extends JFrame{
     menuPanel.setVisible (true);
     title.setVisible(true);
     this.setVisible (true);
+    this.getContentPane().setBackground(Color.BLACK);
   }
   
   public void refreshAll(){
