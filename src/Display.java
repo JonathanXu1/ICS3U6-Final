@@ -48,10 +48,13 @@ class Display extends JFrame{
     gamePanel.addMouseListener(mouseListener);
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
+    menuBgPanel.setLayout(null);
     this.add(menuBgPanel);
-    menuBgPanel.setLayout(new BorderLayout());
     menuPanel = new MenuPanel(300,100);
+    //menuPanel.setOpaque(false);
+    menuPanel.setBounds(200, 200, 200, 300);
     title.setFont(new Font("sansserif", Font.BOLD, 72));
+    title.setLocation(10,10);
     menuBgPanel.add(title, BorderLayout.NORTH);
     menuBgPanel.add(menuPanel, BorderLayout.WEST);
     menuPanel.setLayout(new GridLayout(5, 1));

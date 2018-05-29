@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import java.awt.Color;
 
 class Main{
@@ -66,4 +67,92 @@ class Main{
       }
     }
   }
+=======
+import java.awt.Color;
+import java.io.File;
+import javax.sound.sampled.*;
+
+class Main{
+  public static void main (String[] args) throws Exception{
+    //Finds memory usage before program starts
+    int mb = 1024*1024;
+    Runtime runtime = Runtime.getRuntime();
+    double maxMem = runtime.maxMemory();
+    double usedMem;
+    //Music vars
+    File audioFile = new File("../res/africa.wav");
+    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+    Clip clip = (Clip) AudioSystem.getLine(info);
+    
+    //Very messy code, may have to reformat later    
+    MapGen2_3 gen = new MapGen2_3();
+    
+    char[][] charMap = gen.charMap(gen.generateMap(24,6));
+    Tile [][] map = new Tile [charMap.length][charMap[0].length];
+    String tempLine;
+    
+    for (int i = 0; i < charMap.length; i++){
+      for(int j = 0; j < charMap[0].length; j++){
+        if (charMap[i][j] == 'X'){
+          map[i][j]= new FloorTile(Color.WHITE);
+        } else if (charMap[i][j] == 'R') {
+          map[i][j]= new FloorTile(Color.GREEN);
+        } else if (charMap[i][j] == 'D') {
+          map[i][j]= new FloorTile(Color.BLUE);
+        } else if (charMap[i][j] == '~') {
+          map[i][j]= new WallTile(Color.DARK_GRAY);
+        } else if (charMap[i][j] == '|') {
+          map[i][j]= new WallTile(Color.LIGHT_GRAY);
+        }else if (charMap[i][j] == '@'){
+          map[i][j]= new FloorTile(Color.GREEN);
+          Character.setArrayX (j);
+          Character.setArrayY (i);
+        }else{
+          map[i][j]= new VoidTile(Color.BLACK);
+        }
+      }
+    }
+    
+    //Plays music
+    try {      
+      clip.open(audioStream);
+      clip.start();
+      }catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    Display disp = new Display ();
+    disp.setMap(map);
+    long oldTime = System.nanoTime();
+    long secondTime = System.nanoTime();
+    long currentTime = System.nanoTime();
+    int frame=0;
+    final long DELTA_LIMIT = 10000000;
+    final long SECOND_LIMIT = 1000000000;
+    while (true){
+      currentTime= System.nanoTime();
+      //Finds memory usage after code execution
+      usedMem = runtime.totalMemory() - runtime.freeMemory();
+      disp.setMem(maxMem/mb, usedMem/mb);
+      
+      if ((currentTime-oldTime)>=DELTA_LIMIT){
+        disp.getListen();
+        disp.refreshAll();
+        oldTime = currentTime;
+        frame++;
+      }
+      if ((currentTime-secondTime)>=SECOND_LIMIT){
+        secondTime = currentTime;
+        //System.out.println (frame);
+        disp.setFps(frame);
+        frame =0;
+      }
+      
+      if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
+        clip.close();
+      }
+    }
+  }
+>>>>>>> 78c97138ced697a2918e2a6c1239cc9cd15a9e87
 }
