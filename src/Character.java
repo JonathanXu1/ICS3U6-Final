@@ -8,13 +8,13 @@ class Character{
   public static int getArrayX(){
     return (x);
   }
-  public static void setArrayX(int newX){
-    x =newX;
+  public static void setArrayX(int xNew){
+    x =xNew;
   }
   public static int getArrayY(){
     return (y);
   }
-  public static void setArrayY(int newY){
-    y =newY;
+  public static void setArrayY(int yNew){
+    y =yNew;
   }
 }

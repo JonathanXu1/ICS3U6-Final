@@ -1,5 +1,10 @@
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 class GamePanel extends JPanel{
   private boolean debugState;
@@ -12,7 +17,8 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   
   private Tile[][] map;
-  private int maxX, maxY;
+  private int maxX= 0;
+  private int maxY= 0;
   private int minimapX, minimapY, minimapArrayX, miniTileSize, minimapArrayY; //minimapX = minimapY, may remove one later
   private int minimapFactor = 20;
   private boolean minimapUp = false, minimapDown = false;
@@ -22,14 +28,8 @@ class GamePanel extends JPanel{
   private int playerYInitial = Character.getArrayY();
   /////Set up the character coordinates on the map
   private boolean [] blocked = new boolean [4];
-  GamePanel(int maxX, int maxY){
+  GamePanel(){
     setFocusable(true);
-    this.maxX= maxX;
-    this.maxY = maxY;
-    Dimension panelSize= new Dimension (maxX, maxY);
-    this.setPreferredSize(panelSize);
-    this.minimapX = (int)(maxX*1.0/5.0);
-    this.minimapY = (int)(maxX*1.0/5.0);
     Background.setTileSize(tileSize);
     Character.setArrayX (playerXInitial);
     Character.setArrayY (playerYInitial);
@@ -45,6 +45,13 @@ class GamePanel extends JPanel{
   @Override
   public void paintComponent(Graphics g){
     super.paintComponent(g);
+    if (maxX==0){
+      this.setPreferredSize(this.getSize());
+      this.maxX= (int)this.getSize().getWidth();
+      this.maxY =(int)this.getSize().getHeight();
+          this.minimapX = (int)(maxX*1.0/5.0);
+    this.minimapY = (int)(maxX*1.0/5.0);
+    }
     Background.setTileSize(tileSize);
     //Draw the map
     drawMap(g);

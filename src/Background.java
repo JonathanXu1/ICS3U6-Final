@@ -35,6 +35,12 @@ class Background{
   public static int getY(){  
     return (y);
   }
+  public static void setX(int xNew){
+    x = xNew;
+  }
+  public static void setY(int yNew){  
+    y = yNew;
+  }
   public static boolean getOnTile(){
     return (onTile);
   }
