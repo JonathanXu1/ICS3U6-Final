@@ -20,7 +20,7 @@ class GamePanel extends JPanel{
   private int maxX= 0;
   private int maxY= 0;
   private int minimapX, minimapY, minimapArrayX, miniTileSize, minimapArrayY; //minimapX = minimapY, may remove one later
-  private int minimapFactor = 10;
+  private int minimapFactor = 20;
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
   private int tileSize= 100;
@@ -139,7 +139,7 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
-    if((mouseXy[0] > maxX-40)&&(mouseXy[0] < maxX-20)&&(mouseXy[1] > 50)&&(mouseXy[1] < 70)&&(mouseXy[2] == 1)&&(!minimapUp)&&(minimapFactor > 10)){ //Clicked on top button
+    if((mouseXy[0] > maxX-40)&&(mouseXy[0] < maxX-20)&&(mouseXy[1] > 50)&&(mouseXy[1] < 70)&&(mouseXy[2] == 1)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
       minimapDown = false;
