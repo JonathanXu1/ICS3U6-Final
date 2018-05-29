@@ -1,6 +1,6 @@
 import java.awt.Color;
 
-class DisplayTest{
+class Main{
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
     int mb = 1024*1024;
