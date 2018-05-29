@@ -27,11 +27,11 @@ class Main{
           map[i][j]= new VoidTile(Color.DARK_GRAY);
         } else if (charMap[i][j] == '|') {
           map[i][j]= new WallTile(Color.LIGHT_GRAY);
-        }else if (charMap[i][j] == '@'){
+        } else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN);
           Character.setArrayX (j);
           Character.setArrayY (i);
-        }else{
+        } else{
           map[i][j]= new VoidTile(Color.BLACK);
         }
       }
