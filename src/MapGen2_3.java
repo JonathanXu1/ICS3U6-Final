@@ -4,7 +4,7 @@
  * Generates a mazelike map, with rooms that are radomly sized, equally dispersed. Also, unecessary dead ends are removed,
  * doors are generated, along with stairs going up and down. 
  * 
- * Version cleaned up and commented, now with imporved OOP, fixed rooms, and unique room ID. 
+ * Version cleaned up and commented, now with improved OOP, fixed rooms, and unique room ID. 
  * 
  * NOTE: Dynamic room scaling does not work, and needs to be adjusted within the generateMao method to work for different map sizes
  * expirementation has yielded no better method of getting at the optimal room size than doing it by hand. 
@@ -15,7 +15,7 @@
  */ 
 
 
-class MapGen2_3{    
+class MapGen2_3{
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
   public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {

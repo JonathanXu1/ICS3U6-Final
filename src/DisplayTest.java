@@ -1,5 +1,3 @@
-import java.io.*;
-import java.util.Scanner;
 import java.awt.Color;
 
 class DisplayTest{
@@ -9,29 +7,36 @@ class DisplayTest{
     Runtime runtime = Runtime.getRuntime();
     double maxMem = runtime.maxMemory();
     double usedMem;
-    //Very messy code, may have to reformat later
-    File fileMap = new File("../res/testMap.txt");
-    Scanner input = new Scanner (fileMap);
-    int arrayRow =0;
-    int arrayColumn = 0;
-    while (input.hasNext()){
-      arrayColumn=(input.nextLine()).length();
-      arrayRow++;
-    }
-    Tile [][] map = new Tile [arrayRow][arrayColumn];
+    
+    //Very messy code, may have to reformat later    
+    MapGen2_3 gen = new MapGen2_3();
+    
+    char[][] charMap = gen.charMap(gen.generateMap(24,6));
+    Tile [][] map = new Tile [charMap.length][charMap[0].length];
     String tempLine;
-    input = new Scanner (fileMap);
-    for (int i = 0;i<arrayRow;i++){
-      tempLine = input.nextLine();
-      for(int j = 0;j<arrayColumn;j++){
-        if (tempLine.charAt (j)=='X'){
+    
+    for (int i = 0; i < charMap.length; i++){
+      for(int j = 0; j < charMap[0].length; j++){
+        if (charMap[i][j] == 'X'){
           map[i][j]= new FloorTile(Color.WHITE);
+        } else if (charMap[i][j] == 'R') {
+          map[i][j]= new FloorTile(Color.GREEN);
+        } else if (charMap[i][j] == 'D') {
+          map[i][j]= new FloorTile(Color.BLUE);
+        } else if (charMap[i][j] == '~') {
+          map[i][j]= new VoidTile(Color.DARK_GRAY);
+        } else if (charMap[i][j] == '|') {
+          map[i][j]= new WallTile(Color.LIGHT_GRAY);
+        }else if (charMap[i][j] == '@'){
+          map[i][j]= new FloorTile(Color.GREEN);
+          Character.setArrayX (j);
+          Character.setArrayY (i);
         }else{
-          map[i][j]= new WallTile(Color.BLACK);
+          map[i][j]= new VoidTile(Color.BLACK);
         }
       }
     }
-    input.close();
+
     
     Display disp = new Display ();
     disp.setMap(map);
