@@ -62,7 +62,7 @@ class Main{
         secondTime = currentTime;
         //System.out.println (frame);
         disp.setFps(frame);
-        frame =0;
+        frame = 0;
       }
     }
   }
