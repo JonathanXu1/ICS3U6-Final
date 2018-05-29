@@ -13,7 +13,7 @@ class DisplayTest2{
     //Very messy code, may have to reformat later    
     MapGen2_3 gen = new MapGen2_3();
     
-    char[][] charMap = gen.charMap(gen.generateMap(24,6));
+    char[][] charMap = gen.charMap(gen.generateMap(12,12));
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
     String tempLine;
     
