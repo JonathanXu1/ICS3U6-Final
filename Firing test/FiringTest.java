@@ -7,8 +7,6 @@ class FiringTest{
     int ratio = disp.getRatio();     
     
     int counter = 0;
-    int start = 0;
-    int end = 70;
     
     int currentTileD = 6;
     int currentTileR = 6;
