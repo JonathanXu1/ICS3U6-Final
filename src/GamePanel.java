@@ -20,6 +20,7 @@ class GamePanel extends JPanel{
   private Image middle;
   private Image exp;
   private Image hp;
+  private Image hotbar;
   private Image mapBorder;
   private Tile[][] map;
   private int maxX= 0;
@@ -43,6 +44,7 @@ class GamePanel extends JPanel{
     this.middle = Toolkit.getDefaultToolkit().getImage("../res/MetalM.png");
     this.exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     this.hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
+    this.hotbar = Toolkit.getDefaultToolkit().getImage("../res/Hotbar.png");
     this.mapBorder = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
   }
   public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, CustomMouseListener mouse){
@@ -62,8 +64,8 @@ class GamePanel extends JPanel{
       this.setPreferredSize(this.getSize());
       this.maxX= (int)this.getSize().getWidth();
       this.maxY =(int)this.getSize().getHeight();
-      this.minimapX = 350;
-      this.minimapY = 350;
+      this.minimapX = 250;
+      this.minimapY = 250;
     }
     Background.setTileSize(tileSize);
     //Draw the map
@@ -113,14 +115,14 @@ class GamePanel extends JPanel{
   }
   public void drawGameComponents(Graphics g){
     //Bottom toolbar
-    //Always set to 350 pixels in height
-    g.drawImage(left,0,maxY-350,(int)(350.0*(110.0/75.0)),350,this);
-    g.drawImage(middle,(int)((350.0)*110.0/75.0),maxY-350,maxX -(int)(350.0*110.0/75.0*2.0)+5, 350,this);
-    g.drawImage(right,maxX-(int)(350.0*110.0/75.0),maxY-350, (int)(350.0*110.0/75.0), 350,this);
+    //Always set to 250 pixels in height
+    g.drawImage(left,0,maxY-250,(int)(250.0*(110.0/75.0)),250,this);
+    g.drawImage(middle,(int)((250.0)*110.0/75.0),maxY-250,maxX -(int)(250.0*110.0/75.0*2.0)+5, 250,this);
+    g.drawImage(right,maxX-(int)(250.0*110.0/75.0),maxY-250, (int)(250.0*110.0/75.0), 250,this);
+    g.drawImage(hotbar,(int)(maxX/2.0-(250.0*208.0/(75.0*2.0))),maxY-250,(int)(250.0*208.0/75.0), 250,this);
     //Hp and exp bars
     g.drawImage(hp,10,10, ((int)(maxX*1.0/5.0)),  ((int)(maxX*1.0/5.0/200.0*14.0)),this);
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
-
   }
   public void drawMap (Graphics g){
     Background.setOnTile();
@@ -143,11 +145,11 @@ class GamePanel extends JPanel{
   }
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
     //User clicks zoom in and out buttons
-    if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-333)&&(mouseXy[1] < maxY-333+150)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
+    if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-240)&&(mouseXy[1] < maxY-240+110)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
       minimapDown = false;
-    } else if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-170)&&(mouseXy[1] < maxY-170+150)&&(mousePressed)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
+    } else if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-120)&&(mouseXy[1] < maxY-120+110)&&(mousePressed)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
       minimapFactor += 10;
       minimapDown = true;
       minimapUp = false;
@@ -167,15 +169,18 @@ class GamePanel extends JPanel{
         minimapArrayX = Character.getArrayX() + j - minimapFactor/2;
         if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
           g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
-          g.fillRect(j*miniTileSize, (maxY-340)+i*miniTileSize, miniTileSize, miniTileSize);
+          g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize);
+        }
+        if ((minimapArrayY==Character.getArrayY())&&(minimapArrayX==Character.getArrayX())){
+       g.setColor(Color.RED);
+    g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize); //Character square
+      
         }
       }
     }
     //Draws buttons for zoom in and out
-    g.setColor(Color.RED);
-    g.fillRect((minimapFactor/2)*miniTileSize, maxY-(minimapFactor/2)* miniTileSize, miniTileSize, miniTileSize); //Character square
-    //Draws the frame    
-    g.drawImage(mapBorder,0,maxY-350,minimapX, minimapY,this);
+     //Draws the frame    
+    g.drawImage(mapBorder,0,maxY-250,minimapX, minimapY,this);
   }
   public void drawCharacter(Graphics g){
     g.setColor(Color.BLUE);
