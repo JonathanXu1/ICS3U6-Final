@@ -31,7 +31,7 @@ class Main{
         } else if (charMap[i][j] == 'D') {
           map[i][j]= new FloorTile(Color.BLUE);
         } else if (charMap[i][j] == '~') {
-          map[i][j]= new VoidTile(Color.DARK_GRAY);
+          map[i][j]= new WallTile(Color.DARK_GRAY);
         } else if (charMap[i][j] == '|') {
           map[i][j]= new WallTile(Color.LIGHT_GRAY);
         }else if (charMap[i][j] == '@'){
@@ -44,15 +44,13 @@ class Main{
       }
     }
     
-    //Music player
-    try {     
+    //Plays music
+    try {      
       clip.open(audioStream);
       clip.start();
-      
       }catch (Exception e) {
       e.printStackTrace();
     }
-    
     
     Display disp = new Display ();
     disp.setMap(map);

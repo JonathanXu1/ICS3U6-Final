@@ -12,43 +12,40 @@ class CustomKeyListener implements KeyListener {
   private boolean tileDown = false;
   private boolean tileLeft = false;
   private boolean tileRight = false;
-  private boolean tiling = false;
   private int tileMoved;
   public void keyTyped(KeyEvent e) {
   }
   
   public void keyPressed(KeyEvent e) {
-    //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
-    
     if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && !debugState) {  //If 'F1' is pressed
       debugState = true;
     } else if (KeyEvent.getKeyText(e.getKeyCode()).equals("F1") && debugState) {  //If 'F1' is pressed again
       debugState = false;
     }
-    if (e.getKeyChar() =='w'){
+    if ((e.getKeyChar() =='w')||(e.getKeyChar() =='W')){
       moveUp = true;
     }
-    if (e.getKeyChar() =='s'){
+    if ((e.getKeyChar() =='s')||(e.getKeyChar() =='S')){
       moveDown = true;
     }
-    if (e.getKeyChar() =='a'){
+    if ((e.getKeyChar() =='a')||(e.getKeyChar() =='A')){
       moveLeft = true;
     }
-    if (e.getKeyChar() =='d'){
+    if ((e.getKeyChar() =='d')||(e.getKeyChar() =='D')){
       moveRight = true;
     }
   }
   public void keyReleased(KeyEvent e) {
-    if (e.getKeyChar() =='w'){
+    if ((e.getKeyChar() =='w')||(e.getKeyChar() =='W')){
       moveUp = false;
     }
-    if (e.getKeyChar() =='s') { 
+    if ((e.getKeyChar() =='s')||(e.getKeyChar() =='S')) { 
       moveDown = false;
     }
-    if (e.getKeyChar() =='a'){ 
+    if ((e.getKeyChar() =='a')||(e.getKeyChar() =='A')){ 
       moveLeft = false;
     }
-    if (e.getKeyChar() =='d') {
+    if ((e.getKeyChar() =='d')||(e.getKeyChar() =='D')){
       moveRight = false;
     }
   }
@@ -103,11 +100,4 @@ class CustomKeyListener implements KeyListener {
       Background.setXDirection (0);
     }
   }
-//  public boolean getMoving(){
-  //  if ((direction[0]=4)&&(direction[1]=4)&&(direction[2]=4)&&(direction[3]=4)&&!(tileUp)&&!(tileDown)&&!(tileLeft)&&!(tileRight)){
-  // return (false);
-  //  }else{
-  //    return (true);
-//    }
-  // }
 }
