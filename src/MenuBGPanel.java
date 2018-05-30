@@ -13,6 +13,7 @@ class MenuBGPanel extends JPanel{
     this.yVal = yVal;
     Dimension panelSize= new Dimension (xVal, yVal);
     this.setPreferredSize(panelSize);
+    this.setLayout(null);
   }
   @Override
   public void paintComponent(Graphics g){

@@ -1,10 +1,12 @@
 import javax.swing.JPanel;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 class MenuPanel extends JPanel{
-  MenuPanel(int xVal, int yVal){
+  MenuPanel(int x, int y, int xVal, int yVal){
     setFocusable(true);
-    Dimension panelSize = new Dimension (xVal, yVal);
-    this.setPreferredSize(panelSize);
+    this.setBounds(x, y, xVal, yVal);
+    this.setLayout(new GridLayout(6,1));
+    this.setOpaque(false);
   }
 }

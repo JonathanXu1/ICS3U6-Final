@@ -11,6 +11,7 @@ class GamePanel extends JPanel{
   private int stringLength;
   private String fps;
   private int [] mouseXy;
+  private boolean mousePressed, mouseHover;
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
@@ -44,12 +45,14 @@ class GamePanel extends JPanel{
     this.hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     this.mapBorder = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
   }
-  public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, int[] mouseXy){
+  public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, CustomMouseListener mouse){
     this.debugState = debugState;
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
-    this.mouseXy = mouseXy;
+    this.mouseXy = mouse.getMouseXy();
+    this.mousePressed = mouse.getPressed();
+    this.mouseHover = mouse.getHover();
     memPercent = (memUsed/totalMem)*100;
   }
   @Override
@@ -97,7 +100,7 @@ class GamePanel extends JPanel{
     g.fillRect(30, 15, 12*stringLength, 20);
     stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)").length();
     g.fillRect(maxX - 600, 15, 12*stringLength, 20);
-    stringLength = ("Mouse Click: " + mouseXy[2] + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
+    stringLength = ("Mouse Click: " + String.valueOf(mousePressed) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
     g.fillRect(maxX-300, 45, 12*stringLength, 20);
     stringLength = ("Debug Message: " + debugMessage).length();
     g.fillRect(maxX-600, 75, 12*stringLength, 20);
@@ -105,7 +108,7 @@ class GamePanel extends JPanel{
     g.setFont (menuFont);
     g.drawString("FPS: " + fps, 30, 30);
     g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)", maxX-600, 30);
-    g.drawString("Mouse Click: " + mouseXy[2] + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
+    g.drawString("Mouse Click: " + String.valueOf(mousePressed) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     g.drawString("Debug Message: " + debugMessage, maxX-600, 90);
   }
   public void drawGameComponents(Graphics g){
@@ -143,6 +146,7 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
+<<<<<<< HEAD
     if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-333)&&(mouseXy[1] < maxY-333+150)&&(mouseXy[2] == 1)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
@@ -152,12 +156,13 @@ class GamePanel extends JPanel{
       minimapDown = true;
       minimapUp = false;
     }
-    if(mouseXy[2] == 0){
+    if(!mousePressed){
       minimapDown = false;
       minimapUp = false;
     }
+
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor) + String.valueOf(minimapUp);
-    
+
     //Draws minimap contents
     miniTileSize = minimapX/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
