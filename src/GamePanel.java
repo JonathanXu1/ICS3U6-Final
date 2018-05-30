@@ -113,7 +113,7 @@ class GamePanel extends JPanel{
   }
   public void drawGameComponents(Graphics g){
     //Bottom toolbar
-    //Always set to 270 pixels in height
+    //Always set to 350 pixels in height
     g.drawImage(left,0,maxY-350,(int)(350.0*(110.0/75.0)),350,this);
     g.drawImage(middle,(int)((350.0)*110.0/75.0),maxY-350,maxX -(int)(350.0*110.0/75.0*2.0)+5, 350,this);
     g.drawImage(right,maxX-(int)(350.0*110.0/75.0),maxY-350, (int)(350.0*110.0/75.0), 350,this);
@@ -142,9 +142,6 @@ class GamePanel extends JPanel{
     }
   }
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
-    //Minimap bg
-    g.setColor(Color.BLACK);
-    g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
     if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-333)&&(mouseXy[1] < maxY-333+150)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
@@ -175,9 +172,6 @@ class GamePanel extends JPanel{
       }
     }
     //Draws buttons for zoom in and out
-    g.setColor(Color.BLUE);
-    g.fillRect(360, maxY-333, 43, 150);
-    g.fillRect(360, maxY-170, 43, 150);
     g.setColor(Color.RED);
     g.fillRect((minimapFactor/2)*miniTileSize, maxY-(minimapFactor/2)* miniTileSize, miniTileSize, miniTileSize); //Character square
     //Draws the frame    

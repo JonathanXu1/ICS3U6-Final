@@ -16,7 +16,7 @@ class Main{
     Clip clip = (Clip) AudioSystem.getLine(info);
     
     //Very messy code, may have to reformat later    
-    MapGen2_3 gen = new MapGen2_3();
+    MapGen2_4 gen = new MapGen2_4();
     
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
