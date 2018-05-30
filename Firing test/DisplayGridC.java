@@ -13,7 +13,9 @@ class DisplayGridC {
   private JFrame frame;
   private int maxX,maxY, GridToScreenRatio;
   private int[][] world;
-  private int[] fireLine = {40,0,70,70};
+  private int[] fireLine = {0,0,0,0};
+  private int[] firePoint = {0,0};
+  private int[] firingPoint = {0,0};
   private int cycles;
   
   DisplayGridC(int[][] w) { 
@@ -57,6 +59,20 @@ class DisplayGridC {
     System.out.println(GridToScreenRatio);
   }
   
+  public int getRatio() {
+    return GridToScreenRatio;
+  }
+  
+  public void mark(int r, int d) {
+    firePoint[0] = r;
+    firePoint[1] = d;
+  }
+  
+  public void setPos(int r, int d) {
+    firingPoint[0] = r;
+    firingPoint[1] = d;
+  }
+  
   class GridAreaPanel extends JPanel {
     public void paintComponent(Graphics g) {        
       //super.repaint();
@@ -65,6 +81,8 @@ class DisplayGridC {
       setDoubleBuffered(true); 
       g.setColor(Color.BLACK);
       g.drawString(Integer.toString(GridToScreenRatio),GridToScreenRatio*30,GridToScreenRatio*24);
+      g.drawOval(firePoint[0]-5,firePoint[1]-5,5,5);
+      g.drawOval(firingPoint[0]-5,firingPoint[1]-5,10,10);
       
       for(int i = 0; i<world[0].length;i=i+1)
       { 
@@ -77,7 +95,8 @@ class DisplayGridC {
       
       g.setColor(Color.RED);
       g.drawLine(fireLine[0],fireLine[1],fireLine[2],fireLine[3]);
-      
+      g.drawLine(fireLine[0]-1,fireLine[1],fireLine[2]-1,fireLine[3]);
+      g.drawLine(fireLine[0]+1,fireLine[1],fireLine[2]+1,fireLine[3]);
       
     }
   }//end of GridAreaPanel

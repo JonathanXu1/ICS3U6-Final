@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import java.awt.Color;
 
 class Main{
@@ -67,7 +67,7 @@ class Main{
       }
     }
   }
-=======
+
 import java.awt.Color;
 import java.io.File;
 import javax.sound.sampled.*;
