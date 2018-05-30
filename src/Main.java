@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //<<<<<<< HEAD
 import java.awt.Color;
 
@@ -68,6 +69,8 @@ class Main{
     }
   }
 
+=======
+>>>>>>> 13dee46868b6fba22d144a3a540be5af958a96cd
 import java.awt.Color;
 import java.io.File;
 import javax.sound.sampled.*;
@@ -148,11 +151,10 @@ class Main{
         disp.setFps(frame);
         frame =0;
       }
-      
       if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
         clip.close();
       }
     }
+    
   }
->>>>>>> 78c97138ced697a2918e2a6c1239cc9cd15a9e87
 }
