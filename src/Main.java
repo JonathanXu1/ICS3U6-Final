@@ -16,7 +16,7 @@ class Main{
     Clip clip = (Clip) AudioSystem.getLine(info);
     
     //Very messy code, may have to reformat later    
-    MapGen2_3 gen = new MapGen2_3();
+    MapGen2_4 gen = new MapGen2_4();
     
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
@@ -34,7 +34,9 @@ class Main{
           map[i][j]= new WallTile(Color.DARK_GRAY);
         } else if (charMap[i][j] == '|') {
           map[i][j]= new WallTile(Color.LIGHT_GRAY);
-        }else if (charMap[i][j] == '@'){
+        } else if (charMap[i][j] == 'A') {
+          map[i][j]= new FloorTile(Color.ORANGE);
+        } else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN);
           Character.setArrayX (j);
           Character.setArrayY (i);

@@ -241,23 +241,8 @@ class MapGen2_4{
     for (int i = 6; i < map.length - 6; i++) {
       for (int j = 6; j < map[0].length - 6; j++) {
         if (map[i][j] == -1) {
-          numAdj = 0; // number is reset for every new tile
           
-          // number is determined
-          if (map[i + 1][j]  == -1) {
-            numAdj++;
-          }
-          if (map[i - 1][j]  == -1) {
-            numAdj++;
-          }
-          if (map[i][j + 1]  == -1) {
-            numAdj++;
-          }
-          if (map[i][j - 1]  == -1) {
-            numAdj++;
-          }
-          
-          if (numAdj == 1) { // if there is only one adjacent room tile, the currnt tile is set to be a door tile
+          if (adjMatrixFlower(map,-1,i,j) == 1) { // if there is only one adjacent room tile, the currnt tile is set to be a door tile
             map[i][j] = -2;
           }        
         }
@@ -266,24 +251,8 @@ class MapGen2_4{
     
     for (int i = 6; i < map.length - 6; i++) {
       for (int j = 6; j < map[0].length - 6; j++) {
-        if (map[i][j] == 0) {
-          numAdj = 0; // number is reset for every new tile
-          
-          // number is determined
-          if (map[i + 1][j]  == -1) {
-            numAdj++;
-          }
-          if (map[i - 1][j]  == -1) {
-            numAdj++;
-          }
-          if (map[i][j + 1]  == -1) {
-            numAdj++;
-          }
-          if (map[i][j - 1]  == -1) {
-            numAdj++;
-          }
-          
-          if (numAdj == 1) { // if there is only one adjacent room tile, the currnt tile is set to be a door tile
+        if (map[i][j] == 0) {          
+          if (adjMatrixFlower(map,-1,i,j) == 1) { // if there is only one adjacent room tile, the current tile is set to be a door tile
             map[i][j] = -2;
           }        
         }
@@ -295,7 +264,7 @@ class MapGen2_4{
   
   // Takes in a map, coordinates, and a target tile type
   // determines if the coordinates are fully surrounded by the target tile, and returns a boolean
-  public static boolean fullSurround(int[][] map, int i, int j,  int target) {
+  public static boolean fullSurround(int[][] map, int i, int j, int target) {
     int numAdj = 0;
     
     if (map[i + 1][j]  == target) {
@@ -315,6 +284,37 @@ class MapGen2_4{
       return true;
     }
     return false;
+  }
+  
+  public static int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
+    int numAdj = 0;
+    
+    if (map[dPos + 1][rPos]  == target) {
+      numAdj++;
+    }
+    if (map[dPos - 1][rPos]  == target) {
+      numAdj++;
+    }
+    if (map[dPos][rPos + 1]  == target) {
+      numAdj++;
+    }
+    if (map[dPos][rPos - 1]  == target) {
+      numAdj++;
+    }
+    
+    return numAdj;
+  }
+  
+  public static int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
+    int numAdj = 0;
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        if (map[dPos + i][rPos + j] == target) {
+          numAdj++;
+        }
+      }
+    }
+    return numAdj;
   }
   
   // Inserts a spawn and progression point into the map.
@@ -344,64 +344,60 @@ class MapGen2_4{
     
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
-        if (map[i][j] == 1) {
-          numAdj = 0; // number is reset for every new tile
-          
-          // number is determined
-          if (map[i + 1][j]  == 0) {
-            numAdj++;
-          }
-          if (map[i - 1][j]  == 0) {
-            numAdj++;
-          }
-          if (map[i][j + 1]  == 0) {
-            numAdj++;
-          }
-          if (map[i][j - 1]  == 0) {
-            numAdj++;
+        if (map[i][j] == 0) {
+          for (int i2 = -1; i2 < 2; i2++) {
+            for (int j2  = -1; j2 < 2; j2++) {
+              if (map[i + i2][j + j2] == 1) {
+                map[i + i2][j + j2] = 2;
+              }
+            }
           }    
-          
-          if (j == 5 || j == map[0].length - 6) {
-            numAdj--;
-          }
-          
-          if (i == 5 || i == map.length - 6) {
-            numAdj--;
-          } 
-          
-          if (numAdj >= 1) { // if there is only one adjacent room tile, the currnt tile is set to be a a hallway wall
-            map[i][j] = 2;
-          }        
         }
       }
     }
     
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
-        if (map[i][j] == 1 || map[i][j] == 2) {
-          numAdj = 0; // number is reset for every new tile
-          
-          // number is determined
-          if (map[i + 1][j]  == -1 || map[i + 1][j]  == -2) {
-            numAdj++;
-          }
-          if (map[i - 1][j]  == -1 || map[i - 1][j]  == -2) {
-            numAdj++;
-          }
-          if (map[i][j + 1]  == -1 || map[i][j + 1]  == -2) {
-            numAdj++;
-          }
-          if (map[i][j - 1]  == -1 || map[i][j - 1]  == -2) {
-            numAdj++;
-          }
-          
-          if (numAdj >= 1) { // if there is only one adjacent room tile, the currnt tile is set to be a room wall
-            map[i][j] = 3;
-          }        
-        }
+        if (map[i][j] == -1) {
+          for (int i2 = -1; i2 < 2; i2++) {
+            for (int j2  = -1; j2 < 2; j2++) {
+              if (map[i + i2][j + j2] == 1 || map[i + i2][j + j2] == 2) {
+                map[i + i2][j + j2] = 3;
+              }
+            }
+          }    
+        }      
       }
     }
     
+    
+    
+    return map;
+  }
+  
+  public static int[][] finalizeDesignations(int[][] map) {
+    for (int i = 5; i < map.length - 5; i++) {
+      for (int j = 5; j < map[0].length - 5; j++) {
+        if (map[i][j] == -1) {
+          if (map[i + 1][j] == -1 && map[i - 1][j] == -1 && map[i][j + 1] > 0 && map[i][j - 1] > 0) {
+            map[i][j] = -2;
+          } 
+          if (map[i + 1][j] > 0 && map[i - 1][j] > 0 && map[i][j + 1] == -1 && map[i][j - 1]  == -1) {
+            map[i][j] = -2;
+          } 
+        } 
+        
+        if (map[i][j] == 0) {
+          if (adjMatrixFlower(map,-2,i,j) == 2 && adjMatrixFlower(map,0,i,j) == 0) {
+            map[i][j] = -5;
+          }    
+        }
+        
+        if (adjMatrixFlower(map,-2,i,j) == 1 && map[i][j] == -2) {
+          map[i][j] = -1;
+        }
+      }      
+    }
     
     return map;
   }
@@ -427,7 +423,7 @@ class MapGen2_4{
       
     }
     
-    if (result[7][6] == 1) { // cleans up the start of the recursion
+    if (result[7][6] == 1 || result[6][7] == 1) { // cleans up the start of the recursion
       result[6][6] = -2;
     }
     
@@ -442,6 +438,8 @@ class MapGen2_4{
     result = insertStairs(result);
     
     result = designateWalls(result);           
+    
+    result = finalizeDesignations(result);
     
     return result;             
   }
@@ -465,6 +463,8 @@ class MapGen2_4{
           resultProc[i][j] = '@';
         } else if (result[i][j] == -4) {
           resultProc[i][j] = '#';
+        } else if (result[i][j] == -5) {
+          resultProc[i][j] = 'A';
         } else {
           resultProc[i][j] = 'X';
         }
@@ -492,6 +492,8 @@ class MapGen2_4{
           resultProc[i][j] = '@';
         } else if (result[i][j] == -4) {
           resultProc[i][j] = '#';
+        } else if (result[i][j] == -5) {
+          resultProc[i][j] = 'A';
         } else {
           resultProc[i][j] = 'X';
         }
