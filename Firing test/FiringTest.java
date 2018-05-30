@@ -12,7 +12,7 @@ class FiringTest{
     int currentTileR = 6;
     
     int targetTileD = 10;
-    int targetTileR = 6;
+    int targetTileR = 11;
     
     
     double targetD = (targetTileD - 1)*ratio +  (int) (ratio/2) ;
@@ -71,7 +71,7 @@ class FiringTest{
       if (counter <= 6 ) {
         disp.setLine(currentR,currentD,currentR - (counter)*moveR,currentD - (counter)*moveD);
       } else if (currentD > ratio*11 || currentR > ratio*11) {
-        System.out.println("End");
+        //System.out.println("End");
         
         disp.setLine(currentR - moveR*endCounter,currentD - moveD*endCounter,currentR - 6*moveR,currentD - 6*moveD);
         endCounter++;
@@ -90,7 +90,7 @@ class FiringTest{
         disp.setAffected(affectedTileD,affectedTileR);
       }
       
-      try{ Thread.sleep(300); }catch(Exception e) {};
+      try{ Thread.sleep(200); }catch(Exception e) {};
     } while(endCounter < 8);
   }
   
