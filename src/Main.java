@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.io.File;
+import javax.sound.sampled.*;
 
 class Main{
   public static void main (String[] args) throws Exception{
@@ -7,6 +9,11 @@ class Main{
     Runtime runtime = Runtime.getRuntime();
     double maxMem = runtime.maxMemory();
     double usedMem;
+    //Music vars
+    File audioFile = new File("../res/africa.wav");
+    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+    Clip clip = (Clip) AudioSystem.getLine(info);
     
     //Very messy code, may have to reformat later    
     MapGen2_3 gen = new MapGen2_3();
@@ -36,7 +43,16 @@ class Main{
         }
       }
     }
-
+    
+    //Music player
+    try {     
+      clip.open(audioStream);
+      clip.start();
+      
+      }catch (Exception e) {
+      e.printStackTrace();
+    }
+    
     
     Display disp = new Display ();
     disp.setMap(map);
@@ -64,6 +80,10 @@ class Main{
         disp.setFps(frame);
         frame =0;
       }
+      if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
+        clip.close();
+      }
     }
+    
   }
 }
