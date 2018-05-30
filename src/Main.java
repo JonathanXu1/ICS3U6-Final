@@ -43,7 +43,6 @@ class Main{
         }
       }
     }
-    
     //Plays music
     try {      
       clip.open(audioStream);
@@ -58,15 +57,14 @@ class Main{
     long secondTime = System.nanoTime();
     long currentTime = System.nanoTime();
     int frame=0;
-    final long DELTA_LIMIT = 10000000;
+    final long DELTA_LIMIT = 20000000;
     final long SECOND_LIMIT = 1000000000;
     while (true){
       currentTime= System.nanoTime();
-      //Finds memory usage after code execution
-      usedMem = runtime.totalMemory() - runtime.freeMemory();
-      disp.setMem(maxMem/mb, usedMem/mb);
-      
+      //Finds memory usage after code execution      
       if ((currentTime-oldTime)>=DELTA_LIMIT){
+        usedMem = runtime.totalMemory() - runtime.freeMemory();
+        disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         disp.refreshAll();
         oldTime = currentTime;
@@ -82,6 +80,5 @@ class Main{
         clip.close();
       }
     }
-    
   }
 }
