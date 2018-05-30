@@ -125,6 +125,8 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
   }
   public void drawMap (Graphics g){
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, maxX, maxY);
     Background.setOnTile();
     if (Background.getOnTile()){
       Character.setArrayY(playerYInitial+Background.getY()/tileSize);
@@ -138,7 +140,9 @@ class GamePanel extends JPanel{
       for (int j = 0;j<map[0].length;j++){
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
-        map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+        if(map[i][j].getViewed()){
+          map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+        }
         //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
       }
     }
