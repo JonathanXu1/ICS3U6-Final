@@ -13,8 +13,8 @@ class FiringTest{
     int currentTileD = 6;
     int currentTileR = 6;
     
-    int targetTileD = 8;
-    int targetTileR = 10;
+    int targetTileD = 10;
+    int targetTileR = 6;
     
     
     double targetD = (targetTileD - 1)*ratio +  (int) (ratio/2) ;
@@ -40,14 +40,20 @@ class FiringTest{
     }
     
     double slope = (deltaD/deltaR);
+    int moveD, moveR;
     
-    double moveRTemp = Math.sqrt(1024/(Math.pow(slope,2) + 1));
-    int moveD = (int) Math.round(moveRTemp * slope);
-    int moveR = (int) Math.round(moveRTemp);   
-    
-    moveD = Math.abs(moveD)*dSign;
-    moveR = Math.abs(moveR)*rSign;
-    
+    if (deltaR == 0) {
+      moveD = 32;
+      moveR = 0;
+    } else {
+      
+      double moveRTemp = Math.sqrt(1024/(Math.pow(slope,2) + 1));
+      moveD = (int) Math.round(moveRTemp * slope);
+      moveR = (int) Math.round(moveRTemp);   
+      
+      moveD = Math.abs(moveD)*dSign;
+      moveR = Math.abs(moveR)*rSign;
+    }
     
     
     System.out.println(deltaD);
@@ -58,16 +64,36 @@ class FiringTest{
     
     try{ Thread.sleep(4000); }catch(Exception e) {};
     disp.refresh();
+    
+    int affectedTileD, affectedTileR;
+    int endCounter = 1;
+    
     do{
-      disp.setLine(currentR,currentD,currentR + 5*moveR,currentD + 5*moveD);
       disp.refresh();
+      if (counter <= 6 ) {
+        disp.setLine(currentR,currentD,currentR - (counter)*moveR,currentD - (counter)*moveD);
+      } else if (currentD > ratio*11 || currentR > ratio*11) {
+        System.out.println("End");
+        
+        disp.setLine(currentR - moveR*endCounter,currentD - moveD*endCounter,currentR - 6*moveR,currentD - 6*moveD);
+        endCounter++;
+      }  else {
+        disp.setLine(currentR,currentD,currentR - 6*moveR,currentD - 6*moveD);
+      }         
+      counter++;
+        
+      affectedTileD = (int) (currentD/ratio);
+      affectedTileR = (int) (currentR/ratio);
+      
       currentD = currentD + moveD;
       currentR = currentR + moveR;
       
+      if (endCounter == 1) {
+        disp.setAffected(affectedTileD,affectedTileR);
+      }
       
-      
-      try{ Thread.sleep(200); }catch(Exception e) {};
-    } while (end < disp.returnLim());
+      try{ Thread.sleep(300); }catch(Exception e) {};
+    } while(endCounter < 8);
   }
   
   
