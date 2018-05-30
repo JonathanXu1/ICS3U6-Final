@@ -466,7 +466,11 @@ class MapGen2_4{
         } else if (result[i][j] == -5) {
           resultProc[i][j] = 'A';
         } else {
-          resultProc[i][j] = 'X';
+          if ((i<=4)||(i>=result.length-4)||(j<=4)||(j>=result[0].length-4)){
+            resultProc[i][j] = '-';
+          }else{
+            resultProc[i][j] = 'X';
+          }
         }
       }
     }
@@ -495,7 +499,11 @@ class MapGen2_4{
         } else if (result[i][j] == -5) {
           resultProc[i][j] = 'A';
         } else {
-          resultProc[i][j] = 'X';
+          if ((i<=5)||(i>=result.length-5)||(j<=5)||(j>=result[0].length-5)){
+            resultProc[i][j] = '-';
+          }else{
+            resultProc[i][j] = 'X';
+          }
         }
       }
     }

@@ -1,20 +1,20 @@
 class Character{
   ///Could make it so that this and the background implement tileScaling, meaning they must have get and set tile size
   //We should probably make everything here static
-  private static int x;
-  private static int y;
+  private int x;
+  private int y;
   Character(){
   }
-  public static int getArrayX(){
+  public int getArrayX(){
     return (x);
   }
-  public static void setArrayX(int xNew){
+  public void setArrayX(int xNew){
     x =xNew;
   }
-  public static int getArrayY(){
+  public int getArrayY(){
     return (y);
   }
-  public static void setArrayY(int yNew){
+  public void setArrayY(int yNew){
     y =yNew;
   }
 }
