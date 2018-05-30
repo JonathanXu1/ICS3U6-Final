@@ -138,8 +138,10 @@ class GamePanel extends JPanel{
       for (int j = 0;j<map[0].length;j++){
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
-        map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
-        //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+        if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))<maxY+tileSize*2)){
+          map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+          //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+        }
       }
     }
   }
