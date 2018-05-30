@@ -146,12 +146,11 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(maxX-(int)(maxX*1.0/5.0),0,minimapX, minimapY);
     //User clicks zoom in and out buttons
-<<<<<<< HEAD
-    if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-333)&&(mouseXy[1] < maxY-333+150)&&(mouseXy[2] == 1)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
+    if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-333)&&(mouseXy[1] < maxY-333+150)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
       minimapDown = false;
-    } else if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-170)&&(mouseXy[1] < maxY-170+150)&&(mouseXy[2] == 1)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
+    } else if((mouseXy[0] > 360)&&(mouseXy[0] < 360+43)&&(mouseXy[1] > maxY-170)&&(mouseXy[1] < maxY-170+150)&&(mousePressed)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
       minimapFactor += 10;
       minimapDown = true;
       minimapUp = false;
