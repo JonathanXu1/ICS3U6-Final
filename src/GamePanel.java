@@ -15,11 +15,7 @@ class GamePanel extends JPanel{
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
-  private Image left;
-  private Image right;
-  private Image middle;
-  private Image exp;
-  private Image hp;
+  private Image left, right, middle, exp, hp;
   private Image hotbar;
   private Image mapBorder;
   private Tile[][] map;
@@ -132,6 +128,11 @@ class GamePanel extends JPanel{
       Character.setArrayY(playerYInitial+Background.getY()/tileSize);
       Character.setArrayX(playerXInitial+Background.getX()/tileSize);
       findBlocked ();
+      for(int i = -1; i < 2; i++){
+        for(int j = -1; j < 2; j++){
+          map[Character.getArrayY() + i][Character.getArrayX() + j].setViewed();
+        }
+      }
     }
     if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
       Background.move();
@@ -141,9 +142,11 @@ class GamePanel extends JPanel{
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
         if(map[i][j].getViewed()){
-          map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+          if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))<maxY+tileSize*2)){
+            map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
+            //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+          }
         }
-        //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
       }
     }
   }

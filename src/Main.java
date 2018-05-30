@@ -10,7 +10,7 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
-    File audioFile = new File("../res/africa.wav");
+    File audioFile = new File("../res/interstellar.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
@@ -59,7 +59,7 @@ class Main{
     long secondTime = System.nanoTime();
     long currentTime = System.nanoTime();
     int frame=0;
-    final long DELTA_LIMIT = 20000000;
+    final long DELTA_LIMIT = 10000000;
     final long SECOND_LIMIT = 1000000000;
     while (true){
       currentTime= System.nanoTime();
