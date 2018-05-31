@@ -24,14 +24,26 @@ class CustomKeyListener implements KeyListener {
     }
     if ((e.getKeyChar() =='w')||(e.getKeyChar() =='W')){
       moveUp = true;
+      moveDown = false;
+      moveLeft = false;
+      moveRight = false;
     }
     if ((e.getKeyChar() =='s')||(e.getKeyChar() =='S')){
+      moveUp = false;
       moveDown = true;
+      moveLeft = false;
+      moveRight = false;
     }
     if ((e.getKeyChar() =='a')||(e.getKeyChar() =='A')){
+      moveUp = false;
+      moveDown = false;
       moveLeft = true;
+      moveRight = false;
     }
     if ((e.getKeyChar() =='d')||(e.getKeyChar() =='D')){
+      moveUp = false;
+      moveDown = false;
+      moveLeft = false;
       moveRight = true;
     }
   }

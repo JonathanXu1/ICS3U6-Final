@@ -16,6 +16,7 @@ class CustomMouseListener implements MouseListener {
   
   public void mouseReleased(MouseEvent e) {
     pressed = false;
+    System.out.print ("t");
   }
   
   public void mouseEntered(MouseEvent e) {
