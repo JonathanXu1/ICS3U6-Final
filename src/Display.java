@@ -87,9 +87,6 @@ class Display extends JFrame{
     this.add(menuBgPanel);
     
     //Necessary to start with
-    menuBgPanel.setVisible (true);
-    menuPanel.setVisible (true);
-    title.setVisible(true);
     this.setVisible (true);
     this.getContentPane().setBackground(Color.BLACK);
   }
@@ -118,9 +115,6 @@ class Display extends JFrame{
       } else if(quitButtonMouse.getHover()){
         quitButton.setOpaque(false);
       }
-      menuPanel.setVisible(true);
-      menuBgPanel.setVisible(true);
-      title.setVisible(true);
       // Main game state
     }else if (gameState==1){
       if (keyListener.getDebugState()){
@@ -133,7 +127,7 @@ class Display extends JFrame{
         gamePanel.createMap (map, characterX, characterY);
       }
       keyListener.setAllDirection();
-      this.add (gamePanel);
+      this.add(gamePanel);
       menuPanel.setVisible(false);
       menuBgPanel.setVisible(false);
       title.setVisible(false);
