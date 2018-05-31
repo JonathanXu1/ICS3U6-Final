@@ -30,7 +30,7 @@ class Main{
         } else if (charMap[i][j] == 'R') {
           map[i][j]= new FloorTile(Color.GREEN);
         } else if (charMap[i][j] == 'D') {
-          map[i][j]= new FloorTile(Color.BLUE);
+          map[i][j]= new FloorTile(Color.RED);
         } else if (charMap[i][j] == '~') {
           map[i][j]= new WallTile(Color.DARK_GRAY);
         } else if (charMap[i][j] == '|') {
