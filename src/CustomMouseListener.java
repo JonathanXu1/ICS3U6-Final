@@ -7,7 +7,6 @@ class CustomMouseListener implements MouseListener {
   public void mouseClicked(MouseEvent e) {
     //Have to manually change the coordinates to sync up with windows, must realign to mouse listener to fix.
   }
-  
   public void mousePressed(MouseEvent e) {
     xy[0] = e.getX();
     xy[1] = e.getY();
