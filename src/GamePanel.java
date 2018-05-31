@@ -209,23 +209,39 @@ class GamePanel extends JPanel{
     g.fillRect (maxX/2-(tileSize/2),maxY/2-(tileSize/2),tileSize, tileSize);
   }
   public void findBlocked(){
-    if (map[player.getArrayY()-1][player.getArrayX()]  instanceof WalkableTile){
-      blocked[0] = false;
+    if (player.getArrayY()-1>=0){
+      if (map[player.getArrayY()-1][player.getArrayX()]  instanceof WalkableTile){
+        blocked[0] = false;
+      }else{
+        blocked[0] = true;
+      }
     }else{
       blocked[0] = true;
     }
-    if (map[player.getArrayY()+1][player.getArrayX()]  instanceof WalkableTile){
-      blocked[1] = false;
+    if (player.getArrayY()+1<=map.length){
+      if (map[player.getArrayY()+1][player.getArrayX()]  instanceof WalkableTile){
+        blocked[1] = false;
+      }else{
+        blocked[1] = true;
+      }
     }else{
       blocked[1] = true;
     }
-    if (map[player.getArrayY()][player.getArrayX()-1]  instanceof WalkableTile){
-      blocked[2] = false;
+    if (player.getArrayX()-1>=0){
+      if (map[player.getArrayY()][player.getArrayX()-1]  instanceof WalkableTile){
+        blocked[2] = false;
+      }else{
+        blocked[2] = true;
+      }
     }else{
       blocked[2] = true;
     }
-    if (map[player.getArrayY()][player.getArrayX()+1]  instanceof WalkableTile){
-      blocked[3] = false;
+    if (player.getArrayX()+1<=map[0].length){
+      if (map[player.getArrayY()][player.getArrayX()+1]  instanceof WalkableTile){
+        blocked[3] = false;
+      }else{
+        blocked[3] = true;
+      }
     }else{
       blocked[3] = true;
     }
