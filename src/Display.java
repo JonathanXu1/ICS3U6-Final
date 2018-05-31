@@ -38,6 +38,8 @@ class Display extends JFrame{
   
   //Game logic
   private Tile[][] map;
+  private int characterX;
+  private int characterY;
   
   Display(){
     super ("Concordia");
@@ -128,7 +130,7 @@ class Display extends JFrame{
       }
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
-        gamePanel.createMap (map);
+        gamePanel.createMap (map, characterX, characterY);
       }
       keyListener.setAllDirection();
       this.add (gamePanel);
@@ -156,5 +158,9 @@ class Display extends JFrame{
   public void setMem(double totalMem, double memUsed){
     this.totalMem = totalMem;
     this.memUsed = memUsed;
+  }
+  public void setSetPlayerLocation (int characterX, int characterY){
+    this.characterX = characterX;
+    this.characterY = characterY;
   }
 }

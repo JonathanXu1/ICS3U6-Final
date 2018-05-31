@@ -15,11 +15,7 @@ class GamePanel extends JPanel{
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
-  private Image left;
-  private Image right;
-  private Image middle;
-  private Image exp;
-  private Image hp;
+  private Image left, right, middle, exp, hp;
   private Image hotbar;
   private Image mapBorder;
   private Tile[][] map;
@@ -30,15 +26,16 @@ class GamePanel extends JPanel{
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
   private int tileSize= 100;
-  private int playerXInitial = Character.getArrayX();
-  private int playerYInitial = Character.getArrayY();
+  private int playerStartingX;
+  private int playerStartingY;
+  private Character player = new Character();
   /////Set up the character coordinates on the map
   private boolean [] blocked = new boolean [4];
   GamePanel(){
     setFocusable(true);
     Background.setTileSize(tileSize);
-    Character.setArrayX (playerXInitial);
-    Character.setArrayY (playerYInitial);
+    player.setArrayX (playerStartingX);
+    player.setArrayY (playerStartingY);
     this.left = Toolkit.getDefaultToolkit().getImage("../res/MetalL.png");
     this.right = Toolkit.getDefaultToolkit().getImage("../res/MetalR.png");
     this.middle = Toolkit.getDefaultToolkit().getImage("../res/MetalM.png");
@@ -93,8 +90,10 @@ class GamePanel extends JPanel{
   public void setNewFloor(boolean newFloor){
     this.newFloor = newFloor;
   }
-  public void createMap(Tile [][]map){
+  public void createMap(Tile [][]map, int playerStartingX, int playerStartingY){
     this.map = map;
+    this.playerStartingX =playerStartingX;
+    this.playerStartingY =playerStartingY;
   }
   public void drawDebugPanel (Graphics g){
     g.setColor(new Color(80, 80, 80, 127)); //Translucent grey
@@ -125,11 +124,18 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
   }
   public void drawMap (Graphics g){
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, maxX, maxY);
     Background.setOnTile();
     if (Background.getOnTile()){
-      Character.setArrayY(playerYInitial+Background.getY()/tileSize);
-      Character.setArrayX(playerXInitial+Background.getX()/tileSize);
+      player.setArrayY(playerStartingY+Background.getY()/tileSize);
+      player.setArrayX(playerStartingX+Background.getX()/tileSize);
       findBlocked ();
+      for(int i = -1; i < 2; i++){
+        for(int j = -1; j < 2; j++){
+          map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
+        }
+      }
     }
     if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
       Background.move();
@@ -138,15 +144,19 @@ class GamePanel extends JPanel{
       for (int j = 0;j<map[0].length;j++){
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
-        if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial))<maxY+tileSize*2)){
-          map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize, tileSize, this);
-          //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+        if(map[i][j].getViewed()){
+          if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))<maxY+tileSize*2)){
+            map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY), tileSize, tileSize, this);
+            //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+          }
         }
       }
     }
   }
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
-    //User clicks zoom in and out buttons
+    g.setColor(Color.BLACK);
+    g.fillRect(0,maxY-250,minimapX, minimapY);    
+//User clicks zoom in and out buttons
     if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-240)&&(mouseXy[1] < maxY-240+110)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
@@ -160,28 +170,27 @@ class GamePanel extends JPanel{
       minimapDown = false;
       minimapUp = false;
     }
-
+    
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor) + String.valueOf(minimapUp);
-
+    
     //Draws minimap contents
     miniTileSize = minimapX/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
-        minimapArrayY = Character.getArrayY() + i - minimapFactor/2;
-        minimapArrayX = Character.getArrayX() + j - minimapFactor/2;
+        minimapArrayY = player.getArrayY() + i - minimapFactor/2;
+        minimapArrayX = player.getArrayX() + j - minimapFactor/2;
         if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
           g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
           g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize);
         }
-        if ((minimapArrayY==Character.getArrayY())&&(minimapArrayX==Character.getArrayX())){
-       g.setColor(Color.RED);
-    g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize); //Character square
-      
+        if ((minimapArrayY==player.getArrayY())&&(minimapArrayX==player.getArrayX())){
+          g.setColor(Color.RED);
+          g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize); //Character square
         }
       }
     }
     //Draws buttons for zoom in and out
-     //Draws the frame    
+    //Draws the frame
     g.drawImage(mapBorder,0,maxY-250,minimapX, minimapY,this);
   }
   public void drawCharacter(Graphics g){
@@ -189,22 +198,22 @@ class GamePanel extends JPanel{
     g.fillRect (maxX/2-(tileSize/2),maxY/2-(tileSize/2),tileSize, tileSize);
   }
   public void findBlocked(){
-    if (map[Character.getArrayY()-1][Character.getArrayX()]  instanceof WalkableTile){
+    if (map[player.getArrayY()-1][player.getArrayX()]  instanceof WalkableTile){
       blocked[0] = false;
     }else{
       blocked[0] = true;
     }
-    if (map[Character.getArrayY()+1][Character.getArrayX()]  instanceof WalkableTile){
+    if (map[player.getArrayY()+1][player.getArrayX()]  instanceof WalkableTile){
       blocked[1] = false;
     }else{
       blocked[1] = true;
     }
-    if (map[Character.getArrayY()][Character.getArrayX()-1]  instanceof WalkableTile){
+    if (map[player.getArrayY()][player.getArrayX()-1]  instanceof WalkableTile){
       blocked[2] = false;
     }else{
       blocked[2] = true;
     }
-    if (map[Character.getArrayY()][Character.getArrayX()+1]  instanceof WalkableTile){
+    if (map[player.getArrayY()][player.getArrayX()+1]  instanceof WalkableTile){
       blocked[3] = false;
     }else{
       blocked[3] = true;

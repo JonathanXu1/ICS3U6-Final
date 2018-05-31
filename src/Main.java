@@ -20,7 +20,8 @@ class Main{
     
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    String tempLine;
+    int characterX = 0;
+    int characterY =0;
     
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
@@ -38,8 +39,8 @@ class Main{
           map[i][j]= new FloorTile(Color.ORANGE);
         } else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN);
-          Character.setArrayX (j);
-          Character.setArrayY (i);
+          characterX = j;
+          characterY = i;
         }else{
           map[i][j]= new VoidTile(Color.BLACK);
         }
@@ -55,6 +56,7 @@ class Main{
     
     Display disp = new Display ();
     disp.setMap(map);
+    disp.setSetPlayerLocation (characterX, characterY);
     long oldTime = System.nanoTime();
     long secondTime = System.nanoTime();
     long currentTime = System.nanoTime();
