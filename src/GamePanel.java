@@ -131,10 +131,14 @@ class GamePanel extends JPanel{
       player.setArrayY(playerStartingY+Background.getY()/tileSize);
       player.setArrayX(playerStartingX+Background.getX()/tileSize);
       findBlocked ();
-      for(int i = -1; i < 2; i++){
-        for(int j = -1; j < 2; j++){
-          map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
-        }
+      for(int i = -4; i < 5; i++){
+        for(int j = -4; j < 5; j++){
+          if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
+            if((player.getArrayY()+i>=0)&&(player.getArrayY()+j<=map.length)&&(player.getArrayX()+i>=0)&&(player.getArrayX()+j<=map[0].length)){
+              map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
+            }
+          }
+          }
       }
     }
     if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
@@ -146,8 +150,9 @@ class GamePanel extends JPanel{
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
         if(map[i][j].getViewed()){
           if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))<maxY+tileSize*2)){
-            map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY), tileSize, tileSize, this);
-            //g.fillRect (maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerXInitial), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerYInitial), tileSize,tileSize);
+            if (!(map[i][j] instanceof VoidTile)){
+              map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY), tileSize, tileSize, this);
+            }            
           }
         }
       }
@@ -179,12 +184,18 @@ class GamePanel extends JPanel{
       for(int j = 0; j < minimapFactor; j++){
         minimapArrayY = player.getArrayY() + i - minimapFactor/2;
         minimapArrayX = player.getArrayX() + j - minimapFactor/2;
-        if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
-          g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
-          g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize);
+        if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){
+          if(map[minimapArrayY][minimapArrayX].getViewed()){
+            if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
+              if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){
+                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+                g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize);
+              }
+            }
+          }
         }
         if ((minimapArrayY==player.getArrayY())&&(minimapArrayX==player.getArrayX())){
-          g.setColor(Color.RED);
+          g.setColor(Color.BLUE);
           g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize); //Character square
         }
       }
