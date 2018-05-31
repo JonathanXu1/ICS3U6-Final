@@ -21,7 +21,7 @@ class GamePanel extends JPanel{
   private Tile[][] map;
   private int maxX= 0;
   private int maxY= 0;
-  private int minimapX, minimapY, minimapArrayX, miniTileSize, minimapArrayY; //minimapX = minimapY, may remove one later
+  private int minimapX, minimapY, minimapArrayX, minimapArrayY; //minimapX = minimapY, may remove one later
   private int minimapFactor = 20;
   private boolean minimapUp = false, minimapDown = false;
   private boolean newFloor = true;
@@ -161,7 +161,7 @@ class GamePanel extends JPanel{
   public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
     g.setColor(Color.BLACK);
     g.fillRect(0,maxY-250,minimapX, minimapY);    
-//User clicks zoom in and out buttons
+    //User clicks zoom in and out buttons
     if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-240)&&(mouseXy[1] < maxY-240+110)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
       minimapFactor -= 10;
       minimapUp = true;
@@ -179,24 +179,25 @@ class GamePanel extends JPanel{
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor) + String.valueOf(minimapUp);
     
     //Draws minimap contents
-    miniTileSize = minimapX/minimapFactor;
+    double miniTileSize = ((double)minimapX)/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
         minimapArrayY = player.getArrayY() + i - minimapFactor/2;
         minimapArrayX = player.getArrayX() + j - minimapFactor/2;
-        if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){
-          if(map[minimapArrayY][minimapArrayX].getViewed()){
-            if((minimapArrayY < map.length) && (minimapArrayY >= 0) && (minimapArrayX < map[0].length) && (minimapArrayX >= 0)){
-              if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){
-                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
-                g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize);
-              }
+        if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
+          if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){ //If not void tile
+            if(debugState){ //If debug state
+              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+              g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
+            } else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state
+              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+              g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
           }
         }
         if ((minimapArrayY==player.getArrayY())&&(minimapArrayX==player.getArrayX())){
           g.setColor(Color.BLUE);
-          g.fillRect(j*miniTileSize, (maxY-240)+i*miniTileSize, miniTileSize, miniTileSize); //Character square
+          g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize)); //Character square
         }
       }
     }
