@@ -146,16 +146,7 @@ class GamePanel extends JPanel{
       player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
       player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
       findBlocked ();
-      for(int i = -4; i < 5; i++){
-        for(int j = -4; j < 5; j++){
-          //Sets the view range in a circular shape
-          if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-            if((player.getArrayY()+i>=0)&&(player.getArrayY()+i<=map.length)&&(player.getArrayX()+j>=0)&&(player.getArrayX()+j<=map[0].length)){
-              map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
-            }
-          }
-        }
-      }
+      drawFog(player.getArrayX(), player.getArrayY());
     }
     xyDirection =keyListener.getAllDirection();
     bg.setXDirection (xyDirection[0]);
@@ -174,6 +165,18 @@ class GamePanel extends JPanel{
             if (!(map[i][j] instanceof VoidTile)){
               map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
             }
+          }
+        }
+      }
+    }
+  }
+  public void drawFog(int x, int y){
+    for(int i = -4; i < 5; i++){
+      for(int j = -4; j < 5; j++){
+        //Sets the view range in a circular shape
+        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
+          if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+            map[y + i][x + j].setViewed();
           }
         }
       }
