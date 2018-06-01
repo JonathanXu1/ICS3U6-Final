@@ -385,13 +385,7 @@ class MapGen2_5{
           if (map[i + 1][j] > 0 && map[i - 1][j] > 0 && map[i][j + 1] == -1 && map[i][j - 1]  == -1) {
             map[i][j] = -2;
           } 
-        } 
-        
-        if (map[i][j] == 0) {
-          if (adjMatrixFlower(map,-2,i,j) == 2 && adjMatrixFlower(map,0,i,j) == 0) {
-            map[i][j] = -5;
-          }    
-        }
+        }         
         
         if (adjMatrixFlower(map,-2,i,j) == 1 && map[i][j] == -2) {
           map[i][j] = -1;
@@ -399,6 +393,12 @@ class MapGen2_5{
         
         if (adjMatrixFlower(map,-1,i,j) == 0 && map[i][j] == -1) {
           map[i][j] = 0;
+        }
+        
+        if (map[i][j] == 0) {
+          if (adjMatrixFlower(map,-2,i,j) == 2 && adjMatrixFlower(map,0,i,j) == 0) {
+            map[i][j] = -5;
+          }    
         }
       }      
     }
