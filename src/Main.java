@@ -3,6 +3,7 @@ import java.io.File;
 import javax.sound.sampled.*;
 
 class Main{
+  //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
     int mb = 1024*1024;
@@ -10,19 +11,17 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
-    File audioFile = new File("../res/Sax.wav");
+    File audioFile = new File("../res/interstellar.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
-    
-    //Very messy code, may have to reformat later    
-    MapGen2_4 gen = new MapGen2_4();
-    
+    //Creates the map generator object
+    MapGen2_5 gen = new MapGen2_5();
+    //A tile map will be created based off the tile map
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    //Converts the map into a tile map
+    int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    int characterX = 0;
-    int characterY =0;
-    
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'X'){
@@ -39,53 +38,41 @@ class Main{
           map[i][j]= new FloorTile(Color.ORANGE);
         } else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN);
-          characterX = j;
-          characterY = i;
+          playerStartingX = j;
+          playerStartingY = i;
         }else{
           map[i][j]= new VoidTile(Color.BLACK);
         }
       }
-    }
+    }  
     //Plays music
-    try {      
+    try {
       clip.open(audioStream);
       clip.start();
-      clip.loop(Clip.LOOP_CONTINUOUSLY);
-      }catch (Exception e) {
+    }catch (Exception e) {
       e.printStackTrace();
     }
-    
+    //The display frame is created, and the player x and y are found
     Display disp = new Display ();
+    //The Clock time keeps track of the fps
+    Clock time = new Clock ();
     disp.setMap(map);
-    disp.setSetPlayerLocation (characterX, characterY);
-    long oldTime = System.nanoTime();
-    long secondTime = System.nanoTime();
-    long currentTime = System.nanoTime();
-    int frame=0;
-    final long DELTA_LIMIT = 10000000;
-    final long SECOND_LIMIT = 1000000000;
+    disp.setPlayerLocation (playerStartingX, playerStartingY);
     while (true){
-      currentTime= System.nanoTime();
-      //Finds memory usage after code execution      
-      if ((currentTime-oldTime)>=DELTA_LIMIT){
+      time.setTime();  
+      if (time.getFramePassed()){
+        //Finds memory usage after code execution    
         usedMem = runtime.totalMemory() - runtime.freeMemory();
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         disp.refreshAll();
-        oldTime = currentTime;
-        frame++;
       }
-      if ((currentTime-secondTime)>=SECOND_LIMIT){
-        secondTime = currentTime;
-        //System.out.println (frame);
-        disp.setFps(frame);
-        frame = 0;
+      if (time.getSecondPassed()){
+        disp.setFps(time.getFrame());
+        time.setFrame(0);
       }
-      
       if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
-        //clip.close();
-        //clip.setMicrosecondPosition(1);
-        //System.out.println("aud reset");
+        clip.close();
       }
     }
   }

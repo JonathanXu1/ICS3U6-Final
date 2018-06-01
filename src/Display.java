@@ -1,33 +1,31 @@
 import javax.swing.JLabel;
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 
 class Display extends JFrame{
-  //Main game stats
   private GamePanel gamePanel;
+  //Game state controls what is shown on the screen. 0 is for the menu, 1 is for the game
   private int gameState= 0;
+  private boolean addGamePanel = false;
   private int maxX, maxY;
-  private int[] mouseXy;
   //Menu
+  //Buttons
   private CustomButton continueButton = new CustomButton("Continue", 0);
   private CustomButton newGameButton = new CustomButton("New", 0);
   private CustomButton loadGameButton = new CustomButton("Load", 0);
   private CustomButton settingsButton = new CustomButton("Settings", 0);
   private CustomButton scoreboardButton = new CustomButton("Scoreboard", 0);
   private CustomButton quitButton = new CustomButton("Quit", 0);
+  //The components of the menu
   private MenuPanel menuPanel;
-  private MenuBGPanel menuBgPanel;  
+  private MenuBGPanel menuBgPanel;
   private JLabel title = new JLabel("CONCORDIA");
   //Debug
   private double totalMem, memUsed;
   private int fps = 0;
   //Start Listeners
   private StartListener menuStartListener, menuQuitListener;
-  private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
   private CustomMouseListener continueButtonMouse = new CustomMouseListener();
   private CustomMouseListener newGameButtonMouse = new CustomMouseListener();
@@ -35,11 +33,12 @@ class Display extends JFrame{
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();
+
   
   //Game logic
   private Tile[][] map;
-  private int characterX;
-  private int characterY;
+  private int playerStartingX;
+  private int playerStartingY;
   
   Display(){
     super ("Concordia");
@@ -51,7 +50,6 @@ class Display extends JFrame{
     this.setFocusable(true);
     
     //Adds keylistener object
-    this.addKeyListener(keyListener);
     
     //Creation of the basic game display
     gamePanel = new GamePanel();
@@ -61,7 +59,7 @@ class Display extends JFrame{
     menuStartListener = new StartListener();
     menuQuitListener = new StartListener();
     menuBgPanel = new MenuBGPanel(maxX, maxY);
-        
+    
     //Menu panel and buttons
     menuPanel = new MenuPanel(50, maxY/2, 300, 220);
     title.setFont(new Font("sansserif", Font.BOLD, 72));
@@ -74,7 +72,6 @@ class Display extends JFrame{
     quitButton.addMouseListener(quitButtonMouse);
     continueButton.addActionListener(menuStartListener);
     quitButton.addActionListener(menuQuitListener);
-    
     //Adds everything
     menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
@@ -85,59 +82,56 @@ class Display extends JFrame{
     menuBgPanel.add(menuPanel);
     menuBgPanel.add(title);
     this.add(menuBgPanel);
-    
-    //Necessary to start with
     this.setVisible (true);
-    this.getContentPane().setBackground(Color.BLACK);
   }
   
   public void refreshAll(){
-    mouseXy = mouseListener.getMouseXy();
     //Menu state
+    //Setting content area is more effective than setting opacity
+    continueButton.setContentAreaFilled(false);
+    newGameButton.setContentAreaFilled(false);
+    loadGameButton.setContentAreaFilled(false);
+    settingsButton.setContentAreaFilled(false);
+    scoreboardButton.setContentAreaFilled(false);
+    quitButton.setContentAreaFilled(false);
     if (gameState==0){
-      continueButton.setOpaque(true);
-      newGameButton.setOpaque(true);
-      loadGameButton.setOpaque(true);
-      settingsButton.setOpaque(true);
-      scoreboardButton.setOpaque(true);
-      quitButton.setOpaque(true);
-      
       if(continueButtonMouse.getHover()){
-        continueButton.setOpaque(false);
+        continueButton.setContentAreaFilled(true);
       } else if(newGameButtonMouse.getHover()){
-        newGameButton.setOpaque(false);
+        newGameButton.setContentAreaFilled(true);
       } else if(loadGameButtonMouse.getHover()){
-        loadGameButton.setOpaque(false);
+        loadGameButton.setContentAreaFilled(true);
       } else if(settingsButtonMouse.getHover()){
-        settingsButton.setOpaque(false);
+        settingsButton.setContentAreaFilled(true);
       } else if(scoreboardButtonMouse.getHover()){
-        scoreboardButton.setOpaque(false);
+        scoreboardButton.setContentAreaFilled(true);
       } else if(quitButtonMouse.getHover()){
-        quitButton.setOpaque(false);
+        quitButton.setContentAreaFilled(true);
       }
       // Main game state
     }else if (gameState==1){
-      if (keyListener.getDebugState()){
-        gamePanel.setDebugInfo(true, fps, totalMem, memUsed, mouseListener);
-      }else{
-        gamePanel.setDebugInfo(false, fps, totalMem, memUsed, mouseListener);
-      }
+      gamePanel.setDebugInfo(fps, totalMem, memUsed);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
-        gamePanel.createMap (map, characterX, characterY);
+        gamePanel.createMap (map, playerStartingX, playerStartingY);
       }
-      keyListener.setAllDirection();
-      this.add(gamePanel);
-      menuPanel.setVisible(false);
-      menuBgPanel.setVisible(false);
-      title.setVisible(false);
+      //Only refreshes once, keep this seperate from the line above
+      if (addGamePanel){
+        addGamePanel = false;
+        this.add(gamePanel);
+        gamePanel.setVisible (true);
+        menuPanel.setVisible(false);
+        menuBgPanel.setVisible(false);
+        title.setVisible(false);
+      }
       gamePanel.refresh();
     }
   }
-  
+  //Determines if the game has begun
   public void getListen (){
     if (menuStartListener.getStart()){
       gameState=1;
+      addGamePanel =true;
       menuStartListener.setStart (false);
     } else if (menuQuitListener.getStart()){
       System.exit(0);
@@ -153,8 +147,8 @@ class Display extends JFrame{
     this.totalMem = totalMem;
     this.memUsed = memUsed;
   }
-  public void setSetPlayerLocation (int characterX, int characterY){
-    this.characterX = characterX;
-    this.characterY = characterY;
+  public void setPlayerLocation (int playerStartingX, int playerStartingY){
+    this.playerStartingX = playerStartingX;
+    this.playerStartingY = playerStartingY;
   }
 }

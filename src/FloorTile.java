@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
 class FloorTile extends WalkableTile{
   Image floor = Toolkit.getDefaultToolkit().getImage("../res/FloorTile.png");
   FloorTile(Color minimapColor){

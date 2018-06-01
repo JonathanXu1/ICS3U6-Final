@@ -1,40 +1,51 @@
 //Mouse imports
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+
 class CustomMouseListener implements MouseListener {
-  int[] xy = new int [2];
-  private boolean pressed, hover;
+  //Controls the x and y position of the mouse
+  private int[] xy = new int [2];
+  private boolean alternateButton = false;
+  //The following booleans control the state of the mouse
+  private boolean clicked, hover;
+  
+  //Methods that are implemented from MouseListener
   public void mouseClicked(MouseEvent e) {
-    //Have to manually change the coordinates to sync up with windows, must realign to mouse listener to fix.
-  }
-  public void mousePressed(MouseEvent e) {
     xy[0] = e.getX();
     xy[1] = e.getY();
-    pressed = true;
+    clicked = true;
   }
-  
+  public void mousePressed(MouseEvent e) {
+    this.alternateButton = true;
+  }
   public void mouseReleased(MouseEvent e) {
-    pressed = false;
-    System.out.print ("t");
+    this.alternateButton = false;
   }
-  
   public void mouseEntered(MouseEvent e) {
     hover = true;
   }
-  
   public void mouseExited(MouseEvent e) {
     hover = false;
   }
+  //End of methods that are implemented from MouseListener
   
+  //Getters and setters
+  //This returns the coords of the mouse as an array to shorten code
   public int[] getMouseXy(){
     return xy;
   }
-  
-  public boolean getPressed(){
-    return pressed;
+  //There is no setter for this as it can only be controlled by the mouse
+  public void setClicked(boolean clicked){
+    this.clicked = clicked;
   }
-  
+  public boolean getClicked(){
+    return clicked;
+  }
   public boolean getHover(){
     return hover;
+  }
+  //There is no setter for this as it can only be controlled by the mouse
+  public boolean getAlternateButton(){
+    return (alternateButton);
   }
 }
