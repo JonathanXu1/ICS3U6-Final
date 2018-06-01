@@ -8,7 +8,7 @@ class MenuBGPanel extends JPanel{
   private int xVal;
   private int yVal;
   MenuBGPanel(int xVal, int yVal){
-    setFocusable(true);
+    this.setFocusable(true);
     this.xVal = xVal;
     this.yVal = yVal;
     Dimension panelSize= new Dimension (xVal, yVal);

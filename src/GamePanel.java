@@ -1,5 +1,4 @@
 import javax.swing.JPanel;
-import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -7,65 +6,80 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 class GamePanel extends JPanel{
+  //Debug
   private boolean debugState;
   private int stringLength;
   private String fps;
+  private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private int [] mouseXy;
-  private boolean mousePressed, mouseHover;
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
-  private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
-  private Image left, right, middle, exp, hp;
-  private Image hotbar;
-  private Image mapBorder;
-  private Tile[][] map;
-  private int maxX= 0;
-  private int maxY= 0;
-  private int minimapX, minimapY, minimapArrayX, minimapArrayY; //minimapX = minimapY, may remove one later
+  
+  //Listeners
+  private boolean mouseClicked;
+  private CustomKeyListener keyListener = new CustomKeyListener();
+  private CustomMouseListener mouseListener = new CustomMouseListener();
+  
+  //Images
+  private Image left, leftClicked, right, middle, exp, hp, hotbar,mapBorder;
+  private final double Y_TO_X = 110.0/75.0;
+  private final double Y_TO_X_HOT = 208.0/75.0;
+  private final double BOT_HEIGHT = 250.0;
+  
+  //Sizes
+  private int maxX= 0, maxY= 0;
   private int minimapFactor = 20;
-  private boolean minimapUp = false, minimapDown = false;
+  private final int TILE_SIZE= 100;
+  
+  //Tiling and maps
+  private Tile[][] map;
+  private int minimapX, minimapY, minimapArrayX, minimapArrayY; //minimapX = minimapY, may remove one later
   private boolean newFloor = true;
-  private int tileSize= 100;
-  private int playerStartingX;
-  private int playerStartingY;
-  private Character player = new Character();
-  /////Set up the character coordinates on the map
+  private Background bg= new Background (TILE_SIZE);
+  
+  //Coordinate control
+  private int playerStartingX, playerStartingY;
+  private Character player;
   private boolean [] blocked = new boolean [4];
+  private int [] xyDirection = new int [2];
+  
+  //Constructor
   GamePanel(){
-    setFocusable(true);
-    Background.setTileSize(tileSize);
-    player.setArrayX (playerStartingX);
-    player.setArrayY (playerStartingY);
+    //Adds the listeners
+    this.addKeyListener(keyListener);
+    this.addMouseListener(mouseListener);
+    //Initializes the player
+    player = new Character(playerStartingX,playerStartingY);
+    //Initializes images
     this.left = Toolkit.getDefaultToolkit().getImage("../res/MetalL.png");
+    this.leftClicked = Toolkit.getDefaultToolkit().getImage("../res/MetalLC.png");
     this.right = Toolkit.getDefaultToolkit().getImage("../res/MetalR.png");
     this.middle = Toolkit.getDefaultToolkit().getImage("../res/MetalM.png");
     this.exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     this.hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     this.hotbar = Toolkit.getDefaultToolkit().getImage("../res/Hotbar.png");
     this.mapBorder = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
+    //Initializes minimap size
+    this.minimapX = (int)(BOT_HEIGHT);
+    this.minimapY = (int)(BOT_HEIGHT);
   }
-  public void setDebugInfo(boolean debugState, int fps, double totalMem, double memUsed, CustomMouseListener mouse){
-    this.debugState = debugState;
-    this.fps = Integer.toString(fps);
-    this.totalMem = totalMem;
-    this.memUsed = memUsed;
-    this.mouseXy = mouse.getMouseXy();
-    this.mousePressed = mouse.getPressed();
-    this.mouseHover = mouse.getHover();
-    memPercent = (memUsed/totalMem)*100;
-  }
+  
+  //Methods that are inherited from JPanel
   @Override
   public void paintComponent(Graphics g){
     super.paintComponent(g);
+    //Required to have focus so that the listeners work
+    this.requestFocusInWindow();
+    setDoubleBuffered(true);
     if (maxX==0){
-      this.setPreferredSize(this.getSize());
       this.maxX= (int)this.getSize().getWidth();
       this.maxY =(int)this.getSize().getHeight();
-      this.minimapX = 250;
-      this.minimapY = 250;
+      this.setPreferredSize(this.getSize());
     }
-    Background.setTileSize(tileSize);
-    //Draw the map
+    //Update the listeners
+    mouseXy = mouseListener.getMouseXy();
+    mouseClicked = mouseListener.getClicked();
+    //Draw map (background)
     drawMap(g);
     //Draw the game components
     drawGameComponents(g);
@@ -76,7 +90,7 @@ class GamePanel extends JPanel{
     //Draw the character
     drawCharacter (g);
     //Draw the debugPanel
-    if(debugState){
+    if (keyListener.getDebugState()){
       drawDebugPanel(g);
     }
     this.setVisible(true);
@@ -84,24 +98,17 @@ class GamePanel extends JPanel{
   public void refresh(){
     this.repaint();
   }
-  public boolean getNewFloor(){
-    return (newFloor);
-  }
-  public void setNewFloor(boolean newFloor){
-    this.newFloor = newFloor;
-  }
-  public void createMap(Tile [][]map, int playerStartingX, int playerStartingY){
-    this.map = map;
-    this.playerStartingX =playerStartingX;
-    this.playerStartingY =playerStartingY;
-  }
+  //End of methods that are inherited from JPanel
+
+  //Drawing methods, which were split up for legibility
   public void drawDebugPanel (Graphics g){
+    //Debug panel, for personal use and testing
     g.setColor(new Color(80, 80, 80, 127)); //Translucent grey
     stringLength = ("FPS: "+fps).length();
     g.fillRect(30, 15, 12*stringLength, 20);
     stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)").length();
     g.fillRect(maxX - 600, 15, 12*stringLength, 20);
-    stringLength = ("Mouse Click: " + String.valueOf(mousePressed) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
+    stringLength = ("Mouse Click: " + String.valueOf(mouseClicked) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
     g.fillRect(maxX-300, 45, 12*stringLength, 20);
     stringLength = ("Debug Message: " + debugMessage).length();
     g.fillRect(maxX-600, 75, 12*stringLength, 20);
@@ -109,87 +116,92 @@ class GamePanel extends JPanel{
     g.setFont (menuFont);
     g.drawString("FPS: " + fps, 30, 30);
     g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)", maxX-600, 30);
-    g.drawString("Mouse Click: " + String.valueOf(mousePressed) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
+    g.drawString("Mouse Click: " + String.valueOf(mouseClicked) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     g.drawString("Debug Message: " + debugMessage, maxX-600, 90);
   }
   public void drawGameComponents(Graphics g){
     //Bottom toolbar
-    //Always set to 250 pixels in height
-    g.drawImage(left,0,maxY-250,(int)(250.0*(110.0/75.0)),250,this);
-    g.drawImage(middle,(int)((250.0)*110.0/75.0),maxY-250,maxX -(int)(250.0*110.0/75.0*2.0)+5, 250,this);
-    g.drawImage(right,maxX-(int)(250.0*110.0/75.0),maxY-250, (int)(250.0*110.0/75.0), 250,this);
-    g.drawImage(hotbar,(int)(maxX/2.0-(250.0*208.0/(75.0*2.0))),maxY-250,(int)(250.0*208.0/75.0), 250,this);
+    if (mouseListener.getAlternateButton()){
+      g.drawImage(leftClicked,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+    }else{
+      g.drawImage(left,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+    }
+    g.drawImage(middle,(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT),maxX -(int)(2.0*BOT_HEIGHT*Y_TO_X)+5, (int)(BOT_HEIGHT),this);
+    g.drawImage(right,maxX-(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT), (int)(BOT_HEIGHT*Y_TO_X), (int)(BOT_HEIGHT),this);
+    g.drawImage(hotbar,(int)(maxX/2.0-(BOT_HEIGHT*(Y_TO_X_HOT/2.0))),maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X_HOT), (int)(BOT_HEIGHT),this);
     //Hp and exp bars
-    g.drawImage(hp,10,10, ((int)(maxX*1.0/5.0)),  ((int)(maxX*1.0/5.0/200.0*14.0)),this);
-    g.drawImage(exp,10,15+ ((int)(maxX*1.0/5.0/200.0*14.0)),((int)(maxX*1.0/5.0)), ((int)(maxX*1.0/5.0/200.0*10.0)),this);
+    g.drawImage(hp,10,10, ((int)(maxX*0.2)),  ((int)(maxX*0.2/200.0*14.0)),this);
+    g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
   }
   public void drawMap (Graphics g){
+    //Sets the void image
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, maxX, maxY);
-    Background.setOnTile();
-    if (Background.getOnTile()){
-      player.setArrayY(playerStartingY+Background.getY()/tileSize);
-      player.setArrayX(playerStartingX+Background.getX()/tileSize);
+    bg.setOnTile();
+    if (bg.getOnTile()){
+      keyListener.setAllDirection();
+      player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
+      player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
       findBlocked ();
       for(int i = -4; i < 5; i++){
         for(int j = -4; j < 5; j++){
+          //Sets the view range in a circular shape
           if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-            if((player.getArrayY()+i>=0)&&(player.getArrayY()+j<=map.length)&&(player.getArrayX()+i>=0)&&(player.getArrayX()+j<=map[0].length)){
+            if((player.getArrayY()+i>=0)&&(player.getArrayY()+i<=map.length)&&(player.getArrayX()+j>=0)&&(player.getArrayX()+j<=map[0].length)){
               map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
             }
           }
         }
       }
     }
-    if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
-      Background.move();
+    xyDirection =keyListener.getAllDirection();
+    bg.setXDirection (xyDirection[0]);
+    bg.setYDirection (xyDirection[1]);
+    //If no paths are blocked and the array does not go out of bounds
+    if ((!(blocked[0])&&(bg.getYDirection()<0))||(!(blocked[1])&&(bg.getYDirection()>0))||(!(blocked[2])&&(bg.getXDirection()<0))||(!(blocked[3])&&(bg.getXDirection()>0))){
+      bg.move();
     }
     for (int i = 0;i<map.length;i++){
       for (int j = 0;j<map[0].length;j++){
         ///The 10 and 7 are initial positions
         //Getting the x and y for the background allow the ability to have smooth movement when going from one tile to the next
         if(map[i][j].getViewed()){
-          if (((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))>-tileSize*2)&&((maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX))<maxX+tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))>-tileSize*2)&&((maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY))<maxY+tileSize*2)){
+          //Restricts the map so that the array will not go out of bounds
+          if (((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))>-TILE_SIZE*2)&&((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))<maxX+TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))>-TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))<maxY+TILE_SIZE*2)){
             if (!(map[i][j] instanceof VoidTile)){
-              map[i][j].drawTile(g, maxX/2+j*tileSize-Background.getX()-(tileSize/2)-(tileSize*playerStartingX), maxY/2+i*tileSize-Background.getY()-(tileSize/2)-(tileSize*playerStartingY), tileSize, tileSize, this);
+              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
             }            
           }
         }
       }
     }
   }
-  public void drawMinimap(Graphics g){ //Trying to figure out how to only activate once when clicked
+  public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
-    g.fillRect(0,maxY-250,minimapX, minimapY);    
+    g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);    
     //User clicks zoom in and out buttons
-    if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-240)&&(mouseXy[1] < maxY-240+110)&&(mousePressed)&&(!minimapUp)&&(minimapFactor > 20)){ //Clicked on top button
+    if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getClicked())&&(minimapFactor > 20)){ //Clicked on top button
+      mouseListener.setClicked (false);
       minimapFactor -= 10;
-      minimapUp = true;
-      minimapDown = false;
-    } else if((mouseXy[0] > 253)&&(mouseXy[0] < 253+34)&&(mouseXy[1] > maxY-120)&&(mouseXy[1] < maxY-120+110)&&(mousePressed)&&(!minimapDown)&&(minimapFactor < 100)){ //Clicked on bottom button
+    } else if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getClicked())&&(minimapFactor < 100)){ //Clicked on bottom button
+      mouseListener.setClicked (false);
       minimapFactor += 10;
-      minimapDown = true;
-      minimapUp = false;
     }
-    if(!mousePressed){
-      minimapDown = false;
-      minimapUp = false;
-    }
-    
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
-    
     //Draws minimap contents
+    //Must be a double to avoid rounding errors
     double miniTileSize = ((double)minimapX)/minimapFactor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
+        //Sets the minimap based on the normal map relative to the player
         minimapArrayY = player.getArrayY() + i - minimapFactor/2;
         minimapArrayX = player.getArrayX() + j - minimapFactor/2;
         if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
-          if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){ //If not void tile
+          if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){ //If not void tile, to remove unecessary drawing
             if(debugState){ //If debug state
               g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
-            } else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state
+            } else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
               g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
@@ -201,16 +213,28 @@ class GamePanel extends JPanel{
         }
       }
     }
-    //Draws buttons for zoom in and out
-    //Draws the frame
-    g.drawImage(mapBorder,0,maxY-250,minimapX, minimapY,this);
+    //Draws the frame, placed last as it covers the minimap
+    g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawCharacter(Graphics g){
     g.setColor(Color.BLUE);
-    g.fillRect (maxX/2-(tileSize/2),maxY/2-(tileSize/2),tileSize, tileSize);
+    g.fillRect (maxX/2-(TILE_SIZE/2),maxY/2-(TILE_SIZE/2),TILE_SIZE, TILE_SIZE);
   }
-  public void findBlocked(){
+  public void drawBars(Graphics g){
+    //Fill Hp, can be modified through the width
+    g.setColor (new Color (69,218,215));
+    g.fillRect (16,16, ((int)(maxX*1.0/5.0))-12, ((int)(maxX*1.0/5.0/200.0*14.0))-12);
+    //Fill Exp, can be modified through the width
+    g.setColor (new Color (152,251,152));
+    g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
+  }
+  
+  //Map manipulation
+  //The first method blocks off all impossible paths so that it the player does not clip into walls
+    public void findBlocked(){
+    //Restrictions are placed before the start of the each if so that array out of bounds is avoided
     if (player.getArrayY()-1>=0){
+      //If the tile is void, then it will not be drawn to save memory
       if (map[player.getArrayY()-1][player.getArrayX()]  instanceof WalkableTile){
         blocked[0] = false;
       }else{
@@ -246,13 +270,30 @@ class GamePanel extends JPanel{
     }else{
       blocked[3] = true;
     }
+    }
+    //Sets up the map so that setting the floor is easier as well
+    public void createMap(Tile [][]map, int playerStartingX, int playerStartingY){
+    //Initializes player locations
+    this.map = map;
+    this.playerStartingX =playerStartingX;
+    this.playerStartingY =playerStartingY;
   }
-  public void drawBars(Graphics g){
-    //Fill Hp
-    g.setColor (new Color (69,218,215));
-    g.fillRect (16,16, ((int)(maxX*1.0/5.0))-12, ((int)(maxX*1.0/5.0/200.0*14.0))-12);
-    //Fill Exp
-    g.setColor (new Color (152,251,152));
-    g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
+    
+  //Getters and setters
+  //There is no getter for the following, as it only needs to be accessed from this class
+  //Sets all the information for the debug panel
+  public void setDebugInfo(int fps, double totalMem, double memUsed){
+    this.fps = Integer.toString(fps);
+    this.totalMem = totalMem;
+    this.memUsed = memUsed;
+    memPercent = (memUsed/totalMem)*100;
+  }
+  //Retrieves whether or not it is a new floor
+  public boolean getNewFloor(){
+    return (newFloor);
+  }
+  //Sends back if the floor is new or not; this is useful for understanding what code to run
+  public void setNewFloor(boolean newFloor){
+    this.newFloor = newFloor;
   }
 }

@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+
 class VoidTile extends WallTile{
   VoidTile(Color minimapColor){
     super(minimapColor);

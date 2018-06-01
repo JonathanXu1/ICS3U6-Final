@@ -1,20 +1,24 @@
 class Character{
-  ///Could make it so that this and the background implement tileScaling, meaning they must have get and set tile size
-  //We should probably make everything here static
   private int x;
   private int y;
-  Character(){
+  
+  //Constructor
+  Character(int x, int y){
+    this.x = x;
+    this.y=y;
   }
+  
+  //Getters and setters
   public int getArrayX(){
     return (x);
   }
-  public void setArrayX(int xNew){
-    x =xNew;
+  public void setArrayX(int x){
+    this.x =x;
   }
   public int getArrayY(){
     return (y);
   }
-  public void setArrayY(int yNew){
-    y =yNew;
+  public void setArrayY(int y){
+    this.y =y;
   }
 }

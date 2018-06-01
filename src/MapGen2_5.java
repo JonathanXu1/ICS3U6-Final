@@ -17,7 +17,7 @@
 
 class MapGen2_5{
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
-  public static boolean randomRoll(int chance) {
+  public boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {
       return true;
     } else {
@@ -26,13 +26,13 @@ class MapGen2_5{
   }
   
   // Gets a random number from the lower bound to the upper bound
-  public static int getRand(int lowerBound, int upperBound) {    
+  public int getRand(int lowerBound, int upperBound) {    
     return ((int) (Math.random()*(upperBound - lowerBound))) + lowerBound; 
   }
   
   
   // Generates a template for the map, with borders capped as paths to contain the algorithms 
-  public static int[][] genTemplate(int sizeW, int sizeD) {
+  public int[][] genTemplate(int sizeW, int sizeD) {
     int[][] retArray = new int[sizeD + 10][sizeW + 10];
     
     for (int i = 5; i < sizeD + 5; i++) {
@@ -45,7 +45,7 @@ class MapGen2_5{
   }
     
   // printing method for visualization    
-  public static void printArrayCharComp(char[][] input) {
+  public void printArrayCharComp(char[][] input) {
     for (int i = 5; i < input.length - 5; i++) {
       for (int j = 5; j < input[0].length - 5; j++) {
         System.out.print(input[i][j]);
@@ -55,7 +55,7 @@ class MapGen2_5{
   }
   
   // main recursive method for carving initial paths through the template
-  public static int[][] carvePath(int[][] map, int dPos, int rPos, int dirState[], int probTurn) {
+  public int[][] carvePath(int[][] map, int dPos, int rPos, int dirState[], int probTurn) {
     map[dPos][rPos] = 0; // Sets the current spot to zero 
     int[][] returnMap  = new int[map.length][map.length]; // Initializes return map
     int[] newDirState = new int[2];   // Initializes future movement array
@@ -118,7 +118,7 @@ class MapGen2_5{
   }
   
   // Takes the map and randomly spawns rooms in it, based on the number of rooms specified as argument
-  public static int[][] genRooms(int[][] map, int numRooms) {
+  public int[][] genRooms(int[][] map, int numRooms) {
     int[][] returnArray = new int[map.length][map[0].length]; 
     int randR,randD; // initilizes integers for random spawn
     // Creates a matrix of rooms to prevent room clustering and keep track of where rooms are
@@ -173,7 +173,7 @@ class MapGen2_5{
   
   // Recursive method employed to remove unecessary dead ends from the map, taking in xy coordinates and the map
   // currntly being worked on as travel.
-  public static int[][] pathPruner(int dPos, int rPos, int[][] map) {
+  public int[][] pathPruner(int dPos, int rPos, int[][] map) {
     int numOpt = 0; // initializes the number of travel options the recursion has
     int[] nextStep = {0,0}; // The displacment array for the next recursion, to be set later
     
@@ -218,7 +218,7 @@ class MapGen2_5{
   }
   
   // Scanes the map for dead ends and uses the pathPruner to remove them
-  public static int[][] prunePaths(int[][] map) {
+  public int[][] prunePaths(int[][] map) {
     int[][] retArray = map;
     
     for (int i = 0; i < map.length; i++) {
@@ -235,7 +235,7 @@ class MapGen2_5{
   }
   
   // Generates doors based on the work of previous methods
-  public static int[][] genDoors(int[][] map) {
+  public int[][] genDoors(int[][] map) {
     int numAdj; // Initilizes the number of adjacent room tiles
     
     for (int i = 6; i < map.length - 6; i++) {
@@ -264,7 +264,7 @@ class MapGen2_5{
   
   // Takes in a map, coordinates, and a target tile type
   // determines if the coordinates are fully surrounded by the target tile, and returns a boolean
-  public static boolean fullSurround(int[][] map, int i, int j, int target) {
+  public boolean fullSurround(int[][] map, int i, int j, int target) {
     int numAdj = 0;
     
     if (map[i + 1][j]  == target) {
@@ -286,7 +286,7 @@ class MapGen2_5{
     return false;
   }
   
-  public static int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
+  public int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     
     if (map[dPos + 1][rPos]  == target) {
@@ -305,7 +305,7 @@ class MapGen2_5{
     return numAdj;
   }
   
-  public static int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
+  public int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
@@ -318,7 +318,7 @@ class MapGen2_5{
   }
   
   // Inserts a spawn and progression point into the map.
-  public static int[][] insertStairs(int[][] map) {
+  public int[][] insertStairs(int[][] map) {
     int randD,randR; // Initalzes integers for random generation
     
     // Generates two sets of random coordinates for putting the points on
@@ -339,7 +339,7 @@ class MapGen2_5{
     return map;
   }
   
-  public static int[][] designateWalls(int[][] map) {
+  public int[][] designateWalls(int[][] map) {
     int numAdj;        
     
     for (int i = 5; i < map.length - 5; i++) {
@@ -375,7 +375,7 @@ class MapGen2_5{
     return map;
   }
   
-  public static int[][] finalizeDesignations(int[][] map) {
+  public int[][] finalizeDesignations(int[][] map) {
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
         if (map[i][j] == -1) {
@@ -407,7 +407,7 @@ class MapGen2_5{
   }
   
   // Main method that uses the the previously created methods in conjuction to generate a complete map
-  public static int[][] generateMap(int effMapSizeW, int effMapSizeD) {   
+  public int[][] generateMap(int effMapSizeW, int effMapSizeD) {   
     int mapSizeW = (effMapSizeW-1)*6 + 3; // Initalizes map size
     int mapSizeD = (effMapSizeD-1)*6 + 3;
     int[][] subject = genTemplate(mapSizeW,mapSizeD); // Generates an empty template
@@ -449,7 +449,7 @@ class MapGen2_5{
   }
   
   // Method for visualizing the generated map onto console
-  public static void visMap(int[][] result) {
+  public void visMap(int[][] result) {
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
@@ -482,7 +482,7 @@ class MapGen2_5{
     printArrayCharComp(resultProc);   
   }
   
-  public static char[][] charMap(int[][] result) {
+  public char[][] charMap(int[][] result) {
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
@@ -514,8 +514,9 @@ class MapGen2_5{
     
     return resultProc;
   }
-  
+  /*
   public static void main(String[] args) {
     visMap(generateMap(24,6)); // width-depth generates a map of integers
   }
+  */
 }
