@@ -11,14 +11,18 @@ class CustomMouseListener implements MouseListener {
   
   //Methods that are implemented from MouseListener
   public void mouseClicked(MouseEvent e) {
-    xy[0] = e.getX();
-    xy[1] = e.getY();
-    clicked = true;
+//    xy[0] = e.getX();
+//    xy[1] = e.getY();
+//    clicked = true;
   }
   public void mousePressed(MouseEvent e) {
+    xy[0] = e.getX();
+    xy[1] = e.getY();
+    clicked = false;
     this.alternateButton = true;
   }
   public void mouseReleased(MouseEvent e) {
+    clicked = true;
     this.alternateButton = false;
   }
   public void mouseEntered(MouseEvent e) {

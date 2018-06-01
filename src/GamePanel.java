@@ -21,7 +21,7 @@ class GamePanel extends JPanel{
   private CustomMouseListener mouseListener = new CustomMouseListener();
   
   //Images
-  private Image left, leftClicked, right, middle, exp, hp, hotbar,mapBorder;
+  private Image left, leftClickedPlus, leftClickedMinus, right, middle, exp, hp, hotbar,mapBorder;
   private final double Y_TO_X = 110.0/75.0;
   private final double Y_TO_X_HOT = 208.0/75.0;
   private final double BOT_HEIGHT = 250.0;
@@ -52,7 +52,8 @@ class GamePanel extends JPanel{
     player = new Character(playerStartingX,playerStartingY);
     //Initializes images
     this.left = Toolkit.getDefaultToolkit().getImage("../res/MetalL.png");
-    this.leftClicked = Toolkit.getDefaultToolkit().getImage("../res/MetalLC.png");
+    this.leftClickedPlus = Toolkit.getDefaultToolkit().getImage("../res/MetalC+.png");
+    this.leftClickedMinus = Toolkit.getDefaultToolkit().getImage("../res/MetalC-.png");
     this.right = Toolkit.getDefaultToolkit().getImage("../res/MetalR.png");
     this.middle = Toolkit.getDefaultToolkit().getImage("../res/MetalM.png");
     this.exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
@@ -108,7 +109,7 @@ class GamePanel extends JPanel{
     g.fillRect(30, 15, 12*stringLength, 20);
     stringLength = ("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)").length();
     g.fillRect(maxX - 600, 15, 12*stringLength, 20);
-    stringLength = ("Mouse Click: " + String.valueOf(mouseClicked) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
+    stringLength = ("Mouse Click: " + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1])  + " y").length();
     g.fillRect(maxX-300, 45, 12*stringLength, 20);
     stringLength = ("Debug Message: " + debugMessage).length();
     g.fillRect(maxX-600, 75, 12*stringLength, 20);
@@ -122,7 +123,13 @@ class GamePanel extends JPanel{
   public void drawGameComponents(Graphics g){
     //Bottom toolbar
     if (mouseListener.getAlternateButton()){
-      g.drawImage(leftClicked,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+      if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
+        g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
+        g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+      }else{
+              g.drawImage(left,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+      }
     }else{
       g.drawImage(left,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
     }
@@ -183,7 +190,7 @@ class GamePanel extends JPanel{
     if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getClicked())&&(minimapFactor > 20)){ //Clicked on top button
       mouseListener.setClicked (false);
       minimapFactor -= 10;
-    } else if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getClicked())&&(minimapFactor < 100)){ //Clicked on bottom button
+    } else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getClicked())&&(minimapFactor < 100)){ //Clicked on bottom button
       mouseListener.setClicked (false);
       minimapFactor += 10;
     }
