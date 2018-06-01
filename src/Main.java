@@ -11,7 +11,11 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
+<<<<<<< HEAD
     File audioFile = new File("../res/spacebackround.wav");
+=======
+    File audioFile = new File("../res/interstellar.wav");
+>>>>>>> 8d139ff4d85a701a3691e81f1ed85b88a7d2bbb5
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
