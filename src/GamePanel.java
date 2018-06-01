@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 
 class GamePanel extends JPanel{
   //Debug
-  private boolean debugState;
   private int stringLength;
   private String fps;
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
@@ -117,7 +116,7 @@ class GamePanel extends JPanel{
     g.setFont (menuFont);
     g.drawString("FPS: " + fps, 30, 30);
     g.drawString("Memory Usage: " + String.format("%.2f", memPercent) + "% (" + String.format("%.2f", memUsed) + "MB out of " + String.format("%.2f", totalMem) + "MB)", maxX-600, 30);
-    g.drawString("Mouse Click: " + String.valueOf(mouseClicked) + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
+    g.drawString("Mouse Click: " + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     g.drawString("Debug Message: " + debugMessage, maxX-600, 90);
   }
   public void drawGameComponents(Graphics g){
@@ -202,10 +201,10 @@ class GamePanel extends JPanel{
         minimapArrayX = player.getArrayX() + j - minimapFactor/2;
         if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
           if (!(map[minimapArrayY][minimapArrayX] instanceof VoidTile)){ //If not void tile, to remove unecessary drawing
-            if(debugState){ //If debug state
+            if(keyListener.getDebugState()){ //If debug state
               g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
-            } else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
+            }else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
               g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
