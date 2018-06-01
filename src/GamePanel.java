@@ -138,7 +138,7 @@ class GamePanel extends JPanel{
               map[player.getArrayY() + i][player.getArrayX() + j].setViewed();
             }
           }
-          }
+        }
       }
     }
     if ((!(blocked[0])&&(Background.getYDirection()<0))||(!(blocked[1])&&(Background.getYDirection()>0))||(!(blocked[2])&&(Background.getXDirection()<0))||(!(blocked[3])&&(Background.getXDirection()>0))){
@@ -176,7 +176,7 @@ class GamePanel extends JPanel{
       minimapUp = false;
     }
     
-    debugMessage = "Minimap factor: " + Integer.toString(minimapFactor) + String.valueOf(minimapUp);
+    debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
     
     //Draws minimap contents
     double miniTileSize = ((double)minimapX)/minimapFactor;
