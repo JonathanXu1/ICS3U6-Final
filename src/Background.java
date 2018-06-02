@@ -7,6 +7,7 @@ class Background{
   private int yDirection  =0;
   //Positioning
   private boolean onTile = true;
+  private boolean firstMovement =false;
   private final int TILE_SIZE;
   
   //Constructor
@@ -50,6 +51,12 @@ class Background{
     }else{
       onTile =false;
     }
+  }
+  public boolean getFirstMovement(){
+    return (firstMovement);
+  }
+  public void setFirstMovement (boolean firstMovement){
+    this.firstMovement =firstMovement;
   }
   //Moves the background smoothly    
   public void move(){
