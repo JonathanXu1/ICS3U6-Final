@@ -173,6 +173,7 @@ class GamePanel extends JPanel{
     //Setting all the possible positions is the second thing that will occur
     if (!(tiling)){
       keyListener.setAllDirection();
+<<<<<<< HEAD
       if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
         //Set all array postion
         for (int i =0;i<entityMap.length;i++){
@@ -258,6 +259,11 @@ class GamePanel extends JPanel{
           }
         }
       }
+ //May add this back later if necessary
+      //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
+    //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
+      findBlocked ();
+      drawFog(player.getArrayX(), player.getArrayY(), 0);
     }
     //The tiling variables allows the user to know when a turn is occuring 
     if (tiling){
@@ -324,6 +330,51 @@ class GamePanel extends JPanel{
         }
       }
     }
+  }
+  
+  
+  public void drawFog(int x, int y, int count){
+    map[y][x].setViewed();
+    if(count <= 2){
+      if(map[y][x].getMinimapColor() == Color.GREEN){
+        for(int i = -1; i <= 1; i ++){
+          for(int j = -1; j <= 1; j++){
+            if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+              drawFog(x+j, y+i, count+1);
+            }
+          }
+        }
+      } else if (map[y][x].getMinimapColor() == Color.WHITE){
+        for(int i = -1; i <= 1; i ++){
+          for(int j = -1; j <= 1; j++){
+            if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+              drawFog(x+j, y+i, count+1);
+            }
+          }
+        }
+      }
+    }
+    /*
+    for(int i = -4; i < 5; i++){
+      for(int j = -4; j < 5; j++){
+        //Sets the view range in a circular shape
+        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
+          if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+            if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.GREEN){
+              if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+                map[y + i][x + j].setViewed();
+              }
+            } else if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.WHITE){
+              if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+                map[y + i][x + j].setViewed();
+              }
+            } else{
+              map[y + i][x + j].setViewed();
+            }
+          }
+        }
+      }
+    } */
   }
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
