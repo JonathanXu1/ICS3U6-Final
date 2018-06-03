@@ -173,7 +173,6 @@ class GamePanel extends JPanel{
     //Setting all the possible positions is the second thing that will occur
     if (!(tiling)){
       keyListener.setAllDirection();
-<<<<<<< HEAD
       if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
         //Set all array postion
         for (int i =0;i<entityMap.length;i++){
@@ -262,8 +261,7 @@ class GamePanel extends JPanel{
  //May add this back later if necessary
       //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
     //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
-      findBlocked ();
-      drawFog(player.getArrayX(), player.getArrayY(), 0);
+      drawFog(playerCurrentX, playerCurrentY, 0);
     }
     //The tiling variables allows the user to know when a turn is occuring 
     if (tiling){
