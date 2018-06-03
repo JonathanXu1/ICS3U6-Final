@@ -225,6 +225,10 @@ class GamePanel extends JPanel{
                     do{
                       directionRand=((int)(Math.random()*4));
                     }while (blocked[directionRand]);
+                    if ((!((Enemy)(entityMap[i][j])).getEnraged())&&(((int)(Math.random()*2))==1)){
+                      //50% chance for them to not move if aggro'd
+                      directionRand  =4;
+                    }
                   }
                   entityMap[i][j].setTiling (directionRand);
                   entityMap[i][j].setMoved(true);
@@ -323,6 +327,7 @@ class GamePanel extends JPanel{
   }
   
   public void drawFog(int x, int y, int count){
+    if (map[y][x] instanceof Tile){
     map[y][x].setViewed();
     //May need later
     /*
@@ -346,6 +351,7 @@ class GamePanel extends JPanel{
      }
      */
     map[y][x].setFocus(true);
+    }
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
