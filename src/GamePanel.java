@@ -172,21 +172,15 @@ class GamePanel extends JPanel{
   }
   public void drawFog(int x, int y, int count){
     map[y][x].setViewed();
-    if(count <= 2){
-      if(map[y][x].getMinimapColor() == Color.GREEN){
-        for(int i = -1; i <= 1; i ++){
-          for(int j = -1; j <= 1; j++){
-            if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-              drawFog(x+j, y+i, count+1);
-            }
-          }
-        }
-      } else if (map[y][x].getMinimapColor() == Color.WHITE){
-        for(int i = -1; i <= 1; i ++){
-          for(int j = -1; j <= 1; j++){
-            if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-              drawFog(x+j, y+i, count+1);
-            }
+    if(count <= 2){ //If within range
+      for(int i = -1; i <= 1; i ++){
+        for(int j = -1; j <= 1; j++){
+          if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
+            drawFog(x+j, y+i, count+1);
+          } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
+            drawFog(x+j, y+i, count+1);
+          } else if(map[y][x].getMinimapColor() == Color.RED && map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
+            drawFog(x+j, y+i, count+1);
           }
         }
       }
