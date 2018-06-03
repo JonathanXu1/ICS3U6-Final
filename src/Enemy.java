@@ -4,8 +4,8 @@ import java.awt.Color;
 class Enemy extends Entity{
   
   //Constructor
-  Enemy(int h,int hC,int a,int sP,int sT){
-    super (h,hC,a,sP,sT);
+  Enemy(int h,int hC,int a,int sP,int sT, Color minimapColor){
+    super (h,hC,a,sP,sT,minimapColor);
   }
   //Should be placed in Entity class and made abstract later
   public void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){

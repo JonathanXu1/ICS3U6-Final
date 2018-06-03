@@ -162,7 +162,7 @@ class GamePanel extends JPanel{
         spawnY =(int)(Math.random()*entityMap.length);
       }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0);
+      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA);
     }
     findBlocked (playerCurrentX, playerCurrentY);
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
@@ -297,6 +297,9 @@ class GamePanel extends JPanel{
           if (entityMap[i][j] instanceof Entity){
             entityMap[i][j].setMoved(false);
           }
+          if(map[i][j] instanceof Tile){
+            map[i][j].setFocus(false);
+          }
         }
       }
     }
@@ -318,23 +321,26 @@ class GamePanel extends JPanel{
     drawFog(playerCurrentX, playerCurrentY, 0);
   }
   
-  
   public void drawFog(int x, int y, int count){
     map[y][x].setViewed();
-    if(count <= 2){ //If within range
+    map[y][x].setFocus(true);
+    if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
-          if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
-            drawFog(x+j, y+i, count+1);
-          } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
-            drawFog(x+j, y+i, count+1);
-          } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
-            drawFog(x+j, y+i, count+1);
+          if(map[y+i][x+j] != null){
+            if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
+              drawFog(x+j, y+i, count+1);
+            } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
+              drawFog(x+j, y+i, count+1);
+            } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
+              drawFog(x+j, y+i, count+1);
+            }
           }
         }
       }
     }
   }
+  
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
     g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);    
@@ -356,19 +362,27 @@ class GamePanel extends JPanel{
         minimapArrayY = playerCurrentY + i - minimapFactor/2;
         minimapArrayX = playerCurrentX + j - minimapFactor/2;
         if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
-          if (map[minimapArrayY][minimapArrayX] instanceof Tile){ //If not void tile, to remove unecessary drawing
+          if(map[minimapArrayY][minimapArrayX] != null){ //If not void tile, to remove unecessary drawing){
+            if(map[minimapArrayY][minimapArrayX].getFocus()){
+              if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
+                g.setColor(entityMap[minimapArrayY][minimapArrayX].getMinimapColor());
+              } else{
+                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+              }
+            } else{
+              if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
+                g.setColor(entityMap[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker());
+              } else{
+                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker());
+              }
+            }
+            
             if(keyListener.getDebugState()){ //If debug state
-              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
-              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
           }
-        }
-        if ((minimapArrayY==playerCurrentY)&&(minimapArrayX==playerCurrentX)){
-          g.setColor(Color.BLUE);
-          g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize)); //Character square
         }
       }
     }
@@ -459,7 +473,7 @@ class GamePanel extends JPanel{
     this.playerStartingY =playerStartingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
-    entityMap[playerStartingX][playerStartingY]= new Character(100,100,1,1,0);
+    entityMap[playerStartingX][playerStartingY]= new Character(100,100,1,1,0,Color.BLUE);
   }
   
   //Getters and setters
