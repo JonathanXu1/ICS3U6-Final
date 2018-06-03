@@ -327,7 +327,7 @@ class GamePanel extends JPanel{
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
-          if(map[y+i][x+j] != null){
+          if(map[y+i][x+j] instanceof Tile){
             if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
               drawFog(x+j, y+i, count+1);
             } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
@@ -356,6 +356,7 @@ class GamePanel extends JPanel{
     //Draws minimap contents
     //Must be a double to avoid rounding errors
     double miniTileSize = ((double)minimapX)/minimapFactor;
+    Color currentColor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
         //Sets the minimap based on the normal map relative to the player
@@ -365,21 +366,24 @@ class GamePanel extends JPanel{
           if(map[minimapArrayY][minimapArrayX] != null){ //If not void tile, to remove unecessary drawing){
             if(map[minimapArrayY][minimapArrayX].getFocus()){
               if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
-                g.setColor(entityMap[minimapArrayY][minimapArrayX].getMinimapColor());
+                currentColor = entityMap[minimapArrayY][minimapArrayX].getMinimapColor();
               } else{
-                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+                currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor();
               }
             } else{
               if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
-                g.setColor(entityMap[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker());
+                currentColor = entityMap[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
               } else{
-                g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker());
+                currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
               }
             }
-            
+            g.setColor(currentColor);
             if(keyListener.getDebugState()){ //If debug state
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
+              if(map[minimapArrayY][minimapArrayX].getMinimapColor() == Color.LIGHT_GRAY){
+                g.setColor(currentColor.darker().darker().darker());
+              }
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
           }
