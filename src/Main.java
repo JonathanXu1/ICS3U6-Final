@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.io.File;
+import java.io.PrintWriter;
 import javax.sound.sampled.*;
 
 class Main{
@@ -11,6 +12,8 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
+    File mappo = new File ("map.txt");
+    PrintWriter output = new PrintWriter (mappo);
     File audioFile = new File("../res/spacebackround.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
@@ -22,30 +25,32 @@ class Main{
     //Converts the map into a tile map
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    for (int i = 0; i < charMap.length; i++){
-      for(int j = 0; j < charMap[0].length; j++){
-        if (charMap[i][j] == 'X'){
-          map[i][j]= new FloorTile(Color.WHITE);
-        } else if (charMap[i][j] == 'R') {
-          map[i][j]= new FloorTile(Color.GREEN);
-        } else if (charMap[i][j] == 'D') {
-          map[i][j]= new FloorTile(Color.RED);
-        } else if (charMap[i][j] == '~') {
-          map[i][j]= new WallTile(Color.DARK_GRAY);
-        } else if (charMap[i][j] == '|') {
-          map[i][j]= new WallTile(Color.LIGHT_GRAY);
-        } else if (charMap[i][j] == 'A') {
-          map[i][j]= new FloorTile(Color.ORANGE);
-        } else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN);
-          playerStartingX = j;
-          playerStartingY = i;
-        }else{
-          map[i][j]= new VoidTile(Color.BLACK);
-        }
+      for (int i = 0; i < charMap.length; i++){
+        output.println ("");
+        for(int j = 0; j < charMap[0].length; j++){
+          output.print (charMap[i][j]);
+          if (charMap[i][j] == 'X'){
+            map[i][j]= new FloorTile(Color.WHITE);
+          } else if (charMap[i][j] == 'R') {
+            map[i][j]= new FloorTile(Color.GREEN);
+          } else if (charMap[i][j] == 'D') {
+            map[i][j]= new FloorTile(Color.RED);
+          } else if (charMap[i][j] == '~') {
+            map[i][j]= new WallTile(Color.DARK_GRAY);
+          } else if (charMap[i][j] == '|') {
+            map[i][j]= new WallTile(Color.LIGHT_GRAY);
+          } else if (charMap[i][j] == 'A') {
+            map[i][j]= new FloorTile(Color.ORANGE);
+          } else if (charMap[i][j] == '@'){
+            //Question
+            map[i][j]= new FloorTile(Color.GREEN);
+            playerStartingX = j;
+            playerStartingY = i;
+          }
       }
-    }  
-    //Plays music
+      }
+      output.close();
+      //Plays music
     try {
       clip.open(audioStream);
       clip.start();

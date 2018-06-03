@@ -1,24 +1,14 @@
-class Character{
-  private int x;
-  private int y;
+import java.awt.Graphics;
+
+class Character extends Entity{
   
   //Constructor
-  Character(int x, int y){
-    this.x = x;
-    this.y=y;
+  Character(int h,int hC,int a,int sP,int sT){
+    super (h,hC,a,sP,sT);
+  }
+  public void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
+
   }
   
   //Getters and setters
-  public int getArrayX(){
-    return (x);
-  }
-  public void setArrayX(int x){
-    this.x =x;
-  }
-  public int getArrayY(){
-    return (y);
-  }
-  public void setArrayY(int y){
-    this.y =y;
-  }
 }
