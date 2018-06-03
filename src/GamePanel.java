@@ -173,7 +173,6 @@ class GamePanel extends JPanel{
     //Setting all the possible positions is the second thing that will occur
     if (!(tiling)){
       keyListener.setAllDirection();
-<<<<<<< HEAD
       if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
         //Set all array postion
         for (int i =0;i<entityMap.length;i++){
@@ -262,8 +261,6 @@ class GamePanel extends JPanel{
  //May add this back later if necessary
       //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
     //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
-      findBlocked ();
-      drawFog(player.getArrayX(), player.getArrayY(), 0);
     }
     //The tiling variables allows the user to know when a turn is occuring 
     if (tiling){
@@ -318,18 +315,7 @@ class GamePanel extends JPanel{
     }
     
     //Load basic visuals last
-    for(int i = -4; i < 5; i++){
-      for(int j = -4; j < 5; j++){
-        //Sets the view range in a circular shape
-        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-          if((playerCurrentY+i>=0)&&(playerCurrentY+i<=map.length)&&(playerCurrentX+j>=0)&&(playerCurrentX+j<=map[0].length)){
-            if(map[playerCurrentY + i][playerCurrentX + j] instanceof Tile){
-              map[playerCurrentY + i][playerCurrentX + j].setViewed();
-            }
-          }
-        }
-      }
-    }
+    drawFog(playerCurrentX, playerCurrentY, 0);
   }
   
   
@@ -342,33 +328,12 @@ class GamePanel extends JPanel{
             drawFog(x+j, y+i, count+1);
           } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
             drawFog(x+j, y+i, count+1);
-          } else if(map[y][x].getMinimapColor() == Color.RED && map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
+          } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
             drawFog(x+j, y+i, count+1);
           }
         }
       }
     }
-    /*
-    for(int i = -4; i < 5; i++){
-      for(int j = -4; j < 5; j++){
-        //Sets the view range in a circular shape
-        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-          if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
-            if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.GREEN){
-              if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                map[y + i][x + j].setViewed();
-              }
-            } else if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.WHITE){
-              if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                map[y + i][x + j].setViewed();
-              }
-            } else{
-              map[y + i][x + j].setViewed();
-            }
-          }
-        }
-      }
-    } */
   }
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
