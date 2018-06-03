@@ -162,7 +162,7 @@ class GamePanel extends JPanel{
         spawnY =(int)(Math.random()*entityMap.length);
       }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0);
+      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0, false);
     }
     findBlocked (playerCurrentX, playerCurrentY);
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
@@ -258,9 +258,9 @@ class GamePanel extends JPanel{
           }
         }
       }
- //May add this back later if necessary
+      //May add this back later if necessary
       //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
-    //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
+      //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
       drawFog(playerCurrentX, playerCurrentY, 0);
     }
     //The tiling variables allows the user to know when a turn is occuring 
@@ -337,43 +337,48 @@ class GamePanel extends JPanel{
       if(map[y][x].getMinimapColor() == Color.GREEN){
         for(int i = -1; i <= 1; i ++){
           for(int j = -1; j <= 1; j++){
-            if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-              drawFog(x+j, y+i, count+1);
+            if (map[y+i][x+j] instanceof Tile){
+              if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+                drawFog(x+j, y+i, count+1);
+              }
             }
           }
         }
       } else if (map[y][x].getMinimapColor() == Color.WHITE){
         for(int i = -1; i <= 1; i ++){
           for(int j = -1; j <= 1; j++){
-            if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-              drawFog(x+j, y+i, count+1);
+            if (map[y+i][x+j] instanceof Tile){
+              if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+                drawFog(x+j, y+i, count+1);
+              }
             }
           }
         }
       }
     }
-    /*
-    for(int i = -4; i < 5; i++){
-      for(int j = -4; j < 5; j++){
-        //Sets the view range in a circular shape
-        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-          if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
-            if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.GREEN){
-              if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                map[y + i][x + j].setViewed();
-              }
-            } else if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.WHITE){
-              if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                map[y + i][x + j].setViewed();
-              }
-            } else{
-              map[y + i][x + j].setViewed();
-            }
-          }
-        }
-      }
-    } */
   }
+  /*
+   for(int i = -4; i < 5; i++){
+   for(int j = -4; j < 5; j++){
+   //Sets the view range in a circular shape
+   if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
+   if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+   if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.GREEN){
+   if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+   map[y + i][x + j].setViewed();
+   }
+   } else if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.WHITE){
+   if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+   map[y + i][x + j].setViewed();
+   }
+   } else{
+   map[y + i][x + j].setViewed();
+   }
+   }
+   }
+   }
+   } */
+  
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
     g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);    
@@ -421,7 +426,7 @@ class GamePanel extends JPanel{
     for (int i = 0;i<entityMap.length;i++){
       for (int j = 0;j<entityMap[0].length;j++){
         if(entityMap[i][j] instanceof Enemy){
-        //  System.out.println ("Enemy: "+i +" and " +j);
+          //  System.out.println ("Enemy: "+i +" and " +j);
           if (entityMap[i][j].getTiling ()==0){
             entityMap[i][j].drawEntity(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod()), TILE_SIZE, TILE_SIZE, this);
           }else if (entityMap[i][j].getTiling ()==1){
@@ -434,7 +439,7 @@ class GamePanel extends JPanel{
             entityMap[i][j].drawEntity(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
           }
         }else if (entityMap[i][j] instanceof Character){
-     //  System.out.println ("-");
+          //  System.out.println ("-");
         }
       }
     }
@@ -452,38 +457,54 @@ class GamePanel extends JPanel{
   //The first method blocks off all impossible paths so that it the player does not clip into walls
   public void findBlocked(int j, int i){
     //Restrictions are placed before the start of the each if so that array out of bounds is avoided
+    blocked[0] = false;
+    blocked[1] = false;
+    blocked[2] = false;
+    blocked[3] = false;
     if (i-1>=0){
+      if ((entityMap[i][j] instanceof Enemy)&&(map[i-1][j] instanceof DoorTile)){
+        if(!(((Enemy)(entityMap[i][j])).getEnraged())){
+          blocked[0] = true;
+        }
+      }
       if (!(map[i-1][j]  instanceof WalkableTile)||(entityMap[i-1][j] instanceof Entity)){
         blocked[0] = true;
-      }else{
-        blocked[0] = false;
       }
     }else{
       blocked[0] = true;
     }
     if (i+1<=map.length){
+      if ((entityMap[i][j] instanceof Enemy)&&(map[i+1][j] instanceof DoorTile)){
+        if(!(((Enemy)(entityMap[i][j])).getEnraged())){
+          blocked[1] = true;
+        }
+      }
       if (!(map[i+1][j]  instanceof WalkableTile)|| (entityMap[i+1][j] instanceof Entity)){
         blocked[1] = true;
-      }else{
-        blocked[1] = false;
       }
     }else{
       blocked[1] = true;
     }
     if (j-1>=0){
+      if ((entityMap[i][j] instanceof Enemy)&&(map[i][j-1] instanceof DoorTile)){
+        if(!(((Enemy)(entityMap[i][j])).getEnraged())){
+          blocked[2] = true;
+        }
+      }
       if (!(map[i][j-1]  instanceof WalkableTile)|| (entityMap[i][j-1] instanceof Entity)){
         blocked[2] = true;
-      }else{
-        blocked[2] = false;
       }
     }else{
       blocked[2] = true;
     }
     if (j+1<=map[0].length){
+      if ((entityMap[i][j] instanceof Enemy)&&(map[i][j+1] instanceof DoorTile)){
+        if(!(((Enemy)(entityMap[i][j])).getEnraged())){
+          blocked[3] = true;
+        }
+      }
       if (!(map[i][j+1]  instanceof WalkableTile)|| (entityMap[i][j+1] instanceof Entity)){
         blocked[3] = true;
-      }else{
-        blocked[3] = false;
       }
     }else{
       blocked[3] = true;

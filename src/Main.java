@@ -12,8 +12,8 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
-    File mappo = new File ("map.txt");
-    PrintWriter output = new PrintWriter (mappo);
+ //   File mappo = new File ("map.txt");
+  //  PrintWriter output = new PrintWriter (mappo);
     File audioFile = new File("../res/spacebackround.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
@@ -26,15 +26,15 @@ class Main{
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
       for (int i = 0; i < charMap.length; i++){
-        output.println ("");
+//        output.println ("");
         for(int j = 0; j < charMap[0].length; j++){
-          output.print (charMap[i][j]);
+ //         output.print (charMap[i][j]);
           if (charMap[i][j] == 'X'){
-            map[i][j]= new FloorTile(Color.WHITE);
+            map[i][j]= new HallwayTile(Color.WHITE);
           } else if (charMap[i][j] == 'R') {
             map[i][j]= new FloorTile(Color.GREEN);
           } else if (charMap[i][j] == 'D') {
-            map[i][j]= new FloorTile(Color.RED);
+            map[i][j]= new DoorTile(Color.RED);
           } else if (charMap[i][j] == '~') {
             map[i][j]= new WallTile(Color.DARK_GRAY);
           } else if (charMap[i][j] == '|') {
@@ -42,14 +42,13 @@ class Main{
           } else if (charMap[i][j] == 'A') {
             map[i][j]= new FloorTile(Color.ORANGE);
           } else if (charMap[i][j] == '@'){
-            //Question
             map[i][j]= new FloorTile(Color.GREEN);
             playerStartingX = j;
             playerStartingY = i;
           }
       }
       }
-      output.close();
+   //   output.close();
       //Plays music
     try {
       clip.open(audioStream);
