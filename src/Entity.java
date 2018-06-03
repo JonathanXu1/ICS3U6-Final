@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Color;
 
 abstract class Entity {
   private int health;
@@ -10,14 +11,16 @@ abstract class Entity {
   private int direction;
   private int tileXMod;
   private int tileYMod;
+  private Color minimapColor;
   
-  Entity(int h,int hC,int a,int sP,int sT) {
+  Entity(int h,int hC,int a,int sP,int sT, Color minimapColor) {
     this.health = h;
     this.healthCap = hC;
     this.armor = a;
     this.speed = sP;
     this.status = sT;
     this.moved = false;
+    this.minimapColor = minimapColor;
   }
   Entity(){
   }
@@ -91,5 +94,8 @@ abstract class Entity {
   }
   public void setTileYMod(int tileYMod) {
     this.tileYMod = tileYMod;
+  }
+  public Color getMinimapColor(){
+    return minimapColor;
   }
 }

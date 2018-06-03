@@ -6,11 +6,10 @@ class Enemy extends Entity{
   private boolean enraged = false;
   
   //Constructor
-  Enemy(int h,int hC,int a,int sP,int sT, boolean enraged){
-    super (h,hC,a,sP,sT);
+  Enemy(int h,int hC,int a,int sP,int sT, Color minimapColor, boolean enraged){
+    super (h,hC,a,sP,sT, minimapColor);
     this.enraged = enraged;
   }
-  
   //Should be placed in Entity class and made abstract later
   public void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     g.setColor (Color.GRAY);

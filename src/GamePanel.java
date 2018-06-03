@@ -162,7 +162,7 @@ class GamePanel extends JPanel{
         spawnY =(int)(Math.random()*entityMap.length);
       }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0, false);
+      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
     }
     findBlocked (playerCurrentX, playerCurrentY);
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
@@ -298,6 +298,9 @@ class GamePanel extends JPanel{
           if (entityMap[i][j] instanceof Entity){
             entityMap[i][j].setMoved(false);
           }
+          if(map[i][j] instanceof Tile){
+            map[i][j].setFocus(false);
+          }
         }
       }
     }
@@ -316,41 +319,43 @@ class GamePanel extends JPanel{
     }
     
     //Load basic visuals last
-    for(int i = -4; i < 5; i++){
-      for(int j = -4; j < 5; j++){
-        //Sets the view range in a circular shape
-        if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-          if((playerCurrentY+i>=0)&&(playerCurrentY+i<=map.length)&&(playerCurrentX+j>=0)&&(playerCurrentX+j<=map[0].length)){
-            if(map[playerCurrentY + i][playerCurrentX + j] instanceof Tile){
-              map[playerCurrentY + i][playerCurrentX + j].setViewed();
-            }
-          }
-        }
-      }
-    }
+    drawFog(playerCurrentX, playerCurrentY, 0);
   }
-  
   
   public void drawFog(int x, int y, int count){
     map[y][x].setViewed();
-    if(count <= 2){
-      if(map[y][x].getMinimapColor() == Color.GREEN){
-        for(int i = -1; i <= 1; i ++){
-          for(int j = -1; j <= 1; j++){
-            if (map[y+i][x+j] instanceof Tile){
-              if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                drawFog(x+j, y+i, count+1);
-              }
-            }
-          }
-        }
-      } else if (map[y][x].getMinimapColor() == Color.WHITE){
-        for(int i = -1; i <= 1; i ++){
-          for(int j = -1; j <= 1; j++){
-            if (map[y+i][x+j] instanceof Tile){
-              if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-                drawFog(x+j, y+i, count+1);
-              }
+    //May need later
+    /*
+     if(count <= 2){
+     if(map[y][x].getMinimapColor() == Color.GREEN){
+     for(int i = -1; i <= 1; i ++){
+     for(int j = -1; j <= 1; j++){
+     if (map[y+i][x+j] instanceof Tile){
+     if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+     drawFog(x+j, y+i, count+1);
+     }
+     }
+     }
+     }
+     } else if (map[y][x].getMinimapColor() == Color.WHITE){
+     for(int i = -1; i <= 1; i ++){
+     for(int j = -1; j <= 1; j++){
+     if (map[y+i][x+j] instanceof Tile){
+     if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
+     drawFog(x+j, y+i, count+1);
+     }
+     */
+    map[y][x].setFocus(true);
+    if(count <= 3){ //If within range
+      for(int i = -1; i <= 1; i ++){
+        for(int j = -1; j <= 1; j++){
+          if(map[y+i][x+j] instanceof Tile){
+            if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
+              drawFog(x+j, y+i, count+1);
+            } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
+              drawFog(x+j, y+i, count+1);
+            } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
+              drawFog(x+j, y+i, count+1);
             }
           }
         }
@@ -394,25 +399,37 @@ class GamePanel extends JPanel{
     //Draws minimap contents
     //Must be a double to avoid rounding errors
     double miniTileSize = ((double)minimapX)/minimapFactor;
+    Color currentColor;
     for(int i = 0; i < minimapFactor; i++){
       for(int j = 0; j < minimapFactor; j++){
         //Sets the minimap based on the normal map relative to the player
         minimapArrayY = playerCurrentY + i - minimapFactor/2;
         minimapArrayX = playerCurrentX + j - minimapFactor/2;
         if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
-          if (map[minimapArrayY][minimapArrayX] instanceof Tile){ //If not void tile, to remove unecessary drawing
+          if(map[minimapArrayY][minimapArrayX] != null){ //If not void tile, to remove unecessary drawing){
+            if(map[minimapArrayY][minimapArrayX].getFocus()){
+              if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
+                currentColor = entityMap[minimapArrayY][minimapArrayX].getMinimapColor();
+              } else{
+                currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor();
+              }
+            } else{
+              if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
+                currentColor = entityMap[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
+              } else{
+                currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
+              }
+            }
+            g.setColor(currentColor);
             if(keyListener.getDebugState()){ //If debug state
-              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }else if(map[minimapArrayY][minimapArrayX].getViewed()){ //If not debug state, to be able to see the map while testing
-              g.setColor(map[minimapArrayY][minimapArrayX].getMinimapColor());
+              if(map[minimapArrayY][minimapArrayX].getMinimapColor() == Color.LIGHT_GRAY){
+                g.setColor(currentColor.darker().darker().darker());
+              }
               g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize));
             }
           }
-        }
-        if ((minimapArrayY==playerCurrentY)&&(minimapArrayX==playerCurrentX)){
-          g.setColor(Color.BLUE);
-          g.fillRect((int)Math.round(j*miniTileSize), (maxY-240)+ (int)Math.round(i*miniTileSize), (int)Math.ceil(miniTileSize), (int)Math.ceil(miniTileSize)); //Character square
         }
       }
     }
@@ -519,7 +536,7 @@ class GamePanel extends JPanel{
     this.playerStartingY =playerStartingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
-    entityMap[playerStartingX][playerStartingY]= new Character(100,100,1,1,0);
+    entityMap[playerStartingX][playerStartingY]= new Character(100,100,1,1,0,Color.BLUE);
   }
   
   //Getters and setters

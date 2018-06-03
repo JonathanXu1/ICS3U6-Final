@@ -4,6 +4,7 @@ import java.awt.Graphics;
 abstract class Tile {
   private Color minimapColor;
   private boolean viewed = false;
+  private boolean focus = false;
   
   Tile(Color minimapColor){
     this.minimapColor = minimapColor;
@@ -23,6 +24,14 @@ abstract class Tile {
   
   public boolean getViewed(){
     return viewed;
+  }
+  
+  public void setFocus(boolean focus){
+    this.focus = focus;
+  }
+  
+  public boolean getFocus(){
+    return focus;
   }
   abstract void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }
