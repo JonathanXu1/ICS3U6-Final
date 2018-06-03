@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 class WallTile extends Tile{
-  Image wall = Toolkit.getDefaultToolkit().getImage("../res/WallTile2.png");
+  Image wall = Toolkit.getDefaultToolkit().getImage("../res/WallTile.png");
   WallTile(Color minimapColor){
     super(minimapColor);
   }
