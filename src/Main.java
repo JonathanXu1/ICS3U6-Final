@@ -16,15 +16,23 @@ class Main{
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
     //Creates the map generator object
-    MapGen2_5 gen = new MapGen2_5();
+    MapGen2_6 gen = new MapGen2_6();
     //A tile map will be created based off the tile map
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     //Converts the map into a tile map
+    Color BURGANDY = new Color(140,22,34);
+    
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
-        if (charMap[i][j] == 'X'){
+        if (charMap[i][j] == '%'){
+          map[i][j]= new FloorTile(BURGANDY);
+        } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
+          map[i][j]= new WallTile(Color.YELLOW);
+        } else if (charMap[i][j] == '='){
+          map[i][j]= new FloorTile(Color.CYAN);
+        } else if (charMap[i][j] == 'X'){
           map[i][j]= new FloorTile(Color.WHITE);
         } else if (charMap[i][j] == 'R') {
           map[i][j]= new FloorTile(Color.GREEN);

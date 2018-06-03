@@ -1,10 +1,12 @@
 /*
- * [MapGen2_5.java]
+ * [MapGen2_6.java]
  * 
  * Generates a mazelike map, with rooms that are radomly sized, equally dispersed. Also, unecessary dead ends are removed,
  * doors are generated, along with stairs going up and down. 
  * 
- * Version cleaned up and commented, now with improved OOP, fixed rooms, and designated rooms with corners 
+ * Version cleaned up and commented, now with improved OOP, fixed rooms, and designated rooms with corners.
+ * 
+ * 2.6 also spawn chests on appropriate tiles. 
  * 
  * NOTE: Dynamic room scaling does not work, and needs to be adjusted within the generateMao method to work for different map sizes
  * expirementation has yielded no better method of getting at the optimal room size than doing it by hand. 
@@ -15,9 +17,9 @@
  */ 
 
 
-class MapGen2_5{
+class MapGen2_6{
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
-  public boolean randomRoll(int chance) {
+  public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {
       return true;
     } else {
@@ -26,7 +28,7 @@ class MapGen2_5{
   }
   
   // Gets a random number from the lower bound to the upper bound
-  public int getRand(int lowerBound, int upperBound) {    
+  public static int getRand(int lowerBound, int upperBound) {    
     return ((int) (Math.random()*(upperBound - lowerBound))) + lowerBound; 
   }
   
@@ -119,6 +121,7 @@ class MapGen2_5{
   
   // Takes the map and randomly spawns rooms in it, based on the number of rooms specified as argument
   public int[][] genRooms(int[][] map, int numRooms) {
+    boolean  capQPlaced = false;
     int[][] returnArray = new int[map.length][map[0].length]; 
     int randR,randD; // initilizes integers for random spawn
     // Creates a matrix of rooms to prevent room clustering and keep track of where rooms are
@@ -143,28 +146,54 @@ class MapGen2_5{
         }
       }                  
       
-      int randDReal = randD*6; // random numbers are ocnverted to real coordinates on the map
+      int randDReal = randD*6;
       int randRReal = randR*6;
       
-      int randWMod1 = getRand(-1,3); // Random modifiers for room size are generated
-      int randWMod2 = getRand(-1,3);
-      int randDMod1 = getRand(-1,3);
-      int randDMod2 = getRand(-1,3);
-      
-      // Room is carved based on the random size modifiers
-      for (int i = randDMod1; i < 9 - randDMod2; i++){
-        for (int j = randWMod1; j < 9 - randWMod2; j++) {
-          returnArray[randDReal - 4 + i][randRReal - 4 + j] = -1;
+      if (!capQPlaced) { 
+        
+        for (int i = -2; i < 4; i++){
+          for (int j = -3; j < 4; j++) {
+            returnArray[randDReal + i][randRReal + j] = -1;
+          }
         }
-      }
-      
-      // All surrounding spaces are converted into room spaces to ease tile and door placement
-      for (int i = randDMod1 - 1; i < 9 - randDMod2 + 1; i++){ // can be optimized
-        for (int j = randWMod1 - 1; j < 9 - randWMod2 + 1; j++) {          
-          if (returnArray[randDReal - 4 + i][randRReal - 4 + j] == 0) {
+        
+        capQPlaced = true;     
+        
+        returnArray[randDReal][randRReal] = 8;
+        
+      } else if (randomRoll(150)) {
+        for (int i = -3; i < 4; i++){
+          for (int j = -3; j < 4; j++) {
+            returnArray[randDReal + i][randRReal + j] = -1;
+          }
+        }
+        
+        returnArray[randDReal][randRReal] = 5;
+        
+          
+      } else {
+        
+        int randWMod1 = getRand(-1,3); // Random modifiers for room size are generated
+        int randWMod2 = getRand(-1,3);
+        int randDMod1 = getRand(-1,3);
+        int randDMod2 = getRand(-1,3);
+        
+        // Room is carved based on the random size modifiers
+        for (int i = randDMod1; i < 9 - randDMod2; i++){
+          for (int j = randWMod1; j < 9 - randWMod2; j++) {
             returnArray[randDReal - 4 + i][randRReal - 4 + j] = -1;
-          } 
+          }
         }
+        
+        // All surrounding spaces are converted into room spaces to ease tile and door placement
+        for (int i = randDMod1 - 1; i < 9 - randDMod2 + 1; i++){ // can be optimized
+          for (int j = randWMod1 - 1; j < 9 - randWMod2 + 1; j++) {          
+            if (returnArray[randDReal - 4 + i][randRReal - 4 + j] == 0) {
+              returnArray[randDReal - 4 + i][randRReal - 4 + j] = -1;
+            } 
+          }
+        }
+        
       }
     }
     
@@ -286,7 +315,7 @@ class MapGen2_5{
     return false;
   }
   
-  public int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
+  public static int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     
     if (map[dPos + 1][rPos]  == target) {
@@ -305,7 +334,7 @@ class MapGen2_5{
     return numAdj;
   }
   
-  public int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
+  public static int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
@@ -325,14 +354,14 @@ class MapGen2_5{
     do {
       randD = getRand(2,(map.length-3)/6);
       randR = getRand(2,(map[0].length-3)/6);
-    } while (!fullSurround(map,randD*6,randR*6,-1)); // While loop ensures that the points are in the middle of a room
+    } while (adjMatrixSquare(map, -1, randD*6,randR*6) < 9); // While loop ensures that the points are in the middle of a room
     
     map[randD*6][randR*6] = -3;
     
     do {
       randD = getRand(2,(map.length-3)/6);
       randR = getRand(2,(map[0].length-3)/6);
-    } while (!fullSurround(map,randD*6,randR*6,-1) && map[randD*6][randR*6] != 3);
+    } while (adjMatrixSquare(map, -1, randD*6,randR*6) < 9);
     
     map[randD*6][randR*6] = -4;
     
@@ -375,6 +404,19 @@ class MapGen2_5{
     return map;
   }
   
+  public int[][] removeDudRooms(int[][] map) {
+    for (int i = 5; i < map.length - 5; i++) {
+      for (int j = 5; j < map[0].length - 5; j++) {
+        
+        if (adjMatrixFlower(map,-1,i,j) == 0 && map[i][j] == -1) {
+          map[i][j] = 0;
+        }        
+      }      
+    }
+    
+    return map;
+  }
+  
   public int[][] finalizeDesignations(int[][] map) {
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
@@ -406,7 +448,73 @@ class MapGen2_5{
     return map;
   }
   
+  public static int[][] spawnChests(int[][] map) {
+    int randD,randR;
+    
+    
+    for (int i = 1; i < (map.length-3)/6; i++) {
+      for (int j = 1; j < (map[0].length - 3)/6; j++) {
+        if (map[i*6][j*6] == 5) {
+          
+          for (int i2 = -3; i2 < 4; i2++) {
+            for (int j2 = -3; j2 < 4; j2++) {
+              map[i*6 + i2][j*6 + j2] = -6;
+            }
+          }
+          
+          map[i*6][j*6] = 5;
+                    
+        }
+        
+        if (map[i*6][j*6] == 8) {
+          
+          map[i*6][j*6] = -1;
+          RecursiveCancer tagger = new RecursiveCancer(map);
+          
+          tagger.spreadCancer3(i*6,j*6,99,-7,0);
+          
+          map = tagger.returnCancer();     
+          
+        }
+      }
+    }
+    
+    int wallChests = 0;
+    
+    do {
+      randD = getRand(2,(map.length-3));
+      randR = getRand(2,(map[0].length-3));
+      
+      if (map[randD][randR] == 3) {
+        if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
+          map[randD][randR] = 6;
+          wallChests++;
+        }
+      }
+    } while (wallChests < 10);
+    
+    
+    return map;
+  }
   
+  public static int[][] spawnDebris(int[][] map) {
+    int numDebris = 0;
+    int randD,randR;
+    
+    do{
+      randD = getRand(2,(map.length-3));
+      randR = getRand(2,(map[0].length-3));
+      
+      if (map[randD][randR] == -1) {
+        if (adjMatrixSquare(map,-1,randD,randR) == 9) {
+          map[randD][randR] = 7;
+          numDebris++;
+        }
+      }     
+    } while (numDebris < 10);
+    
+    return map;
+  }
   // Main method that uses the the previously created methods in conjuction to generate a complete map
   public int[][] generateMap(int effMapSizeW, int effMapSizeD) {   
     int mapSizeW = (effMapSizeW-1)*6 + 3; // Initalizes map size
@@ -438,6 +546,8 @@ class MapGen2_5{
     
     result = prunePaths(result);
     
+    result = removeDudRooms(result);
+    
     result = genDoors(result);
     
     result = insertStairs(result);
@@ -445,6 +555,10 @@ class MapGen2_5{
     result = designateWalls(result);           
     
     result = finalizeDesignations(result);
+    
+    result = spawnChests(result);
+    
+    result = spawnDebris(result);
     
     return result;             
   }
@@ -487,7 +601,13 @@ class MapGen2_5{
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
-        if (result[i][j] == 3) {
+        if (result[i][j] == 7) {
+          resultProc[i][j] = 'J';
+        } else if (result[i][j] == 6) {
+          resultProc[i][j] = 'S';
+        } else if (result[i][j] == 5) {
+          resultProc[i][j] = 'C';
+        } else if (result[i][j] == 3) {
           resultProc[i][j] = '|';
         } else if (result[i][j] == 2) {
           resultProc[i][j] = '~';
@@ -503,6 +623,10 @@ class MapGen2_5{
           resultProc[i][j] = '#';
         } else if (result[i][j] == -5) {
           resultProc[i][j] = 'A';
+        } else if (result[i][j] == -6) {
+          resultProc[i][j] = '=';
+        } else if (result[i][j] == -7) {
+          resultProc[i][j] = '%';
         } else {
           if ((i<=5)||(i>=result.length-5)||(j<=5)||(j>=result[0].length-5)){
             resultProc[i][j] = '-';
@@ -515,9 +639,19 @@ class MapGen2_5{
     
     return resultProc;
   }
-  /*
-  public static void main(String[] args) {
-    vis2(generateMap(12,12)); // width-depth generates a map of integers
+  
+  public static void visMap2(char[][] map) {
+    for (int i = 0; i < map.length; i++) {
+      for (int j = 0; j < map[0].length; j++) {
+        System.out.print(map[i][j]);
+      }
+      System.out.println("");
+    }
   }
-  */
+  
+  public static void main(String[] args) {
+    MapGen2_6 tester = new MapGen2_6();
+    tester.generateMap(24,6); // width-depth generates a map of integers
+  }
+  
 }

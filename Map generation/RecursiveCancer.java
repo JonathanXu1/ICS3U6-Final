@@ -47,4 +47,24 @@ class RecursiveCancer {
     }
   }
   
+  public void spreadCancer3(int dPos, int rPos, int limit, int id, int counter) {
+    int targetTile = map[dPos][rPos];
+    map[dPos][rPos] = id;
+    
+    if (counter <= limit) {
+      if (map[dPos + 1][rPos] == targetTile) {      
+        spreadCancer3(dPos + 1,rPos,limit, id,counter + 1);
+      }
+      if (map[dPos - 1][rPos] == targetTile) {      
+        spreadCancer3(dPos - 1,rPos, limit, id, counter + 1);
+      }
+      if (map[dPos][rPos + 1] == targetTile) {      
+        spreadCancer3(dPos,rPos + 1, limit, id, counter + 1);
+      }
+      if (map[dPos][rPos - 1] == targetTile) {      
+        spreadCancer3(dPos,rPos - 1, limit, id, counter + 1);
+      }
+    }
+  }
+  
 }
