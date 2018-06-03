@@ -371,7 +371,7 @@ class GamePanel extends JPanel{
                 currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor();
               }
             } else{
-              if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
+              if (entityMap[minimapArrayY][minimapArrayX] != null && keyListener.getDebugState()){ //If an entity is at location
                 currentColor = entityMap[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
               } else{
                 currentColor = map[minimapArrayY][minimapArrayX].getMinimapColor().darker().darker();
