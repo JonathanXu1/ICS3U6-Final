@@ -265,7 +265,6 @@ class GamePanel extends JPanel{
       //May add this back later if necessary
       //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
       //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
-      drawFog(playerCurrentX, playerCurrentY, 0);
     }
     //The tiling variables allows the user to know when a turn is occuring 
     if (tiling){
@@ -328,41 +327,49 @@ class GamePanel extends JPanel{
   
   public void drawFog(int x, int y, int count){
     if (map[y][x] instanceof Tile){
-    map[y][x].setViewed();
-    //May need later
-    /*
-     if(count <= 2){
-     if(map[y][x].getMinimapColor() == Color.GREEN){
-     for(int i = -1; i <= 1; i ++){
-     for(int j = -1; j <= 1; j++){
-     if (map[y+i][x+j] instanceof Tile){
-     if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-     drawFog(x+j, y+i, count+1);
-     }
-     }
-     }
-     }
-     } else if (map[y][x].getMinimapColor() == Color.WHITE){
-     for(int i = -1; i <= 1; i ++){
-     for(int j = -1; j <= 1; j++){
-     if (map[y+i][x+j] instanceof Tile){
-     if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-     drawFog(x+j, y+i, count+1);
-     }
-     */
-    map[y][x].setFocus(true);
+      map[y][x].setViewed();
+      map[y][x].setFocus(true);
     }
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
           if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
             if(map[y+i][x+j] instanceof Tile){
-              if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
+              if((map[y][x].getMinimapColor() == Color.GREEN) || (map[y][x].getMinimapColor() == Color.YELLOW) && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
-              } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
+              } else if(map[y][x].getMinimapColor() == Color.WHITE){ //In hall/airlock tile
+                map[y+i][x+j].setViewed();
+                map[y+i][x+j].setFocus(true);
+                if((map[y+i][x+j].getMinimapColor() == Color.WHITE)){
+                  if((i==-1) && (j==0)){ //North
+                    drawFog(x+j, y+i, count, 1);
+                  }else if((i==1) && (j==0)){ //South
+                    drawFog(x+j, y+i, count, 2);
+                  }else if((i==0) && (j==1)){ //East
+                    drawFog(x+j, y+i, count, 3);
+                  }else if((i==0) && (j==-1)){ //West
+                    drawFog(x+j, y+i, count, 4);
+                  }
+                }
+              } else if(map[y][x].getMinimapColor() == Color.CYAN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight, in chest room tile
                 drawFog(x+j, y+i, count+1);
-              } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
-                drawFog(x+j, y+i, count+1);
+              } else if((map[y][x] instanceof DoorTile) && (map[playerCurrentY][playerCurrentX] instanceof DoorTile) && !(map[y+i][x+j] instanceof DoorTile)){ //In door tile
+                map[y+i][x+j].setViewed();
+                map[y+i][x+j].setFocus(true);
+                if((map[y+i][x+j].getMinimapColor() == Color.WHITE) || (map[y+i][x+j].getMinimapColor() == Color.ORANGE)){
+                  if((i==-1) && (j==0)){ //North
+                    drawFog(x+j, y+i, count+1, 1);
+                  }else if((i==1) && (j==0)){ //South
+                    drawFog(x+j, y+i, count+1, 2);
+                  }else if((i==0) && (j==1)){ //East
+                    drawFog(x+j, y+i, count+1, 3);
+                  }else if((i==0) && (j==-1)){ //West
+                    drawFog(x+j, y+i, count+1, 4);
+                  }
+                }
+                else{
+                  drawFog(x+j, y+i, count+1);
+                }
               }
             }
           }
@@ -370,27 +377,35 @@ class GamePanel extends JPanel{
       }
     }
   }
-  /*
-   for(int i = -4; i < 5; i++){
-   for(int j = -4; j < 5; j++){
-   //Sets the view range in a circular shape
-   if (!((Math.abs(j-i)==8)||(Math.abs(j-i)==7)||(Math.abs(j-i)==6)||(Math.abs(i+j)==8)||(Math.abs(i+j)==7)||(Math.abs(i+j)==6))){
-   if((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
-   if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.GREEN){
-   if(map[y+i][x+j].getMinimapColor() == Color.GREEN || map[y+i][x+j].getMinimapColor() == Color.LIGHT_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-   map[y + i][x + j].setViewed();
-   }
-   } else if(map[player.getArrayY()][player.getArrayX()].getMinimapColor() == Color.WHITE){
-   if(map[y+i][x+j].getMinimapColor() == Color.WHITE || map[y+i][x+j].getMinimapColor() == Color.DARK_GRAY || map[y+i][x+j].getMinimapColor() == Color.RED){
-   map[y + i][x + j].setViewed();
-   }
-   } else{
-   map[y + i][x + j].setViewed();
-   }
-   }
-   }
-   }
-   } */
+  public void drawFog(int x, int y, int count, int direction){
+    if((y>=0) && (y<map.length) && (x>=0) && (x<map[0].length)){
+      if (map[y][x] instanceof Tile){
+        map[y][x].setViewed();
+        map[y][x].setFocus(true);
+      }
+      if((count <= 2) && (map[y][x].getMinimapColor() == Color.WHITE)){
+        for(int i = -1; i <= 1; i ++){
+          for(int j = -1; j <= 1; j++){
+            if((y+i>=0) && (y+i<map.length) && (x+j>=0) && (x+j<map[0].length)){
+              if((map[y+i][x+j].getMinimapColor() != Color.WHITE) || ((Math.abs(i+j)==1) && (count <= 0))){
+                map[y+i][x+j].setViewed();
+                map[y+i][x+j].setFocus(true);
+              }
+            }
+          }
+        }
+        if(direction == 1){
+          drawFog(x, y-1, count+1, 1);
+        } else if(direction == 2){
+          drawFog(x, y+1, count+1, 2);
+        } else if(direction == 3){
+          drawFog(x+1, y, count+1, 3);
+        } else if(direction == 4){
+          drawFog(x-1, y, count+1, 4);
+        }
+      }
+    }
+  }
   
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);

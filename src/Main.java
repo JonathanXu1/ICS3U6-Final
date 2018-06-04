@@ -34,21 +34,21 @@ class Main{
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
           map[i][j]= new WallTile(Color.YELLOW);
         } else if (charMap[i][j] == '='){
-          map[i][j]= new FloorTile(Color.CYAN);
+          map[i][j]= new FloorTile(Color.CYAN); //Chest floor tile
         } else if (charMap[i][j] == 'X'){
-          map[i][j]= new HallwayTile(Color.WHITE);
+          map[i][j]= new HallwayTile(Color.WHITE); //Hallway floor
         } else if (charMap[i][j] == 'R') {
-          map[i][j]= new FloorTile(Color.GREEN);
+          map[i][j]= new FloorTile(Color.GREEN); //Room floor
         } else if (charMap[i][j] == 'D') {
-          map[i][j]= new DoorTile(Color.RED);
+          map[i][j]= new DoorTile(Color.RED); //Door
         } else if (charMap[i][j] == '~') {
-          map[i][j]= new WallTile(Color.DARK_GRAY);
+          map[i][j]= new WallTile(Color.DARK_GRAY); //Hallway wall
         } else if (charMap[i][j] == '|') {
-          map[i][j]= new WallTile(Color.LIGHT_GRAY);
+          map[i][j]= new WallTile(Color.LIGHT_GRAY); //Room wall
         } else if (charMap[i][j] == 'A') {
-          map[i][j]= new FloorTile(Color.ORANGE);
+          map[i][j]= new FloorTile(Color.ORANGE); //Airlock
         } else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN);
+          map[i][j]= new FloorTile(Color.GREEN); //Spawn
           playerStartingX = j;
           playerStartingY = i;
         }else{
