@@ -302,9 +302,6 @@ class GamePanel extends JPanel{
           if (entityMap[i][j] instanceof Entity){
             entityMap[i][j].setMoved(false);
           }
-          if(map[i][j] instanceof Tile){
-            map[i][j].setFocus(false);
-          }
         }
       }
     }
@@ -315,13 +312,20 @@ class GamePanel extends JPanel{
           if(map[i][j].getViewed()){
             //Restricts the map so that the array will not go out of bounds
             if (((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))>-TILE_SIZE*2)&&((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))<maxX+TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))>-TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))<maxY+TILE_SIZE*2)){
-              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
+              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
             }
           }
         }
       }
     }
     
+    for(int i = 0; i < map.length; i++){
+      for(int j = 0; j < map[0].length; j++){
+        if(map[i][j] instanceof Tile){
+          map[i][j].setFocus(false);
+        }
+      }
+    }
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
   }
