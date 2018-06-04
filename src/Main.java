@@ -40,11 +40,11 @@ class Main{
         } else if (charMap[i][j] == '='){
           map[i][j]= new FloorTile(Color.CYAN);
         } else if (charMap[i][j] == 'X'){
-          map[i][j]= new FloorTile(Color.WHITE);
+          map[i][j]= new HallwayTile(Color.WHITE);
         } else if (charMap[i][j] == 'R') {
           map[i][j]= new FloorTile(Color.GREEN);
         } else if (charMap[i][j] == 'D') {
-          map[i][j]= new FloorTile(Color.RED);
+          map[i][j]= new DoorTile(Color.RED);
         } else if (charMap[i][j] == '~') {
           map[i][j]= new WallTile(Color.DARK_GRAY);
         } else if (charMap[i][j] == '|') {
@@ -59,7 +59,7 @@ class Main{
           map[i][j]= new VoidTile(Color.BLACK);
         }
       }
-      }
+    }
    //   output.close();
       //Plays music
     try {
