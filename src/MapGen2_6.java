@@ -469,12 +469,13 @@ class MapGen2_6{
         if (map[i*6][j*6] == 8) {
           
           map[i*6][j*6] = -1;
+          /*
           RecursiveCancer tagger = new RecursiveCancer(map);
           
           tagger.spreadCancer3(i*6,j*6,99,-7,0);
           
           map = tagger.returnCancer();     
-          
+          */
         }
       }
     }
