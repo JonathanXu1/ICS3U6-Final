@@ -355,13 +355,15 @@ class GamePanel extends JPanel{
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
-          if(map[y+i][x+j] instanceof Tile){
-            if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
-              drawFog(x+j, y+i, count+1);
-            } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
-              drawFog(x+j, y+i, count+1);
-            } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
-              drawFog(x+j, y+i, count+1);
+          if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+            if(map[y+i][x+j] instanceof Tile){
+              if(map[y][x].getMinimapColor() == Color.GREEN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight
+                drawFog(x+j, y+i, count+1);
+              } else if(map[y][x].getMinimapColor() == Color.WHITE && map[y+i][x+j].getMinimapColor() != Color.GREEN){
+                drawFog(x+j, y+i, count+1);
+              } else if(map[y][x].getMinimapColor() == Color.RED && map[playerCurrentY][playerCurrentX].getMinimapColor() == Color.RED && map[y+i][x+j].getMinimapColor() != Color.RED){
+                drawFog(x+j, y+i, count+1);
+              }
             }
           }
         }
@@ -443,8 +445,7 @@ class GamePanel extends JPanel{
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawEntity(Graphics g){
-    g.setColor(Color.BLUE);
-    g.fillRect (maxX/2-(TILE_SIZE/2),maxY/2-(TILE_SIZE/2),TILE_SIZE, TILE_SIZE);
+   
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
       for (int j = 0;j<entityMap[0].length;j++){
@@ -462,7 +463,7 @@ class GamePanel extends JPanel{
             entityMap[i][j].drawEntity(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
           }
         }else if (entityMap[i][j] instanceof Character){
-          //  System.out.println ("-");
+           entityMap[i][j].drawEntity(g, maxX/2-(TILE_SIZE/2),maxY/2-(TILE_SIZE/2),TILE_SIZE, TILE_SIZE, this);
         }
       }
     }
