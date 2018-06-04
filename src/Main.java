@@ -32,7 +32,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){
-          map[i][j]= new FloorTile(POO);
+          map[i][j]= new WallTile(POO);
         } else if (charMap[i][j] == '%'){
           map[i][j]= new FloorTile(BURGANDY);
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
