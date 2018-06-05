@@ -88,7 +88,7 @@ class FireController {
   
   public double[] cycle() {
     double[] returnArray = {currentD,currentR,trailD,trailR, angle};
-    this.cycle();    
+    this.calculate();    
     return returnArray;
   }
   
