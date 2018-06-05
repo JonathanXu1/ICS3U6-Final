@@ -24,6 +24,15 @@ class GamePanel extends JPanel{
   private final double Y_TO_X = 110.0/75.0;
   private final double Y_TO_X_HOT = 208.0/75.0;
   private final double BOT_HEIGHT = 250.0;
+  private boolean inventoryOpen =false;
+  private int minButtonX;
+  private int maxButtonX;
+  private int minButtonY;
+  private int maxButtonY;
+  
+  //Turn tracking
+  private boolean turnStart = false;
+  private int turnCount =0;
   
   //Sizes
   private int maxX= 0, maxY= 0;
@@ -92,13 +101,14 @@ class GamePanel extends JPanel{
     //Draw map (background)
     drawMap(g);
     //Draws the entities
-    drawEntity (g);
+    drawAllEntity (g);
     //Draw the game components
     drawGameComponents(g);
     //Draws the minimap
     drawMinimap(g);
     //Draw the health and exp
     drawBars(g);
+    drawInventory(g);
     //Draw the debugPanel
     if (keyListener.getDebugState()){
       drawDebugPanel(g);
@@ -151,19 +161,6 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, maxX, maxY);
     bg.setOnTile();
-    //5 % chance to spawn
-    //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
-      //Resets the spawn
-      spawnX = 0;
-      spawnY = 0;
-      do{
-        spawnX =(int)(Math.random()*entityMap[0].length);
-        spawnY =(int)(Math.random()*entityMap.length);
-      }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
-      mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
-    }
     findBlocked (playerCurrentX, playerCurrentY);
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
     //Sets off tiling for the reset of movement
@@ -183,12 +180,14 @@ class GamePanel extends JPanel{
                 if (keyListener.getAllDirection()[0]<0){
                   playerCurrentX= playerCurrentX -1;
                   tiling =true;
+                  turnStart = true;
                   entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
                   entityMap[i][j] =null;
                   entityMap[playerCurrentY][playerCurrentX].setMoved(true);
                 }else if (keyListener.getAllDirection()[0]>0){
                   playerCurrentX =playerCurrentX+1;
                   tiling =true;
+                  turnStart = true;
                   entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
                   entityMap[i][j] =null;
                   entityMap[playerCurrentY][playerCurrentX].setMoved(true);
@@ -196,12 +195,14 @@ class GamePanel extends JPanel{
                 if (keyListener.getAllDirection()[1]<0){
                   playerCurrentY =playerCurrentY-1;
                   tiling =true;
+                  turnStart = true;
                   entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
                   entityMap[i][j] =null;
                   entityMap[playerCurrentY][playerCurrentX].setMoved(true);
                 }else if (keyListener.getAllDirection()[1]>0){
                   playerCurrentY =playerCurrentY+1;
                   tiling =true;
+                  turnStart = true;
                   entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
                   entityMap[i][j] =null;
                   entityMap[playerCurrentY][playerCurrentX].setMoved(true);
@@ -268,6 +269,13 @@ class GamePanel extends JPanel{
     }
     //The tiling variables allows the user to know when a turn is occuring 
     if (tiling){
+      //A turn is set, and it is added
+      if (turnStart){
+        ///This method performs all the actions that will be done in a turn
+        passTurn();
+        turnStart = false;
+        turnCount++;
+      }
       //Move all of the entities slowly
       //Moving the bg is a prerequisite for everything else to move
       xyDirection =keyListener.getAllDirection();
@@ -301,9 +309,6 @@ class GamePanel extends JPanel{
           if (entityMap[i][j] instanceof Entity){
             entityMap[i][j].setMoved(false);
           }
-          if(map[i][j] instanceof Tile){
-            map[i][j].setFocus(false);
-          }
         }
       }
     }
@@ -314,13 +319,20 @@ class GamePanel extends JPanel{
           if(map[i][j].getViewed()){
             //Restricts the map so that the array will not go out of bounds
             if (((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))>-TILE_SIZE*2)&&((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))<maxX+TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))>-TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))<maxY+TILE_SIZE*2)){
-              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
+              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
             }
           }
         }
       }
     }
     
+    for(int i = 0; i < map.length; i++){
+      for(int j = 0; j < map[0].length; j++){
+        if(map[i][j] instanceof Tile){
+          map[i][j].setFocus(false);
+        }
+      }
+    }
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
   }
@@ -459,7 +471,7 @@ class GamePanel extends JPanel{
     //Draws the frame, placed last as it covers the minimap
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
-  public void drawEntity(Graphics g){
+  public void drawAllEntity(Graphics g){
    
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
@@ -549,6 +561,24 @@ class GamePanel extends JPanel{
       blocked[3] = true;
     }
   }
+  public void drawInventory(Graphics g){
+    g.setColor (Color.BLUE);
+    minButtonX = maxX-(int)(BOT_HEIGHT*Y_TO_X)+80;
+    maxButtonX= (int)(BOT_HEIGHT*Y_TO_X)-100+maxX-(int)(BOT_HEIGHT*Y_TO_X)+80;
+    minButtonY = maxY-(int)(BOT_HEIGHT)+20;
+    maxButtonY = maxY-(int)(BOT_HEIGHT)+20+(int)(BOT_HEIGHT/2.0)-30;
+    if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getClicked())&&(!(inventoryOpen))){
+      mouseListener.setClicked (false);
+      inventoryOpen = true;
+    }else if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getClicked())&&(inventoryOpen)){
+      mouseListener.setClicked (false);
+      inventoryOpen = false;
+    }
+    if (inventoryOpen){
+      g.setColor (Color.YELLOW);
+      g.fillRect (maxX-500,maxY-500, 300,300);
+    }
+  }
   //Sets up the map so that setting the floor is easier as well
   public void createMap(Tile [][]map, int playerStartingX, int playerStartingY){
     //Initializes player locations
@@ -558,7 +588,7 @@ class GamePanel extends JPanel{
     this.playerStartingY =playerStartingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
-    entityMap[playerStartingX][playerStartingY]= new Character(100,100,1,1,0,Color.BLUE);
+    entityMap[playerStartingY][playerStartingX]= new Character(100,100,1,1,0,Color.BLUE);
   }
   
   //Getters and setters
@@ -577,5 +607,20 @@ class GamePanel extends JPanel{
   //Sends back if the floor is new or not; this is useful for understanding what code to run
   public void setNewFloor(boolean newFloor){
     this.newFloor = newFloor;
+  }
+  public void passTurn (){
+    //5 % chance to spawn
+    //Spawning method, this is the first thing that will occur
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+      //Resets the spawn
+      spawnX = 0;
+      spawnY = 0;
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      mobCount++;
+      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
+    }
   }
 }

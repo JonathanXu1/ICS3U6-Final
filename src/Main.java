@@ -24,12 +24,16 @@ class Main{
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     //Converts the map into a tile map
     Color BURGANDY = new Color(140,22,34);
+    Color POO = new Color(168,107,23);
     
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
-      for (int i = 0; i < charMap.length; i++){
+
+    for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
-        if (charMap[i][j] == '%'){
+        if (charMap[i][j] == 'J'){
+          map[i][j]= new FloorTile(POO);
+        } else if (charMap[i][j] == '%'){
           map[i][j]= new FloorTile(BURGANDY);
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
           map[i][j]= new WallTile(Color.YELLOW);
@@ -52,7 +56,7 @@ class Main{
           playerStartingX = j;
           playerStartingY = i;
         }else{
-          map[i][j]= new VoidTile(Color.BLACK);
+          map[i][j]= null;
         }
       }
     }
