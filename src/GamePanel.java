@@ -53,6 +53,9 @@ class GamePanel extends JPanel{
   private int entityArrayXMod = 0;
   private int entityArrayYMod = 0;
   
+  // Fire control
+  private int[] fireTarget;
+  
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -104,6 +107,7 @@ class GamePanel extends JPanel{
       drawDebugPanel(g);
     }
     this.setVisible(true);
+    
   }
   public void refresh(){
     this.repaint();
