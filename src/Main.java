@@ -56,7 +56,7 @@ class Main{
           playerStartingX = j;
           playerStartingY = i;
         }else{
-          map[i][j]= new VoidTile(Color.BLACK);
+          map[i][j]= null;
         }
       }
     }
