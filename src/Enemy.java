@@ -4,6 +4,7 @@ import java.awt.Color;
 class Enemy extends Entity{
   
   private boolean enraged = false;
+  private boolean seen = false;
   
   //Constructor
   Enemy(int h,int hC,int a,int sP,int sT, Color minimapColor, boolean enraged){
@@ -24,5 +25,11 @@ class Enemy extends Entity{
   }
   public boolean getEnraged (){
     return enraged;
+  }
+  public boolean getSeen(){
+    return (seen);
+  }
+  public void setSeen(boolean seen){
+    this.seen=seen;
   }
 }

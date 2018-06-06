@@ -10,18 +10,20 @@ class GamePanel extends JPanel{
   private int stringLength;
   private String fps;
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
-  private int [] mouseXy;
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
   
   //Listeners
-  private boolean mouseClicked;
+  private boolean mouseReleased;
+  private int [] mouseXy;
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
   
   //Images
-  private Image left, leftClickedPlus, leftClickedMinus, right, middle, exp, hp, hotbar,mapBorder;
-  private final double Y_TO_X = 110.0/75.0;
+  private Image left, leftClickedPlus, leftClickedMinus, right, exp, hp, hotbar,mapBorder, inventory;
+  private final double Y_TO_X = 90.0/75.0;
+  private final double INVENTORY_MOD = 110.0/75.0;
+  private final double INV_Y_TO_X = 160.0/212.0;
   private final double Y_TO_X_HOT = 208.0/75.0;
   private final double BOT_HEIGHT = 250.0;
   private boolean inventoryOpen =false;
@@ -33,6 +35,7 @@ class GamePanel extends JPanel{
   //Turn tracking
   private boolean turnStart = false;
   private int turnCount =0;
+  private boolean pauseState =false;
   
   //Sizes
   private int maxX= 0, maxY= 0;
@@ -56,11 +59,15 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 10;
+  private int MOB_CAP = 40;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
   private int entityArrayYMod = 0;
+  private double closestPath;
+  private double [] pathfinderDistance = new double [5];
+  private int closestDirection;
+  private int []pathfinderPriority = new int [5];
   
   //Constructor
   GamePanel(){
@@ -73,11 +80,11 @@ class GamePanel extends JPanel{
     this.leftClickedPlus = Toolkit.getDefaultToolkit().getImage("../res/MetalC+.png");
     this.leftClickedMinus = Toolkit.getDefaultToolkit().getImage("../res/MetalC-.png");
     this.right = Toolkit.getDefaultToolkit().getImage("../res/MetalR.png");
-    this.middle = Toolkit.getDefaultToolkit().getImage("../res/MetalM.png");
     this.exp = Toolkit.getDefaultToolkit().getImage("../res/ExpBar.png");
     this.hp = Toolkit.getDefaultToolkit().getImage("../res/HpBar.png");
     this.hotbar = Toolkit.getDefaultToolkit().getImage("../res/Hotbar.png");
     this.mapBorder = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
+    this.inventory = Toolkit.getDefaultToolkit().getImage("../res/Inventory.png");
     //Initializes minimap size
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
@@ -97,7 +104,7 @@ class GamePanel extends JPanel{
     }
     //Update the listeners
     mouseXy = mouseListener.getMouseXy();
-    mouseClicked = mouseListener.getClicked();
+    mouseReleased = mouseListener.getReleased();
     //Draw map (background)
     drawMap(g);
     //Draws the entities
@@ -149,7 +156,6 @@ class GamePanel extends JPanel{
         g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
       }
     }
-    g.drawImage(middle,(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT),maxX -(int)(2.0*BOT_HEIGHT*Y_TO_X)+5, (int)(BOT_HEIGHT),this);
     g.drawImage(right,maxX-(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT), (int)(BOT_HEIGHT*Y_TO_X), (int)(BOT_HEIGHT),this);
     g.drawImage(hotbar,(int)(maxX/2.0-(BOT_HEIGHT*(Y_TO_X_HOT/2.0))),maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X_HOT), (int)(BOT_HEIGHT),this);
     //Hp and exp bars
@@ -167,149 +173,52 @@ class GamePanel extends JPanel{
     if (bg.getOnTile()){
       tiling = false;
     }
-    //Setting all the possible positions is the second thing that will occur
-    if (!(tiling)){
-      keyListener.setAllDirection();
-      if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
-        //Set all array postion
-        for (int i =0;i<entityMap.length;i++){
-          for(int j =0;j<entityMap[0].length;j++){
-            if (entityMap[i][j] instanceof Character){
-              if (!(entityMap[i][j].getMoved())){
-                //Sets the position on the map directly
-                if (keyListener.getAllDirection()[0]<0){
-                  playerCurrentX= playerCurrentX -1;
-                  tiling =true;
-                  turnStart = true;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-                }else if (keyListener.getAllDirection()[0]>0){
-                  playerCurrentX =playerCurrentX+1;
-                  tiling =true;
-                  turnStart = true;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-                }
-                if (keyListener.getAllDirection()[1]<0){
-                  playerCurrentY =playerCurrentY-1;
-                  tiling =true;
-                  turnStart = true;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-                }else if (keyListener.getAllDirection()[1]>0){
-                  playerCurrentY =playerCurrentY+1;
-                  tiling =true;
-                  turnStart = true;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-                }
-              }
-            }
-          }
+    if (!(pauseState)){
+      //Setting all the possible positions is the second thing that will occur
+      if (!(tiling)){
+        keyListener.setAllDirection();
+        if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
+          passTurn();
+          turnCount++;
         }
+        ///Place in a refresh method later on
+        refreshMobs();
+        //May add this back later if necessary
+        //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
+        //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
+      }
+      //The tiling variables allows the user to know when a turn is occuring 
+      if (tiling){
+        //A turn is set, and it is added
+        //Move all of the entities slowly
+        //Moving the bg is a prerequisite for everything else to move
+        xyDirection =keyListener.getAllDirection();
+        bg.setXDirection (xyDirection[0]);
+        bg.setYDirection (xyDirection[1]);
+        bg.move();
+        //Make an entity move method
         for (int i =0;i<entityMap.length;i++){
           for(int j =0;j<entityMap[0].length;j++){
-            if (entityMap[i][j] instanceof Entity){
-              entityMap[i][j].setTileXMod(0);
-              entityMap[i][j].setTileYMod(0);
+            if (entityMap[i][j] instanceof Enemy){
               if (!(entityMap[i][j].getMoved())){
-                if (entityMap[i][j] instanceof Enemy){
-                  //Finding the blocked for entity
-                  findBlocked (j,i);
-                  if ((blocked[0])&&(blocked[1])&&(blocked[2])&&(blocked[3])){
-                    directionRand = 4;
-                  }else{
-                    do{
-                      directionRand=((int)(Math.random()*4));
-                    }while (blocked[directionRand]);
-                    if ((!((Enemy)(entityMap[i][j])).getEnraged())&&(((int)(Math.random()*2))==1)){
-                      //50% chance for them to not move if aggro'd
-                      directionRand  =4;
-                    }
-                  }
-                  entityMap[i][j].setTiling (directionRand);
+                if (entityMap[i][j].getTiling()==0){
+                  entityMap[i][j].setTileYMod (entityMap[i][j].getTileYMod()-10);
                   entityMap[i][j].setMoved(true);
-                  entityArrayXMod = 0;
-                  entityArrayYMod = 0;
-                  if (directionRand==0){
-                    entityArrayYMod = -1;
-                  }else if (directionRand==1){
-                    entityArrayYMod = 1;
-                  }else if (directionRand==2){
-                    entityArrayXMod = -1;
-                  }else if(directionRand==3){
-                    entityArrayXMod = 1;
-                  }
-                  if (directionRand!=4){
-                    entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
-                    //Not sure about setting it to null, look at if there is a better method
-                    entityMap[i][j] =null;
-                  }
+                }else if(entityMap[i][j].getTiling()==1){
+                  entityMap[i][j].setTileYMod (entityMap[i][j].getTileYMod()+10);
+                  entityMap[i][j].setMoved(true);
+                }else if (entityMap[i][j].getTiling()==2){
+                  entityMap[i][j].setTileXMod (entityMap[i][j].getTileXMod()-10);
+                  entityMap[i][j].setMoved(true);
+                }else if (entityMap[i][j].getTiling()==3){
+                  entityMap[i][j].setTileXMod (entityMap[i][j].getTileXMod()+10);
+                  entityMap[i][j].setMoved(true);
                 }
               }
             }
           }
         }
-      }
-      ///Place in a refresh method later on
-      for (int i =0;i<entityMap.length;i++){
-        for(int j =0;j<entityMap[0].length;j++){
-          if (entityMap[i][j] instanceof Entity){
-            entityMap[i][j].setMoved(false);
-          }
-        }
-      }
-      //May add this back later if necessary
-      //player.setArrayY(playerStartingY+bg.getY()/TILE_SIZE);
-      //  player.setArrayX(playerStartingX+bg.getX()/TILE_SIZE);
-    }
-    //The tiling variables allows the user to know when a turn is occuring 
-    if (tiling){
-      //A turn is set, and it is added
-      if (turnStart){
-        ///This method performs all the actions that will be done in a turn
-        passTurn();
-        turnStart = false;
-        turnCount++;
-      }
-      //Move all of the entities slowly
-      //Moving the bg is a prerequisite for everything else to move
-      xyDirection =keyListener.getAllDirection();
-      bg.setXDirection (xyDirection[0]);
-      bg.setYDirection (xyDirection[1]);
-      bg.move();
-      //Make an entity move method
-      for (int i =0;i<entityMap.length;i++){
-        for(int j =0;j<entityMap[0].length;j++){
-          if (entityMap[i][j] instanceof Enemy){
-            if (!(entityMap[i][j].getMoved())){
-              if (entityMap[i][j].getTiling()==0){
-                entityMap[i][j].setTileYMod (entityMap[i][j].getTileYMod()-10);
-                entityMap[i][j].setMoved(true);
-              }else if(entityMap[i][j].getTiling()==1){
-                entityMap[i][j].setTileYMod (entityMap[i][j].getTileYMod()+10);
-                entityMap[i][j].setMoved(true);
-              }else if (entityMap[i][j].getTiling()==2){
-                entityMap[i][j].setTileXMod (entityMap[i][j].getTileXMod()-10);
-                entityMap[i][j].setMoved(true);
-              }else if (entityMap[i][j].getTiling()==3){
-                entityMap[i][j].setTileXMod (entityMap[i][j].getTileXMod()+10);
-                entityMap[i][j].setMoved(true);
-              }
-            }
-          }
-        }
-      }
-      for (int i =0;i<entityMap.length;i++){
-        for(int j =0;j<entityMap[0].length;j++){
-          if (entityMap[i][j] instanceof Entity){
-            entityMap[i][j].setMoved(false);
-          }
-        }
+        refreshMobs();
       }
     }
     for (int i = 0;i<map.length;i++){
@@ -322,10 +231,9 @@ class GamePanel extends JPanel{
               map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
             }
           }
-        }
+        } 
       }
     }
-    
     for(int i = 0; i < map.length; i++){
       for(int j = 0; j < map[0].length; j++){
         if(map[i][j] instanceof Tile){
@@ -335,12 +243,16 @@ class GamePanel extends JPanel{
     }
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
+
   }
   
   public void drawFog(int x, int y, int count){
     if (map[y][x] instanceof Tile){
       map[y][x].setViewed();
       map[y][x].setFocus(true);
+      if (entityMap[y][x] instanceof Enemy){
+        ((Enemy)(entityMap[y][x])).setEnraged(true);
+      }
     }
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
@@ -423,11 +335,11 @@ class GamePanel extends JPanel{
     g.setColor(Color.BLACK);
     g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);    
     //User clicks zoom in and out buttons
-    if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getClicked())&&(minimapFactor > 20)){ //Clicked on top button
-      mouseListener.setClicked (false);
+    if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getReleased())&&(minimapFactor > 20)){ //Clicked on top button
+      mouseListener.setReleased (false);
       minimapFactor -= 10;
-    } else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getClicked())&&(minimapFactor < 100)){ //Clicked on bottom button
-      mouseListener.setClicked (false);
+    } else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getReleased())&&(minimapFactor < 100)){ //Clicked on bottom button
+      mouseListener.setReleased (false);
       minimapFactor += 10;
     }
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
@@ -472,7 +384,7 @@ class GamePanel extends JPanel{
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawAllEntity(Graphics g){
-   
+    
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
       for (int j = 0;j<entityMap[0].length;j++){
@@ -490,7 +402,7 @@ class GamePanel extends JPanel{
             entityMap[i][j].drawEntity(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
           }
         }else if (entityMap[i][j] instanceof Character){
-           entityMap[i][j].drawEntity(g, maxX/2-(TILE_SIZE/2),maxY/2-(TILE_SIZE/2),TILE_SIZE, TILE_SIZE, this);
+          entityMap[i][j].drawEntity(g, maxX/2-(TILE_SIZE/2),maxY/2-(TILE_SIZE/2),TILE_SIZE, TILE_SIZE, this);
         }
       }
     }
@@ -524,7 +436,7 @@ class GamePanel extends JPanel{
     }else{
       blocked[0] = true;
     }
-    if (i+1<=map.length){
+    if (i+1<map.length){
       if ((entityMap[i][j] instanceof Enemy)&&(map[i+1][j] instanceof DoorTile)){
         if(!(((Enemy)(entityMap[i][j])).getEnraged())){
           blocked[1] = true;
@@ -548,7 +460,7 @@ class GamePanel extends JPanel{
     }else{
       blocked[2] = true;
     }
-    if (j+1<=map[0].length){
+    if (j+1<map[0].length){
       if ((entityMap[i][j] instanceof Enemy)&&(map[i][j+1] instanceof DoorTile)){
         if(!(((Enemy)(entityMap[i][j])).getEnraged())){
           blocked[3] = true;
@@ -562,21 +474,23 @@ class GamePanel extends JPanel{
     }
   }
   public void drawInventory(Graphics g){
-    g.setColor (Color.BLUE);
-    minButtonX = maxX-(int)(BOT_HEIGHT*Y_TO_X)+80;
-    maxButtonX= (int)(BOT_HEIGHT*Y_TO_X)-100+maxX-(int)(BOT_HEIGHT*Y_TO_X)+80;
+    minButtonX = maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+80;
+    maxButtonX= (int)(BOT_HEIGHT*INVENTORY_MOD)-100+maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+80;
     minButtonY = maxY-(int)(BOT_HEIGHT)+20;
     maxButtonY = maxY-(int)(BOT_HEIGHT)+20+(int)(BOT_HEIGHT/2.0)-30;
-    if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getClicked())&&(!(inventoryOpen))){
-      mouseListener.setClicked (false);
+    if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getReleased())&&(!(inventoryOpen))){
+      pauseState =true;
+      mouseListener.setReleased (false);
       inventoryOpen = true;
-    }else if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getClicked())&&(inventoryOpen)){
-      mouseListener.setClicked (false);
+    }else if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getReleased())&&(inventoryOpen)){
+      pauseState =false;
+      mouseListener.setReleased (false);
       inventoryOpen = false;
     }
     if (inventoryOpen){
-      g.setColor (Color.YELLOW);
-      g.fillRect (maxX-500,maxY-500, 300,300);
+      g.setColor(new Color(0, 0, 0, 200)); 
+      g.fillRect (0,0,maxX,maxY);
+      g.drawImage (inventory,(int)(maxX/2.0)-(int)(3.0*maxX/14.0),maxY/2-(int)(3.0*maxX/14.0*INV_Y_TO_X),(int)(3.0*maxX/7.0),(int)(3.0*maxX/7.0*INV_Y_TO_X),this);
     }
   }
   //Sets up the map so that setting the floor is easier as well
@@ -621,6 +535,135 @@ class GamePanel extends JPanel{
       }while(!(entityMap[spawnY][spawnX] instanceof Entity)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       mobCount++;
       entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
+    }
+    //Set all array postion
+    for (int i =0;i<entityMap.length;i++){
+      for(int j =0;j<entityMap[0].length;j++){
+        if (entityMap[i][j] instanceof Character){
+          if (!(entityMap[i][j].getMoved())){
+            //Sets the position on the map directly
+            if (keyListener.getAllDirection()[0]<0){
+              playerCurrentX= playerCurrentX -1;
+              tiling =true;
+              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+              entityMap[i][j] =null;
+              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+            }else if (keyListener.getAllDirection()[0]>0){
+              playerCurrentX =playerCurrentX+1;
+              tiling =true;
+              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+              entityMap[i][j] =null;
+              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+            }
+            if (keyListener.getAllDirection()[1]<0){
+              playerCurrentY =playerCurrentY-1;
+              tiling =true;
+              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+              entityMap[i][j] =null;
+              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+            }else if (keyListener.getAllDirection()[1]>0){
+              playerCurrentY =playerCurrentY+1;
+              tiling =true;
+              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+              entityMap[i][j] =null;
+              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+            }
+          }
+        }
+      }
+    }
+    for (int i =0;i<entityMap.length;i++){
+      for(int j =0;j<entityMap[0].length;j++){
+        if (entityMap[i][j] instanceof Entity){
+          entityMap[i][j].setTileXMod(0);
+          entityMap[i][j].setTileYMod(0);
+          if (!(entityMap[i][j].getMoved())){
+            //Finding the blocked for entity
+            findBlocked (j,i);
+            if (entityMap[i][j] instanceof Enemy){
+              if ((blocked[0])&&(blocked[1])&&(blocked[2])&&(blocked[3])){
+                directionRand = 4;
+              }else{
+                if (((Enemy)(entityMap[i][j])).getEnraged()){
+                  for (int k=0;k<4;k++){
+                    if (!(blocked[k])){
+                      pathfinderPriority[k]=1;
+                    }else{
+                      pathfinderPriority [k]=100;
+                    }
+                  }
+                  pathfinderPriority [4]=1;
+                  for (int k=0;k<5;k++){
+                    if (pathfinderPriority[k]==1){
+                      if (k==0){
+                        pathfinderDistance[k] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow((i-1)-playerCurrentY,2.0));
+                      }else if (k==1){
+                        pathfinderDistance[k] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow((i+1)-playerCurrentY,2.0));
+                      }else if (k==2){
+                        pathfinderDistance[k] = Math.sqrt(Math.pow((j-1)-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
+                      }else if (k==3){
+                        pathfinderDistance[k] = Math.sqrt(Math.pow((j+1)-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
+                      }else if (k==4){
+                       pathfinderDistance[4] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
+                      }
+                      //Resets the closest path
+                      closestPath =1000;
+                    }else{
+                      pathfinderDistance [k]=100;
+                    }
+                  }
+                  for (int k=0;k<5;k++){
+                      if (pathfinderDistance[k]<closestPath){
+                        closestPath = pathfinderDistance[k];
+                        //You might want to randomize the closestDirection by setting it as an array
+                        closestDirection = k;
+                      }
+                  }
+                  directionRand = closestDirection;
+                }else{ 
+                  do{
+                    directionRand=((int)(Math.random()*4));
+                  }while (blocked[directionRand]);
+                  if ((!((Enemy)(entityMap[i][j])).getEnraged())&&(((int)(Math.random()*2))==1)){
+                    //50% chance for them to not move if aggro'd
+                    directionRand  =4;
+                  }
+                }
+                entityMap[i][j].setTiling (directionRand);
+                entityMap[i][j].setMoved(true);
+                entityArrayXMod = 0;
+                entityArrayYMod = 0;
+                if (directionRand==0){
+                  entityArrayYMod = -1;
+                }else if (directionRand==1){
+                  entityArrayYMod = 1;
+                }else if (directionRand==2){
+                  entityArrayXMod = -1;
+                }else if(directionRand==3){
+                  entityArrayXMod = 1;
+                }
+                if (directionRand!=4){
+                  entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
+                  //Not sure about setting it to null, look at if there is a better method
+                  entityMap[i][j] =null;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  public void refreshMobs(){
+    for (int i =0;i<entityMap.length;i++){
+      for(int j =0;j<entityMap[0].length;j++){
+        if (entityMap[i][j] instanceof Entity){
+          entityMap[i][j].setMoved(false);
+        }
+      }
+    }
+    for (int k= 0;k<4;k++){
+    pathfinderDistance[k]=0;
     }
   }
 }

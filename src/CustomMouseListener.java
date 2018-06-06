@@ -7,7 +7,8 @@ class CustomMouseListener implements MouseListener {
   private int[] xy = new int [2];
   private boolean alternateButton = false;
   //The following booleans control the state of the mouse
-  private boolean clicked, hover;
+  private boolean released, hover;
+  private boolean inventoryMove = false;
   
   //Methods that are implemented from MouseListener
   public void mouseClicked(MouseEvent e) {
@@ -15,11 +16,11 @@ class CustomMouseListener implements MouseListener {
   public void mousePressed(MouseEvent e) {
     xy[0] = e.getX();
     xy[1] = e.getY();
-    clicked = false;
+    released = false;
     this.alternateButton = true;
   }
   public void mouseReleased(MouseEvent e) {
-    clicked = true;
+    released = true;
     this.alternateButton = false;
   }
   public void mouseEntered(MouseEvent e) {
@@ -36,11 +37,11 @@ class CustomMouseListener implements MouseListener {
     return xy;
   }
   //There is no setter for this as it can only be controlled by the mouse
-  public void setClicked(boolean clicked){
-    this.clicked = clicked;
+  public void setReleased(boolean released){
+    this.released = released;
   }
-  public boolean getClicked(){
-    return clicked;
+  public boolean getReleased(){
+    return released;
   }
   public boolean getHover(){
     return hover;
