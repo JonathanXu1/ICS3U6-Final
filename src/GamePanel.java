@@ -59,18 +59,14 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 40;
+  private int MOB_CAP = 10;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
   private int entityArrayYMod = 0;
-  private double closestPath;
-  private double [] pathfinderDistance = new double [5];
-  private int closestDirection;
-  private int []pathfinderPriority = new int [5];
   
-  // Fire control
-  private int[] fireTarget;
+  private int squareX =100;
+  private int squareY = 100;
   
   //Constructor
   GamePanel(){
@@ -124,7 +120,6 @@ class GamePanel extends JPanel{
       drawDebugPanel(g);
     }
     this.setVisible(true);
-    
   }
   public void refresh(){
     this.repaint();
@@ -247,21 +242,26 @@ class GamePanel extends JPanel{
     }
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
-
+    if ((mouseListener.getMouseXy()[0] >squareX)&&(mouseListener.getMouseXy()[0] < squareX+100)&&(mouseListener.getMouseXy()[1] >squareY)&&(mouseListener.getMouseXy()[1] < squareY+100)&&(mouseListener.getReleased())){
+      squareX = mouseListener.getMouseXy()[0]; 
+      squareY = mouseListener.getMouseXy()[1];
+    }
+    g.setColor (Color.BLUE);
+    g.fillRect(squareX, squareY, 100,100);
   }
   
   public void drawFog(int x, int y, int count){
     if (map[y][x] instanceof Tile){
       map[y][x].setViewed();
       map[y][x].setFocus(true);
-      if (entityMap[y][x] instanceof Enemy){
-        ((Enemy)(entityMap[y][x])).setEnraged(true);
-      }
     }
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
           if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+            if (entityMap[y+i][x+j] instanceof Enemy){
+              ((Enemy)(entityMap[y+i][x+j])).setEnraged(true);
+            }
             if(map[y+i][x+j] instanceof Tile){
               if((map[y][x].getMinimapColor() == Color.GREEN) || (map[y][x].getMinimapColor() == Color.YELLOW) && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
@@ -440,7 +440,7 @@ class GamePanel extends JPanel{
     }else{
       blocked[0] = true;
     }
-    if (i+1<map.length){
+    if (i+1<=map.length){
       if ((entityMap[i][j] instanceof Enemy)&&(map[i+1][j] instanceof DoorTile)){
         if(!(((Enemy)(entityMap[i][j])).getEnraged())){
           blocked[1] = true;
@@ -464,7 +464,7 @@ class GamePanel extends JPanel{
     }else{
       blocked[2] = true;
     }
-    if (j+1<map[0].length){
+    if (j+1<=map[0].length){
       if ((entityMap[i][j] instanceof Enemy)&&(map[i][j+1] instanceof DoorTile)){
         if(!(((Enemy)(entityMap[i][j])).getEnraged())){
           blocked[3] = true;
@@ -540,6 +540,8 @@ class GamePanel extends JPanel{
       mobCount++;
       entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
     }
+    //Set the aggro of mobs
+    
     //Set all array postion
     for (int i =0;i<entityMap.length;i++){
       for(int j =0;j<entityMap[0].length;j++){
@@ -582,49 +584,27 @@ class GamePanel extends JPanel{
           entityMap[i][j].setTileXMod(0);
           entityMap[i][j].setTileYMod(0);
           if (!(entityMap[i][j].getMoved())){
-            //Finding the blocked for entity
-            findBlocked (j,i);
             if (entityMap[i][j] instanceof Enemy){
+              //Finding the blocked for entity
+              findBlocked (j,i);
               if ((blocked[0])&&(blocked[1])&&(blocked[2])&&(blocked[3])){
                 directionRand = 4;
               }else{
-                if (((Enemy)(entityMap[i][j])).getEnraged()){
+                if (entityMap[i][j].getEnraged()){
                   for (int k=0;k<4;k++){
+                    //1 has the highest priority, 0 is blocked
                     if (!(blocked[k])){
                       pathfinderPriority[k]=1;
                     }else{
-                      pathfinderPriority [k]=100;
+                      pathfinderPriority[k]=0;                      
                     }
                   }
-                  pathfinderPriority [4]=1;
-                  for (int k=0;k<5;k++){
-                    if (pathfinderPriority[k]==1){
-                      if (k==0){
-                        pathfinderDistance[k] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow((i-1)-playerCurrentY,2.0));
-                      }else if (k==1){
-                        pathfinderDistance[k] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow((i+1)-playerCurrentY,2.0));
-                      }else if (k==2){
-                        pathfinderDistance[k] = Math.sqrt(Math.pow((j-1)-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
-                      }else if (k==3){
-                        pathfinderDistance[k] = Math.sqrt(Math.pow((j+1)-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
-                      }else if (k==4){
-                       pathfinderDistance[4] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
-                      }
-                      //Resets the closest path
-                      closestPath =1000;
-                    }else{
-                      pathfinderDistance [k]=100;
+                  for (int k=0;k<4;k++){
+                    if (pathfinderPriority[k]=1){
+                      pathfinderDistance = (Math.pow((j-playerCurrentX),2)+Math.pow((i-playerCurrentY),2));
                     }
                   }
-                  for (int k=0;k<5;k++){
-                      if (pathfinderDistance[k]<closestPath){
-                        closestPath = pathfinderDistance[k];
-                        //You might want to randomize the closestDirection by setting it as an array
-                        closestDirection = k;
-                      }
-                  }
-                  directionRand = closestDirection;
-                }else{ 
+                }else{
                   do{
                     directionRand=((int)(Math.random()*4));
                   }while (blocked[directionRand]);
@@ -633,24 +613,24 @@ class GamePanel extends JPanel{
                     directionRand  =4;
                   }
                 }
-                entityMap[i][j].setTiling (directionRand);
-                entityMap[i][j].setMoved(true);
-                entityArrayXMod = 0;
-                entityArrayYMod = 0;
-                if (directionRand==0){
-                  entityArrayYMod = -1;
-                }else if (directionRand==1){
-                  entityArrayYMod = 1;
-                }else if (directionRand==2){
-                  entityArrayXMod = -1;
-                }else if(directionRand==3){
-                  entityArrayXMod = 1;
-                }
-                if (directionRand!=4){
-                  entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
-                  //Not sure about setting it to null, look at if there is a better method
-                  entityMap[i][j] =null;
-                }
+              }
+              entityMap[i][j].setTiling (directionRand);
+              entityMap[i][j].setMoved(true);
+              entityArrayXMod = 0;
+              entityArrayYMod = 0;
+              if (directionRand==0){
+                entityArrayYMod = -1;
+              }else if (directionRand==1){
+                entityArrayYMod = 1;
+              }else if (directionRand==2){
+                entityArrayXMod = -1;
+              }else if(directionRand==3){
+                entityArrayXMod = 1;
+              }
+              if (directionRand!=4){
+                entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
+                //Not sure about setting it to null, look at if there is a better method
+                entityMap[i][j] =null;
               }
             }
           }
@@ -665,9 +645,6 @@ class GamePanel extends JPanel{
           entityMap[i][j].setMoved(false);
         }
       }
-    }
-    for (int k= 0;k<4;k++){
-    pathfinderDistance[k]=0;
     }
   }
 }
