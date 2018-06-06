@@ -1,6 +1,10 @@
-public abstract class Equipment {
+public abstract class Equipment extends Item{
   private int durability;
-  private int[] ingredients;
+  private int[] components;
+  
+  Equipment(int dbty) {
+    this.durability = dbty;
+  }
   
   public int getDurability() {
     return this.durability;
@@ -10,12 +14,12 @@ public abstract class Equipment {
     this.durability = d;
   }
   
-  public int[] getIngredients() {
-    return this.ingredients;
+  public int[] getComponets() {
+    return this.components;
   }
   
-  public void setIngredients(int[] input) {
-    this.ingredients = input;
+  public void setComponents(int[] input) {
+    this.components = input;
   }
   
   

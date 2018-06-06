@@ -10,18 +10,22 @@ class FireController {
   private int startD, startR;
   private double angle;
   private int projectileLength;
+  private boolean collision;
+  private int shotLength;
   
-  FireController(int mX, int mY) {
+  FireController(int mX, int mY, int sD, int sR) {
     this.maxX = mX;
     this.maxY = mY;
     
-    startD = maxY/2;
-    startR = maxX/2;
+    startD = sD;//maxY/2;
+    startR = sR;//maxX/2;
   }  
   
-  public void setupProjectile(int targetD, int targetR) {    
+  public void setupProjectile(int targetD, int targetR, int shotLen) {    
     counter = 0;
-    endCounter = 0;  
+    endCounter = 0; 
+    
+    this.shotLength = shotLen;
     
     double deltaD = targetD - startD;
     double deltaR = targetR - startR;
@@ -70,16 +74,16 @@ class FireController {
   }
   
   public void calculate() {    
-    if (counter <= 6 ) {
+    if (counter <= shotLength) {
       trailR = currentR - (counter)*moveR;
       trailD = currentD - (counter)*moveD;
     } else {
-      trailD = currentR - moveD*6;
-      trailR = currentR - moveR*6;
+      trailD = currentR - moveD*shotLength;
+      trailR = currentR - moveR*shotLength;
     }         
     counter++;    
     
-    if (endCounter == 0) {
+    if (!collision) {
       currentD = currentD + moveD;
       currentR = currentR + moveR;
       
@@ -87,9 +91,13 @@ class FireController {
   } 
   
   public double[] cycle() {
-    double[] returnArray = {currentD,currentR,trailD,trailR, angle};
+    double[] returnArray = {currentD,currentR,trailD,trailR,angle};
     this.calculate();    
     return returnArray;
+  }
+  
+  public void setCollision(boolean state) {
+    this.collision = state;
   }
   
   public double returnAngle() {
