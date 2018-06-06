@@ -69,6 +69,9 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   
+  // Fire control
+  private int[] fireTarget;
+  
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -121,6 +124,7 @@ class GamePanel extends JPanel{
       drawDebugPanel(g);
     }
     this.setVisible(true);
+    
   }
   public void refresh(){
     this.repaint();
