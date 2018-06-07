@@ -2,15 +2,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-public class LaserRifle extends RangedWeapon {
-  // item stats;
-  
-  
-  LaserRifle(int dbty){ 
+public class IridiumExoskeleton extends Armor {
+  IridiumExoskeleton(int dbty){
     super(dbty);
-    this.setRarity(1);
-    this.setDamage(25);
-    this.setSPT(1);
+    this.setRarity(5);
+    this.setDefense(25); 
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     

@@ -1,3 +1,7 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 public abstract class Equipment extends Item{
   private int durability;
   

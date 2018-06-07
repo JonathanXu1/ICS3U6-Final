@@ -14,10 +14,12 @@ class Main{
     //Music vars
  //   File mappo = new File ("map.txt");
   //  PrintWriter output = new PrintWriter (mappo);
+  /*
     File audioFile = new File("../res/spacebackround.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
+    */
     //Creates the map generator object
     MapGen2_6 gen = new MapGen2_6();
     //A tile map will be created based off the tile map
@@ -62,6 +64,7 @@ class Main{
     }
    //   output.close();
       //Plays music
+    /*
     try {
       clip.open(audioStream);
       clip.start();
@@ -69,6 +72,7 @@ class Main{
     }catch (Exception e) {
       e.printStackTrace();
     }
+    */
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
     //The Clock time keeps track of the fps
