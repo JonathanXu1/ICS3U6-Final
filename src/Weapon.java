@@ -15,6 +15,7 @@ public abstract class Weapon extends Equipment {
   
   public void setDamage(int dm) {
     this.damage = dm;
+
   }
     abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }
