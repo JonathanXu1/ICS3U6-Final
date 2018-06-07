@@ -171,10 +171,6 @@ class GamePanel extends JPanel{
   }
   public void drawGameComponents(Graphics g){
     //Sees if the mouse is clicking the skip turn button
-    if (((mouseListener.getMouseXy()[0] > maxX-142)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28))&&(mouseListener.getReleased())){
-      mouseListener.setReleased (false);
-      passTurn();
-    }
     //Bottom toolbar
     g.drawImage(left,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
     if (inventoryOpen){
@@ -208,6 +204,7 @@ class GamePanel extends JPanel{
     }
   }
   public void drawMap (Graphics g){
+        
     //Sets the void image
     g.setColor(Color.BLACK);
     g.fillRect(0, 0, maxX, maxY);
@@ -222,6 +219,11 @@ class GamePanel extends JPanel{
     if (!(pauseState)){
       //Setting all the possible positions is the second thing that will occur
       if (!(tiling)){
+        //All turn passing must be in this method
+        if (((mouseListener.getMouseXy()[0] > maxX-142)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28))&&(mouseListener.getReleased())){
+          mouseListener.setReleased (false);
+          passTurn();
+        }
         keyListener.setAllDirection();
         if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
           passTurn();
