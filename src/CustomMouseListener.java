@@ -50,4 +50,8 @@ class CustomMouseListener implements MouseListener {
   public boolean getAlternateButton(){
     return (alternateButton);
   }
+  public void resetXY(){
+    xy[0] =0;
+    xy[1] = 0;
+  }
 }
