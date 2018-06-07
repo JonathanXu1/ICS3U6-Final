@@ -10,7 +10,7 @@ class FireController {
   private int startD, startR;
   private double angle;
   private int projectileLength;
-  private boolean collision;
+  private boolean collision = false;
   private int shotLength;
   
   FireController(int mX, int mY, int sD, int sR) {
@@ -71,6 +71,9 @@ class FireController {
       moveD = Math.abs(moveD)*dSign;
       moveR = Math.abs(moveR)*rSign;
     }
+    
+    System.out.println(moveD);
+    System.out.println(moveR);
   }
   
   public void calculate() {    
@@ -85,15 +88,14 @@ class FireController {
     
     if (!collision) {
       currentD = currentD + moveD;
-      currentR = currentR + moveR;
-      
+      currentR = currentR + moveR; 
     }
   } 
   
   public double[] cycle() {
     double[] returnArray = {currentD,currentR,trailD,trailR,angle};
     this.calculate();    
-    return returnArray;
+    return returnArray;  
   }
   
   public void setCollision(boolean state) {

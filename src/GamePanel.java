@@ -773,7 +773,7 @@ class GamePanel extends JPanel{
                   }while (blocked[directionRand]);
                   if ((!((Enemy)(entityMap[i][j])).getEnraged())&&(((int)(Math.random()*2))==1)){
                     //50% chance for them to not move if aggro'd
-                    directionRand  =4;
+                    directionRand  = 4;
                   }
                 }
                 entityMap[i][j].setTiling (directionRand);
@@ -789,7 +789,10 @@ class GamePanel extends JPanel{
                 }else if(directionRand==3){
                   entityArrayXMod = 1;
                 }
-                if (directionRand!=4){
+                if (entityMap[i+entityArrayYMod][j+entityArrayXMod] instanceof Character) {
+                  System.out.println("Damage!");
+                }
+                if (directionRand != 4){
                   entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
                   //Not sure about setting it to null, look at if there is a better method
                   entityMap[i][j] =null;

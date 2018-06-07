@@ -22,7 +22,6 @@ class DisplayGridC {
   DisplayGridC(int[][] w) { 
     this.world = w;
     this.cycles = -1;
-
     
     maxX = Toolkit.getDefaultToolkit().getScreenSize().width;
     maxY = Toolkit.getDefaultToolkit().getScreenSize().height;
