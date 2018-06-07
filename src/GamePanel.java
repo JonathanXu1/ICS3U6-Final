@@ -131,19 +131,19 @@ class GamePanel extends JPanel{
     drawItems (g);
     //Draws the entities
     drawAllEntity (g);
-    drawInventory(g);
     //Draw the game components
     drawGameComponents(g);
     //Draws the minimap
     drawMinimap(g);
     //Draw the health and exp
     drawBars(g);
+    //Draw inventory
+    drawInventory(g);
     //Draw the debugPanel
     if (keyListener.getDebugState()){
       drawDebugPanel(g);
     }
     this.setVisible(true);
-    
   }
   public void refresh(){
     this.repaint();
@@ -170,15 +170,13 @@ class GamePanel extends JPanel{
     g.drawString("Debug Message: " + debugMessage, maxX-600, 90);
   }
   public void drawGameComponents(Graphics g){
+    //Sees if the mouse is clicking the skip turn button
+    if (((mouseListener.getMouseXy()[0] > maxX-142)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28))&&(mouseListener.getReleased())){
+      mouseListener.setReleased (false);
+      passTurn();
+    }
     //Bottom toolbar
     g.drawImage(left,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
-    if (mouseListener.getAlternateButton()){
-      if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
-        g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
-      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
-        g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
-      }
-    }
     if (inventoryOpen){
       g.drawImage(rightClicked,maxX-(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT), (int)(BOT_HEIGHT*Y_TO_X), (int)(BOT_HEIGHT),this);
     }else{
@@ -195,6 +193,19 @@ class GamePanel extends JPanel{
     //Hp and exp bars
     g.drawImage(hp,10,10, ((int)(maxX*0.2)),  ((int)(maxX*0.2/200.0*14.0)),this);
     g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
+    if (mouseListener.getAlternateButton()){
+      if (!(pauseState)){
+        if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
+          g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+        }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
+          g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+        }
+        if ((mouseListener.getMouseXy()[0] > maxX-142)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28)){
+          g.setColor(new Color(0, 0, 0, 100)); 
+          g.fillRect(maxX-142, maxY-120, 122, 93);
+        }
+      } 
+    }
   }
   public void drawMap (Graphics g){
     //Sets the void image
@@ -271,9 +282,9 @@ class GamePanel extends JPanel{
             //Restricts the map so that the array will not go out of bounds
             //REMOVED A 
             //PART OF THE RESTRICTIONS, TEST IF IT STILL WORKS
-           // if (((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))>-TILE_SIZE*2)&&((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))<maxX+TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))>-TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))<maxY+TILE_SIZE*2)){
-              map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
-        //    }
+            // if (((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))>-TILE_SIZE*2)&&((maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX))<maxX+TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))>-TILE_SIZE*2)&&((maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY))<maxY+TILE_SIZE*2)){
+            map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
+            //    }
           }
         } 
       }
@@ -287,7 +298,7 @@ class GamePanel extends JPanel{
     }
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
-
+    
   }
   
   public void drawFog(int x, int y, int count){
@@ -377,14 +388,16 @@ class GamePanel extends JPanel{
   
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
-    g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);    
+    g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);
     //User clicks zoom in and out buttons
-    if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getReleased())&&(minimapFactor > 20)){ //Clicked on top button
-      mouseListener.setReleased (false);
-      minimapFactor -= 10;
-    } else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getReleased())&&(minimapFactor < 100)){ //Clicked on bottom button
-      mouseListener.setReleased (false);
-      minimapFactor += 10;
+    if (!(pauseState)){
+      if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getReleased())&&(minimapFactor > 20)){ //Clicked on top button
+        mouseListener.setReleased (false);
+        minimapFactor -= 10;
+      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getReleased())&&(minimapFactor < 100)){ //Clicked on bottom button
+        mouseListener.setReleased (false);
+        minimapFactor += 10;
+      }
     }
     debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
     //Draws minimap contents
@@ -437,7 +450,6 @@ class GamePanel extends JPanel{
     }
   }
   public void drawAllEntity(Graphics g){
-    
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
       for (int j = 0;j<entityMap[0].length;j++){
@@ -737,7 +749,7 @@ class GamePanel extends JPanel{
                       }else if (k==3){
                         pathfinderDistance[k] = Math.sqrt(Math.pow((j+1)-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
                       }else if (k==4){
-                       pathfinderDistance[4] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
+                        pathfinderDistance[4] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
                       }
                       //Resets the closest path
                       closestPath =1000;
@@ -746,11 +758,11 @@ class GamePanel extends JPanel{
                     }
                   }
                   for (int k=0;k<5;k++){
-                      if (pathfinderDistance[k]<closestPath){
-                        closestPath = pathfinderDistance[k];
-                        //You might want to randomize the closestDirection by setting it as an array
-                        closestDirection = k;
-                      }
+                    if (pathfinderDistance[k]<closestPath){
+                      closestPath = pathfinderDistance[k];
+                      //You might want to randomize the closestDirection by setting it as an array
+                      closestDirection = k;
+                    }
                   }
                   directionRand = closestDirection;
                 }else{ 
@@ -808,7 +820,7 @@ class GamePanel extends JPanel{
       }
     }
     for (int k= 0;k<4;k++){
-    pathfinderDistance[k]=0;
+      pathfinderDistance[k]=0;
     }
   }
 }
