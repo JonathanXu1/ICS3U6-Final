@@ -72,7 +72,7 @@ class GamePanel extends JPanel{
   // Fire control
   private int[] fireTarget;
   private FireController playerFireController;
-  private boolean collided = false;
+  private boolean collided = true;
   private int translateX = 0;
   private int translateY = 0;
   
@@ -486,27 +486,36 @@ class GamePanel extends JPanel{
   
   public void drawBullets(Graphics g, FireController playerFireController){
     playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
-    debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
     double shootAngle = playerFireController.returnAngle();
+    translateX += Math.cos(shootAngle)*10;
+    translateY += Math.sin(shootAngle)*10;
+    debugMessage = Double.toString(Math.toDegrees(shootAngle));
     g.setColor(Color.RED);
-    if(!mouseListener.getReleased() && !collided){
-      if(!collided){
-        g.drawLine(maxX/2, maxY/2, maxX/2 + translateX + (int)(Math.cos(shootAngle)*10), maxY/2 - translateY - (int)(Math.sin(shootAngle)*10));
-        translateX += Math.cos(shootAngle)*10;
-        translateY += Math.sin(shootAngle)*10;
-        if((maxY/2 + translateY)/100 >= map.length || (maxY/2 + translateY)/100 < 0 || (maxX/2 + translateX)/100 >= map[0].length || (maxX/2 + translateX)/100 < 0){
-          collided = true;
-        } else if(map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof WallTile || map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof DoorTile){
-          collided = true;
-        }
+    if(!mouseListener.getReleased()){
+      //if(collided){
+        collided = false;
+        translateX = 0;
+        translateY = 0;
+      //}
+    }
+    int startX = maxX/2 + translateX;
+    int startY = maxY/2- translateY;
+    int endX = startX + (int)(Math.cos(shootAngle)*10);
+    int endY = startY - (int)(Math.sin(shootAngle)*10);
+    int bulletY = playerCurrentY - (maxY/2 - endY)/100;
+    int bulletX = playerCurrentX +(endX-maxX/2)/100;
+    if (!collided){
+      g.drawLine(startX, startY, endX, endY);
+      System.out.println(Integer.toString((endX-maxX/2)/100) + " " + Integer.toString((maxY/2 - endY)/100));
+      
+      if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
+        collided = true;
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile){
+        collided = true;
       }
-    } else if(collided){
-      collided = false;
-      translateX = 0;
-      translateY = 0;
     }
   }
-
+  
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
