@@ -1,6 +1,9 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 public abstract class RangedWeapon extends Weapon{
   private int shotsPerTurn;
-  private int range;
   
   RangedWeapon(int dbty) {
     super(dbty);
@@ -13,13 +16,5 @@ public abstract class RangedWeapon extends Weapon{
   public int returnSPT() {
     return this.shotsPerTurn;
   }
-  
-  public void setRange(int rng){
-    this.range = rng;
-  }
-
-  public int returnRange() {
-    return this.range;
-  }
-  
+  abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }

@@ -10,7 +10,7 @@ class FireController {
   private int startY, startX;
   private double angle;
   private int projectileLength;
-  private boolean collision;
+  private boolean collision = false;
   private int shotLength;
   
   FireController(int mX, int mY, int sX, int sY) {

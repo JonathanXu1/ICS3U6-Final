@@ -6,7 +6,7 @@ public class GameSaver {
   private int fileCode;
   
   GameSaver() {
-    Scanner calibrator = new Scanner(("SaveCalirator.txt"));
+    Scanner calibrator = new Scanner(("SaveCalibrator.txt"));
     this.fileCode = calibrator.nextInt();
   }
   
@@ -27,7 +27,7 @@ public class GameSaver {
       }
       writer.println("");
     }
-  }
+  }    
   
   
 }
