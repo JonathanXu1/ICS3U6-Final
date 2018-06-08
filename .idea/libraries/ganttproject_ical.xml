@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ganttproject-ical">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/biz.ganttproject.impex.ical/ganttproject-ical.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

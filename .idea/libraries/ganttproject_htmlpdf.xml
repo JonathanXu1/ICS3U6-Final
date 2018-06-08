@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ganttproject-htmlpdf">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/org.ganttproject.impex.htmlpdf/ganttproject-htmlpdf.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

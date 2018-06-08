@@ -1,98 +1,98 @@
 class FireController {
-  private int currentD, currentR;
+  private int currentY, currentX;
   private int counter;
   private int endCounter;
   private int ratio;
-  private int trailD, trailR;
-  private int moveD, moveR;
+  private int trailY, trailX;
+  private int moveY, moveX;
   private int maxX, maxY;
-  private int targetD, targetR;
-  private int startD, startR;
+  private int targetY, targetX;
+  private int startY, startX;
   private double angle;
   private int projectileLength;
   private boolean collision;
   private int shotLength;
   
-  FireController(int mX, int mY, int sD, int sR) {
+  FireController(int mX, int mY, int sX, int sY) {
     this.maxX = mX;
     this.maxY = mY;
     
-    startD = sD;//maxY/2;
-    startR = sR;//maxX/2;
+    this.startY = sY;//maxY/2;
+    this.startX = sX;//maxX/2;
   }  
   
-  public void setupProjectile(int targetD, int targetR, int shotLen) {    
+  public void setupProjectile(int targetX, int targetY, int shotLen) {    
     counter = 0;
     endCounter = 0; 
     
     this.shotLength = shotLen;
     
-    double deltaD = targetD - startD;
-    double deltaR = targetR - startR;
+    double deltaY = targetY - startY;
+    double deltaX = targetX - startX;
     
     int dSign = 1;
     int rSign = 1;
     
-    if (deltaD < 0) {
+    if (deltaY < 0) {
       dSign = -1;
     }        
-    if (deltaR < 0) {
+    if (deltaX < 0) {
       rSign = -1;      
     }
     
-    double slope = (deltaD/deltaR);
+    double slope = (deltaY/deltaX);
     
-    double distance = Math.sqrt(Math.pow(deltaD,2) + Math.pow(deltaR,2));
+    double distance = Math.sqrt(Math.pow(deltaY,2) + Math.pow(deltaX,2));
     
     
-    angle = Math.atan((Math.abs(deltaD)/Math.abs(deltaR)));
+    angle = Math.atan((Math.abs(deltaY)/Math.abs(deltaX)));
     
        
-    if (deltaR < 0) {
-      angle = angle + (Math.PI)/2;
-    } 
-    
-    if (deltaD > 0) {
-      angle = angle*(-1);
-    }                
+    if (deltaX < 0 && deltaY < 0) { //Quadrant 2
+      angle = Math.PI - angle;
+    } else if (deltaX < 0 && deltaY > 0) { //Quadrant 3
+      angle = Math.PI + angle;
+    } else if (deltaX > 0 && deltaY > 0) { //Quadrant 4
+      angle = 2*Math.PI - angle;
+    }
 
     
-    int moveD, moveR;
+    int moveY, moveX;
     
-    if (deltaR == 0) {
-      moveD = 32;
-      moveR = 0;
+    if (deltaX == 0) {
+      moveY = 32;
+      moveX = 0;
     } else {
       
-      double moveRTemp = Math.sqrt(1024/(Math.pow(slope,2) + 1));
-      moveD = (int) Math.round(moveRTemp * slope);
-      moveR = (int) Math.round(moveRTemp);   
+      double moveXTemp = Math.sqrt(1024/(Math.pow(slope,2) + 1));
+      moveY = (int) Math.round(moveXTemp * slope);
+      moveX = (int) Math.round(moveXTemp);   
       
-      moveD = Math.abs(moveD)*dSign;
-      moveR = Math.abs(moveR)*rSign;
+      moveY = Math.abs(moveY)*dSign;
+      moveX = Math.abs(moveX)*rSign;
     }
   }
   
   public void calculate() {    
     if (counter <= shotLength) {
-      trailR = currentR - (counter)*moveR;
-      trailD = currentD - (counter)*moveD;
+      trailX = currentX - (counter)*moveX;
+      trailY = currentY - (counter)*moveY;
     } else {
-      trailD = currentR - moveD*shotLength;
-      trailR = currentR - moveR*shotLength;
+      trailY = currentX - moveY*shotLength;
+      trailX = currentX - moveX*shotLength;
     }         
     counter++;    
     
     if (!collision) {
-      currentD = currentD + moveD;
-      currentR = currentR + moveR;
+      currentY = currentY + moveY;
+      currentX = currentX + moveX;
       
     }
   } 
   
-  public double[] cycle() {
-    double[] returnArray = {currentD,currentR,trailD,trailR,angle};
-    this.calculate();    
+  public double[] getInfo() {
+    double[] returnArray = {currentX,currentY,trailX,trailY,angle};
+    this.calculate();
     return returnArray;
   }
   
