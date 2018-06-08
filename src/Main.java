@@ -52,7 +52,7 @@ class Main{
         } else if (charMap[i][j] == '|') {
           map[i][j]= new WallTile(Color.LIGHT_GRAY); //Room wall
         } else if (charMap[i][j] == 'A') {
-          map[i][j]= new FloorTile(Color.ORANGE); //Airlock
+          map[i][j]= new HallwayTile(Color.ORANGE); //Airlock
         } else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN); //Spawn
           playerStartingX = j;
