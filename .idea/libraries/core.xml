@@ -1,0 +1,31 @@
+<component name="libraryTable">
+  <library name="core">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/swingx-1.6.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/commons-codec-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/endrick-cache-1.7.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/jgoodies-common-1.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/jxlayer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/concurrentlinkedhashmap-lru-1.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/commons-net-ftpclient-3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/slf4j-simple-1.5.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/jgoodies-looks-2.5.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/milton-client-2.6.2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/slf4j-api-1.5.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/balloontip-1.2.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/jcommander-1.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/ganttproject-jxbusycomponent-1.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/AppleJavaExtensions.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/commons-io.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/commons-csv.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/milton-api-2.6.2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/jdom-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/httpcore-4.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/endrick-common-1.7.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/lib/core/httpclient-4.2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

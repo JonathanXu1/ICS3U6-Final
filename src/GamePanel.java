@@ -38,7 +38,7 @@ class GamePanel extends JPanel{
   private boolean pauseState =false;
   
   //Sizes
-  private int maxX= 0, maxY= 0;
+  private int maxX = 0, maxY = 0;
   private int minimapFactor = 20;
   private final int TILE_SIZE= 100;
   
@@ -68,9 +68,13 @@ class GamePanel extends JPanel{
   private double [] pathfinderDistance = new double [5];
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
-  
+      
   // Fire control
   private int[] fireTarget;
+  private FireController playerFireController;
+  private boolean collided = false;
+  private int translateX = 0;
+  private int translateY = 0;
   
   //Inventory and items
   private Item [][] itemMap;
@@ -120,10 +124,11 @@ class GamePanel extends JPanel{
     //Required to have focus so that the listeners work
     this.requestFocusInWindow();
     setDoubleBuffered(true);
-    if (maxX==0){
+    if (maxX == 0){
       this.maxX= (int)this.getSize().getWidth();
       this.maxY =(int)this.getSize().getHeight();
       this.setPreferredSize(this.getSize());
+      playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
     //Update the listeners
     mouseXy = mouseListener.getMouseXy();
@@ -136,6 +141,8 @@ class GamePanel extends JPanel{
     drawItems (g);
     //Draws the entities
     drawAllEntity (g);
+    //Draws bullet sprites
+    drawBullets (g, playerFireController);
     //Draw the game components
     drawGameComponents(g);
     //Draws the minimap
@@ -147,9 +154,13 @@ class GamePanel extends JPanel{
     //Draw the debugPanel
     if (keyListener.getDebugState()){
       drawDebugPanel(g);
+      g.setColor(Color.RED);
+      g.fillRect(maxX/2, maxY/2, 2, 2);
     }
     this.setVisible(true);
   }
+   
+  
   public void refresh(){
     this.repaint();
   }
@@ -444,7 +455,6 @@ class GamePanel extends JPanel{
         minimapFactor += 10;
       }
     }
-    debugMessage = "Minimap factor: " + Integer.toString(minimapFactor);
     //Draws minimap contents
     //Must be a double to avoid rounding errors
     double miniTileSize = ((double)minimapX)/minimapFactor;
@@ -517,6 +527,30 @@ class GamePanel extends JPanel{
       }
     }
   }
+  
+  public void drawBullets(Graphics g, FireController playerFireController){
+    playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
+    debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
+    double shootAngle = playerFireController.returnAngle();
+    g.setColor(Color.RED);
+    if(!mouseListener.getReleased() && !collided){
+      if(!collided){
+        g.drawLine(maxX/2, maxY/2, maxX/2 + translateX + (int)(Math.cos(shootAngle)*10), maxY/2 - translateY - (int)(Math.sin(shootAngle)*10));
+        translateX += Math.cos(shootAngle)*10;
+        translateY += Math.sin(shootAngle)*10;
+        if((maxY/2 + translateY)/100 >= map.length || (maxY/2 + translateY)/100 < 0 || (maxX/2 + translateX)/100 >= map[0].length || (maxX/2 + translateX)/100 < 0){
+          collided = true;
+        } else if(map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof WallTile || map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof DoorTile){
+          collided = true;
+        }
+      }
+    } else if(collided){
+      collided = false;
+      translateX = 0;
+      translateY = 0;
+    }
+  }
+
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
