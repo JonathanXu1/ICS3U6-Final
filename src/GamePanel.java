@@ -485,26 +485,28 @@ class GamePanel extends JPanel{
   }
   
   public void drawBullets(Graphics g, FireController playerFireController){
-    playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
-    debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
-    double shootAngle = playerFireController.returnAngle();
     g.setColor(Color.RED);
-    if(!mouseListener.getReleased() && !collided){
-      if(!collided){
-        g.drawLine(maxX/2, maxY/2, maxX/2 + translateX + (int)(Math.cos(shootAngle)*10), maxY/2 - translateY - (int)(Math.sin(shootAngle)*10));
-        translateX += Math.cos(shootAngle)*10;
-        translateY += Math.sin(shootAngle)*10;
-        if((maxY/2 + translateY)/100 >= map.length || (maxY/2 + translateY)/100 < 0 || (maxX/2 + translateX)/100 >= map[0].length || (maxX/2 + translateX)/100 < 0){
-          collided = true;
-        } else if(map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof WallTile || map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof DoorTile){
+    playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
+    double shootAngle = playerFireController.returnAngle();
+    debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
+    if(!mouseListener.getReleased()){ //If clicked
+      if(collided){
+        collided = false;
+        translateX = 0;
+        translateY = 0;
+      }
+    }
+    if(!collided){
+      g.drawLine(maxX/2 + translateX, maxY/2 - translateY, maxX/2 + translateX + (int)(Math.cos(shootAngle)*25), maxY/2 - translateY - (int)(Math.sin(shootAngle)*25));
+      translateX += Math.cos(shootAngle)*10;
+      translateY += Math.sin(shootAngle)*10;
+      if((maxY/2 + translateY)/100 < map.length && (maxY/2 + translateY)/100 >= 0 && (maxX/2 + translateX)/100 < map[0].length && (maxX/2 + translateX)/100 >= 0){
+        if(map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof WallTile || map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof DoorTile){
           collided = true;
         }
       }
-    } else if(collided){
-      collided = false;
-      translateX = 0;
-      translateY = 0;
     }
+    System.out.println(shootAngle);
   }
 
   public void drawBars(Graphics g){
