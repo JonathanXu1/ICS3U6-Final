@@ -787,13 +787,35 @@ class GamePanel extends JPanel{
                 }else if(directionRand==3){
                   entityArrayXMod = 1;
                 }
-                if (entityMap[i+entityArrayYMod][j+entityArrayXMod] instanceof Character) {
-                  System.out.println("Damage!");
-                }
+                
+
+
+                
                 if (directionRand != 4){
-                  entityMap[i+entityArrayYMod][j+entityArrayXMod] =entityMap[i][j];
+                  entityMap[i+entityArrayYMod][j+entityArrayXMod] = entityMap[i][j];
                   //Not sure about setting it to null, look at if there is a better method
                   entityMap[i][j] =null;
+                } else {
+                  /*
+                  System.out.println("run");
+                  System.out.println(i);
+                  System.out.println(j);
+                  System.out.println(playerCurrentX);
+                  System.out.println(playerCurrentY);
+                  */
+
+                  if (i + 1 == playerCurrentY && j == playerCurrentX) {
+                    System.out.println("Damage!");
+                  }
+                  if (i == playerCurrentY && j + 1 == playerCurrentX) {
+                    System.out.println("Damage!");
+                  }
+                  if (i - 1 == playerCurrentY && j == playerCurrentX) {
+                    System.out.println("Damage!");
+                  }
+                  if (i == playerCurrentY && j - 1 == playerCurrentX) {
+                    System.out.println("Damage!");
+                  }
                 }
               }
             }
