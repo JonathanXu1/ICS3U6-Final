@@ -516,8 +516,10 @@ class GamePanel extends JPanel{
     int bulletY = playerCurrentY - (maxY/2 - endY)/100;
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
     if (!collided){
-      g.drawLine(startX, startY, endX, endY);   
-      if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
+      g.drawLine(startX, startY, endX, endY);
+      if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
+        collided = true;
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
       }
     }
