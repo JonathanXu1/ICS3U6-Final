@@ -1,7 +1,5 @@
 //BUGS TO FIX
-//Skipping turns can make you go through walls, probably set up a skip turn thing that makes it so that everything else doesn't work except for enemies, make this the same for when one will pick up something
-//Mobs only move by increments of 9
-//Change mouseListener.getMouseXy() to mouseXy
+//Hitting enemies can make you pass through them
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -22,7 +20,8 @@ class GamePanel extends JPanel{
   private int [] mouseXy;
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
-  
+  private boolean movementRestriction;
+    
   //Images
   private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage;
   private final double Y_TO_X = 90.0/75.0;
@@ -137,12 +136,11 @@ class GamePanel extends JPanel{
       this.setPreferredSize(this.getSize());
       playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
-    checkKilled();
-    
     //Draw map (background)
     drawMap(g);
     updateListeners();
     determineTiling();
+    checkKilled();
     //Checks for which entities are killed
     //Draws the items
     drawItems (g);
@@ -213,6 +211,7 @@ class GamePanel extends JPanel{
     g.drawImage(hp,10,10, ((int)(maxX*0.2)),  ((int)(maxX*0.2/200.0*14.0)),this);
     g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
     ///Draw in all the button click shading
+    if (!(inventoryOpen)){
     if (mouseListener.getAlternateButton()){
       if (!(pauseState)){
         if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
@@ -240,6 +239,7 @@ class GamePanel extends JPanel{
         }
       } 
     }
+    }
   }
   public void determineTiling(){
     bg.setOnTile();
@@ -258,7 +258,9 @@ class GamePanel extends JPanel{
       xyDirection =keyListener.getAllDirection();
       bg.setXDirection (xyDirection[0]);
       bg.setYDirection (xyDirection[1]);
-      bg.move();
+      if (!(movementRestriction)){
+        bg.move();
+      }
       //Make an entity move method
       for (int i =0;i<entityMap.length;i++){
         for(int j =0;j<entityMap[0].length;j++){
@@ -695,13 +697,13 @@ class GamePanel extends JPanel{
   public void passTurn (){
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<100)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       spawnX = 0;
       spawnY = 0;
       while ((!(entityMap[spawnY][spawnX] instanceof Entity))&&(!(map[spawnY][spawnX] instanceof FloorTile))){
         spawnX =(int)(Math.random()*entityMap[0].length);
-        spawnY =(int)(Math.random()*entityMap.length);
+        spawnY =(int)(Math.random()*entityMap.length);        
         //Cannot spawn 20 blocks in radius beside the character
       }
       mobCount++;
@@ -713,6 +715,7 @@ class GamePanel extends JPanel{
       for(int j =0;j<entityMap[0].length;j++){
         if (entityMap[i][j] instanceof Character){
           if((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){
+            movementRestriction = false;
             if (!(entityMap[i][j].getMoved())){
               //Sets the position on the map directly
               if (keyListener.getAllDirection()[0]<0){
@@ -741,6 +744,8 @@ class GamePanel extends JPanel{
               }
               ///Possibly make tiling true;
             }
+          }else{
+            movementRestriction = true;
           }
         }
       }
@@ -759,10 +764,10 @@ class GamePanel extends JPanel{
               }else{
                 if (((Enemy)(entityMap[i][j])).getEnraged()){
                   for (int k=0;k<4;k++){
-                    if (!(blocked[k])){
-                      pathfinderPriority[k]=1;
+                    if (blocked[k]){
+                      pathfinderPriority[k]=100;
                     }else{
-                      pathfinderPriority [k]=100;
+                      pathfinderPriority [k]=1;
                     }
                   }
                   pathfinderPriority [4]=1;
@@ -779,12 +784,12 @@ class GamePanel extends JPanel{
                       }else if (k==4){
                         pathfinderDistance[4] = Math.sqrt(Math.pow(j-playerCurrentX,2.0)+Math.pow(i-playerCurrentY,2.0));
                       }
-                      //Resets the closest path
-                      closestPath =1000;
                     }else{
                       pathfinderDistance [k]=100;
                     }
                   }
+                  //Resets the closest path
+                  closestPath =1000;
                   for (int k=0;k<5;k++){
                     if (pathfinderDistance[k]<closestPath){
                       closestPath = pathfinderDistance[k];
@@ -793,7 +798,11 @@ class GamePanel extends JPanel{
                     }
                   }
                   directionRand = closestDirection;
-                }else{ 
+                  //THE CODE BELOW AY BE UNECESSARY
+                  if (((int)(Math.abs(playerCurrentX-j)+(int)(Math.abs(playerCurrentY-i))))==1){
+                    directionRand=4;
+                  }
+                }else{
                   do{
                     directionRand=((int)(Math.random()*4));
                   }while (blocked[directionRand]);
@@ -857,7 +866,6 @@ class GamePanel extends JPanel{
   }
   public void reversePixelToArray (int [] xyPixel){
     if (xyPixel[0]<maxX/2-50){
-      
       tileSelectedArray[0]=playerCurrentX-(int)(Math.ceil(-((xyPixel[0]-(maxX/2-50))/100.0)));
     }else if (xyPixel[0]>maxX/2+50){
       tileSelectedArray[0]=playerCurrentX+(int)(Math.ceil((xyPixel[0]-(maxX/2+50))/100.0));
@@ -908,7 +916,7 @@ class GamePanel extends JPanel{
           maxButtonX= maxX-22;
           minButtonY = maxY-120;
           maxButtonY = maxY-28;
-          //Add a pause turn boolean for drawing
+          //This is for skipping a turn
           if (((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] > minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY))){
             turnPasser = true;
           }
@@ -931,9 +939,12 @@ class GamePanel extends JPanel{
             }
           }
           reversePixelToArray(mouseListener.getMouseXy());
+          ///Attack enemies (2 hit kill)
           if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
             if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-100);
+              System.out.print ("w");
+              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-50);
+              turnPasser = true;
             }
           }
         }
