@@ -8,7 +8,7 @@
  * 
  * 2.6 also spawn chests on appropriate tiles. 
  * 2.7 has more custom rooms to spawn, and is fully OOP
- * 2.8 is revamped for more multi custom room generation
+ * 2.8 is revamped for more multi custom room generation, and cleans up the code
  * 
  * NOTE: Dynamic room scaling does not work, and needs to be adjusted within the generateMao method to work for different map sizes
  * expirementation has yielded no better method of getting at the optimal room size than doing it by hand. 
@@ -22,7 +22,11 @@
 class MapGen2_8{
   // Generates a random true/false depending on the percentage entered as argument, out of 1000
   private int[][] map;
-  MapGen2_8() {}
+  private boolean capQPlaced;
+  
+  MapGen2_8() {
+    boolean capQPlaced = false; 
+  }
   
   public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {
@@ -48,17 +52,7 @@ class MapGen2_8{
       }
     }
     
-  }
-  
-  // printing method for visualization    
-  public void printArrayCharComp(char[][] input) {
-    for (int i = 5; i < input.length - 5; i++) {
-      for (int j = 5; j < input[0].length - 5; j++) {
-        System.out.print(input[i][j]);
-      }
-      System.out.println("");
-    }
-  }
+  }  
   
   // main recursive method for carving initial paths through the template
   public void carvePath(int dPos, int rPos, int dirState[], int probTurn) {
@@ -126,8 +120,7 @@ class MapGen2_8{
   }
   
   // Takes the map and randomly spawns rooms in it, based on the number of rooms specified as argument
-  public void genRooms(int numRooms) {
-    boolean  capQPlaced = false;   
+  public void genRooms(int numRooms) {      
     int randR,randD; // initilizes integers for random spawn
     // Creates a matrix of rooms to prevent room clustering and keep track of where rooms are
     int[][] roomMatrix = new int[(map.length-3)/6][(map[0].length-3)/6];     
@@ -151,7 +144,7 @@ class MapGen2_8{
       int randRReal = randR*6;
       
       if (!capQPlaced) {        
-        for (int i = -2; i < 4; i++){
+        for (int i = -3; i < 4; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
@@ -159,27 +152,55 @@ class MapGen2_8{
         
         capQPlaced = true;     
         
-        map[randDReal][randRReal] = 8;   
+        map[randDReal][randRReal] = 10;   
         
-      } else if (randomRoll(150)) {
+      } else if (randomRoll(200)) {
         for (int i = -3; i < 4; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 5;
+        map[randDReal][randRReal] = 20;        
         
-        
-      } else if (randomRoll(150)) {
-        
+      } else if (randomRoll(100)) {        
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 9;
+        map[randDReal][randRReal] = 30;
+        
+        
+      } else if (randomRoll(100)) {        
+        for (int i = -4; i < 5; i++){
+          for (int j = -4; j < 5; j++) {
+            map[randDReal + i][randRReal + j] = -1;
+          }
+        }
+        
+        map[randDReal][randRReal] = 40;
+        
+        
+      } else if (randomRoll(100)) {        
+        for (int i = -4; i < 5; i++){
+          for (int j = -4; j < 5; j++) {
+            map[randDReal + i][randRReal + j] = -1;
+          }
+        }
+        
+        map[randDReal][randRReal] = 50;
+        
+        
+      } else if (randomRoll(100)) {        
+        for (int i = -4; i < 5; i++){
+          for (int j = -4; j < 5; j++) {
+            map[randDReal + i][randRReal + j] = -1;
+          }
+        }
+        
+        map[randDReal][randRReal] = 60;
         
         
       } else {
@@ -421,8 +442,23 @@ class MapGen2_8{
   }
   
   public void spawnChests() {
-    int randD,randR;
-        
+    int randD,randR;                    
+    int wallChests = 0;
+    
+    do {
+      randD = getRand(2,(map.length-3));
+      randR = getRand(2,(map[0].length-3));
+      
+      if (map[randD][randR] == 3) {
+        if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
+          map[randD][randR] = 6;
+          wallChests++;
+        }
+      }
+    } while (wallChests < 10);
+  }
+  
+  public void furnishRooms() {    
     for (int i = 1; i < (map.length-3)/6; i++) {
       for (int j = 1; j < (map[0].length - 3)/6; j++) {
         if (map[i*6][j*6] == 5) {
@@ -450,20 +486,6 @@ class MapGen2_8{
         }
       }
     }
-    
-    int wallChests = 0;
-    
-    do {
-      randD = getRand(2,(map.length-3));
-      randR = getRand(2,(map[0].length-3));
-      
-      if (map[randD][randR] == 3) {
-        if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
-          map[randD][randR] = 6;
-          wallChests++;
-        }
-      }
-    } while (wallChests < 10);
   }
   
   public void spawnDebris() {
@@ -532,46 +554,13 @@ class MapGen2_8{
     //System.out.println("Wall designation pass");
     this.finalizeDesignations();
     //System.out.println("Designation pass");
+    this.furnishRooms();
     this.spawnChests();
     //System.out.println("Chest pass");
     this.spawnDebris();
     
     this.trimMap();
     return map;             
-  }
-  
-  // Method for visualizing the generated map onto console
-  public void visMap(int[][] result) {
-    char[][] resultProc = new char[result.length][result[0].length];
-    for (int i = 0; i < result.length; i++) {
-      for (int j = 0; j < result[0].length; j++) {
-        if (result[i][j] == 3) {
-          resultProc[i][j] = '|';
-        } else if (result[i][j] == 2) {
-          resultProc[i][j] = '~';
-        } else if (result[i][j] == 1) {
-          resultProc[i][j] = '-';
-        } else if (result[i][j] == -2) {
-          resultProc[i][j] = 'D';
-        } else if (result[i][j] == -1) {
-          resultProc[i][j] = 'R';
-        } else if (result[i][j] == -3) {
-          resultProc[i][j] = '@';
-        } else if (result[i][j] == -4) {
-          resultProc[i][j] = '#';
-        } else if (result[i][j] == -5) {
-          resultProc[i][j] = 'A';
-        } else {
-          if ((i<=4)||(i>=result.length-4)||(j<=4)||(j>=result[0].length-4)){
-            resultProc[i][j] = '-';
-          }else{
-            resultProc[i][j] = 'X';
-          }
-        }
-      }
-    }
-    
-    printArrayCharComp(resultProc);   
   }
   
   public void trimMap() {
@@ -641,7 +630,7 @@ class MapGen2_8{
   }
   
   public static void main(String[] args) {
-    MapGen2_7 tester = new MapGen2_7();
+    MapGen2_8 tester = new MapGen2_8();
     visMap2(tester.charMap(tester.generateMap(24,6))); // width-depth generates a map of integers
     //tester.generateMap(24,6);
   }  
