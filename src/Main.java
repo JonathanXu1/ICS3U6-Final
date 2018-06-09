@@ -12,9 +12,9 @@ class Main{
     double maxMem = runtime.maxMemory();
     double usedMem;
     //Music vars
- //   File mappo = new File ("map.txt");
-  //  PrintWriter output = new PrintWriter (mappo);
-  /*
+    //File mappo = new File ("map.txt");
+    //PrintWriter output = new PrintWriter (mappo);
+    /*
     File audioFile = new File("../res/spacebackround.wav");
     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());

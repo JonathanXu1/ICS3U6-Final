@@ -125,6 +125,8 @@ class Display extends JFrame{
         title.setVisible(false);
       }
       gamePanel.refresh();
+    } else if (gameState == 2) {
+      System.exit(0);
     }
   }
   //Determines if the game has begun
@@ -135,6 +137,8 @@ class Display extends JFrame{
       menuStartListener.setStart (false);
     } else if (menuQuitListener.getStart()){
       System.exit(0);
+    } else if (gamePanel.returnGameOver()) {
+      gameState = 2;
     }
   }
   public void setMap(Tile[][] map){
