@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 
 class GamePanel extends JPanel{
   //Debug
@@ -134,10 +136,10 @@ class GamePanel extends JPanel{
     drawMap(g);
     //Draws the items
     drawItems (g);
-    //Draws the entities
-    drawAllEntity (g);
     //Draws bullet sprites
     drawBullets (g, playerFireController);
+    //Draws the entities
+    drawAllEntity (g);
     //Draw the game components
     drawGameComponents(g);
     //Draws the minimap
@@ -490,6 +492,8 @@ class GamePanel extends JPanel{
     translateX += Math.cos(shootAngle)*10;
     translateY += Math.sin(shootAngle)*10;
     debugMessage = Double.toString(Math.toDegrees(shootAngle));
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
     if(!mouseListener.getReleased()){
       //if(collided){
@@ -500,17 +504,15 @@ class GamePanel extends JPanel{
     }
     int startX = maxX/2 + translateX;
     int startY = maxY/2- translateY;
-    int endX = startX + (int)(Math.cos(shootAngle)*10);
-    int endY = startY - (int)(Math.sin(shootAngle)*10);
+    int endX = startX + (int)(Math.cos(shootAngle)*20);
+    int endY = startY - (int)(Math.sin(shootAngle)*20);
     int bulletY = playerCurrentY - (maxY/2 - endY)/100;
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
     if (!collided){
-      g.drawLine(startX, startY, endX, endY);
-      System.out.println(Integer.toString((endX-maxX/2)/100) + " " + Integer.toString((maxY/2 - endY)/100));
-      
+      g.drawLine(startX, startY, endX, endY);   
       if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
-      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile){
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
       }
     }
