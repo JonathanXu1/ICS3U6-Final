@@ -1,4 +1,5 @@
 //Fix inventory so that it will close
+//Enemies must strike second
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -1035,6 +1036,10 @@ class GamePanel extends JPanel{
       minButtonY = maxY-(int)(BOT_HEIGHT)+20;
       maxButtonY = maxY-(int)(BOT_HEIGHT)+20+(int)(BOT_HEIGHT/2.0)-30;
       if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(alternateState)&&(mouseListener.getPressed())&&(inventoryOpen)){
+        inventoryOpen = false;
+        alternateState = false;
+        pauseState =false;
+      }else if  ((!(itemSelected))&&(!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
         inventoryOpen = false;
         alternateState = false;
         pauseState =false;
