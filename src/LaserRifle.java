@@ -1,8 +1,7 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-public class LaserRifle extends RangedWeapon {
+class LaserRifle extends RangedWeapon {
   // item stats;
   
   

@@ -1,5 +1,3 @@
-//BUGS TO FIX
-//Hitting enemies can make you pass through them
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -74,7 +72,7 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   private boolean acceptableSpawn = false;
-  
+ 
   // Fire control
   private int[] fireTarget;
   private FireController playerFireController;
@@ -94,10 +92,12 @@ class GamePanel extends JPanel{
   private int maxSelectY;
   private int[] selectedItemPosition = new int [2];
   private int itemCount = 0;
-  private int ITEM_CAP = 10;
   private boolean itemPickup = false;
   private int turnTransitionCounter  =0;
   private boolean turnPasser = false;
+  private int weaponCap;
+  private int armorCap;
+  private int itemRarity;
   
   //Attacking
   private int [] tileSelectedArray = new int [2];
@@ -445,6 +445,7 @@ class GamePanel extends JPanel{
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawItems(Graphics g){
+
     for (int i = 0;i<itemMap.length;i++){
       for (int j = 0;j<itemMap[0].length;j++){
         if(itemMap[i][j] instanceof Item){
@@ -505,7 +506,7 @@ class GamePanel extends JPanel{
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
-    g.fillRect (16,16, ((int)(maxX*1.0/5.0))-12, ((int)(maxX*1.0/5.0/200.0*14.0))-12);
+    g.fillRect (16,16, (((int)(maxX*1.0/5.0))-12), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
@@ -662,20 +663,7 @@ class GamePanel extends JPanel{
     playerCurrentY = playerStartingY;
     entityMap[playerStartingY][playerStartingX]= new Character(100,100,1,1,0,Color.BLUE);
     //Creates all the items on the floor
-    while (itemCount<ITEM_CAP){
-      //Resets the spawn
-      spawnX = 0;
-      spawnY = 0;
-      do{
-        spawnX =(int)(Math.random()*entityMap[0].length);
-        spawnY =(int)(Math.random()*entityMap.length);
-      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
-      itemCount++;
-      //For now, just spawn armor
-      //    int randomItemNumber;
-      itemMap[spawnY][spawnX] = new AssaultVest (100);  
-    }
-    inventory.setItem(1,3,new SpaceSuit (100));
+    spawnItems();
   }
   
   //Getters and setters
@@ -719,7 +707,7 @@ class GamePanel extends JPanel{
       
       //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
+      entityMap[spawnY][spawnX] = new Enemy (20,20,1,1,0,Color.MAGENTA, false);
     }
     findBlocked (playerCurrentX, playerCurrentY);
     //Set all array postion
@@ -954,8 +942,9 @@ class GamePanel extends JPanel{
           ///Attack enemies (2 hit kill)
           if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
             if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
-              System.out.print ("w");
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-50);
+              if (inventory.getItem(2,3) instanceof MeleeWeapon){
+                entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-((Weapon)(inventory.getItem(2,3))).getDamage());
+              }
               turnPasser = true;
             }
           }
@@ -982,6 +971,59 @@ class GamePanel extends JPanel{
       tiling = true;
       passTurn();
       turnCount++;
+    }
+  }
+  public void spawnItems(){
+    //Sets inventory default items
+    inventory.setItem(1,3,new SpaceSuit (100));
+    inventory.setItem(2,3,new Wrench (100));
+    //First initialize a random number of weapons and armors to spawn across the map
+    weaponCap =7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
+    armorCap = 7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
+    //Resets the spawn
+    spawnX = 0;
+    spawnY = 0;
+    while(itemCount<weaponCap){
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      randomizeWeapon(spawnX, spawnY);
+    }
+    itemCount=0;
+    while(itemCount<armorCap){
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      randomizeArmor(spawnX, spawnY);
+    }
+    itemCount=0;
+  }
+  public void randomizeWeapon(int spawnX, int spawnY){
+    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    if (itemRarity==5){
+      itemMap[spawnY][spawnX] = new PlasmaRapier(100);
+    }else if (itemRarity==4){
+      itemMap[spawnY][spawnX] = new GammaHammer(100); 
+    }else if (itemRarity==3){
+      itemMap[spawnY][spawnX] = new KineticMace(100);
+    }else if (itemRarity==2){
+      itemMap[spawnY][spawnX] = new EnergySword(100);
+    }
+  }
+  public void randomizeArmor(int spawnX, int spawnY){
+    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    if (itemRarity==5){
+      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
+    }else if (itemRarity==4){
+      itemMap[spawnY][spawnX] = new ProximityArmor(100); 
+    }else if (itemRarity==3){
+      itemMap[spawnY][spawnX] = new EnergySuit(100);
+    }else if (itemRarity==2){
+      itemMap[spawnY][spawnX] = new AssaultVest(100);
     }
   }
 }

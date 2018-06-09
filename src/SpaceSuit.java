@@ -1,8 +1,8 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-public class SpaceSuit extends Armor {
+import java.awt.Color;
+class SpaceSuit extends Armor {
   Image spaceSuit;
   SpaceSuit(int dbty){
     super(dbty);
