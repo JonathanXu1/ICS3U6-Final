@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/biz.ganttproject.impex.msproject2/lib/rtfparserkit-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/biz.ganttproject.impex.msproject2/lib/poi-3.11-20141221.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/biz.ganttproject.impex.msproject2/lib/mpxj.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ganttproject">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Gantt Program/plugins/net.sourceforge.ganttproject/ganttproject.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
