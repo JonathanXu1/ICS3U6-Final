@@ -2,19 +2,20 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
-class IridiumExoskeleton extends Armor {
-  Image iridiumExoskeleton;
-  IridiumExoskeleton(int dbty){
+class GammaHammer extends MeleeWeapon{
+  Image gammaHammer;
+  GammaHammer(int dbty) {
     super(dbty);
-    this.setRarity(5);
-    this.setDefense(25); 
+    this.setRarity(4);
+    this.setDamage(20);
   }
+  
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
-    iridiumExoskeleton = Toolkit.getDefaultToolkit().getImage("../res/IridiumExoskeleton.png");
+    gammaHammer = Toolkit.getDefaultToolkit().getImage("../res/GammaHammer.png");
     if (this.getItemSelected()){
       g.setColor(new Color(255, 255, 255, 100)); 
       g.fillRect (x,y,width,height);
     }
-    g.drawImage(iridiumExoskeleton, x,y,width,height,gamePanel);
+    g.drawImage(gammaHammer, x,y,width,height,gamePanel);
   }
 }

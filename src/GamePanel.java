@@ -1,5 +1,4 @@
-//BUGS TO FIX
-//Hitting enemies can make you pass through them
+//Fix inventory so that it will close
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -61,6 +60,7 @@ class GamePanel extends JPanel{
   private int playerCurrentX, playerCurrentY;
   private boolean [] blocked = new boolean [4];
   private int [] xyDirection = new int [2];
+  private boolean alternateState;
   
   //Enemy control
   private Entity [][] entityMap;
@@ -76,7 +76,7 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   private boolean acceptableSpawn = false;
-  
+ 
   // Fire control
   private int[] fireTarget;
   private FireController playerFireController;
@@ -96,10 +96,13 @@ class GamePanel extends JPanel{
   private int maxSelectY;
   private int[] selectedItemPosition = new int [2];
   private int itemCount = 0;
-  private int ITEM_CAP = 10;
   private boolean itemPickup = false;
   private int turnTransitionCounter  =0;
   private boolean turnPasser = false;
+  private int weaponCap;
+  private int armorCap;
+  private int itemRarity;
+
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
@@ -148,6 +151,9 @@ class GamePanel extends JPanel{
     checkKilled();
     
     if (!gameOver) {
+      if (!(mouseListener.getPressed())){
+        alternateState = true;
+      }
       //Draw map (background)
       drawMap(g);
       updateListeners();
@@ -229,7 +235,7 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
     ///Draw in all the button click shading
     if (!(inventoryOpen)){
-      if (mouseListener.getAlternateButton()){
+      if (mouseListener.getPressed()){
         if (!(pauseState)){
           if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
             g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
@@ -461,6 +467,7 @@ class GamePanel extends JPanel{
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawItems(Graphics g){
+
     for (int i = 0;i<itemMap.length;i++){
       for (int j = 0;j<itemMap[0].length;j++){
         if(itemMap[i][j] instanceof Item){
@@ -502,7 +509,7 @@ class GamePanel extends JPanel{
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
-    if(!mouseListener.getReleased()){
+    if(!mouseListener.getPressed()){
       if(collided){
         collided = false;
         translateX = 0;
@@ -643,8 +650,8 @@ class GamePanel extends JPanel{
           //Nothing is selected, looking at each one to swap something
           if (!(itemSelected)){
             if  ((inventory.getItem(j,i) instanceof Item)){
-              if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getReleased())){
-                mouseListener.setReleased(false);
+              if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+                alternateState = false;
                 inventory.setSelected(j,i, true);
                 selectedItemPosition[0]=j;
                 selectedItemPosition[1]=i;
@@ -655,8 +662,8 @@ class GamePanel extends JPanel{
           //The item can be swapped with any space
           if (itemSelected){
             inventory.writeStats(g, selectedItemPosition[0],selectedItemPosition[1],maxX/2-385,maxY/2+110);
-            if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getReleased())){
-              mouseListener.setReleased(false);
+            if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+              alternateState = false;
               inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
               itemSelected = false;
               if (((j==selectedItemPosition[0])&&(i==selectedItemPosition[1]))){
@@ -674,8 +681,8 @@ class GamePanel extends JPanel{
               }else{
                 inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
               }
-            }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getReleased())){
-              mouseListener.setReleased(false);
+            }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
+              alternateState = false;
               itemSelected = false;
               //Create an ERROR sound effect!
               if (!(itemMap[playerCurrentY][playerCurrentX]instanceof Item)){
@@ -712,20 +719,7 @@ class GamePanel extends JPanel{
     playerCurrentY = playerStartingY;
     entityMap[playerStartingY][playerStartingX]= new Character(100,100,1,1,0,Color.BLUE);
     //Creates all the items on the floor
-    while (itemCount<ITEM_CAP){
-      //Resets the spawn
-      spawnX = 0;
-      spawnY = 0;
-      do{
-        spawnX =(int)(Math.random()*entityMap[0].length);
-        spawnY =(int)(Math.random()*entityMap.length);
-      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
-      itemCount++;
-      //For now, just spawn armor
-      //    int randomItemNumber;
-      itemMap[spawnY][spawnX] = new AssaultVest (100);  
-    }
-    inventory.setItem(1,3,new SpaceSuit (100));
+    spawnItems();
   }
   
   //Getters and setters
@@ -769,7 +763,7 @@ class GamePanel extends JPanel{
       
       //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
+      entityMap[spawnY][spawnX] = new Enemy (20,20,1,1,0,Color.MAGENTA, false);
     }
     findBlocked (playerCurrentX, playerCurrentY);
     //Set all array postion
@@ -978,22 +972,21 @@ class GamePanel extends JPanel{
   }
   public void updateListeners(){
     mouseXy = mouseListener.getMouseXy();
-    mouseReleased = mouseListener.getReleased();
     //If the game is not paused
     if (!(inventoryOpen)){
       //Outside of tiling, as it can be used at any time
-      if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getReleased())&&(minimapFactor > 20)){ //Clicked on top button
-        mouseListener.setReleased (false);
+      if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getPressed())&&(alternateState)&&(minimapFactor > 20)){ //Clicked on top button
+        alternateState = false;
         minimapFactor -= 10;
-      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getReleased())&&(minimapFactor < 100)){ //Clicked on bottom button
-        mouseListener.setReleased (false);
+      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getPressed())&&(alternateState)&&(minimapFactor < 100)){ //Clicked on bottom button
+        alternateState = false;
         minimapFactor += 10;
       }
       //Wait a turn button
       if (!(tiling)){
         keyListener.setAllDirection();
-        if (mouseListener.getReleased()){
-          mouseListener.setReleased (false);
+        if (mouseListener.getPressed()&&(alternateState)){
+          alternateState = false;
           //This is for waiting a turn
           minButtonX = maxX-142;
           maxButtonX= maxX-22;
@@ -1025,8 +1018,9 @@ class GamePanel extends JPanel{
           ///Attack enemies (2 hit kill)
           if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
             if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
-              System.out.print ("w");
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-50);
+              if (inventory.getItem(2,3) instanceof MeleeWeapon){
+                entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-((Weapon)(inventory.getItem(2,3))).getDamage());
+              }
               turnPasser = true;
             }
           }
@@ -1042,9 +1036,9 @@ class GamePanel extends JPanel{
       maxButtonX= (int)(BOT_HEIGHT*INVENTORY_MOD)-240+maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+85;
       minButtonY = maxY-(int)(BOT_HEIGHT)+20;
       maxButtonY = maxY-(int)(BOT_HEIGHT)+20+(int)(BOT_HEIGHT/2.0)-30;
-      if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getReleased())&&(inventoryOpen)){
-        mouseListener.setReleased (false);
+      if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(alternateState)&&(mouseListener.getPressed())&&(inventoryOpen)){
         inventoryOpen = false;
+        alternateState = false;
         pauseState =false;
       }
     }
@@ -1053,6 +1047,59 @@ class GamePanel extends JPanel{
       tiling = true;
       passTurn();
       turnCount++;
+    }
+  }
+  public void spawnItems(){
+    //Sets inventory default items
+    inventory.setItem(1,3,new SpaceSuit (100));
+    inventory.setItem(2,3,new Wrench (100));
+    //First initialize a random number of weapons and armors to spawn across the map
+    weaponCap =7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
+    armorCap = 7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
+    //Resets the spawn
+    spawnX = 0;
+    spawnY = 0;
+    while(itemCount<weaponCap){
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      randomizeWeapon(spawnX, spawnY);
+    }
+    itemCount=0;
+    while(itemCount<armorCap){
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      randomizeArmor(spawnX, spawnY);
+    }
+    itemCount=0;
+  }
+  public void randomizeWeapon(int spawnX, int spawnY){
+    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    if (itemRarity==5){
+      itemMap[spawnY][spawnX] = new PlasmaRapier(100);
+    }else if (itemRarity==4){
+      itemMap[spawnY][spawnX] = new GammaHammer(100); 
+    }else if (itemRarity==3){
+      itemMap[spawnY][spawnX] = new KineticMace(100);
+    }else if (itemRarity==2){
+      itemMap[spawnY][spawnX] = new EnergySword(100);
+    }
+  }
+  public void randomizeArmor(int spawnX, int spawnY){
+    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    if (itemRarity==5){
+      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
+    }else if (itemRarity==4){
+      itemMap[spawnY][spawnX] = new ProximityArmor(100); 
+    }else if (itemRarity==3){
+      itemMap[spawnY][spawnX] = new EnergySuit(100);
+    }else if (itemRarity==2){
+      itemMap[spawnY][spawnX] = new AssaultVest(100);
     }
   }
 }

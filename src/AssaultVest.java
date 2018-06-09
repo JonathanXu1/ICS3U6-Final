@@ -1,8 +1,8 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-public class AssaultVest extends Armor {
+import java.awt.Color;
+class AssaultVest extends Armor {
   Image assaultVest;
   AssaultVest(int dbty){
     super(dbty);
