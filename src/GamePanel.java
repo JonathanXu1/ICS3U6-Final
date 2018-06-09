@@ -100,7 +100,10 @@ class GamePanel extends JPanel{
   private boolean turnPasser = false;
   
   //Attacking
-  private int [] tileSelectedArray = new int [2];
+  private int [] tileSelectedArray = new int [2];  
+  
+  //Game over control
+  private boolean gameOver;
   
   //Constructor
   GamePanel(){
@@ -122,6 +125,7 @@ class GamePanel extends JPanel{
     //Initializes minimap size
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
+    this.gameOver = false;
   }
   
   //Methods that are inherited from JPanel
@@ -137,33 +141,40 @@ class GamePanel extends JPanel{
       this.setPreferredSize(this.getSize());
       playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
-    //Draw map (background)
-    drawMap(g);
-    updateListeners();
-    determineTiling();
+    
+    //Checks for which entities are killed, including the player
     checkKilled();
-    //Checks for which entities are killed
-    //Draws the items
-    drawItems (g);
-    //Draws the entities
-    drawAllEntity (g);
-    //Draws bullet sprites
-    drawBullets (g, playerFireController);
-    //Draw the game components
-    drawGameComponents(g);
-    //Draws the minimap
-    drawMinimap(g);
-    //Draw the health and exp
-    drawBars(g);
-    //Draw inventory
-    drawInventory(g);
-    //Draw the debugPanel
-    if (keyListener.getDebugState()){
-      drawDebugPanel(g);
-      g.setColor(Color.RED);
-      g.fillRect(maxX/2, maxY/2, 2, 2);
+    
+    if (!gameOver) {
+      //Draw map (background)
+      drawMap(g);
+      updateListeners();
+      determineTiling();
+      
+      //Draws the items
+      drawItems (g);
+      //Draws the entities
+      drawAllEntity (g);
+      //Draws bullet sprites
+      drawBullets (g, playerFireController);
+      //Draw the game components
+      drawGameComponents(g);
+      //Draws the minimap
+      drawMinimap(g);
+      //Draw the health and exp
+      drawBars(g);
+      //Draw inventory
+      drawInventory(g);
+      //Draw the debugPanel
+      if (keyListener.getDebugState()){
+        drawDebugPanel(g);
+        g.setColor(Color.RED);
+        g.fillRect(maxX/2, maxY/2, 2, 2);
+      }
+      this.setVisible(true);
+    } else {
+      System.out.println("You suck!");    
     }
-    this.setVisible(true);
   }
   
   
@@ -171,6 +182,10 @@ class GamePanel extends JPanel{
     this.repaint();
   }
   //End of methods that are inherited from JPanel
+  
+  public boolean returnGameOver() {
+    return this.gameOver;
+  }
   
   //Drawing methods, which were split up for legibility
   public void drawDebugPanel (Graphics g){
@@ -481,7 +496,7 @@ class GamePanel extends JPanel{
     g.setColor(Color.RED);
     playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
     double shootAngle = playerFireController.returnAngle();
-    debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
+    //debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
     if(!mouseListener.getReleased()){ //If clicked
       if(collided){
         collided = false;
@@ -505,10 +520,36 @@ class GamePanel extends JPanel{
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
-    g.fillRect (16,16, ((int)(maxX*1.0/5.0))-12, ((int)(maxX*1.0/5.0/200.0*14.0))-12);
+    
+    int currHealth, healthCap;
+    
+    if (entityMap[playerCurrentY][playerCurrentX] == null) {
+      
+      currHealth = 0;
+      healthCap = 1;
+      gameOver = true;
+        
+    } else {
+      
+      currHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
+      healthCap = entityMap[playerCurrentY][playerCurrentX].getCap();
+    
+    }
+    debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
+    
+    g.fillRect (16,16,(int)((((int)(maxX*1.0/5.0))-12)*((double)currHealth)/(double)healthCap), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
+    
+    for (int i = 0; i < entityMap.length; i++) {
+      for (int j = 0; j < entityMap[0].length; j++) {
+        if (entityMap[i][j] instanceof Enemy) {
+          
+        
+        }                
+      }
+    }
   }
   
   //Map manipulation
@@ -705,7 +746,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<100)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<10)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -845,25 +886,20 @@ class GamePanel extends JPanel{
                   //Not sure about setting it to null, look at if there is a better method
                   entityMap[i][j] =null;
                 } else {
-                  /*
-                  System.out.println("run");
-                  System.out.println(i);
-                  System.out.println(j);
-                  System.out.println(playerCurrentX);
-                  System.out.println(playerCurrentY);
-                  */
-
+                  
+                  int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
+                  
                   if (i + 1 == playerCurrentY && j == playerCurrentX) {
-                    System.out.println("Damage!");
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
                   }
                   if (i == playerCurrentY && j + 1 == playerCurrentX) {
-                    System.out.println("Damage!");
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
                   }
                   if (i - 1 == playerCurrentY && j == playerCurrentX) {
-                    System.out.println("Damage!");
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
                   }
                   if (i == playerCurrentY && j - 1 == playerCurrentX) {
-                    System.out.println("Damage!");
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
                   }
                 }
               }
@@ -921,7 +957,11 @@ class GamePanel extends JPanel{
         if (entityMap[i][j] instanceof Entity){
           if (entityMap[i][j].getHealth()<=0){
             entityMap[i][j] = null;
-            mobCount--;
+            if (entityMap[i][j] instanceof Character) {
+              gameOver = true;
+            } else {
+              mobCount--;
+            }
           }
         }
       }
