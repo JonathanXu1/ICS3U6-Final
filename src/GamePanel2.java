@@ -97,6 +97,7 @@ class GamePanel extends JPanel{
   private int ITEM_CAP = 10;
   private boolean itemPickup = false;
   private int turnTransitionCounter  =0;
+  private boolean turnPasser = false;
   
   //Attacking
   private int [] tileSelectedArray = new int [2];
@@ -241,9 +242,7 @@ class GamePanel extends JPanel{
     }
   }
   public void determineTiling(){
-    
     bg.setOnTile();
-    findBlocked (playerCurrentX, playerCurrentY);
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
     //Sets off tiling for the reset of movement
     if (bg.getOnTile()&&(turnTransitionCounter==10)){
@@ -694,7 +693,6 @@ class GamePanel extends JPanel{
     this.newFloor = newFloor;
   }
   public void passTurn (){
-    System.out.println ("");
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
     if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
@@ -709,42 +707,40 @@ class GamePanel extends JPanel{
       mobCount++;
       entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
     }
+    findBlocked (playerCurrentX, playerCurrentY);
     //Set all array postion
     for (int i =0;i<entityMap.length;i++){
       for(int j =0;j<entityMap[0].length;j++){
         if (entityMap[i][j] instanceof Character){
-          if (!(entityMap[i][j].getMoved())){
-            //Sets the position on the map directly
-            if (keyListener.getAllDirection()[0]<0){
-              playerCurrentX= playerCurrentX -1;
-              tiling =true;
-              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-              entityMap[i][j] =null;
-              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-            }else if (keyListener.getAllDirection()[0]>0){
-              playerCurrentX =playerCurrentX+1;
-              tiling =true;
-              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-              entityMap[i][j] =null;
-              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+          if((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){
+            if (!(entityMap[i][j].getMoved())){
+              //Sets the position on the map directly
+              if (keyListener.getAllDirection()[0]<0){
+                playerCurrentX= playerCurrentX -1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+              }else if (keyListener.getAllDirection()[0]>0){
+                playerCurrentX =playerCurrentX+1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+              }
+              if (keyListener.getAllDirection()[1]<0){
+                playerCurrentY =playerCurrentY-1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+              }else if (keyListener.getAllDirection()[1]>0){
+                playerCurrentY =playerCurrentY+1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+              }else{
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+              }
+              ///Possibly make tiling true;
             }
-            if (keyListener.getAllDirection()[1]<0){
-              playerCurrentY =playerCurrentY-1;
-              tiling =true;
-              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-              entityMap[i][j] =null;
-              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-            }else if (keyListener.getAllDirection()[1]>0){
-              playerCurrentY =playerCurrentY+1;
-              tiling =true;
-              entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-              entityMap[i][j] =null;
-              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-            }else{
-              tiling =true;
-              entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-            }
-            ///Possibly make tiling true;
           }
         }
       }
@@ -833,6 +829,7 @@ class GamePanel extends JPanel{
         }
       }
     }
+    refreshMobs();
     //Picks up an item if the item pickup was set to true
     if (itemPickup){
       for (int i=0;i<3;i++){
@@ -913,8 +910,7 @@ class GamePanel extends JPanel{
           maxButtonY = maxY-28;
           //Add a pause turn boolean for drawing
           if (((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] > minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY))){
-            passTurn();
-            turnCount++;
+            turnPasser = true;
           }
           //This is for opening the inventory
           minButtonX = maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+85;
@@ -931,8 +927,7 @@ class GamePanel extends JPanel{
           if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)){
             if (itemMap[playerCurrentY][playerCurrentX] instanceof Item){
               itemPickup = true;
-              passTurn();
-              turnCount++;
+              turnPasser = true;
             }
           }
           reversePixelToArray(mouseListener.getMouseXy());
@@ -942,10 +937,9 @@ class GamePanel extends JPanel{
             }
           }
         }
+        findBlocked (playerCurrentX, playerCurrentY);
         if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
-          passTurn();
-          tiling = true;
-          turnCount++;
+          turnPasser = true;
         }
       }
       //User clicks zoom in and out buttons
@@ -959,6 +953,12 @@ class GamePanel extends JPanel{
         inventoryOpen = false;
         pauseState =false;
       }
+    }
+    if (turnPasser){
+      turnPasser = false;
+      tiling = true;
+      passTurn();
+      turnCount++;
     }
   }
 }
