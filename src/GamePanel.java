@@ -21,7 +21,7 @@ class GamePanel extends JPanel{
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
   private boolean movementRestriction;
-    
+  
   //Images
   private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage;
   private final double Y_TO_X = 90.0/75.0;
@@ -73,6 +73,7 @@ class GamePanel extends JPanel{
   private double [] pathfinderDistance = new double [5];
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
+  private boolean acceptableSpawn = false;
   
   // Fire control
   private int[] fireTarget;
@@ -212,33 +213,33 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
     ///Draw in all the button click shading
     if (!(inventoryOpen)){
-    if (mouseListener.getAlternateButton()){
-      if (!(pauseState)){
-        if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
-          g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
-        }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
-          g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
-        }
-        ///Shade in the buttons that are pressed when pausing
-        minButtonX = maxX-142;
-        maxButtonX= maxX-22;
-        minButtonY = maxY-120;
-        maxButtonY = maxY-28;
-        if ((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28)){
-          g.setColor(new Color(0, 0, 0, 100)); 
-          g.fillRect(maxX-142, maxY-120, 122, 93);
-        }
-        //Shade buttons that are pressed when picking up
-        minButtonX = maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+220;
-        maxButtonX= (int)(BOT_HEIGHT*INVENTORY_MOD)-240+maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+220;
-        minButtonY = maxY-(int)(BOT_HEIGHT)+23;
-        maxButtonY = maxY-(int)(BOT_HEIGHT)+23+(int)(BOT_HEIGHT/2.0)-30;
-        if ((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)){
-          g.setColor(new Color(0, 0, 0, 100)); 
-          g.fillRect(minButtonX, minButtonY, maxButtonX-minButtonX, maxButtonY-minButtonY);
-        }
-      } 
-    }
+      if (mouseListener.getAlternateButton()){
+        if (!(pauseState)){
+          if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
+            g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+          }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
+            g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
+          }
+          ///Shade in the buttons that are pressed when pausing
+          minButtonX = maxX-142;
+          maxButtonX= maxX-22;
+          minButtonY = maxY-120;
+          maxButtonY = maxY-28;
+          if ((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxX-22)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-28)){
+            g.setColor(new Color(0, 0, 0, 100)); 
+            g.fillRect(maxX-142, maxY-120, 122, 93);
+          }
+          //Shade buttons that are pressed when picking up
+          minButtonX = maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+220;
+          maxButtonX= (int)(BOT_HEIGHT*INVENTORY_MOD)-240+maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+220;
+          minButtonY = maxY-(int)(BOT_HEIGHT)+23;
+          maxButtonY = maxY-(int)(BOT_HEIGHT)+23+(int)(BOT_HEIGHT/2.0)-30;
+          if ((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)){
+            g.setColor(new Color(0, 0, 0, 100)); 
+            g.fillRect(minButtonX, minButtonY, maxButtonX-minButtonX, maxButtonY-minButtonY);
+          }
+        } 
+      }
     }
   }
   public void determineTiling(){
@@ -695,17 +696,28 @@ class GamePanel extends JPanel{
     this.newFloor = newFloor;
   }
   public void passTurn (){
+    for (int i =0;i<entityMap.length;i++){
+      for(int j =0;j<entityMap[0].length;j++){
+        if (entityMap[i][j] instanceof Enemy){
+          entityMap[i][j].setTiling (4);
+        }
+      }
+    }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
     if (((int)(Math.random()*100)<100)&&(mobCount<MOB_CAP)){
       //Resets the spawn
-      spawnX = 0;
-      spawnY = 0;
-      while ((!(entityMap[spawnY][spawnX] instanceof Entity))&&(!(map[spawnY][spawnX] instanceof FloorTile))){
+      while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
-        spawnY =(int)(Math.random()*entityMap.length);        
-        //Cannot spawn 20 blocks in radius beside the character
+        spawnY =(int)(Math.random()*entityMap.length);      
+        acceptableSpawn = true;
+        if ((entityMap[spawnY][spawnX] instanceof Entity)||(!(map[spawnY][spawnX] instanceof FloorTile))||((playerCurrentX<spawnX+10)&&(playerCurrentX>spawnX-10)&&(playerCurrentY<spawnY+10)&&(playerCurrentY>spawnY-10))){
+          acceptableSpawn = false;
+        }
       }
+      acceptableSpawn = false;
+      
+      //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
       entityMap[spawnY][spawnX] = new Enemy (100,100,1,1,0,Color.MAGENTA, false);
     }
