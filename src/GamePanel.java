@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 
 class GamePanel extends JPanel{
   //Debug
@@ -78,7 +80,7 @@ class GamePanel extends JPanel{
   // Fire control
   private int[] fireTarget;
   private FireController playerFireController;
-  private boolean collided = false;
+  private boolean collided = true;
   private int translateX = 0;
   private int translateY = 0;
   
@@ -176,8 +178,7 @@ class GamePanel extends JPanel{
       System.out.println("You suck!");    
     }
   }
-  
-  
+    
   public void refresh(){
     this.repaint();
   }
@@ -493,28 +494,34 @@ class GamePanel extends JPanel{
   }
   
   public void drawBullets(Graphics g, FireController playerFireController){
-    g.setColor(Color.RED);
     playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
     double shootAngle = playerFireController.returnAngle();
-    //debugMessage = Double.toString(Math.toDegrees(playerFireController.returnAngle()));
-    if(!mouseListener.getReleased()){ //If clicked
+    translateX += Math.cos(shootAngle)*10;
+    translateY += Math.sin(shootAngle)*10;
+    debugMessage = Double.toString(Math.toDegrees(shootAngle));
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(5));
+    g.setColor(Color.RED);
+    if(!mouseListener.getReleased()){
       if(collided){
         collided = false;
         translateX = 0;
         translateY = 0;
       }
     }
-    if(!collided){
-      g.drawLine(maxX/2 + translateX, maxY/2 - translateY, maxX/2 + translateX + (int)(Math.cos(shootAngle)*25), maxY/2 - translateY - (int)(Math.sin(shootAngle)*25));
-      translateX += Math.cos(shootAngle)*10;
-      translateY += Math.sin(shootAngle)*10;
-      if((maxY/2 + translateY)/100 < map.length && (maxY/2 + translateY)/100 >= 0 && (maxX/2 + translateX)/100 < map[0].length && (maxX/2 + translateX)/100 >= 0){
-        if(map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof WallTile || map[(maxY/2 + translateY)/100][(maxX/2 + translateX)/100] instanceof DoorTile){
-          collided = true;
-        }
+    int startX = maxX/2 + translateX;
+    int startY = maxY/2- translateY;
+    int endX = startX + (int)(Math.cos(shootAngle)*20);
+    int endY = startY - (int)(Math.sin(shootAngle)*20);
+    int bulletY = playerCurrentY - (maxY/2 - endY)/100;
+    int bulletX = playerCurrentX +(endX-maxX/2)/100;
+    if (!collided){
+      g.drawLine(startX, startY, endX, endY);   
+      if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
+        collided = true;
       }
     }
-    //System.out.println(shootAngle);
+    //System.out.println();
   }
   
   public void drawBars(Graphics g){
