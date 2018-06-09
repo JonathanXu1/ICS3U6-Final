@@ -1,3 +1,4 @@
+//Fix inventory so that it will close
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -59,6 +60,7 @@ class GamePanel extends JPanel{
   private int playerCurrentX, playerCurrentY;
   private boolean [] blocked = new boolean [4];
   private int [] xyDirection = new int [2];
+  private boolean alternateState;
   
   //Enemy control
   private Entity [][] entityMap;
@@ -100,6 +102,7 @@ class GamePanel extends JPanel{
   private int weaponCap;
   private int armorCap;
   private int itemRarity;
+
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
@@ -148,6 +151,9 @@ class GamePanel extends JPanel{
     checkKilled();
     
     if (!gameOver) {
+      if (!(mouseListener.getPressed())){
+        alternateState = true;
+      }
       //Draw map (background)
       drawMap(g);
       updateListeners();
@@ -229,7 +235,7 @@ class GamePanel extends JPanel{
     g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
     ///Draw in all the button click shading
     if (!(inventoryOpen)){
-      if (mouseListener.getAlternateButton()){
+      if (mouseListener.getPressed()){
         if (!(pauseState)){
           if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)){
             g.drawImage(leftClickedPlus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
@@ -503,7 +509,7 @@ class GamePanel extends JPanel{
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
-    if(!mouseListener.getReleased()){
+    if(!mouseListener.getPressed()){
       if(collided){
         collided = false;
         translateX = 0;
@@ -517,8 +523,10 @@ class GamePanel extends JPanel{
     int bulletY = playerCurrentY - (maxY/2 - endY)/100;
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
     if (!collided){
-      g.drawLine(startX, startY, endX, endY);   
-      if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
+      g.drawLine(startX, startY, endX, endY);
+      if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
+        collided = true;
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
       }
     }
@@ -642,8 +650,8 @@ class GamePanel extends JPanel{
           //Nothing is selected, looking at each one to swap something
           if (!(itemSelected)){
             if  ((inventory.getItem(j,i) instanceof Item)){
-              if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getReleased())){
-                mouseListener.setReleased(false);
+              if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+                alternateState = false;
                 inventory.setSelected(j,i, true);
                 selectedItemPosition[0]=j;
                 selectedItemPosition[1]=i;
@@ -654,8 +662,8 @@ class GamePanel extends JPanel{
           //The item can be swapped with any space
           if (itemSelected){
             inventory.writeStats(g, selectedItemPosition[0],selectedItemPosition[1],maxX/2-385,maxY/2+110);
-            if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getReleased())){
-              mouseListener.setReleased(false);
+            if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+              alternateState = false;
               inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
               itemSelected = false;
               if (((j==selectedItemPosition[0])&&(i==selectedItemPosition[1]))){
@@ -673,8 +681,8 @@ class GamePanel extends JPanel{
               }else{
                 inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
               }
-            }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getReleased())){
-              mouseListener.setReleased(false);
+            }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
+              alternateState = false;
               itemSelected = false;
               //Create an ERROR sound effect!
               if (!(itemMap[playerCurrentY][playerCurrentX]instanceof Item)){
@@ -964,22 +972,21 @@ class GamePanel extends JPanel{
   }
   public void updateListeners(){
     mouseXy = mouseListener.getMouseXy();
-    mouseReleased = mouseListener.getReleased();
     //If the game is not paused
     if (!(inventoryOpen)){
       //Outside of tiling, as it can be used at any time
-      if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getReleased())&&(minimapFactor > 20)){ //Clicked on top button
-        mouseListener.setReleased (false);
+      if((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-240)&&(mouseListener.getMouseXy()[1] < maxY-130)&&(mouseListener.getPressed())&&(alternateState)&&(minimapFactor > 20)){ //Clicked on top button
+        alternateState = false;
         minimapFactor -= 10;
-      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getReleased())&&(minimapFactor < 100)){ //Clicked on bottom button
-        mouseListener.setReleased (false);
+      }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)&&(mouseListener.getPressed())&&(alternateState)&&(minimapFactor < 100)){ //Clicked on bottom button
+        alternateState = false;
         minimapFactor += 10;
       }
       //Wait a turn button
       if (!(tiling)){
         keyListener.setAllDirection();
-        if (mouseListener.getReleased()){
-          mouseListener.setReleased (false);
+        if (mouseListener.getPressed()&&(alternateState)){
+          alternateState = false;
           //This is for waiting a turn
           minButtonX = maxX-142;
           maxButtonX= maxX-22;
@@ -1029,9 +1036,9 @@ class GamePanel extends JPanel{
       maxButtonX= (int)(BOT_HEIGHT*INVENTORY_MOD)-240+maxX-(int)(BOT_HEIGHT*INVENTORY_MOD)+85;
       minButtonY = maxY-(int)(BOT_HEIGHT)+20;
       maxButtonY = maxY-(int)(BOT_HEIGHT)+20+(int)(BOT_HEIGHT/2.0)-30;
-      if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(mouseListener.getReleased())&&(inventoryOpen)){
-        mouseListener.setReleased (false);
+      if ((mouseListener.getMouseXy()[0] >minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] < maxButtonY)&&(alternateState)&&(mouseListener.getPressed())&&(inventoryOpen)){
         inventoryOpen = false;
+        alternateState = false;
         pauseState =false;
       }
     }
