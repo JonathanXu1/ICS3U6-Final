@@ -1,8 +1,5 @@
 //FIx view range (circular)
-//Enemies must strike second
-//Show enemy health above the enemy
-//Click a crystal again to consume
-//Fix the ability to swap things into the slots
+//Add a grey box upon the equipping so that the sprite below is not seen
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -704,7 +701,22 @@ class GamePanel extends JPanel{
                   inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
                   itemSelected = false;
                 }else{
-                  inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
+                  if (!(inventory.getItem(j,i) instanceof Item)){
+                    inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
+                  }else{
+                    if ((selectedItemPosition[0]==0)&&(selectedItemPosition[1]==3)&&(!(inventory.getItem(j,i) instanceof RangedWeapon))){
+                      inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                      itemSelected = false;
+                    }else if ((selectedItemPosition[0]==1)&&(selectedItemPosition[1]==3)&&(!(inventory.getItem(j,i) instanceof Armor))){
+                      inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                      itemSelected = false;
+                    }else if ((selectedItemPosition[0]==2)&&(selectedItemPosition[1]==3)&&(!(inventory.getItem(j,i) instanceof MeleeWeapon))){
+                      inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                      itemSelected = false;
+                    }else{
+                      inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
+                    }
+                  }
                 }
               }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
                 alternateState = false;
