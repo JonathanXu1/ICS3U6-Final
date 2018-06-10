@@ -8,7 +8,7 @@ class PowerDrive extends Drive{
     this.setName("Power Drive");
   }
   public Item upgrade (Item chosenEquip){
-   ( (Equipment)(chosenEquip)).setDurability(100);
+    ((Equipment)(chosenEquip)).setDurability(((Equipment)(chosenEquip)).getDurabilityCap());
     if (chosenEquip instanceof Armor){
       ((Armor)(chosenEquip)).setDefense(((Armor)(chosenEquip)).getDefense()+5);
     }else if (chosenEquip instanceof Weapon){

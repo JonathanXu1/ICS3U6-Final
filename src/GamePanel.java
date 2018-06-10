@@ -76,7 +76,7 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   private boolean acceptableSpawn = false;
- 
+  
   // Fire control
   private int[] fireTarget;
   private FireController playerFireController;
@@ -101,7 +101,9 @@ class GamePanel extends JPanel{
   private boolean turnPasser = false;
   private int weaponCap;
   private int armorCap;
+  private int driveCap;
   private int itemRarity;
+  private int driveNumber;
   private boolean pendingUpgrade;
   private int driveArrayX;
   private int driveArrayY;     
@@ -156,38 +158,40 @@ class GamePanel extends JPanel{
       if (!(mouseListener.getPressed())){
         alternateState = true;
       }
+      //Checks broken gear
+      checkBroken();
       //Draw map (background)
-      drawMap(g);
-      updateListeners();
-      determineTiling(); 
-      //Checks for which entities are killed again so that dead entities cannot kill the player
-      checkKilled();
-      //Draws the items
-      drawItems (g);
-      //Draws bullet sprites
-      drawBullets (g, playerFireController);
-      //Draws the entities
-      drawAllEntity (g);
-      //Draw the health and exp
-      drawBars(g);
-      //Draw the game components
-      drawGameComponents(g);
-      //Draws the minimap
-      drawMinimap(g);
-      //Draw inventory
-      drawInventory(g);
-      //Draw the debugPanel
-      if (keyListener.getDebugState()){
-        drawDebugPanel(g);
-        g.setColor(Color.RED);
-        g.fillRect(maxX/2, maxY/2, 2, 2);
-      }
-      this.setVisible(true);
+        drawMap(g);
+        updateListeners();
+        determineTiling(); 
+        //Checks for which entities are killed again so that dead entities cannot kill the player
+        checkKilled();
+        //Draws the items
+        drawItems (g);
+        //Draws bullet sprites
+        drawBullets (g, playerFireController);
+        //Draws the entities
+        drawAllEntity (g);
+        //Draw the health and exp
+        drawBars(g);
+        //Draw the game components
+        drawGameComponents(g);
+        //Draws the minimap
+        drawMinimap(g);
+        //Draw inventory
+        drawInventory(g);
+        //Draw the debugPanel
+        if (keyListener.getDebugState()){
+          drawDebugPanel(g);
+          g.setColor(Color.RED);
+          g.fillRect(maxX/2, maxY/2, 2, 2);
+        }
+        this.setVisible(true);
     } else {
       System.out.println("You suck!");    
     }
   }
-    
+  
   public void refresh(){
     this.repaint();
   }
@@ -763,7 +767,7 @@ class GamePanel extends JPanel{
     this.playerStartingY =playerStartingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
-    entityMap[playerStartingY][playerStartingX]= new Character(100,100,1,1,0,Color.BLUE);
+    entityMap[playerStartingY][playerStartingX]= new Character(100,100,0,1,false,false,false,Color.BLUE);
     //Creates all the items on the floor
     spawnItems();
   }
@@ -809,8 +813,22 @@ class GamePanel extends JPanel{
       
       //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
-      entityMap[spawnY][spawnX] = new Enemy (20,20,1,1,0,Color.MAGENTA, false);
+      //Defense and health will both increase as the player progresses
+      entityMap[spawnY][spawnX] = new Enemy (20,20,10,1,false,false,false,Color.MAGENTA, false);
     }
+    //Damages whatever is burned
+    for (int i =0;i<entityMap.length;i++){
+      for(int j =0;j<entityMap[0].length;j++){
+        if (entityMap[i][j] instanceof Entity){
+          if (entityMap[i][j].getFlame()){
+            //Deals 5 damage, ignores defense
+            entityMap[i][j].setHealth(entityMap[i][j].getHealth()-5);
+          }
+        }
+      }
+    }
+    //Kills whatever dies from burning
+    checkKilled();
     findBlocked (playerCurrentX, playerCurrentY);
     //Set all array postion
     for (int i =0;i<entityMap.length;i++){
@@ -861,8 +879,11 @@ class GamePanel extends JPanel{
             //Finding the blocked for entity
             findBlocked (j,i);
             if (entityMap[i][j] instanceof Enemy){
-              if ((blocked[0])&&(blocked[1])&&(blocked[2])&&(blocked[3])){
-                directionRand = 4;
+              if (((blocked[0])&&(blocked[1])&&(blocked[2])&&(blocked[3]))||(((entityMap[i][j].getLightning())))){
+                entityMap[i][j].setTiling (4);
+                entityMap[i][j].setMoved(true);
+                entityArrayXMod = 0;
+                entityArrayYMod = 0;
               }else{
                 if (((Enemy)(entityMap[i][j])).getEnraged()){
                   for (int k=0;k<4;k++){
@@ -900,7 +921,6 @@ class GamePanel extends JPanel{
                     }
                   }
                   directionRand = closestDirection;
-                  //THE CODE BELOW AY BE UNECESSARY
                   if (((int)(Math.abs(playerCurrentX-j)+(int)(Math.abs(playerCurrentY-i))))==1){
                     directionRand=4;
                   }
@@ -1057,7 +1077,7 @@ class GamePanel extends JPanel{
             }
           }
           ///Melee attack
-          playerMeleeAttack();
+          playerAttack();
         }
         findBlocked (playerCurrentX, playerCurrentY);
         if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
@@ -1092,8 +1112,9 @@ class GamePanel extends JPanel{
     inventory.setItem(1,3,new SpaceSuit (100));
     inventory.setItem(2,3,new Wrench (100));
     //First initialize a random number of weapons and armors to spawn across the map
-    weaponCap =7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
-    armorCap = 7- (int)(Math.sqrt((double)((int)(Math.random()*50))));
+    weaponCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    driveCap =((100-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //Resets the spawn
     spawnX = 0;
     spawnY = 0;
@@ -1116,50 +1137,104 @@ class GamePanel extends JPanel{
     }
     itemCount=0;
     //Creates one power drive
-    for (int i=0;i<20;i++){
+    while (itemCount<driveCap){
       do{
         spawnX =(int)(Math.random()*entityMap[0].length);
         spawnY =(int)(Math.random()*entityMap.length);
       }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
-      itemMap[spawnY][spawnX] = new PowerDrive();
+      itemCount++;
+      randomizeDrive(spawnX, spawnY);
     }
   }
   public void randomizeWeapon(int spawnX, int spawnY){
-    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    
+    itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
       itemMap[spawnY][spawnX] = new PlasmaRapier(100);
     }else if (itemRarity==4){
       itemMap[spawnY][spawnX] = new GammaHammer(100); 
     }else if (itemRarity==3){
       itemMap[spawnY][spawnX] = new KineticMace(100);
-    }else if (itemRarity==2){
+    }else{
       itemMap[spawnY][spawnX] = new EnergySword(100);
     }
   }
   public void randomizeArmor(int spawnX, int spawnY){
-    itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
+    itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
       itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
     }else if (itemRarity==4){
       itemMap[spawnY][spawnX] = new ProximityArmor(100); 
     }else if (itemRarity==3){
       itemMap[spawnY][spawnX] = new EnergySuit(100);
-    }else if (itemRarity==2){
+    }else{
       itemMap[spawnY][spawnX] = new AssaultVest(100);
     }
   }
-  public void playerMeleeAttack (){
+  public void randomizeDrive(int spawnX, int spawnY){
+    driveNumber =(int)(Math.random()*5);
+    if (driveNumber==0){
+      itemMap[spawnY][spawnX] = new FreezeDrive();
+    }else if (driveNumber==1){
+      itemMap[spawnY][spawnX] = new FlameDrive();
+    }else if (driveNumber==2){
+      itemMap[spawnY][spawnX] = new LightningDrive();
+    }else if (driveNumber==3){
+      itemMap[spawnY][spawnX] = new SteelDrive();
+    }else{
+      itemMap[spawnY][spawnX] = new PowerDrive();      
+    }
+  }
+  public void playerAttack (){
+    //Only one status effect at a time, but multiple drives can be used
     reversePixelToArray(mouseListener.getMouseXy());
     if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
       if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
         if (inventory.getItem(2,3) instanceof MeleeWeapon){
-          entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-((Weapon)(inventory.getItem(2,3))).getDamage());
+          ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
+            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getFreeze())){
+              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setFreeze(true);
+              //Armor becomes weaker
+              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setArmor(0);
+            }
+          }
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
+            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getFlame())){
+              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setFlame(true);
+              //Draw a little icon above the heads of the enemies with the status
+            }
+          }
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
+            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getLightning())){
+              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setLightning(true);
+            }
+          }
           //Checks if the entity has been killed, so that it will not be able to attack afterwards
           if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()<=0){
             entityMap[tileSelectedArray[1]][tileSelectedArray[0]] = null;
           }
+          //Defense will block up to %80 of damage
+          int damage;
+          if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+            damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
+          }else{
+            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getArmor());     
+          }
+          entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-damage);
         }
         turnPasser = true;
+      }
+    }
+  }
+  public void checkBroken(){
+    for (int i=0;i<4;i++){
+      for (int j=0;j<6;j++){
+        if (inventory.getItem(j,i) instanceof Equipment){
+          if (((Equipment)(inventory.getItem(j,i))).getDurability()<=0){
+            inventory.setItem(j,i,null);
+          }
+        }
       }
     }
   }

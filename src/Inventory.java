@@ -41,7 +41,7 @@ class Inventory{
       lineSkip = lineSkip+12;
     }
     if (inventory[positionY][positionX] instanceof Equipment){
-      g.drawString("Durability: "+((Equipment)(inventory[positionY][positionX])).getDurability()+"/100",xPixelPos,yPixelPos+lineSkip);
+      g.drawString("Durability: "+((Equipment)(inventory[positionY][positionX])).getDurability()+"/"+((Equipment)(inventory[positionY][positionX])).getDurabilityCap(),xPixelPos,yPixelPos+lineSkip);
       lineSkip = lineSkip+12;
       if (inventory[positionY][positionX] instanceof Armor){
         g.drawString("Defense: "+((Armor)(inventory[positionY][positionX])).getDefense()+"",xPixelPos,yPixelPos+lineSkip);
@@ -54,6 +54,21 @@ class Inventory{
     if ((inventory[positionY][positionX]) instanceof Consumable){
       g.drawString("Click the item again to use",xPixelPos,yPixelPos+lineSkip);
       lineSkip = lineSkip+12;
+    }
+    lineSkip=0;
+    if ((inventory[positionY][positionX]) instanceof Weapon){
+      if (((Weapon)(inventory[positionY][positionX])).getFlameChance()!=0){
+        g.drawString("Burn chance: "+((Weapon)(inventory[positionY][positionX])).getFlameChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Weapon)(inventory[positionY][positionX])).getFreezeChance()!=0){
+        g.drawString("Freeze chance: "+((Weapon)(inventory[positionY][positionX])).getFreezeChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Weapon)(inventory[positionY][positionX])).getLightningChance()!=0){
+        g.drawString("Paralyze chance: "+((Weapon)(inventory[positionY][positionX])).getLightningChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
     }
   }
   public void writePending(Graphics g, int positionX,int positionY,int xPixelPos,int yPixelPos){
