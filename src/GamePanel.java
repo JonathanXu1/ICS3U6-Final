@@ -161,6 +161,8 @@ class GamePanel extends JPanel{
       drawMap(g);
       updateListeners();
       determineTiling(); 
+      //Checks for which entities are killed again so that dead entities cannot kill the player
+      checkKilled();
       //Draws the items
       drawItems (g);
       //Draws the entities
@@ -1024,16 +1026,8 @@ class GamePanel extends JPanel{
               turnPasser = true;
             }
           }
-          reversePixelToArray(mouseListener.getMouseXy());
-          ///Attack enemies (2 hit kill)
-          if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
-            if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
-              if (inventory.getItem(2,3) instanceof MeleeWeapon){
-                entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-((Weapon)(inventory.getItem(2,3))).getDamage());
-              }
-              turnPasser = true;
-            }
-          }
+          ///Melee attack
+          playerMeleeAttack();
         }
         findBlocked (playerCurrentX, playerCurrentY);
         if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
@@ -1120,6 +1114,21 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new EnergySuit(100);
     }else if (itemRarity==2){
       itemMap[spawnY][spawnX] = new AssaultVest(100);
+    }
+  }
+  public void playerMeleeAttack (){
+    reversePixelToArray(mouseListener.getMouseXy());
+    if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
+      if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
+        if (inventory.getItem(2,3) instanceof MeleeWeapon){
+          entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-((Weapon)(inventory.getItem(2,3))).getDamage());
+          //Checks if the entity has been killed, so that it will not be able to attack afterwards
+          if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()<=0){
+            entityMap[tileSelectedArray[1]][tileSelectedArray[0]] = null;
+          }
+        }
+        turnPasser = true;
+      }
     }
   }
 }
