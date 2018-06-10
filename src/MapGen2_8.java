@@ -144,7 +144,7 @@ class MapGen2_8{
       int randRReal = randR*6;
       
       if (!capQPlaced) {        
-        for (int i = -3; i < 4; i++){
+        for (int i = -2; i < 3; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
@@ -152,16 +152,16 @@ class MapGen2_8{
         
         capQPlaced = true;     
         
-        map[randDReal][randRReal] = 10;   
+        map[randDReal][randRReal] = 600;   
         
-      } else if (randomRoll(200)) {
+      } else if (randomRoll(150)) {
         for (int i = -3; i < 4; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 20;        
+        map[randDReal][randRReal] = 100;        
         
       } else if (randomRoll(100)) {        
         for (int i = -4; i < 5; i++){
@@ -170,37 +170,37 @@ class MapGen2_8{
           }
         }
         
-        map[randDReal][randRReal] = 30;
+        map[randDReal][randRReal] = 200;
         
         
-      } else if (randomRoll(100)) {        
+      } else if (randomRoll(0)) {        
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 40;
+        map[randDReal][randRReal] = 300;
         
         
-      } else if (randomRoll(100)) {        
+      } else if (randomRoll(0)) {        
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 50;
+        map[randDReal][randRReal] = 400;
         
         
-      } else if (randomRoll(100)) {        
+      } else if (randomRoll(0)) {        
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
         
-        map[randDReal][randRReal] = 60;
+        map[randDReal][randRReal] = 500;
         
         
       } else {
@@ -451,7 +451,7 @@ class MapGen2_8{
       
       if (map[randD][randR] == 3) {
         if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
-          map[randD][randR] = 6;
+          map[randD][randR] = 5;
           wallChests++;
         }
       }
@@ -461,29 +461,60 @@ class MapGen2_8{
   public void furnishRooms() {    
     for (int i = 1; i < (map.length-3)/6; i++) {
       for (int j = 1; j < (map[0].length - 3)/6; j++) {
-        if (map[i*6][j*6] == 5) {
+        
+        if (map[i*6][j*6] == 100) {
           
           for (int i2 = -3; i2 < 4; i2++) {
             for (int j2 = -3; j2 < 4; j2++) {
-              map[i*6 + i2][j*6 + j2] = -6;
+              map[i*6 + i2][j*6 + j2] = -101;
             }
           }
           
-          map[i*6][j*6] = 5;
+          map[i*6][j*6] = 101;
           
         }
         
-        if (map[i*6][j*6] == 8) {
+        else if (map[i*6][j*6] == 200) {
+          int[][] template = 
+          {
+            {-201,-201,-201,-201,-201,-201,-201,-201,-201},
+            {-201,-201,-201,-201,-201,-201,-201,-201,-201},
+            {-201,-201,-207,-202,-202,-202,-204,-201,-201},
+            {-201,-201,-203, 208, 208, 208,-203,-201,-201},
+            {-201,-201,-203, 208, 209, 208,-203,-201,-201},
+            {-201,-201,-203, 208, 208, 208,-203,-201,-201},
+            {-201,-201,-206,-202,-202,-202,-205,-201,-201},
+            {-201,-201,-201,-201,-201,-201,-201,-201,-201},
+            {-201,-201,-201,-201,-201,-201,-201,-201,-201},
+          };
           
-          map[i*6][j*6] = -1;
-          /*
-           RecursiveCancer tagger = new RecursiveCancer(map);
-           
-           tagger.spreadCancer3(i*6,j*6,99,-7,0);
-           
-           map = tagger.returnCancer();     
-           */
+          
+          for (int i2 = -4; i2 < 5; i2++) {
+            for (int j2 = -4; j2 < 5; j2++) {
+              map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 4];
+            }
+          } 
+          
+          if (map[i*6][j*6 + 5] == -2) {
+            map[i*6][j*6 + 4] = -202;
+            map[i*6][j*6 + 3] = -202;
+          }
+          if (map[i*6][j*6 - 5] == -2) {
+            map[i*6][j*6 - 4] = -202;
+            map[i*6][j*6 - 3] = -202;
+          }
+          if (map[i*6 + 5][j*6] == -2) {
+            map[i*6 + 4][j*6] = -203;
+            map[i*6 + 3][j*6] = -203;
+          }
+          if (map[i*6 - 5][j*6] == -2) {
+            map[i*6 - 4][j*6] = -203;
+            map[i*6 - 3][j*6] = -203;
+          }
+          
         }
+        
+        
       }
     }
   }
@@ -498,7 +529,7 @@ class MapGen2_8{
       
       if (map[randD][randR] == -1) {
         if (adjMatrixSquare(map,-1,randD,randR) == 9) {
-          map[randD][randR] = 7;
+          map[randD][randR] = 6;
           numDebris++;
         }
       }     
@@ -579,34 +610,52 @@ class MapGen2_8{
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
-        if (result[i][j] == 7) {
+        if (result[i][j] == 208) { // reactor stabilizers
+          resultProc[i][j] = 'z';
+        } else if (result[i][j] == 209) { // reactor core
+          resultProc[i][j] = 'r';
+        } else if (result[i][j] == 101) { // chest room chest
+          resultProc[i][j] = 'c';
+        } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
-        } else if (result[i][j] == 6) {
+        } else if (result[i][j] == 5) { // wall safe
           resultProc[i][j] = 'S';
-        } else if (result[i][j] == 5) {
+        } else if (result[i][j] == 4) { // chest
           resultProc[i][j] = 'C';
-        } else if (result[i][j] == 3) {
+        } else if (result[i][j] == 3) { // room wall
           resultProc[i][j] = '|';
-        } else if (result[i][j] == 2) {
+        } else if (result[i][j] == 2) { // hallway wall
           resultProc[i][j] = '~';
-        } else if (result[i][j] == 1) {
+        } else if (result[i][j] == 1) { // wall
           resultProc[i][j] = '-';
-        } else if (result[i][j] == 0) {
+        } else if (result[i][j] == 0) { // hallway
           resultProc[i][j] = 'X';        
-        } else if (result[i][j] == -2) {
+        } else if (result[i][j] == -2) { // door
           resultProc[i][j] = 'D';
-        } else if (result[i][j] == -1) {
+        } else if (result[i][j] == -1) { // room tile
           resultProc[i][j] = 'R';
-        } else if (result[i][j] == -3) {
+        } else if (result[i][j] == -3) { // spawn
           resultProc[i][j] = '@';
-        } else if (result[i][j] == -4) {
+        } else if (result[i][j] == -4) { // stair
           resultProc[i][j] = '#';
-        } else if (result[i][j] == -5) {
+        } else if (result[i][j] == -5) { // airlock
           resultProc[i][j] = 'A';
-        } else if (result[i][j] == -6) {
+        } else if (result[i][j] == -101) { // chest room floor
           resultProc[i][j] = '=';
-        } else if (result[i][j] == -7) {
+        } else if (result[i][j] == -201) { // chasm
           resultProc[i][j] = '%';
+        } else if (result[i][j] == -202) { // horizontal walkway
+          resultProc[i][j] = 'h';
+        } else if (result[i][j] == -203) { // veritcal walkway
+          resultProc[i][j] = 'v';
+        } else if (result[i][j] == -204) { // corner 1
+          resultProc[i][j] = 'a';
+        } else if (result[i][j] == -205) { // corner 2
+          resultProc[i][j] = 'b';
+        } else if (result[i][j] == -206) { // corner 3
+          resultProc[i][j] = 'c';
+        } else if (result[i][j] == -207) { // corner 4
+          resultProc[i][j] = 'd';
         } else {
           if ((i<=5)||(i>=result.length-5)||(j<=5)||(j>=result[0].length-5)){
             resultProc[i][j] = '-';
