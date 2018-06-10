@@ -1,5 +1,4 @@
 //FIx view range (circular)
-//Add a grey box upon the equipping so that the sprite below is not seen
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -231,6 +230,10 @@ class GamePanel extends JPanel{
       if (inventory.getItem(j,3) instanceof Item){
         xInvPixel =(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))+((BOT_HEIGHT/2.0*Y_TO_X_HOT)*12.0/778.0)+(j*BOT_HEIGHT/2.0*Y_TO_X_HOT*128.0/778.0));
         yInvPixel = (int)(maxY-(int)(BOT_HEIGHT/2.0)+((int)(BOT_HEIGHT/2.0)*11.0/135.0))-1;
+        g.setColor(new Color(54,53,53));
+        if ((j==0)||(j==1)||(j==2)){
+          g.fillRect (xInvPixel, yInvPixel,  (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0));
+        }
         inventory.drawSelectedItem(g,j,3, xInvPixel, yInvPixel, (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), this);
       }
     }
@@ -734,6 +737,10 @@ class GamePanel extends JPanel{
             }
           }
           if (inventory.getItem(j,i) instanceof Item){
+            g.setColor(new Color(54,53,53));
+            if (((j==0)&&(i==3))||((j==1)&&(i==3))||((j==2)&&(i==3))){
+              g.fillRect (xInvPixel, yInvPixel, 113, 113);
+            }
             inventory.drawSelectedItem(g,j,i, xInvPixel, yInvPixel, 113, 113, this);
           }
         }
