@@ -165,10 +165,10 @@ class GamePanel extends JPanel{
       checkKilled();
       //Draws the items
       drawItems (g);
-      //Draws the entities
-      drawAllEntity (g);
       //Draws bullet sprites
       drawBullets (g, playerFireController);
+      //Draws the entities
+      drawAllEntity (g);
       //Draw the health and exp
       drawBars(g);
       //Draw the game components
@@ -342,24 +342,22 @@ class GamePanel extends JPanel{
   }
   
   public void drawFog(int x, int y, int count){
-    if (map[y][x] instanceof Tile){
-      map[y][x].setViewed();
-      map[y][x].setFocus(true);
-      if (entityMap[y][x] instanceof Enemy){
-        ((Enemy)(entityMap[y][x])).setEnraged(true);
-      }
+    map[y][x].setViewed();
+    map[y][x].setFocus(true);
+    if (entityMap[y][x] instanceof Enemy){
+      ((Enemy)(entityMap[y][x])).setEnraged(true);
     }
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
           if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
             if(map[y+i][x+j] instanceof Tile){
-              if((map[y][x].getMinimapColor() == Color.GREEN) || (map[y][x].getMinimapColor() == Color.YELLOW) && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight, in room tile
+              if((map[y][x] instanceof FloorTile) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
-              } else if(map[y][x].getMinimapColor() == Color.WHITE){ //In hall/airlock tile
+              } else if(map[y][x] instanceof HallwayTile){ //In hall tile
                 map[y+i][x+j].setViewed();
                 map[y+i][x+j].setFocus(true);
-                if((map[y+i][x+j].getMinimapColor() == Color.WHITE)){
+                if((map[y+i][x+j] instanceof HallwayTile)){
                   if((i==-1) && (j==0)){ //North
                     drawFog(x+j, y+i, count, 1);
                   }else if((i==1) && (j==0)){ //South
@@ -370,12 +368,10 @@ class GamePanel extends JPanel{
                     drawFog(x+j, y+i, count, 4);
                   }
                 }
-              } else if(map[y][x].getMinimapColor() == Color.CYAN && map[y+i][x+j].getMinimapColor() != Color.WHITE){ //Avoids corner sight, in chest room tile
-                drawFog(x+j, y+i, count+1);
-              } else if((map[y][x] instanceof DoorTile) && (map[playerCurrentY][playerCurrentX] instanceof DoorTile) && !(map[y+i][x+j] instanceof DoorTile)){ //In door tile
+              }else if((map[y][x] instanceof DoorTile) && (map[playerCurrentY][playerCurrentX] instanceof DoorTile)){ //In door tile
                 map[y+i][x+j].setViewed();
                 map[y+i][x+j].setFocus(true);
-                if((map[y+i][x+j].getMinimapColor() == Color.WHITE) || (map[y+i][x+j].getMinimapColor() == Color.ORANGE)){
+                if((map[y+i][x+j] instanceof HallwayTile) || (map[y+i][x+j].getMinimapColor() == Color.ORANGE)){
                   if((i==-1) && (j==0)){ //North
                     drawFog(x+j, y+i, count+1, 1);
                   }else if((i==1) && (j==0)){ //South
@@ -397,31 +393,26 @@ class GamePanel extends JPanel{
     }
   }
   public void drawFog(int x, int y, int count, int direction){
-    if((y>=0) && (y<map.length) && (x>=0) && (x<map[0].length)){
-      if (map[y][x] instanceof Tile){
-        map[y][x].setViewed();
-        map[y][x].setFocus(true);
-      }
-      if((count <= 2) && (map[y][x].getMinimapColor() == Color.WHITE)){
-        for(int i = -1; i <= 1; i ++){
-          for(int j = -1; j <= 1; j++){
-            if((y+i>=0) && (y+i<map.length) && (x+j>=0) && (x+j<map[0].length)){
-              if((map[y+i][x+j].getMinimapColor() != Color.WHITE) || ((Math.abs(i+j)==1) && (count <= 0))){
-                map[y+i][x+j].setViewed();
-                map[y+i][x+j].setFocus(true);
-              }
+    map[y][x].setViewed();
+    map[y][x].setFocus(true);
+    if((count <= 2) && (map[y][x] instanceof HallwayTile)){ //If current tile white
+      for(int i = -1; i <= 1; i ++){ //Draws surrounding walls
+        for(int j = -1; j <= 1; j++){
+          if((y+i>=0) && (y+i<map.length) && (x+j>=0) && (x+j<map[0].length)){
+            if(!(map[y+i][x+j] instanceof HallwayTile) || ((Math.abs(i+j)==1) && (count <= 0))){
+              drawFog(x+j, y+i, count+1, 0);
             }
           }
         }
-        if(direction == 1){
-          drawFog(x, y-1, count+1, 1);
-        } else if(direction == 2){
-          drawFog(x, y+1, count+1, 2);
-        } else if(direction == 3){
-          drawFog(x+1, y, count+1, 3);
-        } else if(direction == 4){
-          drawFog(x-1, y, count+1, 4);
-        }
+      }
+      if(direction == 1){
+        drawFog(x, y-1, count+1, 1);
+      } else if(direction == 2){
+        drawFog(x, y+1, count+1, 2);
+      } else if(direction == 3){
+        drawFog(x+1, y, count+1, 3);
+      } else if(direction == 4){
+        drawFog(x-1, y, count+1, 4);
       }
     }
   }
@@ -471,10 +462,9 @@ class GamePanel extends JPanel{
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
   public void drawItems(Graphics g){
-
     for (int i = 0;i<itemMap.length;i++){
       for (int j = 0;j<itemMap[0].length;j++){
-        if(itemMap[i][j] instanceof Item){
+        if(itemMap[i][j] instanceof Item && map[i][j].getFocus()){
           itemMap[i][j].drawItem(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this);
         }
       }
@@ -484,7 +474,7 @@ class GamePanel extends JPanel{
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
       for (int j = 0;j<entityMap[0].length;j++){
-        if(entityMap[i][j] instanceof Enemy){
+        if(entityMap[i][j] instanceof Enemy && map[i][j].getFocus()){
           //  System.out.println ("Enemy: "+i +" and " +j);
           if (entityMap[i][j].getTiling ()==0){
             entityMap[i][j].drawEntity(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod()), TILE_SIZE, TILE_SIZE, this);
@@ -513,7 +503,7 @@ class GamePanel extends JPanel{
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
-    if(!mouseListener.getPressed()){
+    if(mouseListener.getPressed()){
       if(collided){
         collided = false;
         translateX = 0;
