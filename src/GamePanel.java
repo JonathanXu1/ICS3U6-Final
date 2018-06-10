@@ -2,6 +2,7 @@
 //Enemies must strike second
 //Show enemy health above the enemy
 //Click a crystal again to consume
+//Fix the ability to swap things into the slots
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -105,7 +106,9 @@ class GamePanel extends JPanel{
   private int weaponCap;
   private int armorCap;
   private int itemRarity;
-
+  private boolean pendingUpgrade;
+  private int driveArrayX;
+  private int driveArrayY;     
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
@@ -547,7 +550,7 @@ class GamePanel extends JPanel{
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
         g.setColor (new Color (220,20,60));
-        if (entityMap[i][j] instanceof Enemy) {
+        if (entityMap[i][j] instanceof Enemy && map[i][j].getFocus()) {
           if (entityMap[i][j].getTiling ()==0){
             g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
@@ -654,51 +657,68 @@ class GamePanel extends JPanel{
             maxSelectY =maxY/2+277;
           }
           //Nothing is selected, looking at each one to swap something
-          if (!(itemSelected)){
-            if  ((inventory.getItem(j,i) instanceof Item)){
+          if (pendingUpgrade){
+            inventory.writePending(g, driveArrayX,driveArrayY,maxX/2-385,maxY/2+110);
+            if  ((inventory.getItem(j,i) instanceof Equipment)){
               if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
                 alternateState = false;
-                inventory.setSelected(j,i, true);
-                selectedItemPosition[0]=j;
-                selectedItemPosition[1]=i;
-                itemSelected = true;
+                pendingUpgrade = false;
+                inventory.setItem(j,i,(((Drive)(inventory.getItem(driveArrayX,driveArrayY))).upgrade(inventory.getItem(j,i))));
+                inventory.setItem(driveArrayX,driveArrayY, null);
               }
             }
-          }
-          //The item can be swapped with any space
-          if (itemSelected){
-            inventory.writeStats(g, selectedItemPosition[0],selectedItemPosition[1],maxX/2-385,maxY/2+110);
-            if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
-              alternateState = false;
-              inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-              itemSelected = false;
-              if (((j==selectedItemPosition[0])&&(i==selectedItemPosition[1]))){
-                //Nothing will occur, rewrite this section of code
-                //However, this statement must be first
-              }else if ((j==0)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof RangedWeapon))){
-                inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-                itemSelected = false;
-              }else if ((j==1)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Armor))){
-                inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-                itemSelected = false;
-              }else if ((j==2)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof MeleeWeapon))){
-                inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-                itemSelected = false;
-              }else{
-                inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
+          }else{
+            if (!(itemSelected)){
+              if  ((inventory.getItem(j,i) instanceof Item)){
+                if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+                  alternateState = false;
+                  inventory.setSelected(j,i, true);
+                  selectedItemPosition[0]=j;
+                  selectedItemPosition[1]=i;
+                  itemSelected = true;
+                }
               }
-            }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
-              alternateState = false;
-              itemSelected = false;
-              //Create an ERROR sound effect!
-              if (!(itemMap[playerCurrentY][playerCurrentX]instanceof Item)){
+            }
+            //The item can be swapped with any space
+            if (itemSelected){
+              inventory.writeStats(g, selectedItemPosition[0],selectedItemPosition[1],maxX/2-385,maxY/2+110);
+              if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
+                alternateState = false;
                 inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-                itemMap[playerCurrentY][playerCurrentX] =  inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]);
-                inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                inventoryOpen = false;
-                pauseState=false;
+                itemSelected = false;
+                if (((j==selectedItemPosition[0])&&(i==selectedItemPosition[1]))){
+                  if (inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Drive){
+                    inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                    itemSelected = false;
+                    pendingUpgrade = true;
+                    driveArrayX=j;
+                    driveArrayY=i;  
+                  }
+                }else if ((j==0)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof RangedWeapon))){
+                  inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                  itemSelected = false;
+                }else if ((j==1)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Armor))){
+                  inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                  itemSelected = false;
+                }else if ((j==2)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof MeleeWeapon))){
+                  inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                  itemSelected = false;
+                }else{
+                  inventory.swap(j,i,selectedItemPosition[0],selectedItemPosition[1]);
+                }
+              }else if ((!((mouseListener.getMouseXy()[0] >maxX/2-400)&&(mouseListener.getMouseXy()[0] <maxX/2+400)&&(mouseListener.getMouseXy()[1] >maxY/2-300)&&(mouseListener.getMouseXy()[1] <maxY/2+300)))&&(mouseListener.getPressed())&&(alternateState)){
+                alternateState = false;
+                itemSelected = false;
+                //Create an ERROR sound effect!
+                if (!(itemMap[playerCurrentY][playerCurrentX]instanceof Item)){
+                  inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                  itemMap[playerCurrentY][playerCurrentX] =  inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]);
+                  inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
+                  inventoryOpen = false;
+                  pauseState=false;
+                }
+                //No turn passes when dropping items, but turns will pass when picking them up
               }
-              //No turn passes when dropping items, but turns will pass when picking them up
             }
           }
           if (inventory.getItem(j,i) instanceof Item){
@@ -709,8 +729,9 @@ class GamePanel extends JPanel{
     }else{
       if (inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Item){
         inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
-        itemSelected = false;
       }
+      itemSelected = false;
+      pendingUpgrade = false;
     }
   }
   //Sets up the map so that setting the floor is easier as well
@@ -1076,11 +1097,13 @@ class GamePanel extends JPanel{
     }
     itemCount=0;
     //Creates one power drive
+    for (int i=0;i<20;i++){
       do{
         spawnX =(int)(Math.random()*entityMap[0].length);
         spawnY =(int)(Math.random()*entityMap.length);
       }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       itemMap[spawnY][spawnX] = new PowerDrive();
+    }
   }
   public void randomizeWeapon(int spawnX, int spawnY){
     itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));
