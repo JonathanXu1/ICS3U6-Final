@@ -8,6 +8,7 @@ class PlasmaRapier extends MeleeWeapon {
     super(dbty);
     this.setRarity(5);
     this.setDamage(25);   
+    this.setName("Plasma Rapier");
   }
   
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel) {

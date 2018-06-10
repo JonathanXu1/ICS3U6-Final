@@ -8,6 +8,7 @@ class KineticMace extends MeleeWeapon{
     super(dbty);
     this.setRarity(3);
     this.setDamage(15);    
+    this.setName("Kinetic Mace");
   }
   
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel) {

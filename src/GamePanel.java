@@ -1,5 +1,7 @@
-//Fix inventory so that it will close
+//FIx view range (circular)
 //Enemies must strike second
+//Show enemy health above the enemy
+//Click a crystal again to consume
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -158,20 +160,19 @@ class GamePanel extends JPanel{
       //Draw map (background)
       drawMap(g);
       updateListeners();
-      determineTiling();
-      
+      determineTiling(); 
       //Draws the items
       drawItems (g);
       //Draws the entities
       drawAllEntity (g);
       //Draws bullet sprites
       drawBullets (g, playerFireController);
+      //Draw the health and exp
+      drawBars(g);
       //Draw the game components
       drawGameComponents(g);
       //Draws the minimap
       drawMinimap(g);
-      //Draw the health and exp
-      drawBars(g);
       //Draw inventory
       drawInventory(g);
       //Draw the debugPanel
@@ -537,33 +538,45 @@ class GamePanel extends JPanel{
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
-    
     int currHealth, healthCap;
-    
     if (entityMap[playerCurrentY][playerCurrentX] == null) {
-      
       currHealth = 0;
       healthCap = 1;
       gameOver = true;
-        
     } else {
-      
       currHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
       healthCap = entityMap[playerCurrentY][playerCurrentX].getCap();
-    
     }
     debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
-    
     g.fillRect (16,16,(int)((((int)(maxX*1.0/5.0))-12)*((double)currHealth)/(double)healthCap), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
-    
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
+        g.setColor (new Color (220,20,60));
         if (entityMap[i][j] instanceof Enemy) {
-          
-        
+          if (entityMap[i][j].getTiling ()==0){
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
+            g.setColor (new Color (152,251,152));
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+          }else if (entityMap[i][j].getTiling ()==1){
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i-1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
+            g.setColor (new Color (152,251,152));
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i-1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+          }else if (entityMap[i][j].getTiling ()==2){
+            g.fillRect (maxX/2+(j+1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
+            g.setColor (new Color (152,251,152));
+            g.fillRect (maxX/2+(j+1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+          }else if (entityMap[i][j].getTiling ()==3){
+            g.fillRect (maxX/2+(j-1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
+            g.setColor (new Color (152,251,152));
+            g.fillRect (maxX/2+(j-1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+          }else{
+            g.fillRect(maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)-15, TILE_SIZE, 10);
+            g.setColor (new Color (152,251,152));
+            g.fillRect(maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+          }
         }                
       }
     }
@@ -881,10 +894,6 @@ class GamePanel extends JPanel{
                 }else if(directionRand==3){
                   entityArrayXMod = 1;
                 }
-                
-
-
-                
                 if (directionRand != 4){
                   entityMap[i+entityArrayYMod][j+entityArrayXMod] = entityMap[i][j];
                   //Not sure about setting it to null, look at if there is a better method
@@ -1082,6 +1091,12 @@ class GamePanel extends JPanel{
       randomizeArmor(spawnX, spawnY);
     }
     itemCount=0;
+    //Creates one power drive
+      do{
+        spawnX =(int)(Math.random()*entityMap[0].length);
+        spawnY =(int)(Math.random()*entityMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemMap[spawnY][spawnX] = new PowerDrive();
   }
   public void randomizeWeapon(int spawnX, int spawnY){
     itemRarity = 5-(int)(Math.sqrt((double)((int)(Math.random()*16))));

@@ -8,6 +8,7 @@ class AssaultVest extends Armor {
     super(dbty);
     this.setRarity(2);
     this.setDefense(10); 
+    this.setName("Assault Vest");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     assaultVest = Toolkit.getDefaultToolkit().getImage("../res/AssaultVest.png");

@@ -8,6 +8,7 @@ class IridiumExoskeleton extends Armor {
     super(dbty);
     this.setRarity(5);
     this.setDefense(25); 
+    this.setName("Iridium Exoskeleton");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     iridiumExoskeleton = Toolkit.getDefaultToolkit().getImage("../res/IridiumExoskeleton.png");

@@ -8,6 +8,7 @@ class GammaHammer extends MeleeWeapon{
     super(dbty);
     this.setRarity(4);
     this.setDamage(20);
+    this.setName("Gamma Hammer");
   }
   
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){

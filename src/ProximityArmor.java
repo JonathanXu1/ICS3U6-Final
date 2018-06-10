@@ -8,6 +8,7 @@ class ProximityArmor extends Armor {
     super(dbty);
     this.setRarity(4);
     this.setDefense(20); 
+    this.setName("Proximity Armor");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     proximityArmor = Toolkit.getDefaultToolkit().getImage("../res/ProximityArmor.png");

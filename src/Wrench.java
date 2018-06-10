@@ -8,6 +8,7 @@ class Wrench extends MeleeWeapon{
     super(dbty);
     this.setRarity(1);
     this.setDamage(5);    
+    this.setName("Wrench");
   }
   
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel) {

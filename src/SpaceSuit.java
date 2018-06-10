@@ -8,6 +8,7 @@ class SpaceSuit extends Armor {
     super(dbty);
     this.setRarity(1);
     this.setDefense(5); 
+    this.setName("Space Suit");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     spaceSuit = Toolkit.getDefaultToolkit().getImage("../res/SpaceSuit.png");

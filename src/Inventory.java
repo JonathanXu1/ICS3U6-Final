@@ -34,7 +34,11 @@ class Inventory{
     g.setColor(Color.WHITE);
     g.setFont(stats);
     lineSkip = 0;
-    g.drawString("Rarity: "+((inventory[positionY][positionX])).getRarity()+"/5",xPixelPos,yPixelPos);
+    g.drawString (((inventory[positionY][positionX])).getName(), xPixelPos, yPixelPos);
+    lineSkip = lineSkip+12;
+    if (!((inventory[positionY][positionX]).getRarity()==-1)){
+      g.drawString("Rarity: "+((inventory[positionY][positionX])).getRarity()+"/5",xPixelPos,yPixelPos+lineSkip);
+    }
     lineSkip = lineSkip+12;
     if (inventory[positionY][positionX] instanceof Equipment){
       g.drawString("Durability: "+((Equipment)(inventory[positionY][positionX])).getDurability()+"/100",xPixelPos,yPixelPos+lineSkip);
@@ -46,6 +50,10 @@ class Inventory{
         g.drawString("Attack: "+((Weapon)(inventory[positionY][positionX])).getDamage()+"",xPixelPos,yPixelPos+lineSkip);
         lineSkip = lineSkip+12;
       }
+    }
+    if ((inventory[positionY][positionX]) instanceof Consumable){
+      g.drawString("Press the button on the right to use",xPixelPos,yPixelPos+lineSkip);
+      lineSkip = lineSkip+12;
     }
   }
 }
