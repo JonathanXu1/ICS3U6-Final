@@ -512,8 +512,9 @@ class GamePanel extends JPanel{
   }
   
   public void drawBullets(Graphics g, FireController playerFireController){
-    int targetX = 50*(int)Math.floor(mouseListener.getMouseXy()[0]/50);
-    int targetY = 50*(int)Math.floor(mouseListener.getMouseXy()[1]/50);
+    reversePixelToArray(mouseListener.getMouseXy());
+    int targetX =     maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
+    int targetY =     maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
     debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
     playerFireController.setupProjectile(targetX, targetY, 100);
     double shootAngle = playerFireController.returnAngle();
