@@ -6,19 +6,23 @@ abstract class Entity {
   private int healthCap;
   private int armor;
   private int speed; 
-  private int status;
+  private boolean freezeStatus;
+  private boolean lightningStatus;
+  private boolean flameStatus;
   private boolean moved;
   private int direction;
   private int tileXMod;
   private int tileYMod;
   private Color minimapColor;
   
-  Entity(int h,int hC,int a,int sP,int sT, Color minimapColor) {
+  Entity(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor) {
     this.health = h;
     this.healthCap = hC;
     this.armor = a;
     this.speed = sP;
-    this.status = sT;
+    this.freezeStatus = freezeStatus;
+    this.lightningStatus = lightningStatus;
+    this.flameStatus = flameStatus;
     this.moved = false;
     this.minimapColor = minimapColor;
   }
@@ -47,7 +51,7 @@ abstract class Entity {
     this.armor = updt;
   }
   
-  public int getCap() {
+  public int getHealthCap() {
     return this.healthCap;
   }
   
@@ -59,14 +63,24 @@ abstract class Entity {
     this.speed = updt;
   }
   
-  public int getStatus() {
-    return this.status;
+  public boolean getFlame() {
+    return flameStatus;
   }
-  
-  public void setStatus(int updt) {
-    this.status = updt;
+  public void setFlame(boolean flameStatus) {
+    this.flameStatus = flameStatus;
   }
-  
+  public boolean getFreeze() {
+    return freezeStatus;
+  }
+  public void setFreeze(boolean freezeStatus) {
+    this.freezeStatus = freezeStatus;
+  }
+  public boolean getLightning() {
+    return lightningStatus;
+  }
+  public void setLightning(boolean lightningStatus) {
+    this.lightningStatus = lightningStatus;
+  }
   public boolean getMoved() {
     return this.moved;
   }
@@ -75,7 +89,8 @@ abstract class Entity {
     this.moved = moved;
   }
   
-  abstract void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
+  
+  abstract void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel);
   //0 is nothing, 1 is up, 2 is down, 3 is left, 4 is right
   public void setTiling (int direction){
     this.direction = direction;

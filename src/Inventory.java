@@ -41,7 +41,7 @@ class Inventory{
       lineSkip = lineSkip+12;
     }
     if (inventory[positionY][positionX] instanceof Equipment){
-      g.drawString("Durability: "+((Equipment)(inventory[positionY][positionX])).getDurability()+"/100",xPixelPos,yPixelPos+lineSkip);
+      g.drawString("Durability: "+((Equipment)(inventory[positionY][positionX])).getDurability()+"/"+((Equipment)(inventory[positionY][positionX])).getDurabilityCap(),xPixelPos,yPixelPos+lineSkip);
       lineSkip = lineSkip+12;
       if (inventory[positionY][positionX] instanceof Armor){
         g.drawString("Defense: "+((Armor)(inventory[positionY][positionX])).getDefense()+"",xPixelPos,yPixelPos+lineSkip);
@@ -55,12 +55,27 @@ class Inventory{
       g.drawString("Click the item again to use",xPixelPos,yPixelPos+lineSkip);
       lineSkip = lineSkip+12;
     }
+    lineSkip=0;
+    if ((inventory[positionY][positionX]) instanceof Weapon){
+      if (((Weapon)(inventory[positionY][positionX])).getFlameChance()!=0){
+        g.drawString("Burn chance: "+((Weapon)(inventory[positionY][positionX])).getFlameChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Weapon)(inventory[positionY][positionX])).getFreezeChance()!=0){
+        g.drawString("Freeze chance: "+((Weapon)(inventory[positionY][positionX])).getFreezeChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Weapon)(inventory[positionY][positionX])).getLightningChance()!=0){
+        g.drawString("Paralyze chance: "+((Weapon)(inventory[positionY][positionX])).getLightningChance()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+    }
   }
   public void writePending(Graphics g, int positionX,int positionY,int xPixelPos,int yPixelPos){
     g.setColor(Color.WHITE);
     g.setFont(stats);
     lineSkip = 0;
-    g.drawString(((Drive)(inventory[positionY][positionX])).getEffectDescription(), xPixelPos,yPixelPos);
+    g.drawString(((Consumable)(inventory[positionY][positionX])).getEffectDescription(), xPixelPos,yPixelPos);
     lineSkip = lineSkip+12;
     g.drawString("Click outside the inventory to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
   }

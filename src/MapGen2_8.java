@@ -143,7 +143,7 @@ class MapGen2_8{
       int randDReal = randD*6;
       int randRReal = randR*6;
       
-      if (!capQPlaced) {        
+      if (!capQPlaced) {        // captain's quarters
         for (int i = -2; i < 3; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
@@ -154,7 +154,7 @@ class MapGen2_8{
         
         map[randDReal][randRReal] = 600;   
         
-      } else if (randomRoll(150)) {
+      } else if (randomRoll(150)) { // chest room
         for (int i = -3; i < 4; i++){
           for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
@@ -163,7 +163,7 @@ class MapGen2_8{
         
         map[randDReal][randRReal] = 100;        
         
-      } else if (randomRoll(100)) {        
+      } else if (randomRoll(100)) { // reactor room
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
@@ -173,8 +173,8 @@ class MapGen2_8{
         map[randDReal][randRReal] = 200;
         
         
-      } else if (randomRoll(0)) {        
-        for (int i = -4; i < 5; i++){
+      } else if (randomRoll(200)) {  // Science lab
+        for (int i = -2; i < 3; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
@@ -183,9 +183,9 @@ class MapGen2_8{
         map[randDReal][randRReal] = 300;
         
         
-      } else if (randomRoll(0)) {        
+      } else if (randomRoll(100)) {  // Specimen room      
         for (int i = -4; i < 5; i++){
-          for (int j = -4; j < 5; j++) {
+          for (int j = -3; j < 4; j++) {
             map[randDReal + i][randRReal + j] = -1;
           }
         }
@@ -514,7 +514,99 @@ class MapGen2_8{
           
         }
         
+        else if (map[i*6][j*6] == 300) {
+          
+          for (int i2 = -2; i2 < 3; i2++) {
+            for (int j2 = -4; j2 < 5; j2++) {
+              map[i*6 + i2][j*6 + j2] = -301;
+            }
+          }                              
+          
+          
+          int[][] template = 
+          {
+            { 302, 302, 302, 302,-301, 302, 302, 302, 302},
+            {-301,-301,-301,-301,-301,-301,-301,-301,-301},
+            {-301, 303, 303, 303, 303, 303, 303, 303,-301},
+            {-301,-301,-301,-301,-301,-301,-301,-301,-301},         
+            { 302, 302, 303, 302,-301, 302, 302, 302, 302},
+          };
+          
+          for (int i2 = -2; i2 < 3; i2++) {
+            for (int j2 = -4; j2 < 5; j2++) {
+              map[i*6 + i2][j*6 + j2] = template[i2 + 2][j2 + 4];
+            }
+          } 
+          
+          for (int j2 = -4; j2 < 5; j2++) {
+            if (randomRoll(200)) {
+              map[i*6 - 2][j*6 + j2] = 304; // notes
+            }
+            if (randomRoll(50)) {
+              map[i*6 - 2][j*6 + j2] = 305; // computer
+            }
+          }
+          
+          for (int j2 = -4; j2 < 5; j2++) {
+            if (randomRoll(100)) {
+              map[i*6 + 2][j*6 + j2] = 304; // notes
+            }
+          }
+          
+          for (int j2 = -3; j2 < 4; j2++) {
+            if (randomRoll(200)) {
+              map[i*6][j*6 + j2] = 306; // chemicals
+            }
+            if (randomRoll(50)) {
+              map[i*6][j*6 + j2] = 307; // splatter
+            }
+          }
+          
+          map[i*6 - 2][j*6] = -301;
+          map[i*6 + 2][j*6] = -301;
+          
+        } else if (map[i*6][j*6] == 400) {
+         
+          int[][] template = 
+          {
+            {-401,-401,-401,-401,-401,-401,-401},
+            {-401,-401,-401,-401,-401,-401,-401},
+            {-401, 403,-401,-401,-401, 402,-401},
+            {-401,-401,-401,-401,-401,-401,-401},
+            {-401, 402,-401,-401,-401, 402,-401},
+            {-401,-401,-401,-401,-401,-401,-401},
+            {-401, 402,-401,-401,-401, 402,-401},
+            {-401,-401,-401,-401,-401,-401,-401},
+            {-401,-401,-401,-401,-401,-401,-401},
+          };
+          
+          for (int i2 = -4; i2 < 5; i2++) {
+            for (int j2 = -3; j2 < 4; j2++) {
+              map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 3];
+            }
+          } 
+          
+          for (int cust = 2; cust < 8; cust = cust + 2) {
+            if (randomRoll(600)) {
+              map[i*6 - 4 + cust][j*6 - 2] = 403;
+            }
+            if (randomRoll(600)) {
+              map[i*6 - 4 + cust][j*6 + 2] = 403;
+            }
+          }   
+          
+          for (int i2 = -4; i2 < 5; i2++) {
+            for (int j2 = -1; j2 < 2; j2++) {
+              if (randomRoll(100)) {
+                map[i*6 + i2][j*6 + j2] = -402;
+              } 
+              if (randomRoll(100)) {
+                map[i*6 + i2][j*6 + j2] = -403; 
+              }
+            }
+          }
         
+        }
       }
     }
   }
@@ -602,7 +694,7 @@ class MapGen2_8{
         trimmedArray[i - 5][j - 5] = map[i][j];
       }
     }
-  
+    
     map = trimmedArray;
   }
   
@@ -610,7 +702,24 @@ class MapGen2_8{
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
-        if (result[i][j] == 208) { // reactor stabilizers
+        
+        if (result[i][j] == 403) { // specimen container (broken)
+          resultProc[i][j] = 'B';
+        } else if (result[i][j] == 402) { // specimen container (whole)
+          resultProc[i][j] = 'U';
+        } else if (result[i][j] == 307) { // research table w/ splatter
+          resultProc[i][j] = 's';
+        } else if (result[i][j] == 306) { // research table w/ chemicals
+          resultProc[i][j] = 'h';
+        } else if (result[i][j] == 305) { // lab bench w/ computer
+          resultProc[i][j] = 'p';
+        } else if (result[i][j] == 304) { // lab bench w/ notes
+          resultProc[i][j] = 'n';
+        } else if (result[i][j] == 303) { // research table
+          resultProc[i][j] = 't';
+        } else if (result[i][j] == 302) { // lab bench
+          resultProc[i][j] = 'l';
+        } else if (result[i][j] == 208) { // reactor stabilizers
           resultProc[i][j] = 'z';
         } else if (result[i][j] == 209) { // reactor core
           resultProc[i][j] = 'r';
@@ -656,6 +765,14 @@ class MapGen2_8{
           resultProc[i][j] = 'c';
         } else if (result[i][j] == -207) { // corner 4
           resultProc[i][j] = 'd';
+        } else if (result[i][j] == -301) { // lab floor
+          resultProc[i][j] = '&';
+        } else if (result[i][j] == -401) { // specimen room floor
+          resultProc[i][j] = '!';
+        } else if (result[i][j] == -402) { // specimen room floor w/ blood
+          resultProc[i][j] = 'O';
+        } else if (result[i][j] == -403) { // specimen room floor w/ hand
+          resultProc[i][j] = 'H';
         } else {
           if ((i<=5)||(i>=result.length-5)||(j<=5)||(j>=result[0].length-5)){
             resultProc[i][j] = '-';
