@@ -51,29 +51,29 @@ class Main{
         } 
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
-          map[i][j]= new WallTile(Color.GREEN.darker(), "..res/SpecimenBroken"); 
+          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/SpecimenBroken");
         } else if (charMap[i][j] == 'U'){//Specimen Container
-          map[i][j]= new WallTile(Color.GREEN.darker(), "..res/Specimen"); 
+          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/Specimen"); 
         } else if (charMap[i][j] == 'O'){//Arm
-          map[i][j]= new FloorTile(Color.GREEN, "..res/Arm"); 
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Arm"); 
         } else if (charMap[i][j] == 'H'){//Blood
-          map[i][j]= new FloorTile(Color.GREEN, "..res/BloodFloor"); 
+          map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor"); 
         }
         //Lab
         else if (charMap[i][j] == 't'){ //Lab table
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/Lab");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab");
         } else if (charMap[i][j] == 'h'){ //Lab table w/ chemicals
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/LabTube");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabTube");
         } else if (charMap[i][j] == 's'){ // Lab table w/ splatter
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/LabSpill"); 
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabSpill"); 
         } else if (charMap[i][j] == 'p'){//Lab table w/ computer
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/LabComputer");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer");
         } else if (charMap[i][j] == 'n'){//Lab table w/ notes
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/LabNotes");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes");
         }
         //Reactor
         else if(charMap[i][j] == 'r'){
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "..res/ReactorCore");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore");
         }
         //Key points
         else if (charMap[i][j] == '@'){
@@ -81,7 +81,7 @@ class Main{
           playerStartingX = j;
           playerStartingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "..res/WallTile");
+          map[i][j]= new WallTile(Color.BLACK, "../res/WallTile");
         } else{
           map[i][j]= null;
         }

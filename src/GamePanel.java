@@ -1,4 +1,12 @@
 //FIx view range (circular)
+//Add new mobs
+//Fix the tile stuff
+//Add projectile weapons
+//Work on displaying levels
+//Work on showing effects
+//Work on increasing difficulty based on levels
+//Work on different levels
+
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -347,7 +355,7 @@ class GamePanel extends JPanel{
           if(map[i][j].getViewed()){
             map[i][j].drawTile(g, maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY), TILE_SIZE, TILE_SIZE, this, map[i][j].getFocus());
           }
-        } 
+        }
       }
     }
     for(int i = 0; i < map.length; i++){
@@ -532,11 +540,13 @@ class GamePanel extends JPanel{
       if (!(tiling)){
         if(mouseListener.getPressed()){
           if(collided){
-            if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
-              if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
-                collided = false;
-                translateX = 0;
-                translateY = 0;
+            if ((tileSelectedArray[0]>0)&&(tileSelectedArray[0]<map[0].length)&&(tileSelectedArray[1]>0)&&(tileSelectedArray[1]<map.length)){
+              if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
+                if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
+                  collided = false;
+                  translateX = 0;
+                  translateY = 0;
+                }
               }
             }
           }
@@ -847,7 +857,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<50)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1257,39 +1267,41 @@ class GamePanel extends JPanel{
   public void playerAttack(int targetX, int targetY){
     //Only one status effect at a time, but multiple drives can be used
     reversePixelToArray(mouseListener.getMouseXy());
-    if (entityMap[targetY][targetX] instanceof Enemy){
-      if (inventory.getItem(2,3) instanceof MeleeWeapon){
-        ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
-          if (!(entityMap[targetY][targetX].getFreeze())){
-            entityMap[targetY][targetX].setFreeze(true);
-            //Armor becomes weaker
-            entityMap[targetY][targetX].setArmor(0);
+    if ((targetY>0)&&(targetY<entityMap.length)&&(targetX>0)&&(targetX<entityMap[0].length)){
+      if (entityMap[targetY][targetX] instanceof Enemy){
+        if (inventory.getItem(2,3) instanceof MeleeWeapon){
+          ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
+            if (!(entityMap[targetY][targetX].getFreeze())){
+              entityMap[targetY][targetX].setFreeze(true);
+              //Armor becomes weaker
+              entityMap[targetY][targetX].setArmor(0);
+            }
           }
-        }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
-          if (!(entityMap[targetY][targetX].getFlame())){
-            entityMap[targetY][targetX].setFlame(true);
-            //Draw a little icon above the heads of the enemies with the status
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
+            if (!(entityMap[targetY][targetX].getFlame())){
+              entityMap[targetY][targetX].setFlame(true);
+              //Draw a little icon above the heads of the enemies with the status
+            }
           }
-        }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
-          if (!(entityMap[targetY][targetX].getLightning())){
-            entityMap[targetY][targetX].setLightning(true);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
+            if (!(entityMap[targetY][targetX].getLightning())){
+              entityMap[targetY][targetX].setLightning(true);
+            }
           }
+          //Checks if the entity has been killed, so that it will not be able to attack afterwards
+          checkKilled(targetX, targetY);
+          //Defense will block up to %80 of damage
+          int damage;
+          if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+            damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
+          }else{
+            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
+          }
+          entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
-        //Checks if the entity has been killed, so that it will not be able to attack afterwards
-        checkKilled(targetX, targetY);
-        //Defense will block up to %80 of damage
-        int damage;
-        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
-          damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
-        }else{
-          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
-        }
-        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
+        turnPasser = true;
       }
-      turnPasser = true;
     }
   }
   public void checkBroken(){

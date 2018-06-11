@@ -13,6 +13,7 @@ class WallTile extends Tile{
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){
       wall = Toolkit.getDefaultToolkit().getImage(dir + ".png");
+      //System.out.println (dir + ".png");
     } else{
       wall = Toolkit.getDefaultToolkit().getImage(dir + "Dark" + ".png");
     }
