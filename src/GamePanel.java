@@ -498,11 +498,13 @@ class GamePanel extends JPanel{
   }
   
   public void drawBullets(Graphics g, FireController playerFireController){
-    playerFireController.setupProjectile(mouseListener.getMouseXy()[0], mouseListener.getMouseXy()[1], 100);
+    int targetX = 50*(int)Math.floor(mouseListener.getMouseXy()[0]/50);
+    int targetY = 50*(int)Math.floor(mouseListener.getMouseXy()[1]/50);
+    debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
+    playerFireController.setupProjectile(targetX, targetY, 100);
     double shootAngle = playerFireController.returnAngle();
     translateX += Math.cos(shootAngle)*10;
     translateY += Math.sin(shootAngle)*10;
-    debugMessage = Double.toString(Math.toDegrees(shootAngle));
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
@@ -542,7 +544,7 @@ class GamePanel extends JPanel{
       currHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
       healthCap = entityMap[playerCurrentY][playerCurrentX].getCap();
     }
-    debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
+    //debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
     g.fillRect (16,16,(int)((((int)(maxX*1.0/5.0))-12)*((double)currHealth)/(double)healthCap), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
