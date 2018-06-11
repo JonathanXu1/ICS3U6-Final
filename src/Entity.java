@@ -90,7 +90,7 @@ abstract class Entity {
   }
   
   
-  abstract void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
+  abstract void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel);
   //0 is nothing, 1 is up, 2 is down, 3 is left, 4 is right
   public void setTiling (int direction){
     this.direction = direction;

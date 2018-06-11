@@ -3,7 +3,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class PowerDrive extends Drive{
-  Image powerDrive;
+  private Image powerDrive;
   PowerDrive(){
     this.setName("Power Drive");
   }

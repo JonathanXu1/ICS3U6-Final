@@ -12,7 +12,7 @@ class Enemy extends Entity{
     this.enraged = enraged;
   }
   //Should be placed in Entity class and made abstract later
-  public void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
+  public void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel){
     g.setColor (Color.GRAY);
     g.fillRect(x,y,width,height);
     g.setColor (Color.BLACK);

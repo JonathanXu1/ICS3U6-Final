@@ -3,7 +3,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class LightningDrive extends Drive{
-  Image lightningDrive;
+  private Image lightningDrive;
   LightningDrive(){
     this.setName("Lightning Drive");
   }

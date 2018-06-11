@@ -3,7 +3,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class SteelDrive extends Drive{
-  Image steelDrive;
+  private Image steelDrive;
   SteelDrive(){
     this.setName("Steel Drive");
   }

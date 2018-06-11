@@ -3,7 +3,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class FlameDrive extends Drive{
-  Image flameDrive;
+  private Image flameDrive;
   FlameDrive(){
     this.setName("Flame Drive");
   }

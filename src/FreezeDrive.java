@@ -3,7 +3,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class FreezeDrive extends Drive{
-  Image freezeDrive;
+  private Image freezeDrive;
   FreezeDrive(){
     this.setName("Freeze Drive");
   }
