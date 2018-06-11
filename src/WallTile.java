@@ -5,14 +5,16 @@ import java.awt.Toolkit;
 
 class WallTile extends Tile{
   Image wall;
-  WallTile(Color minimapColor){
+  String dir;
+  WallTile(Color minimapColor, String dir){
     super(minimapColor);
+    this.dir = dir;
   }
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){
-      wall = Toolkit.getDefaultToolkit().getImage("../res/WallTile.png");
+      wall = Toolkit.getDefaultToolkit().getImage(dir + ".png");
     } else{
-      wall = Toolkit.getDefaultToolkit().getImage("../res/WallTileDark.png");
+      wall = Toolkit.getDefaultToolkit().getImage(dir + "Dark" + ".png");
     }
     g.drawImage(wall, x,y,width,height,gamePanel);
   }
