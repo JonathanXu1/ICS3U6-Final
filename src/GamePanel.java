@@ -155,11 +155,11 @@ class GamePanel extends JPanel{
     
     //Checks for which entities are killed, including the player
     checkKilled(0,0);
-    
     if (!gameOver) {
       if (!(mouseListener.getPressed())){
         alternateState = true;
       }
+      refreshStats();
       //Checks broken gear
       checkBroken();
       //Draw map (background)
@@ -847,7 +847,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<50)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1001,16 +1001,16 @@ class GamePanel extends JPanel{
                 } else {    
                   int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
                   if (i + 1 == playerCurrentY && j == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 25+entityMap[playerCurrentY][playerCurrentX].getArmor());
                   }
                   if (i == playerCurrentY && j + 1 == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 25+entityMap[playerCurrentY][playerCurrentX].getArmor());
                   }
                   if (i - 1 == playerCurrentY && j == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 25+entityMap[playerCurrentY][playerCurrentX].getArmor());
                   }
                   if (i == playerCurrentY && j - 1 == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 10);
+                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 25+entityMap[playerCurrentY][playerCurrentX].getArmor());
                   }
                 }
               }
@@ -1320,6 +1320,13 @@ class GamePanel extends JPanel{
           itemMap[spawnY][spawnX] = new MedKit();
         }
       }
+    }
+  }
+  public void refreshStats(){
+    if (inventory.getItem(1,3) instanceof Armor){
+      entityMap[playerCurrentY][playerCurrentX].setArmor(((Armor)(inventory.getItem(1,3))).getDefense());
+    }else{
+      entityMap[playerCurrentY][playerCurrentX].setArmor(0);
     }
   }
 }

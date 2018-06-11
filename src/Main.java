@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
 import javax.sound.sampled.*;
-
+///Make it so that you click again to cancel the upgrade
 class Main{
   //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
