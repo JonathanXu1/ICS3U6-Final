@@ -527,6 +527,7 @@ class GamePanel extends JPanel{
         collided = false;
         translateX = 0;
         translateY = 0;
+        passTurn();
       }
     }
     int startX = maxX/2 + translateX;
@@ -541,6 +542,9 @@ class GamePanel extends JPanel{
         collided = true;
       } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
+        if(entityMap[bulletY][bulletX] instanceof Enemy && !turnPasser){
+          playerAttack(bulletX, bulletY);
+        }
       }
     }
     //System.out.println();
@@ -550,19 +554,24 @@ class GamePanel extends JPanel{
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
     int currHealth, healthCap;
+    int currXp, xpCap;
     if (entityMap[playerCurrentY][playerCurrentX] == null) {
       currHealth = 0;
       healthCap = 1;
+      currXp = 0;
+      xpCap = 1;
       gameOver = true;
     } else {
       currHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
-      healthCap = entityMap[playerCurrentY][playerCurrentX].getCap();
+      healthCap = entityMap[playerCurrentY][playerCurrentX].getHealthCap();
+      currXp = ((Character)entityMap[playerCurrentY][playerCurrentX]).getXp();
+      xpCap = ((Character)entityMap[playerCurrentY][playerCurrentX]).getXpCap();
     }
     //debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
     g.fillRect (16,16,(int)((((int)(maxX*1.0/5.0))-12)*((double)currHealth)/(double)healthCap), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
-    g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), ((int)(maxX*1.0/5.0))-12,((int)(maxX*1.0/5.0/200.0*10.0))-12);
+    g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), (int)((((int)(maxX*1.0/5.0))-12)*((double)currXp)/(double)xpCap),((int)(maxX*1.0/5.0/200.0*10.0))-12);
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
         g.setColor (new Color (220,20,60));
@@ -570,23 +579,23 @@ class GamePanel extends JPanel{
           if (entityMap[i][j].getTiling ()==0){
             g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
-            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getHealthCap())), 10);
           }else if (entityMap[i][j].getTiling ()==1){
             g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i-1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
-            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i-1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+            g.fillRect (maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i-1)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getHealthCap())), 10);
           }else if (entityMap[i][j].getTiling ()==2){
             g.fillRect (maxX/2+(j+1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
-            g.fillRect (maxX/2+(j+1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+            g.fillRect (maxX/2+(j+1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getHealthCap())), 10);
           }else if (entityMap[i][j].getTiling ()==3){
             g.fillRect (maxX/2+(j-1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
-            g.fillRect (maxX/2+(j-1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+            g.fillRect (maxX/2+(j-1)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+i*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getHealthCap())), 10);
           }else{
             g.fillRect(maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)-15, TILE_SIZE, 10);
             g.setColor (new Color (152,251,152));
-            g.fillRect(maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getCap())), 10);
+            g.fillRect(maxX/2+j*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX), maxY/2+(i)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)-15, (int)(TILE_SIZE*((double)entityMap[i][j].getHealth())/((double)entityMap[i][j].getHealthCap())), 10);
           }
         }                
       }
@@ -1044,13 +1053,14 @@ class GamePanel extends JPanel{
         for(int j=0;j<entityMap[0].length;j++){
           if (entityMap[i][j] instanceof Entity){
             if (entityMap[i][j].getHealth()<=0){
-              entityMap[i][j] = null;
               if (entityMap[i][j] instanceof Character) {
                 gameOver = true;
               } else {
                 mobCount--;
                 mobDrop(j, i);
+                ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
               }
+              entityMap[i][j] = null;
             }
           }
         }
@@ -1108,7 +1118,9 @@ class GamePanel extends JPanel{
             }
           }
           ///Melee attack
-          playerAttack();
+          if(!turnPasser){
+            playerAttack(tileSelectedArray[0],tileSelectedArray[1]);
+          }
         }
         findBlocked (playerCurrentX, playerCurrentY);
         if ((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){  
@@ -1227,41 +1239,41 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new PowerDrive();      
     }
   }
-  public void playerAttack (){
+  public void playerAttack(int targetX, int targetY){
     //Only one status effect at a time, but multiple drives can be used
     reversePixelToArray(mouseListener.getMouseXy());
-    if (((int)(Math.abs(playerCurrentX-tileSelectedArray[0])+(int)(Math.abs(playerCurrentY-tileSelectedArray[1]))))==1){
-      if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
+    if (((int)(Math.abs(playerCurrentX-targetX)+(int)(Math.abs(playerCurrentY-targetY))))==1){
+      if (entityMap[targetY][targetX] instanceof Enemy){
         if (inventory.getItem(2,3) instanceof MeleeWeapon){
           ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
           if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
-            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getFreeze())){
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setFreeze(true);
+            if (!(entityMap[targetY][targetX].getFreeze())){
+              entityMap[targetY][targetX].setFreeze(true);
               //Armor becomes weaker
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setArmor(0);
+              entityMap[targetY][targetX].setArmor(0);
             }
           }
           if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
-            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getFlame())){
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setFlame(true);
+            if (!(entityMap[targetY][targetX].getFlame())){
+              entityMap[targetY][targetX].setFlame(true);
               //Draw a little icon above the heads of the enemies with the status
             }
           }
           if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
-            if (!(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getLightning())){
-              entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setLightning(true);
+            if (!(entityMap[targetY][targetX].getLightning())){
+              entityMap[targetY][targetX].setLightning(true);
             }
           }
           //Checks if the entity has been killed, so that it will not be able to attack afterwards
-          checkKilled(tileSelectedArray[0], tileSelectedArray[1]);
+          checkKilled(targetX, targetY);
           //Defense will block up to %80 of damage
           int damage;
-          if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+          if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
             damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
           }else{
-            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getArmor());     
+            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
           }
-          entityMap[tileSelectedArray[1]][tileSelectedArray[0]].setHealth(entityMap[tileSelectedArray[1]][tileSelectedArray[0]].getHealth()-damage);
+          entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
         turnPasser = true;
       }

@@ -8,10 +8,10 @@ class MedKit extends Consumable{
     this.setName("Medicine Kit");
   }
   public Character heal(Character player){
-    if (player.getHealth()+((int)(player.getCap()/4.0))<player.getCap()){
-      player.setHealth(player.getHealth()+((int)(player.getCap()/4.0)));
+    if (player.getHealth()+((int)(player.getHealthCap()/4.0))<player.getHealthCap()){
+      player.setHealth(player.getHealth()+((int)(player.getHealthCap()/4.0)));
     }else{
-      player.setHealth(player.getCap());  
+      player.setHealth(player.getHealthCap());  
     }
     return (player);
   }

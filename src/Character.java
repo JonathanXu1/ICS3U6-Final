@@ -12,6 +12,8 @@ class Character extends Entity{
   int lastSprite;
   int movementMod=-1;
   int movementCount=0;
+  int xp = 0;
+  int xpCap = 100;
   Character(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor){
     super (h,hC,a,sP,freezeStatus,lightningStatus,flameStatus, minimapColor);
     try {
@@ -48,6 +50,17 @@ class Character extends Entity{
       }
     }
   }
-  
+  public int getXp(){
+    return xp;
+  }
+  public void changeXp(int xp){
+    this.xp += xp;
+  }
+  public int getXpCap(){
+    return xpCap;
+  }
+  public void setXpCap(int cap){
+    this.xpCap = cap;
+  }
   //Getters and setters
 }

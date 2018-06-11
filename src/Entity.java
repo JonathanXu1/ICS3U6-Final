@@ -51,7 +51,7 @@ abstract class Entity {
     this.armor = updt;
   }
   
-  public int getCap() {
+  public int getHealthCap() {
     return this.healthCap;
   }
   
