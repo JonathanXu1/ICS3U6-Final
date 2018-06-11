@@ -2,15 +2,51 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 class Character extends Entity{
-    Image character = Toolkit.getDefaultToolkit().getImage("../res/Character.png");
   //Constructor
-  Character(int h,int hC,int a,int sP,int sT, Color minimapColor){
-    super (h,hC,a,sP,sT,minimapColor);
+  BufferedImage[] sprites;
+  int lastSprite;
+  int movementMod=-1;
+  int movementCount=0;
+  Character(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor){
+    super (h,hC,a,sP,freezeStatus,lightningStatus,flameStatus, minimapColor);
+    try {
+      BufferedImage sheet = ImageIO.read(new File("../res/Character.png"));
+      sprites = new BufferedImage[12];
+      for (int i = 0; i < 4;i++){
+        for (int j = 0; j < 3; j++){
+          sprites[(i*3) + j] = sheet.getSubimage(j* 15,i* 15,15,15);
+        }
+      }
+    }catch(Exception e) {
+      System.out.println("Error");
+    }
   }
-  public void drawEntity(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
-    g.drawImage(character, x,y,width,height,gamePanel);
+  public void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel){
+    if ((xDirection==0)&&(yDirection==0)){
+      g.drawImage(sprites[lastSprite], x,y,width,height,gamePanel);
+    }else{
+      movementCount++;
+      if (xDirection==0){
+        g.drawImage(sprites[((yDirection/10+1)/2)*3+1+movementMod], x,y,width,height,gamePanel);
+        lastSprite= ((yDirection/10+1)/2)*3+1;
+      }else{
+        g.drawImage(sprites[((xDirection/10+1)/2+2)*3+1+movementMod], x,y,width,height,gamePanel);
+        lastSprite= ((xDirection/10+1)/2+2)*3+1;
+      }
+      if (movementCount==10){
+        if (movementMod==1){
+          movementMod =-1;
+        }else if (movementMod==-1){
+          movementMod =1;
+        }
+        movementCount =0;
+      }
+    }
   }
   
   //Getters and setters

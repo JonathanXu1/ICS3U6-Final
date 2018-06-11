@@ -3,12 +3,12 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class PowerDrive extends Drive{
-  Image powerDrive;
+  private Image powerDrive;
   PowerDrive(){
     this.setName("Power Drive");
   }
   public Item upgrade (Item chosenEquip){
-   ( (Equipment)(chosenEquip)).setDurability(100);
+    ((Equipment)(chosenEquip)).setDurability(((Equipment)(chosenEquip)).getDurabilityCap());
     if (chosenEquip instanceof Armor){
       ((Armor)(chosenEquip)).setDefense(((Armor)(chosenEquip)).getDefense()+5);
     }else if (chosenEquip instanceof Weapon){
