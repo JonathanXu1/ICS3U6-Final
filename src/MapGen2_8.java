@@ -193,7 +193,7 @@ class MapGen2_8{
         map[randDReal][randRReal] = 400;
         
         
-      } else if (randomRoll(0)) {        
+      } else if (randomRoll(150)) { // crew's quarters       
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
@@ -606,6 +606,56 @@ class MapGen2_8{
             }
           }
         
+        } else if (map[i*6][j*6] == 500){
+          int[][] template = {
+            {-501,-501,-501,-501,-501,-501,-501,-501,-501},
+            {-501, 502,-501, 502,-501, 502,-501, 502,-501},
+            {-501, 503,-501, 503,-501, 503,-501, 503,-501},
+            {-501,-501,-501,-501,-501,-501,-501,-501,-501},
+            {-501,-501,-501,-501,-501,-501,-501,-501,-501},
+            {-501,-501,-501,-501,-501,-501,-501,-501,-501},
+            {-501, 503,-501, 503,-501, 503,-501, 503,-501},
+            {-501, 502,-501, 502,-501, 502,-501, 502,-501},           
+            {-501,-501,-501,-501,-501,-501,-501,-501,-501},
+          };          
+          
+          for (int i2 = -4; i2 < 5; i2++) {
+            for (int j2 = -4; j2 < 5; j2++) {
+              map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 4];
+              
+              if (template[i2 + 4][j2 + 4] == -501) {
+                if (randomRoll(50)) {
+                  map[i*6 + i2][j*6 + j2] = -504;
+                }
+                if (randomRoll(50)) {
+                  map[i*6 + i2][j*6 + j2] = -505;
+                }
+              }
+            }
+          }          
+        } else if (map[i*6][j*6] == 600){
+          int[][] template =   {
+            {-601, 602,-601,-601,-601,-601,-601},
+            {-601, 603,-601,-601,-601,-601,-601},
+            {-601,-601,-601,-601,-601,-601,-601},
+            { 605,-601,-601,-601,-601,-601,-601},
+            { 604,-601,-601,-601,-601,-601,-601},
+          };
+          
+          for (int i2 = -2; i2 < 3; i2++){
+            for (int j2 = -3; j2 < 4; j2++) {
+            map[i*6 + i2][j*6 + j2] = template[i2 + 2][j2 + 3];
+              
+              if (template[i2 + 2][j2 + 3] == -601) {
+                if (randomRoll(50)) {
+                  map[i*6 + i2][j*6 + j2] = -606;
+                }
+                if (randomRoll(50)) {
+                  map[i*6 + i2][j*6 + j2] = -607;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -703,7 +753,19 @@ class MapGen2_8{
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[0].length; j++) {
         
-        if (result[i][j] == 403) { // specimen container (broken)
+        if (result[i][j] == 605) { // capatin's bed (foot);
+          resultProc[i][j] = '4';
+        } else if (result[i][j] == 604) { // captain's bed (head)
+          resultProc[i][j] = '3';
+        } else if (result[i][j] == 603) { // captain's desk (2)
+          resultProc[i][j] = 'x';
+        } else if (result[i][j] == 602) { // captain's desk (1)
+          resultProc[i][j] = 'z';
+        } else if (result[i][j] == 503) { // crew's bed (foot)
+          resultProc[i][j] = '2';
+        } else if (result[i][j] == 502) { // crew's bed (head)
+          resultProc[i][j] = '1';
+        } else if (result[i][j] == 403) { // specimen container (broken)
           resultProc[i][j] = 'B';
         } else if (result[i][j] == 402) { // specimen container (whole)
           resultProc[i][j] = 'U';
@@ -773,6 +835,18 @@ class MapGen2_8{
           resultProc[i][j] = 'O';
         } else if (result[i][j] == -403) { // specimen room floor w/ hand
           resultProc[i][j] = 'H';
+        } else if (result[i][j] == -501) { // crew's quarters floor
+          resultProc[i][j] = 'Q';
+        } else if (result[i][j] == -504) { // crew's quarters floor w/ shirt
+          resultProc[i][j] = 'I';
+        } else if (result[i][j] == -505) { // crew's quarters floor w/ pants
+          resultProc[i][j] = 'P';
+        } else if (result[i][j] == -601) { // captain's quarters floor
+          resultProc[i][j] = '$';
+        } else if (result[i][j] == -606) { // captain's quarters floor w/ notes (1)
+          resultProc[i][j] = '?';
+        } else if (result[i][j] == -607) { // captain's quarters floor w/ notes (2)
+          resultProc[i][j] = 'M';
         } else {
           if ((i<=5)||(i>=result.length-5)||(j<=5)||(j>=result[0].length-5)){
             resultProc[i][j] = '-';
