@@ -108,7 +108,8 @@ class GamePanel extends JPanel{
   private boolean pendingUpgrade;
   private int driveArrayX;
   private int driveArrayY;     
-  
+  private int targetX=0;
+  private int targetY=0;
   //Attacking
   private int [] tileSelectedArray = new int [2];  
   
@@ -162,32 +163,34 @@ class GamePanel extends JPanel{
       //Checks broken gear
       checkBroken();
       //Draw map (background)
-        drawMap(g);
+      drawMap(g);
+      if ((collided)){
         updateListeners();
         determineTiling(); 
-        //Checks for which entities are killed again so that dead entities cannot kill the player
-        checkKilled(0,0);
-        //Draws the items
-        drawItems (g);
-        //Draws bullet sprites
-        drawBullets (g, playerFireController);
-        //Draws the entities
-        drawAllEntity (g);
-        //Draw the health and exp
-        drawBars(g);
-        //Draw the game components
-        drawGameComponents(g);
-        //Draws the minimap
-        drawMinimap(g);
-        //Draw inventory
-        drawInventory(g);
-        //Draw the debugPanel
-        if (keyListener.getDebugState()){
-          drawDebugPanel(g);
-          g.setColor(Color.RED);
-          g.fillRect(maxX/2, maxY/2, 2, 2);
-        }
-        this.setVisible(true);
+      }
+      //Draws bullet sprites
+      drawBullets (g, playerFireController);
+      //Checks for which entities are killed again so that dead entities cannot kill the player
+      checkKilled(0,0);
+      //Draws the items
+      drawItems (g);
+      //Draws the entities
+      drawAllEntity (g);
+      //Draw the health and exp
+      drawBars(g);
+      //Draw the game components
+      drawGameComponents(g);
+      //Draws the minimap
+      drawMinimap(g);
+      //Draw inventory
+      drawInventory(g);
+      //Draw the debugPanel
+      if (keyListener.getDebugState()){
+        drawDebugPanel(g);
+        g.setColor(Color.RED);
+        g.fillRect(maxX/2, maxY/2, 2, 2);
+      }
+      this.setVisible(true);
     } else {
       System.out.println("You suck!");    
     }
@@ -512,23 +515,32 @@ class GamePanel extends JPanel{
   }
   
   public void drawBullets(Graphics g, FireController playerFireController){
-    reversePixelToArray(mouseListener.getMouseXy());
-    int targetX =     maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
-    int targetY =     maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
-    debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
-    playerFireController.setupProjectile(targetX, targetY, 100);
-    double shootAngle = playerFireController.returnAngle();
-    translateX += Math.cos(shootAngle)*10;
-    translateY += Math.sin(shootAngle)*10;
-    Graphics2D g2 = (Graphics2D) g;
-    g2.setStroke(new BasicStroke(5));
-    g.setColor(Color.RED);
-    if(mouseListener.getPressed()){
-      if(collided){
-        collided = false;
-        translateX = 0;
-        translateY = 0;
-        passTurn();
+    if (collided){
+      reversePixelToArray(mouseListener.getMouseXy());
+      targetX = maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
+      targetY= maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
+    }
+      debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
+      playerFireController.setupProjectile(targetX, targetY, 100);
+      double shootAngle = playerFireController.returnAngle();
+      translateX += Math.cos(shootAngle)*10;
+      translateY += Math.sin(shootAngle)*10;
+      Graphics2D g2 = (Graphics2D) g;
+      g2.setStroke(new BasicStroke(5));
+      g.setColor(Color.RED);
+    if (!(inventoryOpen)){
+      if (!(tiling)){
+        if(mouseListener.getPressed()){
+          if(collided){
+            if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
+              if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
+                collided = false;
+                translateX = 0;
+                translateY = 0;
+              }
+            }
+          }
+        }
       }
     }
     int startX = maxX/2 + translateX;
@@ -541,9 +553,11 @@ class GamePanel extends JPanel{
       g.drawLine(startX, startY, endX, endY);
       if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
+        turnPasser = true;
       } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
-        if(entityMap[bulletY][bulletX] instanceof Enemy && !turnPasser){
+        turnPasser = true;
+        if(entityMap[bulletY][bulletX] instanceof Enemy){
           playerAttack(bulletX, bulletY);
         }
       }
@@ -1182,7 +1196,7 @@ class GamePanel extends JPanel{
       randomizeArmor(spawnX, spawnY);
     }
     itemCount=0;
-
+    
     while (itemCount<driveCap){
       do{
         spawnX =(int)(Math.random()*itemMap[0].length);
@@ -1243,41 +1257,39 @@ class GamePanel extends JPanel{
   public void playerAttack(int targetX, int targetY){
     //Only one status effect at a time, but multiple drives can be used
     reversePixelToArray(mouseListener.getMouseXy());
-    if (((int)(Math.abs(playerCurrentX-targetX)+(int)(Math.abs(playerCurrentY-targetY))))==1){
-      if (entityMap[targetY][targetX] instanceof Enemy){
-        if (inventory.getItem(2,3) instanceof MeleeWeapon){
-          ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
-          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
-            if (!(entityMap[targetY][targetX].getFreeze())){
-              entityMap[targetY][targetX].setFreeze(true);
-              //Armor becomes weaker
-              entityMap[targetY][targetX].setArmor(0);
-            }
+    if (entityMap[targetY][targetX] instanceof Enemy){
+      if (inventory.getItem(2,3) instanceof MeleeWeapon){
+        ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
+        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
+          if (!(entityMap[targetY][targetX].getFreeze())){
+            entityMap[targetY][targetX].setFreeze(true);
+            //Armor becomes weaker
+            entityMap[targetY][targetX].setArmor(0);
           }
-          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
-            if (!(entityMap[targetY][targetX].getFlame())){
-              entityMap[targetY][targetX].setFlame(true);
-              //Draw a little icon above the heads of the enemies with the status
-            }
-          }
-          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
-            if (!(entityMap[targetY][targetX].getLightning())){
-              entityMap[targetY][targetX].setLightning(true);
-            }
-          }
-          //Checks if the entity has been killed, so that it will not be able to attack afterwards
-          checkKilled(targetX, targetY);
-          //Defense will block up to %80 of damage
-          int damage;
-          if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
-            damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
-          }else{
-            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
-          }
-          entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
-        turnPasser = true;
+        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
+          if (!(entityMap[targetY][targetX].getFlame())){
+            entityMap[targetY][targetX].setFlame(true);
+            //Draw a little icon above the heads of the enemies with the status
+          }
+        }
+        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
+          if (!(entityMap[targetY][targetX].getLightning())){
+            entityMap[targetY][targetX].setLightning(true);
+          }
+        }
+        //Checks if the entity has been killed, so that it will not be able to attack afterwards
+        checkKilled(targetX, targetY);
+        //Defense will block up to %80 of damage
+        int damage;
+        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+          damage =((int)((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8));
+        }else{
+          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
+        }
+        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
       }
+      turnPasser = true;
     }
   }
   public void checkBroken(){
