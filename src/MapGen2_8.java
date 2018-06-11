@@ -769,18 +769,16 @@ class MapGen2_8{
           resultProc[i][j] = 'B';
         } else if (result[i][j] == 402) { // specimen container (whole)
           resultProc[i][j] = 'U';
-        } else if (result[i][j] == 307) { // research table w/ splatter
+        } else if (result[i][j] == 307) { // lab table w/ splatter
           resultProc[i][j] = 's';
-        } else if (result[i][j] == 306) { // research table w/ chemicals
+        } else if (result[i][j] == 306) { // lab table w/ chemicals
           resultProc[i][j] = 'h';
         } else if (result[i][j] == 305) { // lab bench w/ computer
           resultProc[i][j] = 'p';
         } else if (result[i][j] == 304) { // lab bench w/ notes
           resultProc[i][j] = 'n';
-        } else if (result[i][j] == 303) { // research table
+        } else if (result[i][j] == 303) { // lab table
           resultProc[i][j] = 't';
-        } else if (result[i][j] == 302) { // lab bench
-          resultProc[i][j] = 'l';
         } else if (result[i][j] == 208) { // reactor stabilizers
           resultProc[i][j] = 'z';
         } else if (result[i][j] == 209) { // reactor core
@@ -819,13 +817,13 @@ class MapGen2_8{
           resultProc[i][j] = 'h';
         } else if (result[i][j] == -203) { // veritcal walkway
           resultProc[i][j] = 'v';
-        } else if (result[i][j] == -204) { // corner 1
+        } else if (result[i][j] == -204) { // reactor corner 1
           resultProc[i][j] = 'a';
-        } else if (result[i][j] == -205) { // corner 2
+        } else if (result[i][j] == -205) { // reactor corner 2
           resultProc[i][j] = 'b';
-        } else if (result[i][j] == -206) { // corner 3
+        } else if (result[i][j] == -206) { // reactor corner 3
           resultProc[i][j] = 'c';
-        } else if (result[i][j] == -207) { // corner 4
+        } else if (result[i][j] == -207) { // reactor corner 4
           resultProc[i][j] = 'd';
         } else if (result[i][j] == -301) { // lab floor
           resultProc[i][j] = '&';

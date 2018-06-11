@@ -620,7 +620,7 @@ class MapGen2_6{
           resultProc[i][j] = 'R';
         } else if (result[i][j] == -3) {
           resultProc[i][j] = '@';
-        } else if (result[i][j] == -4) {
+        } else if (result[i][j] == -4) { //Stairs
           resultProc[i][j] = '#';
         } else if (result[i][j] == -5) {
           resultProc[i][j] = 'A';
