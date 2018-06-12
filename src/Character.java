@@ -8,12 +8,14 @@ import java.io.File;
 
 class Character extends Entity{
   //Constructor
-  BufferedImage[] sprites;
-  int lastSprite;
-  int movementMod=-1;
-  int movementCount=0;
-  int xp = 0;
-  int xpCap = 100;
+  private BufferedImage[] sprites;
+  private int lastSprite = 4;
+  private int movementMod=-1;
+  private int movementCount=0;
+  private int xp = 0;
+  private int xpCap = 100;
+  private int hunger = 100;
+  
   Character(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor){
     super (h,hC,a,sP,freezeStatus,lightningStatus,flameStatus, minimapColor);
     try {
@@ -50,6 +52,7 @@ class Character extends Entity{
       }
     }
   }
+  //Getters and setters
   public int getXp(){
     return xp;
   }
@@ -62,5 +65,10 @@ class Character extends Entity{
   public void setXpCap(int cap){
     this.xpCap = cap;
   }
-  //Getters and setters
+  public int getHunger(){
+    return hunger;
+  }
+  public void setHunger(int hunger){
+    this.hunger = hunger;
+  }
 }

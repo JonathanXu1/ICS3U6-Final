@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
+
 import javax.sound.sampled.*;
 ///Make it so that you click again to cancel the upgrade
 class Main{
@@ -72,8 +73,12 @@ class Main{
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes");
         }
         //Reactor
-        else if(charMap[i][j] == 'r'){
+        else if(charMap[i][j] == 'r'){//Reactor Core
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore");
+        }else if(charMap[i][j] == 'h'){ //Horizontal Walkway
+          map[i][j]= new FloorTile(Color.GREEN, "../res/ReactorCore", 0.5 * Math.PI);
+        }else if(charMap[i][j] == 'v'){ //Vertical Walkway
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway");
         }
         //Key points
         else if (charMap[i][j] == '@'){

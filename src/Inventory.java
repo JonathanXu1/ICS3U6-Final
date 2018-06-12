@@ -77,6 +77,6 @@ class Inventory{
     lineSkip = 0;
     g.drawString(((Consumable)(inventory[positionY][positionX])).getEffectDescription(), xPixelPos,yPixelPos);
     lineSkip = lineSkip+12;
-    g.drawString("Click outside the inventory to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
+    g.drawString("Click outside the inventory or the drive again to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
   }
 }
