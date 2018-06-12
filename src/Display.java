@@ -33,7 +33,7 @@ class Display extends JFrame{
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();
-
+  
   
   //Game logic
   private Tile[][] map;
@@ -107,7 +107,7 @@ class Display extends JFrame{
         scoreboardButton.setContentAreaFilled(true);
       } else if(quitButtonMouse.getHover()){
         quitButton.setContentAreaFilled(true);
-      }//Custy might have to remove
+      }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);
       menuPanel.add(loadGameButton);
@@ -117,8 +117,9 @@ class Display extends JFrame{
       menuBgPanel.add(menuPanel);
       menuBgPanel.add(title);
       menuBgPanel.refresh();
-      // Main game state
-    }else if (gameState==1){
+    }
+    // Main game state
+    else if (gameState==1){
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
