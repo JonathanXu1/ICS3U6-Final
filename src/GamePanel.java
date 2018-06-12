@@ -113,10 +113,6 @@ class GamePanel extends JPanel{
   private boolean itemPickup = false;
   private int turnTransitionCounter  =0;
   private boolean turnPasser = false;
-  private int weaponCap;
-  private int armorCap;
-  private int driveCap;
-  private int medicineCap;
   private int itemRarity;
   private int driveNumber;
   private boolean pendingUpgrade;
@@ -127,7 +123,7 @@ class GamePanel extends JPanel{
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
-  private boolean meleeSelected  = false;
+  private boolean meleeSelected  = true;
   //Game over control
   private boolean gameOver;
   private boolean weaponState = true;
@@ -589,11 +585,12 @@ class GamePanel extends JPanel{
               if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
                 if (!((tileSelectedArray[1]==playerCurrentY)&&(tileSelectedArray[0]==playerCurrentX))){
                   if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
-                    if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&
-                         (mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>maxY-(int)(BOT_HEIGHT/2.0))&&(mouseListener.getMouseXy()[1]<maxY-(int)(BOT_HEIGHT/2.0)+maxY-(int)(BOT_HEIGHT/2.0)))){
-                      collided = false;
-                      translateX = 0;
-                      translateY = 0;
+                    if ((inventory.getItem(0,3)) instanceof RangedWeapon){
+                      if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>maxY-(int)(BOT_HEIGHT/2.0))&&(mouseListener.getMouseXy()[1]<maxY-(int)(BOT_HEIGHT/2.0)+maxY-(int)(BOT_HEIGHT/2.0)))){
+                        collided = false;
+                        translateX = 0;
+                        translateY = 0;
+                      }
                     }
                   }
                 }
@@ -656,7 +653,7 @@ class GamePanel extends JPanel{
     if (hunger <= 0){
       g.drawImage(starving,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
       statusSkip=statusSkip+35;
-    } else if(hunger < 50){
+    } else if(hunger < 100){
       g.drawImage(hungry,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
       statusSkip=statusSkip+35;
     }
@@ -942,10 +939,10 @@ class GamePanel extends JPanel{
     if(hungerCount >= 5){
       ((Character)entityMap[playerCurrentY][playerCurrentX]).setHunger(hunger-1);
       if(hunger <= 0){
-        entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth-2);
-      } else if(hunger < 50){
         entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth-1);
-      } else if(tempHealth < entityMap[playerCurrentY][playerCurrentX].getHealthCap()){
+      } else if(hunger < 100){
+        //There is just a hunger warning
+      } else if(tempHealth < entityMap[playerCurrentY][playerCurrentX].getHealthCap()) {
         entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth+1);
       }
       hungerCount = 0;
@@ -960,7 +957,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<0)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1326,21 +1323,31 @@ class GamePanel extends JPanel{
     ((Weapon)(inventory.getItem(2,3))).setFreezeChance(100);
     ((Weapon)(inventory.getItem(2,3))).setLightningChance(100);
     //First initialize a random number of weapons and armors to spawn across the map
-    weaponCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
-    armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
-    driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int rangedWeaponCap =((200-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     //Resets the spawn
     spawnX = 0;
     spawnY = 0;
-    while(itemCount<weaponCap){
+    while(itemCount<meleeWeaponCap){
       do{
         spawnX =(int)(Math.random()*itemMap[0].length);
         spawnY =(int)(Math.random()*itemMap.length);
       }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
       itemCount++;
-      randomizeWeapon(spawnX, spawnY);
+      randomizeMeleeWeapon(spawnX, spawnY);
+    }
+    itemCount=0;
+    while(itemCount<rangedWeaponCap){
+      do{
+        spawnX =(int)(Math.random()*itemMap[0].length);
+        spawnY =(int)(Math.random()*itemMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      randomizeRangedWeapon(spawnX, spawnY);
     }
     itemCount=0;
     while(itemCount<armorCap){
@@ -1371,7 +1378,7 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new MedKit();
     }
   }
-  public void randomizeWeapon(int spawnX, int spawnY){
+  public void randomizeMeleeWeapon(int spawnX, int spawnY){
     
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
@@ -1394,6 +1401,18 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new EnergySuit(100);
     }else{
       itemMap[spawnY][spawnX] = new AssaultVest(100);
+    }
+  }
+  public void randomizeRangedWeapon(int spawnX, int spawnY){
+    itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
+    if (itemRarity==5){
+      itemMap[spawnY][spawnX] = new SolarScorcher(100);
+    }else if (itemRarity==4){
+      itemMap[spawnY][spawnX] = new PulseRailgun(100); 
+    }else if (itemRarity==3){
+      itemMap[spawnY][spawnX] = new PlasmaRifle(100);
+    }else{
+      itemMap[spawnY][spawnX] = new LaserPistol(100);
     }
   }
   public void randomizeDrive(int spawnX, int spawnY){
@@ -1433,17 +1452,25 @@ class GamePanel extends JPanel{
             entityMap[targetY][targetX].setLightning(true);
           }
         }
-      }
-      }else if (!(meleeSelected)){
-                if ((inventory.getItem(0,3)) instanceof RangedWeapon){
-        ((Equipment)(inventory.getItem(0,3))).setDurability(((Equipment)(inventory.getItem(0,3))).getDurability()-1);
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFreezeChance()){
-          if (!(entityMap[targetY][targetX].getFreeze())){
-            entityMap[targetY][targetX].setFreeze(true);
-            //Armor becomes weaker
-            entityMap[targetY][targetX].setArmor(0);
-          }
+        //Defense will block up to %80 of damage
+        int damage;
+        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+          damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
+        }else{
+          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
         }
+        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
+        }
+      }else if (!(meleeSelected)){
+        if ((inventory.getItem(0,3)) instanceof RangedWeapon){
+          ((Equipment)(inventory.getItem(0,3))).setDurability(((Equipment)(inventory.getItem(0,3))).getDurability()-1);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFreezeChance()){
+            if (!(entityMap[targetY][targetX].getFreeze())){
+              entityMap[targetY][targetX].setFreeze(true);
+              //Armor becomes weaker
+              entityMap[targetY][targetX].setArmor(0);
+            }
+          }
         if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFlameChance()){
           if (!(entityMap[targetY][targetX].getFlame())){
             entityMap[targetY][targetX].setFlame(true);
@@ -1455,16 +1482,16 @@ class GamePanel extends JPanel{
             entityMap[targetY][targetX].setLightning(true);
           }
         }
+        //Defense will block up to %80 of damage
+        int damage;
+        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+          damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
+        }else{
+          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
+        }
+        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
       }
-      //Defense will block up to %80 of damage
-      int damage;
-      if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
-        damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
-      }else{
-        damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
-      }
-      entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
       //Checks if the entity has been killed, so that it will not be able to attack afterwards
       checkKilled(targetX, targetY);
     }
@@ -1486,14 +1513,16 @@ class GamePanel extends JPanel{
       //5% chance to spawn an item
       //Maybe up?
       if ((int)(Math.random()*100)<15){
-        itemNum = (int)(Math.random()*4);
+        itemNum = (int)(Math.random()*5);
         if (itemNum==0){
           randomizeDrive(arrayX, arrayY);
         }else if(itemNum==1){
           randomizeArmor(arrayX, arrayY);
         }else if(itemNum==2){
-          randomizeWeapon(arrayX, arrayY);
+          randomizeMeleeWeapon(arrayX, arrayY);
         }else if (itemNum==3){
+          randomizeRangedWeapon(arrayX, arrayY);
+        }else if (itemNum==4){
           itemMap[spawnY][spawnX] = new MedKit();
         }
       }

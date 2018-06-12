@@ -24,6 +24,6 @@ class MedKit extends Consumable{
     g.drawImage(medKit, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This will heal the player by 10 hp");  
+    return ("This will heal the player to full");  
   }
 }

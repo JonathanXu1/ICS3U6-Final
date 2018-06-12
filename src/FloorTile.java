@@ -40,7 +40,7 @@ class FloorTile extends WalkableTile{
       bimage = (BufferedImage)image;
     } else{
       // Create a buffered image with transparency
-      bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+      bimage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
       
       // Draw the image on to the buffered image
       Graphics2D bGr = bimage.createGraphics();
