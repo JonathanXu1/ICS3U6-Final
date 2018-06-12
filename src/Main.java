@@ -1,8 +1,8 @@
 import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
+import javax.sound.sampled.*; //Wildcard
 
-import javax.sound.sampled.*;
 ///Make it so that you click again to cancel the upgrade
 class Main{
   //These variables are required to be able to set starting position of the character
@@ -21,6 +21,7 @@ class Main{
     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
     Clip clip = (Clip) AudioSystem.getLine(info);
     */
+   
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map

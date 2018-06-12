@@ -2,6 +2,11 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
+import java.awt.GraphicsEnvironment;
+import java.awt.FontFormatException;
+import java.awt.Color;
+import java.io.IOException;
 
 class Display extends JFrame{
   private GamePanel gamePanel;
@@ -32,13 +37,13 @@ class Display extends JFrame{
   private CustomMouseListener loadGameButtonMouse = new CustomMouseListener();
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
-  private CustomMouseListener quitButtonMouse = new CustomMouseListener();
-  
-  
+  private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
   //Game logic
   private Tile[][] map;
   private int playerStartingX;
   private int playerStartingY;
+  //Fonts
+  Font customTitle, customHeader;
   
   Display(){
     super ("Concordia");
@@ -49,6 +54,16 @@ class Display extends JFrame{
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setFocusable(true);
     
+    //Adds fonts
+    try {
+      customTitle = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(80f);
+      customHeader = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(32f);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch(FontFormatException e) {
+      e.printStackTrace();
+    }
+  
     //Adds keylistener object
     
     //Creation of the basic game display
@@ -60,10 +75,14 @@ class Display extends JFrame{
     menuQuitListener = new StartListener();
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     
+    //Title
+    title.setFont(customTitle);
+    title.setForeground(Color.WHITE);
+    title.setBounds(50, -50, 800, 300);
+    
     //Menu panel and buttons
     menuPanel = new MenuPanel(50, maxY/2, 300, 220);
-    title.setFont(new Font("sansserif", Font.BOLD, 72));
-    title.setBounds(10, 10, 500, 300);
+    menuPanel.setFont(customHeader);
     continueButton.addMouseListener(continueButtonMouse);
     newGameButton.addMouseListener(newGameButtonMouse);
     loadGameButton.addMouseListener(loadGameButtonMouse);

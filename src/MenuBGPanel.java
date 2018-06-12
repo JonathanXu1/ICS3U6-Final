@@ -1,3 +1,7 @@
+//Add custom font
+//Have better button highlight effects
+
+
 import javax.swing.JPanel;
 import java.awt.Image;
 import java.awt.Toolkit;
