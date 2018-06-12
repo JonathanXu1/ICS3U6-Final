@@ -5,8 +5,8 @@ import java.awt.Toolkit;
 
 class HallwayTile extends WalkableTile{
   Image hallway;
-  HallwayTile(Color minimapColor, String info){
-    super(minimapColor, info);
+  HallwayTile(Color minimapColor){
+    super(minimapColor);
   }
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){

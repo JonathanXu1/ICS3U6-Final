@@ -3,8 +3,8 @@ import java.awt.Graphics;
 
 abstract class WalkableTile extends Tile{
   private boolean steppedOn = false;
-  WalkableTile(Color minimapColor, String info){
-    super(minimapColor, info);
+  WalkableTile(Color minimapColor){
+    super(minimapColor);
   }
   
   public void stepped(){

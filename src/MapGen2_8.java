@@ -525,11 +525,11 @@ class MapGen2_8{
           
           int[][] template = 
           {
-            { 303, 303, 303, 303,-301, 303, 303, 303, 303},
+            { 302, 302, 302, 302,-301, 302, 302, 302, 302},
             {-301,-301,-301,-301,-301,-301,-301,-301,-301},
             {-301, 303, 303, 303, 303, 303, 303, 303,-301},
             {-301,-301,-301,-301,-301,-301,-301,-301,-301},         
-            { 303, 303, 303, 303,-301, 303, 303, 303, 303},
+            { 302, 302, 303, 302,-301, 302, 302, 302, 302},
           };
           
           for (int i2 = -2; i2 < 3; i2++) {
@@ -772,7 +772,7 @@ class MapGen2_8{
         } else if (result[i][j] == 307) { // lab table w/ splatter
           resultProc[i][j] = 's';
         } else if (result[i][j] == 306) { // lab table w/ chemicals
-          resultProc[i][j] = 'm';
+          resultProc[i][j] = 'h';
         } else if (result[i][j] == 305) { // lab bench w/ computer
           resultProc[i][j] = 'p';
         } else if (result[i][j] == 304) { // lab bench w/ notes
@@ -784,7 +784,7 @@ class MapGen2_8{
         } else if (result[i][j] == 209) { // reactor core
           resultProc[i][j] = 'r';
         } else if (result[i][j] == 101) { // chest room chest
-          resultProc[i][j] = 'G';
+          resultProc[i][j] = 'c';
         } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
         } else if (result[i][j] == 5) { // wall safe
