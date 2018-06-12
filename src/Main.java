@@ -34,52 +34,52 @@ class Main{
 
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
-        if (charMap[i][j] == 'J'){ //
-          map[i][j]= new WallTile(POO, "../res/WallTile", "garbage");
+        if (charMap[i][j] == 'J'){
+          map[i][j]= new WallTile(POO, "../res/WallTile");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
-        } else if (charMap[i][j] == 'X'){//Hallway floor
-          map[i][j]= new HallwayTile(Color.WHITE, "hallway floor"); 
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallSafe"); //Wall Safe
+        } else if (charMap[i][j] == 'X'){
+          map[i][j]= new HallwayTile(Color.WHITE); //Hallway floor
         } else if (charMap[i][j] == 'R' || charMap[i][j] == '!' || charMap[i][j] == '&' || charMap[i][j] == '%' || charMap[i][j] == '=') { //Room floor
-          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile", "room floor");
-        } else if (charMap[i][j] == 'D') { //Door
-          map[i][j]= new DoorTile(Color.RED, "door");
+          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile");
+        } else if (charMap[i][j] == 'D') {
+          map[i][j]= new DoorTile(Color.RED); //Door
         } else if (charMap[i][j] == '~') {
-          map[i][j]= new WallTile(Color.DARK_GRAY,"../res/WallTile", "hallway wall"); //Hallway wall
+          map[i][j]= new WallTile(Color.DARK_GRAY,"../res/WallTile"); //Hallway wall
         } else if (charMap[i][j] == '|') {
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); //Room wall
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile"); //Room wall
         } else if (charMap[i][j] == 'A') {
-          map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); //Airlock
+          map[i][j]= new HallwayTile(Color.ORANGE); //Airlock
         } 
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
-          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/SpecimenBroken", "broken specimen");
+          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/SpecimenBroken");
         } else if (charMap[i][j] == 'U'){//Specimen Container
-          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/Specimen", "specimen"); 
+          map[i][j]= new WallTile(Color.GREEN.darker(), "../res/Specimen"); 
         } else if (charMap[i][j] == 'O'){//Arm
-          map[i][j]= new FloorTile(Color.GREEN, "../res/Arm", "arm"); 
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Arm"); 
         } else if (charMap[i][j] == 'H'){//Blood
-          map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood"); 
+          map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor"); 
         }
         //Lab
         else if (charMap[i][j] == 't'){ //Lab table
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab", "lab");
-        } else if (charMap[i][j] == 'm' ){ //Lab table w/ chemicals
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabTube", "lab");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab");
+        } else if (charMap[i][j] == 'h'){ //Lab table w/ chemicals
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabTube");
         } else if (charMap[i][j] == 's'){ // Lab table w/ splatter
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabSpill", "lab"); 
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabSpill"); 
         } else if (charMap[i][j] == 'p'){//Lab table w/ computer
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer", "lab");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer");
         } else if (charMap[i][j] == 'n'){//Lab table w/ notes
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes", "lab");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes");
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor core");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore");
         }else if(charMap[i][j] == 'h'){ //Horizontal Walkway
-          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", 0.5 * Math.PI, "horizontal walkway");
+          map[i][j]= new FloorTile(Color.GREEN, "../res/ReactorCore", 0.5 * Math.PI);
         }else if(charMap[i][j] == 'v'){ //Vertical Walkway
-          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", "vertical walkway");
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway");
         }
         
         // Captain's Quarters
@@ -115,11 +115,11 @@ class Main{
         
         //Key points
         else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile", "spawn"); //Spawn
+          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile"); //Spawn
           playerStartingX = j;
           playerStartingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "../res/StairDown", "stair down");
+          map[i][j]= new WallTile(Color.BLACK, "../res/WallTile");
         } else{
           map[i][j]= null;
         }
