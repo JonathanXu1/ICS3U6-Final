@@ -570,13 +570,13 @@ class GamePanel extends JPanel{
         targetY= maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
     }
     debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
-    playerFireController.setupProjectile(targetX, targetY, 100);
-    double shootAngle = playerFireController.returnAngle();
-    translateX += Math.cos(shootAngle)*10;
-    translateY += Math.sin(shootAngle)*10;
-    Graphics2D g2 = (Graphics2D) g;
-    g2.setStroke(new BasicStroke(5));
-    g.setColor(Color.RED);
+      playerFireController.setupProjectile(targetX, targetY, 100);
+      double shootAngle = playerFireController.returnAngle();
+      translateX += Math.cos(shootAngle)*10;
+      translateY += Math.sin(shootAngle)*10;
+      Graphics2D g2 = (Graphics2D) g;
+      g2.setStroke(new BasicStroke(5));
+      g.setColor(Color.RED);
     if (!(inventoryOpen)){
       if (!(tiling)){
         if(mouseListener.getPressed()){
@@ -666,7 +666,6 @@ class GamePanel extends JPanel{
     if (entityMap[playerCurrentY][playerCurrentX].getFlame()){
       g.drawImage (flameStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
     }
-    //Add in more status
     //Draws health bars for entities
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
