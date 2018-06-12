@@ -117,8 +117,9 @@ class Display extends JFrame{
       menuBgPanel.add(menuPanel);
       menuBgPanel.add(title);
       menuBgPanel.refresh();
-      // Main game state
-    }else if (gameState==1){
+    }
+    // Main game state
+    else if (gameState==1){
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
