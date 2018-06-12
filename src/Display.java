@@ -108,6 +108,7 @@ class Display extends JFrame{
       } else if(quitButtonMouse.getHover()){
         quitButton.setContentAreaFilled(true);
       }
+      menuBgPanel.refresh();
       // Main game state
     }else if (gameState==1){
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
