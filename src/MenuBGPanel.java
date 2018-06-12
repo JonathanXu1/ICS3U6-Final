@@ -8,12 +8,15 @@ class MenuBGPanel extends JPanel{
   private int xVal;
   private int yVal;
 <<<<<<< HEAD
+<<<<<<< HEAD
   private int pixelX, pixelY;
   private int starCount;
   private Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bg.png");
   private Star[][] stars = new Star[100][200];
   private int count = 0;
   Random rand = new Random();
+=======
+>>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
 =======
 >>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
   MenuBGPanel(int xVal, int yVal){
@@ -30,6 +33,7 @@ class MenuBGPanel extends JPanel{
     super.paintComponent(g);
     Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.drawImage(menuBg,0,0,xVal,yVal,this);
+<<<<<<< HEAD
 <<<<<<< HEAD
     if(count >= 10){ //Display count for buffering animations
       count = 0; 
@@ -55,6 +59,8 @@ class MenuBGPanel extends JPanel{
         }
       }
     }
+=======
+>>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
 =======
 >>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
   }
