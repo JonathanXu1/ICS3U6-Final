@@ -33,7 +33,7 @@ class Display extends JFrame{
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();
-  
+
   
   //Game logic
   private Tile[][] map;
@@ -107,6 +107,7 @@ class Display extends JFrame{
         scoreboardButton.setContentAreaFilled(true);
       } else if(quitButtonMouse.getHover()){
         quitButton.setContentAreaFilled(true);
+<<<<<<< HEAD
       }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);
@@ -117,6 +118,9 @@ class Display extends JFrame{
       menuBgPanel.add(menuPanel);
       menuBgPanel.add(title);
       menuBgPanel.refresh();
+=======
+      }
+>>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
       // Main game state
     }else if (gameState==1){
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
