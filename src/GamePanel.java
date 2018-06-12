@@ -297,7 +297,7 @@ class GamePanel extends JPanel{
         }
     }
     g.drawImage(hotbar,(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))),maxY-(int)(BOT_HEIGHT/2.0),(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT), (int)(BOT_HEIGHT/2.0),this);
-    //Hp and exp bars
+      //Hp and exp bars
     g.drawImage(hp,10,10, (int)(maxX*0.2),  (int)(maxX*0.2/200.0*14.0),this);
     g.drawImage(exp,10,15+ (int)(maxX*0.2/200.0*14.0),(int)(maxX*0.2), (int)(maxX*0.2/200.0*10.0),this);
     ///Draw in all the button click shading
@@ -588,7 +588,8 @@ class GamePanel extends JPanel{
               if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
                 if (!((tileSelectedArray[1]==playerCurrentY)&&(tileSelectedArray[0]==playerCurrentX))){
                   if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
-                    if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[1]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+maxY-(int)(BOT_HEIGHT/2.0)))){
+                    if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&
+                         (mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>maxY-(int)(BOT_HEIGHT/2.0))&&(mouseListener.getMouseXy()[1]<maxY-(int)(BOT_HEIGHT/2.0)+maxY-(int)(BOT_HEIGHT/2.0)))){
                       collided = false;
                       translateX = 0;
                       translateY = 0;
@@ -973,7 +974,7 @@ class GamePanel extends JPanel{
       //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
       //Defense and health will both increase as the player progresses
-      entityMap[spawnY][spawnX] = new Enemy (20,20,10,1,false,false,false,Color.MAGENTA, false);
+      entityMap[spawnY][spawnX] = new Roomba (20,20,10,1,false,false,false,Color.MAGENTA, false);
     }
     //Damages whatever is burned
     for (int i =0;i<entityMap.length;i++){
@@ -1126,19 +1127,15 @@ class GamePanel extends JPanel{
                     damage =25-entityMap[playerCurrentY][playerCurrentX].getArmor();
                   }
                   if (i + 1 == playerCurrentY && j == playerCurrentX) {
-                    System.out.println (damage);
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
                   }
                   if (i == playerCurrentY && j + 1 == playerCurrentX) {
-                    System.out.println (damage);
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
                   }
                   if (i - 1 == playerCurrentY && j == playerCurrentX) {
-                    System.out.println (damage);
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
                   }
                   if (i == playerCurrentY && j - 1 == playerCurrentX) {
-                    System.out.println (damage);
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
                   }
                 }
