@@ -25,6 +25,7 @@ class Main{
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     Color POO = new Color(168,107,23);
     
@@ -70,7 +71,7 @@ class Main{
         } else if (charMap[i][j] == 'p'){//Lab table w/ computer
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer");
         } else if (charMap[i][j] == 'n'){//Lab table w/ notes
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab"); // TEMPORARY while sprite isn't created yet
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes"); // TEMPORARY while sprite isn't created yet
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
@@ -80,6 +81,38 @@ class Main{
         }else if(charMap[i][j] == 'v'){ //Vertical Walkway
           map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway");
         }
+        
+        // Captain's Quarters
+        else if (charMap[i][j] == '$') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloor");
+        } else if (charMap[i][j] == 'y') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop");
+        } else if (charMap[i][j] == 'x') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom");
+        } else if (charMap[i][j] == '3') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedTop");
+        } else if (charMap[i][j] == '4') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedBottom");
+        } else if (charMap[i][j] == '?') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorPaper");
+        } else if (charMap[i][j] == 'M') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorScratch");
+        }
+        
+        // Crew's Quarters
+        
+        else if (charMap[i][j] == 'Q') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloor");
+        } else if (charMap[i][j] == '1') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedTop");
+        } else if (charMap[i][j] == '2') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedBottom");
+        } else if (charMap[i][j] == 'I') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorShirt");
+        } else if (charMap[i][j] == 'P') {
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorChess");
+        }
+        
         //Key points
         else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile"); //Spawn
@@ -92,6 +125,7 @@ class Main{
         }
       }
     }
+    
    //   output.close();
       //Plays music
     /*

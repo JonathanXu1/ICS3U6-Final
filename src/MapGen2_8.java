@@ -614,8 +614,8 @@ class MapGen2_8{
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
-            {-501, 503,-501, 503,-501, 503,-501, 503,-501},
-            {-501, 502,-501, 502,-501, 502,-501, 502,-501},           
+            {-501, 502,-501, 502,-501, 502,-501, 502,-501},
+            {-501, 503,-501, 503,-501, 503,-501, 503,-501},           
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
           };          
           
@@ -635,11 +635,11 @@ class MapGen2_8{
           }          
         } else if (map[i*6][j*6] == 600){
           int[][] template =   {
-            {-601, 602,-601,-601,-601,-601,-601},
-            {-601, 603,-601,-601,-601,-601,-601},
+            {-601, 602,-601,-601,-601,-601, 604},
+            {-601, 603,-601,-601,-601,-601, 605},
             {-601,-601,-601,-601,-601,-601,-601},
-            { 605,-601,-601,-601,-601,-601,-601},
-            { 604,-601,-601,-601,-601,-601,-601},
+            {-601,-601,-601,-601,-601,-601,-601},
+            {-601,-601,-601,-601,-601,-601,-601},
           };
           
           for (int i2 = -2; i2 < 3; i2++){
@@ -748,6 +748,31 @@ class MapGen2_8{
     map = trimmedArray;
   }
   
+  public char[][] createBossRoom() {
+    char[][] returnArray = new char[41][60];
+    for (int i = 1; i < 40; i++) {
+      for (int j = 1; j < 30;j++) {      
+        returnArray[i][j] = 'R';                
+      }
+    }
+    
+    for (int j = 30; j < 45; j++) {
+      returnArray[21][j] = 'X';
+      returnArray[22][j] = 'X';
+      returnArray[23][j] = 'X';
+    }
+    
+    for (int i = 15; i < 26; i++) {
+      for (int j = 45; j < 56; j++) {
+        returnArray[i][j] = 'R';        
+      }  
+    }
+      
+    returnArray[22][50] = '@';
+    
+    return returnArray;                
+  }
+  
   public char[][] charMap(int[][] result) {
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
@@ -760,7 +785,7 @@ class MapGen2_8{
         } else if (result[i][j] == 603) { // captain's desk (2)
           resultProc[i][j] = 'x';
         } else if (result[i][j] == 602) { // captain's desk (1)
-          resultProc[i][j] = 'z';
+          resultProc[i][j] = 'y';
         } else if (result[i][j] == 503) { // crew's bed (foot)
           resultProc[i][j] = '2';
         } else if (result[i][j] == 502) { // crew's bed (head)
