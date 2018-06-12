@@ -4,6 +4,7 @@
 //Make it so that when you switch your weapon, it is no longer highlighted
 //Select one or the other, one will always be selected
 //Fix the inability to shoot below
+//Draw bars null pointer exception
 
 //Others:
 //Work on displaying different levels
@@ -959,7 +960,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<50)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<0)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1388,11 +1389,11 @@ class GamePanel extends JPanel{
     if (itemRarity==5){
       itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
     }else if (itemRarity==4){
-      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100); 
+      itemMap[spawnY][spawnX] = new ProximityArmor(100); 
     }else if (itemRarity==3){
-      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
+      itemMap[spawnY][spawnX] = new EnergySuit(100);
     }else{
-      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
+      itemMap[spawnY][spawnX] = new AssaultVest(100);
     }
   }
   public void randomizeDrive(int spawnX, int spawnY){

@@ -64,7 +64,7 @@ class Main{
         //Lab
         else if (charMap[i][j] == 't'){ //Lab table
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab");
-        } else if (charMap[i][j] == 'h'){ //Lab table w/ chemicals
+        } else if (charMap[i][j] == 'm'){ //Lab table w/ chemicals
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabTube");
         } else if (charMap[i][j] == 's'){ // Lab table w/ splatter
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabSpill"); 
@@ -84,33 +84,33 @@ class Main{
         
         // Captain's Quarters
         else if (charMap[i][j] == '$') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloor", "capq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloor");
         } else if (charMap[i][j] == 'y') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop", "capq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop");
         } else if (charMap[i][j] == 'x') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom", "capq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom");
         } else if (charMap[i][j] == '3') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedTop", "capq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedTop");
         } else if (charMap[i][j] == '4') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedBottom", "capq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedBottom");
         } else if (charMap[i][j] == '?') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorPaper", "capq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorPaper");
         } else if (charMap[i][j] == 'M') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorScratch", "capq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CaptainFloorScratch");
         }
         
         // Crew's Quarters
         
         else if (charMap[i][j] == 'Q') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloor", "crewq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloor");
         } else if (charMap[i][j] == '1') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedTop", "crewq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedTop");
         } else if (charMap[i][j] == '2') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedBottom", "crewq");
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CrewBedBottom");
         } else if (charMap[i][j] == 'I') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorShirt", "crewq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorShirt");
         } else if (charMap[i][j] == 'P') {
-          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorChess", "crewq");
+          map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorChess");
         }
         
         //Key points
