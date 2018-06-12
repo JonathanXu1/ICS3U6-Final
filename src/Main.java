@@ -70,7 +70,7 @@ class Main{
         } else if (charMap[i][j] == 'p'){//Lab table w/ computer
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer", "lab");
         } else if (charMap[i][j] == 'n'){//Lab table w/ notes
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab", "lab"); // TEMPORARY while sprite isn't created yet
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes", "lab");
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
