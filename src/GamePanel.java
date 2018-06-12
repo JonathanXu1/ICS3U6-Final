@@ -569,19 +569,13 @@ class GamePanel extends JPanel{
         targetX = maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
         targetY= maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
     }
-    
     playerFireController.setupProjectile(targetX, targetY, 100);
     double shootAngle = playerFireController.returnAngle();
-    
-    debugMessage = Integer.toString(translateX) + " " +  Integer.toString(translateY);
-    
     translateX += Math.cos(shootAngle)*10;
     translateY += Math.sin(shootAngle)*10;
-    
     Graphics2D g2 = (Graphics2D) g;
     g2.setStroke(new BasicStroke(5));
     g.setColor(Color.RED);
-    
     if (!(inventoryOpen)){
       if (!(tiling)){
         if(mouseListener.getPressed()){
@@ -624,7 +618,7 @@ class GamePanel extends JPanel{
         }
       }
     }
-    //System.out.println();
+    debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
   }
   
   public void drawBars(Graphics g){
