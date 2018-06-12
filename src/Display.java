@@ -107,7 +107,7 @@ class Display extends JFrame{
         scoreboardButton.setContentAreaFilled(true);
       } else if(quitButtonMouse.getHover()){
         quitButton.setContentAreaFilled(true);
-      }//Custy might have to remove
+      }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);
       menuPanel.add(loadGameButton);
