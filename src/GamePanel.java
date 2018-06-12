@@ -2,6 +2,7 @@
 //Add enemy sprite
 //Add projectile weapons
 //Make it so that when you switch your weapon, it is no longer highlighted
+//Fix the inability to shoot below
 
 //Others:
 //Work on displaying different levels
