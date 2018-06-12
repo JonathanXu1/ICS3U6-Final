@@ -14,7 +14,7 @@ class Character extends Entity{
   private int movementCount=0;
   private int xp = 0;
   private int xpCap = 100;
-  private int hunger = 100;
+  private int hunger = 200;
   
   Character(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor){
     super (h,hC,a,sP,freezeStatus,lightningStatus,flameStatus, minimapColor);
