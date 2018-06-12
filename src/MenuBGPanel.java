@@ -9,9 +9,11 @@ import java.awt.Color;
 class MenuBGPanel extends JPanel{
   private int xVal;
   private int yVal;
-  private int pixelSize;
+  private int pixelX, pixelY;
   private int starCount;
-  Random r = new Random();
+  private Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bg.png");
+  private Star[][] stars = new Star[100][200];
+  Random rand = new Random();
   MenuBGPanel(int xVal, int yVal){
     this.setFocusable(true);
     this.xVal = xVal;
@@ -19,20 +21,36 @@ class MenuBGPanel extends JPanel{
     Dimension panelSize= new Dimension (xVal, yVal);
     this.setPreferredSize(panelSize);
     this.setLayout(null);
+    
+    pixelX = xVal/200;
+    pixelY = yVal/100;
   }
   @Override
   public void paintComponent(Graphics g){
     super.paintComponent(g);
-    Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bg.png");
     g.drawImage(menuBg,0,0,xVal,yVal,this);
-    pixelSize = xVal/200;
     
-    starCount = r.nextInt(100) + 50; //50 - 100 stars
-    g.setColor(Color.GRAY);
+    starCount = 1; //# stars
     for (int i = 0; i <= starCount; i ++){
-      g.fillRect(r.nextInt(200)*pixelSize, r.nextInt(100)*pixelSize, pixelSize, pixelSize);
+      int randX = rand.nextInt(200);
+      int randY = rand.nextInt(100);
+      if(stars[randY][randX] == null){
+        stars[randY][randX] = new Star();
+      }
     }
-    //System.out.println(Integer.toString(xVal/200) + " " + Integer.toString(yVal/100));
+    for (int i = 0; i < stars.length; i ++){
+      for (int j = 0; j < stars[0].length; j++){
+        if(stars[i][j] != null){
+          if(!stars[i][j].getDied()){
+            stars[i][j].updateColor();
+            g.setColor(stars[i][j].getColor());
+            g.fillRect(j*pixelX, i*pixelY, pixelX, pixelY);
+          } else{
+            stars[i][j] = null;
+          }
+        }
+      }
+    }
   }
   public void refresh(){
     this.repaint();

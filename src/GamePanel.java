@@ -421,7 +421,7 @@ class GamePanel extends JPanel{
         for(int j = -1; j <= 1; j++){
           if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
             if(map[y+i][x+j] instanceof Tile){
-              if((map[y][x] instanceof FloorTile) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
+              if((map[y][x] instanceof FloorTile) || (map[y][x].getType().equals("lab")) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
               } else if(map[y][x] instanceof HallwayTile){ //In hall tile
                 map[y+i][x+j].setViewed();
@@ -618,7 +618,7 @@ class GamePanel extends JPanel{
         }
       }
     }
-    debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
+    //debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
   }
   
   public void drawBars(Graphics g){
@@ -935,7 +935,7 @@ class GamePanel extends JPanel{
     int hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
     //debugMessage = Integer.toString(hunger);
     int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
-    if(hungerCount >= 5){
+    if(hungerCount >= 10){
       ((Character)entityMap[playerCurrentY][playerCurrentX]).setHunger(hunger-1);
       if(hunger <= 0){
         entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth-2);

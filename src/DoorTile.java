@@ -6,8 +6,8 @@ import java.awt.Toolkit;
 class DoorTile extends WalkableTile{
   Image door;
   boolean entityOnDoor = true;
-  DoorTile(Color minimapColor){
-    super(minimapColor);
+  DoorTile(Color minimapColor, String info){
+    super(minimapColor, info);
   }
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){
