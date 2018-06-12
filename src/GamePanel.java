@@ -32,7 +32,7 @@ class GamePanel extends JPanel{
   private boolean movementRestriction;
   
   //Images
-  private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage;
+  private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage, hungry, starving;
   private final double Y_TO_X = 90.0/75.0;
   private final double INVENTORY_MOD = 110.0/75.0;
   private final double INV_Y_TO_X = 160.0/212.0;
@@ -50,6 +50,7 @@ class GamePanel extends JPanel{
   private boolean turnStart = false;
   private int turnCount =0;
   private boolean pauseState =false;
+  private int hungerCount = 0;
   
   //Sizes
   private int maxX = 0, maxY = 0;
@@ -118,6 +119,7 @@ class GamePanel extends JPanel{
   private int driveArrayY;     
   private int targetX=0;
   private int targetY=0;
+  
   //Attacking
   private int [] tileSelectedArray = new int [2];  
   
@@ -141,6 +143,8 @@ class GamePanel extends JPanel{
     this.hotbar = Toolkit.getDefaultToolkit().getImage("../res/Hotbar.png");
     this.mapBorder = Toolkit.getDefaultToolkit().getImage("../res/MapNoBorder.png"); //duplicate name
     this.inventoryImage = Toolkit.getDefaultToolkit().getImage("../res/Inventory.png");
+    this.hungry = Toolkit.getDefaultToolkit().getImage("../res/Hungry.png");
+    this.starving = Toolkit.getDefaultToolkit().getImage("../res/Starving.png");
     //Initializes minimap size
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
@@ -254,8 +258,8 @@ class GamePanel extends JPanel{
       }
     }
     //Hp and exp bars
-    g.drawImage(hp,10,10, ((int)(maxX*0.2)),  ((int)(maxX*0.2/200.0*14.0)),this);
-    g.drawImage(exp,10,15+ ((int)(maxX*0.2/200.0*14.0)),((int)(maxX*0.2)), ((int)(maxX*0.2/200.0*10.0)),this);
+    g.drawImage(hp,10,10, (int)(maxX*0.2),  (int)(maxX*0.2/200.0*14.0),this);
+    g.drawImage(exp,10,15+ (int)(maxX*0.2/200.0*14.0),(int)(maxX*0.2), (int)(maxX*0.2/200.0*10.0),this);
     ///Draw in all the button click shading
     if (!(inventoryOpen)){
       if (mouseListener.getPressed()){
@@ -528,7 +532,6 @@ class GamePanel extends JPanel{
       targetX = maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
       targetY= maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
     }
-      debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
       playerFireController.setupProjectile(targetX, targetY, 100);
       double shootAngle = playerFireController.returnAngle();
       translateX += Math.cos(shootAngle)*10;
@@ -597,6 +600,14 @@ class GamePanel extends JPanel{
     //Fill Exp, can be modified through the width
     g.setColor (new Color (152,251,152));
     g.fillRect (16,21+((int)(maxX*1.0/5.0/200.0*14.0)), (int)((((int)(maxX*1.0/5.0))-12)*((double)currXp)/(double)xpCap),((int)(maxX*1.0/5.0/200.0*10.0))-12);
+    //Draws status icons
+    int hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
+    if(hunger <= 0){
+      g.drawImage(starving,16,15+ (int)(maxX*0.2/200.0*24.0),30,30,this);
+    } else if(hunger < 50){
+      g.drawImage(hungry,16,15+ (int)(maxX*0.2/200.0*24.0),30,30,this);
+    }
+    //Draws health bars for entities
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
         g.setColor (new Color (220,20,60));
@@ -848,6 +859,23 @@ class GamePanel extends JPanel{
     this.newFloor = newFloor;
   }
   public void passTurn (){
+    //Updates hunger and health
+    hungerCount ++;
+    int hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
+    debugMessage = Integer.toString(hunger);
+    int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
+    if(hungerCount >= 5){
+      ((Character)entityMap[playerCurrentY][playerCurrentX]).setHunger(hunger-1);
+      if(hunger <= 0){
+        entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth-2);
+      } else if(hunger < 50){
+        entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth-1);
+      } else if(tempHealth < entityMap[playerCurrentY][playerCurrentX].getHealthCap()){
+        entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth+1);
+      }
+      hungerCount = 0;
+    }
+    
     for (int i =0;i<entityMap.length;i++){
       for(int j =0;j<entityMap[0].length;j++){
         if (entityMap[i][j] instanceof Enemy){
@@ -1009,7 +1037,7 @@ class GamePanel extends JPanel{
                   //Not sure about setting it to null, look at if there is a better method
                   entityMap[i][j] =null;
                 } else {    
-                  int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
+                  tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
                   if (i + 1 == playerCurrentY && j == playerCurrentX) {
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - 25+entityMap[playerCurrentY][playerCurrentX].getArmor());
                   }
