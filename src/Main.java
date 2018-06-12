@@ -63,20 +63,20 @@ class Main{
         //Lab
         else if (charMap[i][j] == 't'){ //Lab table
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab");
-        } else if (charMap[i][j] == 'h'){ //Lab table w/ chemicals
+        } else if (charMap[i][j] == 'm' ){ //Lab table w/ chemicals
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabTube");
         } else if (charMap[i][j] == 's'){ // Lab table w/ splatter
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabSpill"); 
         } else if (charMap[i][j] == 'p'){//Lab table w/ computer
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabComputer");
         } else if (charMap[i][j] == 'n'){//Lab table w/ notes
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/LabNotes");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab"); // TEMPORARY while sprite isn't created yet
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore");
         }else if(charMap[i][j] == 'h'){ //Horizontal Walkway
-          map[i][j]= new FloorTile(Color.GREEN, "../res/ReactorCore", 0.5 * Math.PI);
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", 0.5 * Math.PI);
         }else if(charMap[i][j] == 'v'){ //Vertical Walkway
           map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway");
         }

@@ -48,11 +48,11 @@ class FireController {
     angle = Math.atan((Math.abs(deltaY)/Math.abs(deltaX)));
     
        
-    if (deltaX < 0 && deltaY < 0) { //Quadrant 2
+    if (deltaX < 0 && deltaY <= 0) { //Quadrant 2
       angle = Math.PI - angle;
-    } else if (deltaX < 0 && deltaY > 0) { //Quadrant 3
+    } else if (deltaX < 0 && deltaY >= 0) { //Quadrant 3
       angle = Math.PI + angle;
-    } else if (deltaX > 0 && deltaY > 0) { //Quadrant 4
+    } else if (deltaX >= 0 && deltaY > 0) { //Quadrant 4
       angle = 2*Math.PI - angle;
     }
 

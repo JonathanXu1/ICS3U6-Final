@@ -569,14 +569,19 @@ class GamePanel extends JPanel{
         targetX = maxX/2+tileSelectedArray[0]*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX)+50;
         targetY= maxY/2+tileSelectedArray[1]*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+50;
     }
-    debugMessage = Integer.toString(maxX/2-targetX) + " " + Integer.toString(maxY/2-targetY);
-      playerFireController.setupProjectile(targetX, targetY, 100);
-      double shootAngle = playerFireController.returnAngle();
-      translateX += Math.cos(shootAngle)*10;
-      translateY += Math.sin(shootAngle)*10;
-      Graphics2D g2 = (Graphics2D) g;
-      g2.setStroke(new BasicStroke(5));
-      g.setColor(Color.RED);
+    
+    playerFireController.setupProjectile(targetX, targetY, 100);
+    double shootAngle = playerFireController.returnAngle();
+    
+    debugMessage = Integer.toString(translateX) + " " +  Integer.toString(translateY);
+    
+    translateX += Math.cos(shootAngle)*10;
+    translateY += Math.sin(shootAngle)*10;
+    
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setStroke(new BasicStroke(5));
+    g.setColor(Color.RED);
+    
     if (!(inventoryOpen)){
       if (!(tiling)){
         if(mouseListener.getPressed()){
@@ -585,11 +590,11 @@ class GamePanel extends JPanel{
               if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
                 if (!((tileSelectedArray[1]==playerCurrentY)&&(tileSelectedArray[0]==playerCurrentX))){
                   if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
-                    if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[1]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+maxY-(int)(BOT_HEIGHT/2.0)))){
+                    //if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[1]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+maxY-(int)(BOT_HEIGHT/2.0)))){
                       collided = false;
                       translateX = 0;
                       translateY = 0;
-                    }
+                    //}
                   }
                 }
               }
@@ -598,17 +603,19 @@ class GamePanel extends JPanel{
         }
       }
     }
+    
     int startX = maxX/2 + translateX;
-    int startY = maxY/2- translateY;
+    int startY = maxY/2 - translateY;
     int endX = startX + (int)(Math.cos(shootAngle)*20);
     int endY = startY - (int)(Math.sin(shootAngle)*20);
     int bulletY = playerCurrentY - (maxY/2 - endY)/100;
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
+    
     if (!collided){
       g.drawLine(startX, startY, endX, endY);
       if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
-        turnPasser = true;
+        turnPasser = true;      
       } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
         collided = true;
         turnPasser = true;
@@ -647,7 +654,7 @@ class GamePanel extends JPanel{
     int statusSkip=0;
     if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
       hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
-    }
+    } // should the rest be in this if?
     if (hunger <= 0){
       g.drawImage(starving,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
       statusSkip=statusSkip+35;
@@ -932,7 +939,7 @@ class GamePanel extends JPanel{
     //Updates hunger and health
     hungerCount ++;
     int hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
-    debugMessage = Integer.toString(hunger);
+    //debugMessage = Integer.toString(hunger);
     int tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
     if(hungerCount >= 5){
       ((Character)entityMap[playerCurrentY][playerCurrentX]).setHunger(hunger-1);
@@ -953,9 +960,9 @@ class GamePanel extends JPanel{
         }
       }
     }
-    //5 % chance to spawn
+    //0.5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<50)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
