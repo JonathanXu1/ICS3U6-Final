@@ -14,7 +14,7 @@ class MenuBGPanel extends JPanel{
   private Star[][] stars = new Star[100][200];
   private int count = 0;
   Random rand = new Random();
-
+  
   MenuBGPanel(int xVal, int yVal){
     this.setFocusable(true);
     this.xVal = xVal;
@@ -22,12 +22,14 @@ class MenuBGPanel extends JPanel{
     Dimension panelSize= new Dimension (xVal, yVal);
     this.setPreferredSize(panelSize);
     this.setLayout(null);
+    
+    pixelX = xVal/200;
+    pixelY = yVal/100;
   }
   @Override
   public void paintComponent(Graphics g){
     count ++;
     super.paintComponent(g);
-    Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bgPlaceholder.jpg");
     g.drawImage(menuBg,0,0,xVal,yVal,this);
     if(count >= 10){ //Display count for buffering animations
       count = 0; 
