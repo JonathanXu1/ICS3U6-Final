@@ -9,7 +9,7 @@ import java.io.File;
 class Character extends Entity{
   //Constructor
   private BufferedImage[] sprites;
-  private int lastSprite;
+  private int lastSprite = 4;
   private int movementMod=-1;
   private int movementCount=0;
   private int xp = 0;

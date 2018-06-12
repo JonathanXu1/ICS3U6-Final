@@ -7,6 +7,7 @@ public abstract class Weapon extends Equipment {
   private int freezeChance;
   private int flameChance;
   private int lightningChance;
+  private boolean weaponSelect;
   
   Weapon(int dbty) {
     super(dbty);
@@ -49,6 +50,11 @@ public abstract class Weapon extends Equipment {
       this.lightningChance = lightningChance;
     }
   }
-  
+  public boolean getWeaponSelect(){
+    return (weaponSelect);
+  }
+  public void setWeaponSelect(boolean weaponSelect){
+    this.weaponSelect = weaponSelect;
+  }
   abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }
