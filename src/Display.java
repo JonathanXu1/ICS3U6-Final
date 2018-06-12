@@ -109,6 +109,7 @@ class Display extends JFrame{
         quitButton.setContentAreaFilled(true);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);
@@ -119,6 +120,9 @@ class Display extends JFrame{
       menuBgPanel.add(menuPanel);
       menuBgPanel.add(title);
       menuBgPanel.refresh();
+=======
+      }
+>>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
 =======
       }
 >>>>>>> parent of 62b0c46... Merge branch 'master' of https://github.com/JonathanXu1/ICS3U6-Final
