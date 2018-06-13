@@ -113,8 +113,10 @@ public class GameSaver {
           }                              
           
           writer.println("");
-        }
-      }
+        } //else if () {
+          //writer.println("")
+        //}
+      } 
     }        
     
     System.out.println("Inventory start");
@@ -233,9 +235,9 @@ public class GameSaver {
     loadedItemMap = new Item[sizeY][sizeX];
     String loadedItemType; 
     int loadedType;
-    int loadedDurability;
-    int loadedDurCap;
-    int loadedDamage;    
+    int loadedDurability = 0;
+    int loadedDurCap = 0;
+    int loadedDamage = 0;    
     
     while (lineReader.charAt(0) != '%') {
       int nameCapture = 0;
@@ -250,8 +252,10 @@ public class GameSaver {
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
-      loadedDurability = reader.nextInt();
-      loadedDurCap = reader.nextInt();
+      if (loadedType > -1) {        
+        loadedDurability = reader.nextInt();
+        loadedDurCap = reader.nextInt();        
+      }
       
       if (loadedType == 1)  {    
         loadedDamage = reader.nextInt();    
