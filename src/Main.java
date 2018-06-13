@@ -37,7 +37,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){ //
-          map[i][j]= new WallTile(POO, "../res/Garbage", "garbage");
+          map[i][j]= new FloorTile(POO, "../res/Garbage", "garbage");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
@@ -52,6 +52,8 @@ class Main{
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); 
         } else if (charMap[i][j] == 'A') {//Airlock
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
+        }else if (charMap[i][j] == 'c'){
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -106,8 +108,8 @@ class Main{
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 1.5 * Math.PI, "reactor");
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
-        } else if (charMap[i][j] == '-') { //Reactor Chasm
-          map[i][j]= new FloorTile(Color.BLACK, "../res/Chasm", "chasm");
+        } else if (charMap[i][j] == '}') { //Reactor Chasm
+          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {
@@ -144,11 +146,11 @@ class Main{
         
         //Key points
         else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile", "spawn"); //Spawn
+          map[i][j]= new FloorTile(Color.GREEN, "../res/LadderUp", "spawn"); //Spawn
           playerStartingX = j;
           playerStartingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "../res/StairDown", "stair down");
+          map[i][j]= new WallTile(Color.BLACK, "../res/LadderDown", "stair down");
         } else{
           map[i][j]= null;
         }

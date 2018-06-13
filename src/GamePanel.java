@@ -7,6 +7,8 @@
 //Work on displaying different levels
 //Work on increasing difficulty based on levels
 //Work on boss room generation as well as boss fight
+//Fix freeze text so it fits
+//Make a drop timer
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -76,7 +78,7 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 40;
+  private int MOB_CAP = 100;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
@@ -354,7 +356,7 @@ class GamePanel extends JPanel{
       bg.setXDirection (xyDirection[0]);
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
-          bg.move();
+        bg.move();
       }
       //Make an entity move method
       for (int i =0;i<entityMap.length;i++){
@@ -425,9 +427,9 @@ class GamePanel extends JPanel{
     if(count <= 3){ //If within range
       for(int i = -1; i <= 1; i ++){
         for(int j = -1; j <= 1; j++){
-          if ((y+i>=0)&&(y+i<map.length)&&(x+j>=0)&&(x+j<map[0].length)){
+          if (checkInMap(x+j,y+i)){
             if(map[y+i][x+j] instanceof Tile){
-              if((map[y][x] instanceof FloorTile) || (map[y][x].getType().equals("lab")) ||(map[y][x].getType().equals("crew")) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
+              if((map[y][x] instanceof FloorTile) || (map[y][x].getType().equals("lab")) ||(map[y][x].getType().equals("crew")) ||(map[y][x].getType().equals("capq")) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
               } else if(map[y][x] instanceof HallwayTile){ //In hall tile
                 map[y+i][x+j].setViewed();
@@ -473,7 +475,7 @@ class GamePanel extends JPanel{
     if((count <= 2) && (map[y][x] instanceof HallwayTile)){ //If current tile white
       for(int i = -1; i <= 1; i ++){ //Draws surrounding walls
         for(int j = -1; j <= 1; j++){
-          if((y+i>=0) && (y+i<map.length) && (x+j>=0) && (x+j<map[0].length)){
+          if(checkInMap(x+j, y+i)){
             if(!(map[y+i][x+j] instanceof HallwayTile) || ((Math.abs(i+j)==1) && (count <= 0))){
               drawFog(x+j, y+i, count+1, 0);
             }
@@ -505,7 +507,7 @@ class GamePanel extends JPanel{
         //Sets the minimap based on the normal map relative to the player
         minimapArrayY = playerCurrentY + i - minimapFactor/2;
         minimapArrayX = playerCurrentX + j - minimapFactor/2;
-        if ((minimapArrayY>0)&&(minimapArrayY<map.length)&&(minimapArrayX>0)&&(minimapArrayX<map[0].length)){ //If tiles are in view window
+        if (checkInMap(minimapArrayX,minimapArrayY)){ //If tiles are in view window
           if(map[minimapArrayY][minimapArrayX] != null){ //If not void tile, to remove unecessary drawing){
             if(map[minimapArrayY][minimapArrayX].getFocus()){
               if (entityMap[minimapArrayY][minimapArrayX] != null){ //If an entity is at location
@@ -587,7 +589,7 @@ class GamePanel extends JPanel{
       if (!(tiling)){
         if(mouseListener.getPressed()){
           if(collided){
-            if ((tileSelectedArray[0]>0)&&(tileSelectedArray[0]<map[0].length)&&(tileSelectedArray[1]>0)&&(tileSelectedArray[1]<map.length)){
+            if (checkInMap(tileSelectedArray[0],tileSelectedArray[1])){
               if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Tile){
                 if (!((tileSelectedArray[1]==playerCurrentY)&&(tileSelectedArray[0]==playerCurrentX))){
                   if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
@@ -615,7 +617,7 @@ class GamePanel extends JPanel{
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
     if (!collided){
       g.drawLine(startX, startY, endX, endY);
-      if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
+      if(checkInMap(bulletX, bulletY)){
         collided = true;
         turnPasser = true;
       } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
@@ -987,7 +989,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<100)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1057,32 +1059,32 @@ class GamePanel extends JPanel{
             if ((!(entityMap[i][j].getMoved()))){
               //Sets the position on the map directly
               if (keyListener.getAllDirection()[0]<0){
-                  playerCurrentX= playerCurrentX -1;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
+                playerCurrentX= playerCurrentX -1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
                 entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else if (keyListener.getAllDirection()[0]>0){
-                  playerCurrentX =playerCurrentX+1;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                playerCurrentX =playerCurrentX+1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }
               if (keyListener.getAllDirection()[1]<0){
-                  playerCurrentY =playerCurrentY-1;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                playerCurrentY =playerCurrentY-1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else if (keyListener.getAllDirection()[1]>0){
-                  playerCurrentY =playerCurrentY+1;
-                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                  entityMap[i][j] =null;
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                playerCurrentY =playerCurrentY+1;
+                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                entityMap[i][j] =null;
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else{
-                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
-                }
+                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }
-              ///Possibly make tiling true;
-            }else{
+            }
+            ///Possibly make tiling true;
+          }else{
             movementRestriction = true;
           }
         }
@@ -1281,24 +1283,9 @@ class GamePanel extends JPanel{
         tileSelectedArray[1] = playerCurrentY;
       }
       if ((Math.abs(tileSelectedArray[1])==1)&&(Math.abs(tileSelectedArray[0])==1)){
+        System.out.print ("w");
         tileSelectedArray[0] =0;
         tileSelectedArray[1] =0;
-      }
-    }else{
-      if (xyPixel[0]<maxX/2-50){
-        tileSelectedArray[0]=playerCurrentX-1;
-      }else if (xyPixel[0]>maxX/2+50){
-        tileSelectedArray[0]=playerCurrentX+1;
-      }else{
-        tileSelectedArray[0] = playerCurrentX;      
-        //The person is clicking the character, the value for the x is the same as the playerCurrentX
-      }
-      if (xyPixel[1]<maxY/2-50){
-        tileSelectedArray[1]=playerCurrentY-1;
-      }else if (xyPixel[1]>maxY/2+50){
-        tileSelectedArray[1]=playerCurrentY+1;
-      }else{
-        tileSelectedArray[1] = playerCurrentY;
       }
     }
   }
@@ -1312,7 +1299,7 @@ class GamePanel extends JPanel{
                 gameOver = true;
               } else {
                 mobCount--;
-                mobDrop(j, i);
+                dropItems(j, i, 0);
                 ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
               }
               entityMap[i][j] = null;
@@ -1324,7 +1311,7 @@ class GamePanel extends JPanel{
       if (entityMap[arrayY][arrayX].getHealth()<=0){
         entityMap[arrayY][arrayX] = null;
         mobCount--;
-        mobDrop(arrayX,arrayY);
+        dropItems(arrayX,arrayY,0);
         ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
       }
     }
@@ -1374,11 +1361,29 @@ class GamePanel extends JPanel{
             }
           }
           ///Melee attack
-          reversePixelToArray(mouseListener.getMouseXy(), true);
-          if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
-            if (meleeSelected){
-              turnPasser = true;
-              playerAttack(tileSelectedArray[0],tileSelectedArray[1]);
+          reversePixelToArray(mouseListener.getMouseXy(), false);
+          if (checkInMap(tileSelectedArray[0], tileSelectedArray[1])){
+            if (entityMap[tileSelectedArray[1]][tileSelectedArray[0]] instanceof Enemy){
+              if ((Math.abs(tileSelectedArray[0]-playerCurrentX)+Math.abs((tileSelectedArray[1]-playerCurrentY)))==1){
+                if (meleeSelected){
+                  turnPasser = true;
+                  playerAttack(tileSelectedArray[0],tileSelectedArray[1]);
+                }
+              }
+            }
+          }
+          if (checkInMap(tileSelectedArray[0], tileSelectedArray[1])){
+            if (map[tileSelectedArray[1]][tileSelectedArray[0]] instanceof ChestTile){
+              if ((Math.abs(tileSelectedArray[0]-playerCurrentX)+Math.abs((tileSelectedArray[1]-playerCurrentY)))==1){
+                if (!((ChestTile)(map[tileSelectedArray[1]][tileSelectedArray[0]])).getOpen()){
+                  ((ChestTile)(map[tileSelectedArray[1]][tileSelectedArray[0]])).setOpen();
+                  if (map[tileSelectedArray[1]][tileSelectedArray[0]].getType().equals("chest")){
+                    dropItems (playerCurrentX, playerCurrentY,2);
+                  }else{
+                    dropItems (playerCurrentX, playerCurrentY,1);
+                  }
+                }
+              }
             }
           }
         }
@@ -1532,7 +1537,7 @@ class GamePanel extends JPanel{
     }
   }
   public void playerAttack(int targetX, int targetY){
-    if ((targetY>0)&&(targetY<entityMap.length)&&(targetX>0)&&(targetX<entityMap[0].length)){
+    if (checkInMap(targetX, targetY)){
       if (meleeSelected){
         if ((inventory.getItem(2,3)) instanceof MeleeWeapon){
           ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
@@ -1609,12 +1614,23 @@ class GamePanel extends JPanel{
       }
     }
   }
-  public void mobDrop(int arrayX, int arrayY){
+  public void dropItems(int arrayX, int arrayY, int situation){
     int itemNum;
+    int chance;
+    if (situation==0){
+      //Mob drops
+      chance = 15;
+    }else if (situation==1){
+      //Safes with items
+      chance = 50;
+    }else{
+      //Chests with items
+      chance =100;
+    }
     if (!(itemMap[arrayY][arrayX] instanceof Item)){
       //5% chance to spawn an item
       //Maybe up?
-      if ((int)(Math.random()*100)<15){
+      if ((int)(Math.random()*100)<chance){
         itemNum = (int)(Math.random()*5);
         if (itemNum==0){
           randomizeDrive(arrayX, arrayY);
@@ -1660,6 +1676,13 @@ class GamePanel extends JPanel{
     }
     if (entityMap[i][j].getFlame()){
       g.drawImage (flameStatus,statusSkip+maxX/2+(j+jMod)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+iMod)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-45, 30, 30,this);     
+    }
+  }
+  public boolean checkInMap(int x, int y){
+    if ((x>=0)&&(x<map[0].length)&&(y>=0)&&(y<map.length)){
+      return (true);
+    }else{
+      return (false);
     }
   }
 }

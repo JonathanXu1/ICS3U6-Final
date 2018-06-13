@@ -849,7 +849,7 @@ class MapGen2_8{
         } else if (result[i][j] == -101) { // chest room floor
           resultProc[i][j] = '=';
         } else if (result[i][j] == -201) { // reactor chasm (void tiles)
-          resultProc[i][j] = '-';
+          resultProc[i][j] = '}';
         } else if (result[i][j] == -202) { // horizontal walkway
           resultProc[i][j] = 'h';
         } else if (result[i][j] == -203) { // veritcal walkway
