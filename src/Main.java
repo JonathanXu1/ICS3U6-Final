@@ -37,7 +37,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){ //
-          map[i][j]= new FloorTile(POO, "../res/Garbage", "garbage");
+          map[i][j]= new FloorTile(POO, "../res/CrackedTile", "cracked tile");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
@@ -53,7 +53,7 @@ class Main{
         } else if (charMap[i][j] == 'A') {//Airlock
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
         }else if (charMap[i][j] == 'c'){
-          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -184,12 +184,12 @@ class Main{
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         disp.refreshAll();
-        counter++;
-        if (counter == 1000){
-          System.out.print ("w");
-          gamePanel = disp.getPanel();
-          gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
-        }
+   //     counter++;
+      //  if (counter == 1000){
+    //      System.out.print ("w");
+     //     gamePanel = disp.getPanel();
+      //    gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
+//        }
       }
       if (time.getSecondPassed()){
         disp.setFps(time.getFrame());
