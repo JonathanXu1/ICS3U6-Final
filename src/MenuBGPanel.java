@@ -1,6 +1,7 @@
-//Add custom font
+//Add custom font to buttons
 //Have better button highlight effects
-
+//Add ships
+//Allign pixels to bg
 
 import javax.swing.JPanel;
 import java.awt.Image;
@@ -13,14 +14,16 @@ class MenuBGPanel extends JPanel{
   private int xVal;
   private int yVal;
   private double pixelX, pixelY;
-  private int starCount;
   private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg2.png");
   private Image station1 = Toolkit.getDefaultToolkit().getImage("../res/Station1.png");
   private Image station2 = Toolkit.getDefaultToolkit().getImage("../res/Station2.png");
+  private Image ship1 = Toolkit.getDefaultToolkit().getImage("../res/Ship1.png");
   private Star[][] stars = new Star[50][100];
   private int count = 0;
   private int stationState = 1;
-  private int stationCount = 0;
+  private int stationCount, starCount, ship1Count;
+  private int ship1X, ship1Y;
+  
   Random rand = new Random();
   
   MenuBGPanel(int xVal, int yVal){
@@ -32,12 +35,15 @@ class MenuBGPanel extends JPanel{
     this.setLayout(null);
     
     pixelX = xVal/100;
-    pixelY = yVal/50; 
+    pixelY = yVal/50;
+    
+    stationCount = starCount = ship1Count = 0;
   }
   @Override
   public void paintComponent(Graphics g){
     count ++;
     stationCount ++;
+    ship1Count ++;
     super.paintComponent(g);
     //Draws space gradient
     g.drawImage(bg,0,0,xVal,yVal,this);
@@ -74,6 +80,12 @@ class MenuBGPanel extends JPanel{
         }
       }
     }
+    /* Will do later when time permits
+    //Draws Ship1    
+    g.drawImage(ship1,ship1X,ship1Y,xVal,yVal,this);
+    ship1X = xVal;
+    ship1Y = rand.nextInt(500) + 50; //Between 50 and 550
+    */
     //Draws Station
     if(stationCount >= 200){
       stationCount = 0;
