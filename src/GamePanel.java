@@ -6,7 +6,7 @@
 //Make an item line so that when an item dissapears it can spawn in
 //Work on boss room generation as well as boss fight
 //Make proper captains room
-
+//Make chest rooms unable to shoot beyond
 
 
 import javax.swing.JPanel;
@@ -125,6 +125,7 @@ class GamePanel extends JPanel{
   //Game over control
   private boolean gameOver;
   private boolean weaponState = true;
+  private boolean attacked;
   
   //Constructor
   GamePanel(){
@@ -344,6 +345,7 @@ class GamePanel extends JPanel{
       bg.setYDirection (0);
       tiling = false;
       turnTransitionCounter=0;
+      attacked = false;
     }
     //The first part of the code will determine if the player array can move given the key listeners
     if (tiling){
@@ -355,7 +357,9 @@ class GamePanel extends JPanel{
       bg.setXDirection (xyDirection[0]);
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
-        bg.move();
+        if (!(attacked)){
+          bg.move();
+        }
       }
       //Make an entity move method
       for (int i =0;i<entityMap.length;i++){
@@ -616,7 +620,7 @@ class GamePanel extends JPanel{
     int bulletX = playerCurrentX +(endX-maxX/2)/100;
     if (!collided){
       g.drawLine(startX, startY, endX, endY);
-      if(checkInMap(bulletX, bulletY)){
+      if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
         turnPasser = true;
       } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
@@ -810,9 +814,6 @@ class GamePanel extends JPanel{
                 pendingUpgrade = false;
                 inventory.setItem(j,i,(((Drive)(inventory.getItem(driveArrayX,driveArrayY))).upgrade(inventory.getItem(j,i))));
                 inventory.setItem(driveArrayX,driveArrayY, null);
-                tiling = true;
-                passTurn();
-                turnCount++;
               }
             }else if ((j==driveArrayX)&&(i==driveArrayY)){
               if ((mouseListener.getMouseXy()[0] >minSelectX)&&(mouseListener.getMouseXy()[0] < maxSelectX)&&(mouseListener.getMouseXy()[1] >minSelectY)&&(mouseListener.getMouseXy()[1] < maxSelectY)&&(mouseListener.getPressed())&&(alternateState)){
@@ -1052,7 +1053,7 @@ class GamePanel extends JPanel{
       for(int j =0;j<entityMap[0].length;j++){
         if (entityMap[i][j] instanceof Character){
           if ((entityMap[playerCurrentY][playerCurrentX].getLightning())){
-            
+          }else if(attacked){
           }else if((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){
             movementRestriction = false;
             if ((!(entityMap[i][j].getMoved()))){
@@ -1282,7 +1283,6 @@ class GamePanel extends JPanel{
         tileSelectedArray[1] = playerCurrentY;
       }
       if ((Math.abs(tileSelectedArray[1])==1)&&(Math.abs(tileSelectedArray[0])==1)){
-        System.out.print ("w");
         tileSelectedArray[0] =0;
         tileSelectedArray[1] =0;
       }
@@ -1327,12 +1327,10 @@ class GamePanel extends JPanel{
         alternateState = false;
         minimapFactor += 10;
       }
-      //Wait a turn button
       if (!(tiling)){
         keyListener.setAllDirection();
         if (mouseListener.getPressed()&&(alternateState)){
           alternateState = false;
-          //This is for waiting a turn
           minButtonX = maxX-142;
           maxButtonX= maxX-22;
           minButtonY = maxY-120;
@@ -1366,7 +1364,6 @@ class GamePanel extends JPanel{
               if ((Math.abs(tileSelectedArray[0]-playerCurrentX)+Math.abs((tileSelectedArray[1]-playerCurrentY)))==1){
                 if (meleeSelected){
                   turnPasser = true;
-                  System.out.print ("w");
                   playerAttack(tileSelectedArray[0],tileSelectedArray[1]);
                 }
               }
@@ -1421,7 +1418,7 @@ class GamePanel extends JPanel{
     inventory.setItem(2,3,new Wrench (50));
     //First initialize a random number of weapons and armors to spawn across the map
     int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    int rangedWeaponCap =200+((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int rangedWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
@@ -1537,6 +1534,7 @@ class GamePanel extends JPanel{
     }
   }
   public void playerAttack(int targetX, int targetY){
+    attacked = true;
     if (checkInMap(targetX, targetY)){
       if (meleeSelected){
         if ((inventory.getItem(2,3)) instanceof MeleeWeapon){
@@ -1570,7 +1568,6 @@ class GamePanel extends JPanel{
         }
       }else if (!(meleeSelected)){
         if ((inventory.getItem(0,3)) instanceof RangedWeapon){
-          System.out.print ("w");
           ((Equipment)(inventory.getItem(0,3))).setDurability(((Equipment)(inventory.getItem(0,3))).getDurability()-1);
           if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFreezeChance()){
             if (!(entityMap[targetY][targetX].getFreeze())){
