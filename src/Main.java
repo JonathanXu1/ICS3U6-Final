@@ -25,8 +25,8 @@ class Main{
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    char[][] charMap = gen.charMap(gen.generateMap(12,12));
-    //char[][] charMap = gen.createBossRoom();
+    //char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     Color POO = new Color(168,107,23);
     Color BURGANDY = new Color(160, 27, 33);
