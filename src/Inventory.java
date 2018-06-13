@@ -97,4 +97,7 @@ class Inventory{
       g.drawString("Click outside the inventory or the drive again to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
     }
   }
+  public Item[][] getArrayInventory(){
+    return (inventory);
+  }
 }

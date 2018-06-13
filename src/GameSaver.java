@@ -5,10 +5,13 @@ import java.awt.Color;
 
 public class GameSaver {
   private int fileCode;  
+  //private String tester;
   
-  GameSaver() {
-    Scanner calibrator = new Scanner(("SaveCalibrator.txt"));
+  GameSaver() throws Exception{
+    Scanner calibrator = new Scanner(new File("SaveCalibrator.txt"));
+    //this.tester = calibrator.nextLine();
     this.fileCode = calibrator.nextInt();
+    //System.out.println(tester);
   }
   
   public void saveGame(char[][] charMap, Entity[][] entityMap, Item[][] itemMap, Item[][] inventory) throws Exception{
@@ -16,7 +19,7 @@ public class GameSaver {
     File saveFile = new File("concordia_savfile_" + fileCode + ".txt");
     
     PrintWriter writer = new PrintWriter(new File("concordia_savfile_" + fileCode + ".txt"));
-    PrintWriter calibrationUpdater = new PrintWriter( new File("SaveCalibrator"));
+    PrintWriter calibrationUpdater = new PrintWriter(new File("SaveCalibrator"));
     calibrationUpdater.println(fileCode + 1);        
     
     writer.println("%map save:");
@@ -38,8 +41,10 @@ public class GameSaver {
     int playerHunger = 0;
     int playerXP = 0;
     
-    writer.println("%entity save:");
+    writer.println("%entity save:");    
     writer.println(entityMap.length + " " + entityMap[0].length);
+    
+    System.out.println("entity start");
     
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
@@ -78,9 +83,11 @@ public class GameSaver {
     int durability;
     int damage = 0;
     
+    System.out.println("item start");
+    
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
-        if (itemMap[i][j] instanceof Item) {
+        if (itemMap[i][j] instanceof Equipment) {
           itemType = itemMap[i][j].getName();
           writer.print(itemType + ",");
           
@@ -110,11 +117,12 @@ public class GameSaver {
       }
     }        
     
+    System.out.println("Inventory start");
     
     writer.println("%inventory save:");
     for (int i = 0; i < inventory.length; i++) {
       for (int j = 0; j < inventory[0].length; j++) {
-        if (itemMap[i][j] instanceof Item) {
+        if (itemMap[i][j] instanceof Equipment) {
           itemType = itemMap[i][j].getName();
           writer.print(itemType + ",");
           
@@ -142,7 +150,10 @@ public class GameSaver {
           writer.println("");
         }
       }
-    }        
+    }  
+    
+    System.out.println("save close");
+    writer.close();
   }
   
   

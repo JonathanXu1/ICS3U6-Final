@@ -744,10 +744,21 @@ class MapGen2_8{
     }
     
     map = trimmedArray;
-  }
+  }    
+  
+  
   
   public char[][] createBossRoom() {
-    char[][] returnArray = new char[41][60];
+    char[][] returnArray = new char[75][75];
+    
+    for (int i = 0; i < returnArray.length; i++) {
+      for (int j = 0; j < returnArray[0].length; j++) {
+        returnArray[i][j] = '-';
+      }
+    }
+    
+    
+    
     for (int i = 1; i < 40; i++) {
       for (int j = 1; j < 30;j++) {      
         returnArray[i][j] = 'R';                
@@ -755,9 +766,9 @@ class MapGen2_8{
     }
     
     for (int j = 30; j < 45; j++) {
-      returnArray[21][j] = 'X';
+      //returnArray[21][j] = 'X';
       returnArray[22][j] = 'X';
-      returnArray[23][j] = 'X';
+     // returnArray[23][j] = 'X';
     }
     
     for (int i = 15; i < 26; i++) {
@@ -765,8 +776,32 @@ class MapGen2_8{
         returnArray[i][j] = 'R';        
       }  
     }
+    
+    returnArray[22][44] = 'D';
       
     returnArray[22][50] = '@';
+    
+    for (int i = 0; i < returnArray.length; i++) {
+      for (int j = 0; j < returnArray[0].length; j++) {
+        if (returnArray[i][j] == 'R') {
+          for (int i2 = -1; i2 < 2; i2++) {
+            for (int j2 = -1; j2 < 2; j2++) {
+              if (returnArray[i + i2][j + j2] == '-') {
+                returnArray[i + i2][j + j2] = '|';
+              }                            
+            } 
+          }
+        } else if (returnArray[i][j] == 'X')  {
+          for (int i2 = -1; i2 < 2; i2++) {
+            for (int j2 = -1; j2 < 2; j2++) {
+              if (returnArray[i + i2][j + j2] == '-') {
+                returnArray[i + i2][j + j2] = '~';
+              }                            
+            } 
+          }
+        }
+      }
+    }
     
     return returnArray;                
   }
