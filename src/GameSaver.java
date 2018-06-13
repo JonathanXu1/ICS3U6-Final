@@ -112,7 +112,7 @@ public class GameSaver {
   }
   
   
-  public void loadGame(String fileName) throws Exception {
+  public LoadFile loadGame(String fileName) throws Exception {
     File loadSource = new File(fileName + ".txt");
     Scanner reader = new Scanner(loadSource);
     String lineReader;
@@ -230,9 +230,9 @@ public class GameSaver {
       lineReader = reader.nextLine();
     } while (reader.hasNext());
     
-    //LoadFile loadFile = new LoadFile(loadedCharMap,loadedEntityMap,loadedItemMap,loadedInventory);
+    LoadFile loadFile = new LoadFile(loadedCharMap,loadedEntityMap,loadedItemMap,loadedInventory);
     
-    
+    return loadFile;
     
   }
 }
