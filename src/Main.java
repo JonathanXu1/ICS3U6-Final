@@ -107,7 +107,7 @@ class Main{
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
         } else if (charMap[i][j] == '-') { //Reactor Chasm
-          map[i][j]= new FloorTile(Color.BLACK, "../res/Chasm", "chasm");
+          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {

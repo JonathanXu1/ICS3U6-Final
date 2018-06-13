@@ -24,7 +24,10 @@ class MenuBGPanel extends JPanel{
   private Star[][] stars = new Star[50][100];
   private int count = 0;
   private int stationState = 1;
-  private int ship1X, ship1Y;
+  private int ship1X, ship1Y, ship1Wait;
+  private int ship1Count = 0;
+  private boolean ship1Drawn = false;
+  private boolean ship1FirstDrawn = false;
   
   Random rand = new Random();
   
@@ -38,6 +41,8 @@ class MenuBGPanel extends JPanel{
     
     pixelX = xVal/100;
     pixelY = yVal/50;
+    
+    ship1Wait = rand.nextInt(200) + 30; //1 to 5 seconds
     
     ActionListener drawStars = new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
@@ -92,12 +97,28 @@ class MenuBGPanel extends JPanel{
         }
       }
     }
-    /* Will do later when time permits
-    //Draws Ship1    
-    g.drawImage(ship1,ship1X,ship1Y,xVal,yVal,this);
-    ship1X = xVal;
-    ship1Y = rand.nextInt(500) + 50; //Between 50 and 550
-    */
+    //Draws Ship1
+    ship1Count ++;
+    if(!(ship1Drawn) && (ship1Count >= ship1Wait) || (!ship1FirstDrawn) ){
+      ship1Y = rand.nextInt(500) + 50 ; //50 to 550
+      ship1Drawn = true;
+      if(!ship1FirstDrawn){
+        ship1X = rand.nextInt(xVal/2 + 500);
+        ship1FirstDrawn = true;
+      } else {
+        ship1X = xVal;
+      }
+    }
+    if(ship1Drawn && ship1X+(int)(16*pixelX)<= 1){
+      ship1Drawn = false;
+      ship1Wait = rand.nextInt(200) + 30;
+      ship1Count = 0;
+    } else if (ship1Drawn){
+      ship1X --;
+      g.drawImage(ship1,ship1X,ship1Y,(int)(16*pixelX),(int)(5*pixelY),this);
+    }
+    //System.out.println(Integer.toString(ship1Count) + " " + Integer.toString(ship1Wait));
+    
     //Draws Station
     if(stationState == 1){
       g.drawImage(station1,0,0,xVal,yVal,this);
