@@ -30,7 +30,6 @@ class Display extends JFrame{
   private double totalMem, memUsed;
   private int fps = 0;
   //Start Listeners
-  private StartListener menuStartListener, menuQuitListener;
   private CustomMouseListener mouseListener = new CustomMouseListener();
   private CustomMouseListener continueButtonMouse = new CustomMouseListener();
   private CustomMouseListener newGameButtonMouse = new CustomMouseListener();
@@ -71,8 +70,6 @@ class Display extends JFrame{
     gamePanel.addMouseListener(mouseListener);
     
     //Creation of the menu
-    menuStartListener = new StartListener();
-    menuQuitListener = new StartListener();
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     
     //Title
@@ -83,14 +80,14 @@ class Display extends JFrame{
     //Menu panel and buttons
     menuPanel = new MenuPanel(50, maxY/2, 300, 220);
     menuPanel.setFont(customHeader);
+    
     continueButton.addMouseListener(continueButtonMouse);
     newGameButton.addMouseListener(newGameButtonMouse);
     loadGameButton.addMouseListener(loadGameButtonMouse);
     settingsButton.addMouseListener(settingsButtonMouse);
     scoreboardButton.addMouseListener(scoreboardButtonMouse);
     quitButton.addMouseListener(quitButtonMouse);
-    continueButton.addActionListener(menuStartListener);
-    quitButton.addActionListener(menuQuitListener);
+    
     //Adds everything
     menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
@@ -153,20 +150,26 @@ class Display extends JFrame{
         title.setVisible(false);
       }
       gamePanel.refresh();
-    } else if (gameState == 2) {
+    } else if (gameState == 2){
+    } else if (gameState == 3) {
       System.exit(0);
     }
   }
   //Determines if the game has begun
   public void getListen (){
-    if (menuStartListener.getStart()){
+    if (continueButtonMouse.getPressed()){
       gameState=1;
       addGamePanel =true;
-      menuStartListener.setStart (false);
-    } else if (menuQuitListener.getStart()){
-      System.exit(0);
+    } else if (newGameButtonMouse.getPressed()){
+      gameState=1;
+      addGamePanel =true;
+    } else if (loadGameButtonMouse.getPressed()){
+    } else if (settingsButtonMouse.getPressed()){
+    } else if (scoreboardButtonMouse.getPressed()){
+    } else if (quitButtonMouse.getPressed()){
+      gameState = 3;
     } else if (gamePanel.returnGameOver()) {
-      gameState = 2;
+      gameState = 3;
     }
   }
   public void setMap(Tile[][] map){

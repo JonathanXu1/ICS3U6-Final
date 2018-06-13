@@ -14,9 +14,13 @@ class MenuBGPanel extends JPanel{
   private int yVal;
   private double pixelX, pixelY;
   private int starCount;
-  private Image menuBg = Toolkit.getDefaultToolkit().getImage("../res/bg.png");
-  private Star[][] stars = new Star[100][200];
+  private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg2.png");
+  private Image station1 = Toolkit.getDefaultToolkit().getImage("../res/Station1.png");
+  private Image station2 = Toolkit.getDefaultToolkit().getImage("../res/Station2.png");
+  private Star[][] stars = new Star[50][100];
   private int count = 0;
+  private int stationState = 1;
+  private int stationCount = 0;
   Random rand = new Random();
   
   MenuBGPanel(int xVal, int yVal){
@@ -27,20 +31,23 @@ class MenuBGPanel extends JPanel{
     this.setPreferredSize(panelSize);
     this.setLayout(null);
     
-    pixelX = xVal/200;
-    pixelY = yVal/100; 
+    pixelX = xVal/100;
+    pixelY = yVal/50; 
   }
   @Override
   public void paintComponent(Graphics g){
     count ++;
+    stationCount ++;
     super.paintComponent(g);
-    g.drawImage(menuBg,0,0,xVal,yVal,this);
-    if(count >= 20){ //Display count for buffering animations
+    //Draws space gradient
+    g.drawImage(bg,0,0,xVal,yVal,this);
+    //Draws stars
+    if(count >= 10){ //Display count for buffering animations
       count = 0; 
-      starCount = 1; //# stars
+      starCount = 2; //# stars
       for (int i = 0; i <= starCount; i ++){
-        int randX = rand.nextInt(200);
-        int randY = rand.nextInt(100);
+        int randX = rand.nextInt(100);
+        int randY = rand.nextInt(50);
         if(stars[randY][randX] == null){
           stars[randY][randX] = new Star();
         }
@@ -55,7 +62,6 @@ class MenuBGPanel extends JPanel{
         }
       }
     }
-    
     for (int i = 0; i < stars.length; i ++){
       for (int j = 0; j < stars[0].length; j++){
         if(stars[i][j] != null){
@@ -68,6 +74,21 @@ class MenuBGPanel extends JPanel{
         }
       }
     }
+    //Draws Station
+    if(stationCount >= 200){
+      stationCount = 0;
+      if(stationState == 1){
+        stationState = 2;
+      }else if(stationState == 2){
+        stationState = 1;
+      } 
+    } 
+    if(stationState == 1){
+      g.drawImage(station1,0,0,xVal,yVal,this);
+    } else if(stationState == 2){
+      g.drawImage(station2,0,0,xVal,yVal,this);
+    }
+    
   }
   public void refresh(){
     this.repaint();
