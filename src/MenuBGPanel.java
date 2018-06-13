@@ -9,6 +9,9 @@ import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Random;
+import javax.swing.Timer;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 class MenuBGPanel extends JPanel{
   private int xVal;
@@ -21,7 +24,6 @@ class MenuBGPanel extends JPanel{
   private Star[][] stars = new Star[50][100];
   private int count = 0;
   private int stationState = 1;
-  private int stationCount, starCount, ship1Count;
   private int ship1X, ship1Y;
   
   Random rand = new Random();
@@ -37,37 +39,47 @@ class MenuBGPanel extends JPanel{
     pixelX = xVal/100;
     pixelY = yVal/50;
     
-    stationCount = starCount = ship1Count = 0;
-  }
-  @Override
-  public void paintComponent(Graphics g){
-    count ++;
-    stationCount ++;
-    ship1Count ++;
-    super.paintComponent(g);
-    //Draws space gradient
-    g.drawImage(bg,0,0,xVal,yVal,this);
-    //Draws stars
-    if(count >= 10){ //Display count for buffering animations
-      count = 0; 
-      starCount = 2; //# stars
-      for (int i = 0; i <= starCount; i ++){
-        int randX = rand.nextInt(100);
-        int randY = rand.nextInt(50);
-        if(stars[randY][randX] == null){
-          stars[randY][randX] = new Star();
+    ActionListener drawStars = new ActionListener() {
+      public void actionPerformed(ActionEvent evt) {
+        int starCount = 2; //# stars
+        for (int i = 0; i <= starCount; i ++){
+          int randX = rand.nextInt(100);
+          int randY = rand.nextInt(50);
+          if(stars[randY][randX] == null){
+            stars[randY][randX] = new Star();
+          }
         }
-      }
-      for (int i = 0; i < stars.length; i ++){
-        for (int j = 0; j < stars[0].length; j++){
-          if(stars[i][j] != null){
-            if(!stars[i][j].getDied()){
-              stars[i][j].updateColor();
+        for (int i = 0; i < stars.length; i ++){
+          for (int j = 0; j < stars[0].length; j++){
+            if(stars[i][j] != null){
+              if(!stars[i][j].getDied()){
+                stars[i][j].updateColor();
+              }
             }
           }
         }
       }
-    }
+    };
+    new Timer(100, drawStars).start();
+    
+    ActionListener drawStation = new ActionListener() {
+      public void actionPerformed(ActionEvent evt) {
+        if(stationState == 1){
+          stationState = 2;
+        }else if(stationState == 2){
+          stationState = 1;
+        } 
+      }
+    };
+    new Timer(2000, drawStation).start();
+  }
+
+  @Override
+  public void paintComponent(Graphics g){
+    super.paintComponent(g);
+    //Draws space gradient
+    g.drawImage(bg,0,0,xVal,yVal,this);
+    //Draws stars
     for (int i = 0; i < stars.length; i ++){
       for (int j = 0; j < stars[0].length; j++){
         if(stars[i][j] != null){
@@ -87,14 +99,6 @@ class MenuBGPanel extends JPanel{
     ship1Y = rand.nextInt(500) + 50; //Between 50 and 550
     */
     //Draws Station
-    if(stationCount >= 200){
-      stationCount = 0;
-      if(stationState == 1){
-        stationState = 2;
-      }else if(stationState == 2){
-        stationState = 1;
-      } 
-    } 
     if(stationState == 1){
       g.drawImage(station1,0,0,xVal,yVal,this);
     } else if(stationState == 2){

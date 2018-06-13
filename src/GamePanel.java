@@ -429,7 +429,7 @@ class GamePanel extends JPanel{
         for(int j = -1; j <= 1; j++){
           if (checkInMap(x+j,y+i)){
             if(map[y+i][x+j] instanceof Tile){
-              if((map[y][x] instanceof FloorTile) || (map[y][x].getType().equals("lab")) ||(map[y][x].getType().equals("crew")) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
+              if((map[y][x] instanceof FloorTile) || (map[y][x].getType().equals("lab")) ||(map[y][x].getType().equals("crew")) ||(map[y][x].getType().equals("capq")) && !(map[y+i][x+j] instanceof HallwayTile)){ //Avoids corner sight, in room tile
                 drawFog(x+j, y+i, count+1);
               } else if(map[y][x] instanceof HallwayTile){ //In hall tile
                 map[y+i][x+j].setViewed();

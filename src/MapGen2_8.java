@@ -455,7 +455,7 @@ class MapGen2_8{
           wallChests++;
         }
       }
-    } while (wallChests < 10);
+    } while (wallChests < 8);
   }
   
   public void furnishRooms() {    
@@ -480,9 +480,9 @@ class MapGen2_8{
             {-201,-201,-201,-201,-201,-201,-201,-201,-201},
             {-201,-201,-201,-201,-201,-201,-201,-201,-201},
             {-201,-201,-207,-202,-202,-202,-204,-201,-201},
-            {-201,-201,-203, 208, 208, 208,-203,-201,-201},
-            {-201,-201,-203, 208, 209, 208,-203,-201,-201},
-            {-201,-201,-203, 208, 208, 208,-203,-201,-201},
+            {-201,-201,-203, 215, 216, 209,-203,-201,-201},
+            {-201,-201,-203, 214, 217, 210,-203,-201,-201},
+            {-201,-201,-203, 213, 212, 211,-203,-201,-201},
             {-201,-201,-206,-202,-202,-202,-205,-201,-201},
             {-201,-201,-201,-201,-201,-201,-201,-201,-201},
             {-201,-201,-201,-201,-201,-201,-201,-201,-201},
@@ -587,12 +587,10 @@ class MapGen2_8{
           } 
           
           for (int cust = 2; cust < 8; cust = cust + 2) {
-            if (randomRoll(600)) {
+            if (randomRoll(300)) {
               map[i*6 - 4 + cust][j*6 - 2] = 403;
             }
-            if (randomRoll(600)) {
-              map[i*6 - 4 + cust][j*6 + 2] = 403;
-            }
+
           }   
           
           for (int i2 = -4; i2 < 5; i2++) {
@@ -650,7 +648,7 @@ class MapGen2_8{
                 if (randomRoll(50)) {
                   map[i*6 + i2][j*6 + j2] = -606;
                 }
-                if (randomRoll(50)) {
+                if (randomRoll(40)) {
                   map[i*6 + i2][j*6 + j2] = -607;
                 }
               }
@@ -804,12 +802,26 @@ class MapGen2_8{
           resultProc[i][j] = 'n';
         } else if (result[i][j] == 303) { // lab table
           resultProc[i][j] = 't';
-        } else if (result[i][j] == 208) { // reactor stabilizers
-          resultProc[i][j] = 'z';
-        } else if (result[i][j] == 209) { // reactor core
+        } else if (result[i][j] == 208) { // reactor stabilzer North
+          resultProc[i][j] = '5';
+        } else if (result[i][j] == 209) { // reactor stabilzer North-East
+          resultProc[i][j] = '6';
+        } else if (result[i][j] == 210) { // reactor stabilzer East
+          resultProc[i][j] = '7';
+        } else if (result[i][j] == 211) { // reactor stabilzer South-East
+          resultProc[i][j] = '8';
+        } else if (result[i][j] == 212) { // reactor stabilzer South
+          resultProc[i][j] = '9';
+        } else if (result[i][j] == 213) { // reactor stabilzer South-West
+          resultProc[i][j] = 'i';
+        } else if (result[i][j] == 214) { // reactor stabilzer West
+          resultProc[i][j] = 'j';
+        } else if (result[i][j] == 215) { // reactor stabilzer North-West
+          resultProc[i][j] = 'k';
+        } else if (result[i][j] == 216) { // reactor stabilzer North //Duplicate?
+          resultProc[i][j] = 'l';
+        } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
-        } else if (result[i][j] == 101) { // chest room chest
-          resultProc[i][j] = 'c';
         } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
         } else if (result[i][j] == 5) { // wall safe
@@ -836,19 +848,19 @@ class MapGen2_8{
           resultProc[i][j] = 'A';
         } else if (result[i][j] == -101) { // chest room floor
           resultProc[i][j] = '=';
-        } else if (result[i][j] == -201) { // chasm
-          resultProc[i][j] = '%';
+        } else if (result[i][j] == -201) { // reactor chasm (void tiles)
+          resultProc[i][j] = '-';
         } else if (result[i][j] == -202) { // horizontal walkway
           resultProc[i][j] = 'h';
         } else if (result[i][j] == -203) { // veritcal walkway
           resultProc[i][j] = 'v';
-        } else if (result[i][j] == -204) { // reactor corner 1
+        } else if (result[i][j] == -204) { // walkway corner 1
           resultProc[i][j] = 'a';
-        } else if (result[i][j] == -205) { // reactor corner 2
+        } else if (result[i][j] == -205) { // walkway corner 2
           resultProc[i][j] = 'b';
-        } else if (result[i][j] == -206) { // reactor corner 3
+        } else if (result[i][j] == -206) { // walkway corner 3
           resultProc[i][j] = 'c';
-        } else if (result[i][j] == -207) { // reactor corner 4
+        } else if (result[i][j] == -207) { // walkway corner 4
           resultProc[i][j] = 'd';
         } else if (result[i][j] == -301) { // lab floor
           resultProc[i][j] = '&';

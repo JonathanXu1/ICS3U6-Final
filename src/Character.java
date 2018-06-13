@@ -59,6 +59,9 @@ class Character extends Entity{
   public void changeXp(int xp){
     this.xp += xp;
   }
+  public void setXp(int xp) {
+    this.xp = xp;
+  }
   public int getXpCap(){
     return xpCap;
   }

@@ -1,10 +1,17 @@
 This is just some scrap text file, you can change it however you like.
 
 Jonathan
--menu bg again
 -more room sprites
 -Implement revamped fow
+-Settings panel
+-Tell artem why some hall walls not seen
 
 Will
 
 Artem
+- Broken floors
+- Broken Walls
+- ventillation
+- T joints
+- fix reactor gen
+- reactor wall
