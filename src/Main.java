@@ -25,8 +25,8 @@ class Main{
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    char[][] charMap = gen.charMap(gen.generateMap(12,12));
-    //char[][] charMap = gen.createBossRoom();
+    //char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     Color POO = new Color(168,107,23);
     Color BURGANDY = new Color(160, 27, 33);
@@ -52,6 +52,8 @@ class Main{
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); 
         } else if (charMap[i][j] == 'A') {//Airlock
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
+        }else if (charMap[i][j] == 'c'){
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -106,7 +108,7 @@ class Main{
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 1.5 * Math.PI, "reactor");
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
-        } else if (charMap[i][j] == '-') { //Reactor Chasm
+        } else if (charMap[i][j] == '}') { //Reactor Chasm
           map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
         }
         // Crew's Quarters
@@ -144,11 +146,11 @@ class Main{
         
         //Key points
         else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile", "spawn"); //Spawn
+          map[i][j]= new FloorTile(Color.GREEN, "../res/LadderUp", "spawn"); //Spawn
           playerStartingX = j;
           playerStartingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "../res/StairDown", "stair down");
+          map[i][j]= new WallTile(Color.BLACK, "../res/LadderDown", "stair down");
         } else{
           map[i][j]= null;
         }

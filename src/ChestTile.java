@@ -26,9 +26,9 @@ class ChestTile extends Tile{
       }
     } else{
       if (open){
-      //chest = Toolkit.getDefaultToolkit().getImage(dir +"Open"+ "Dark" + ".png");
+        chest = Toolkit.getDefaultToolkit().getImage(dir +"Open"+ "Dark" + ".png");
       }else{
-        //chest = Toolkit.getDefaultToolkit().getImage(dir + ".png");
+        chest = Toolkit.getDefaultToolkit().getImage(dir + "Dark" + ".png");
       }
     }
     if(orientation != 0){
@@ -37,7 +37,10 @@ class ChestTile extends Tile{
       g.drawImage(chest, x,y,width,height,gamePanel);
     }
   }
-  public void openChest(){
+  public void setOpen(){
     open  =true;
+  }
+  public boolean getOpen(){
+    return (open);
   }
 }

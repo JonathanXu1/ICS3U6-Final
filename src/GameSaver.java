@@ -76,11 +76,13 @@ public class GameSaver {
     
     String itemType;
     int durability;
+    int damage = 0;
     
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
         if (itemMap[i][j] instanceof Item) {
           itemType = itemMap[i][j].getName();
+          writer.print(itemType + ",");
           
           if (itemMap[i][j] instanceof Equipment) { 
             durability = ((Equipment)itemMap[i][j]).getDurability();
@@ -88,9 +90,21 @@ public class GameSaver {
             durability = -1;
           }
           
-          writer.print(itemType + ",");
-          writer.print(durability + ",");
-          writer.print(i + " " + j);
+          if (itemMap[i][j] instanceof Weapon) { 
+            damage = (((Weapon)itemMap[i][j]).getDamage());   
+            writer.print(1);
+          } else {
+            writer.print(0);
+          }
+          
+          writer.print("," + i + " " + j  + ",");          
+          writer.print(durability + ",");          
+          writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
+          
+          if (itemMap[i][j] instanceof Weapon) { 
+            writer.print("," + damage);
+          }                              
+          
           writer.println("");
         }
       }
@@ -102,6 +116,7 @@ public class GameSaver {
       for (int j = 0; j < inventory[0].length; j++) {
         if (itemMap[i][j] instanceof Item) {
           itemType = itemMap[i][j].getName();
+          writer.print(itemType + ",");
           
           if (itemMap[i][j] instanceof Equipment) { 
             durability = ((Equipment)itemMap[i][j]).getDurability();
@@ -109,9 +124,21 @@ public class GameSaver {
             durability = -1;
           }
           
-          writer.print(itemType + ",");
-          writer.print(durability + ",");
-          writer.print(i + " " + j);
+          if (itemMap[i][j] instanceof Weapon) { 
+            damage = (((Weapon)itemMap[i][j]).getDamage());   
+            writer.print(1);
+          } else {
+            writer.print(0);
+          }
+          
+          writer.print("," + i + " " + j  + ",");          
+          writer.print(durability + ",");          
+          writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
+          
+          if (itemMap[i][j] instanceof Weapon) { 
+            writer.print("," + damage);
+          }                              
+          
           writer.println("");
         }
       }
@@ -194,7 +221,10 @@ public class GameSaver {
     
     loadedItemMap = new Item[sizeY][sizeX];
     String loadedItemType; 
+    int loadedType;
     int loadedDurability;
+    int loadedDurCap;
+    int loadedDamage;    
     
     while (lineReader.charAt(0) != '%') {
       int nameCapture = 0;
@@ -204,16 +234,26 @@ public class GameSaver {
       } while(lineReader.charAt(nameCapture) != ',');
       
       loadedItemType = lineReader.substring(0,nameCapture);
-      loadedDurability = reader.nextInt();
+      loadedType = reader.nextInt();             
       
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
+      loadedDurability = reader.nextInt();
+      loadedDurCap = reader.nextInt();
       
-      if (loadedItemType.equals("Gamma Hammer")) {
-        GammaHammer loadedItem = new GammaHammer(loadedDurability);
-        loadedItemMap[yCoord][xCoord] = loadedItem;
-      } else {}
+      if (loadedType == 1)  {    
+        loadedDamage = reader.nextInt();    
+        if (loadedItemType.equals("Gamma Hammer")) {
+          GammaHammer loadedItem = new GammaHammer(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else {  
+          
+        }
+        ((Weapon)loadedItemMap[yCoord][xCoord]).setDamage(loadedDamage);
+      } else {
+      
+      }
       
       lineReader = reader.nextLine();
     }
@@ -250,7 +290,6 @@ public class GameSaver {
     
     LoadFile loadFile = new LoadFile(loadedCharMap,loadedEntityMap,loadedItemMap,loadedInventory,loadedExtras);
     
-    return loadFile;
-    
+    return loadFile;    
   }
 }
