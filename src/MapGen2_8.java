@@ -470,7 +470,7 @@ class MapGen2_8{
             }
           }
           
-          map[i*6][j*6] = 101;
+          map[i*6][j*6] = 102;
           
         }
         
@@ -857,12 +857,12 @@ class MapGen2_8{
           resultProc[i][j] = 'l';
         } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
+        } else if (result[i][j] == 102) { // chest room chest
+          resultProc[i][j] = 'C';
         } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
         } else if (result[i][j] == 5) { // wall safe
           resultProc[i][j] = 'S';
-        } else if (result[i][j] == 4) { // chest
-          resultProc[i][j] = 'C';
         } else if (result[i][j] == 3) { // room wall
           resultProc[i][j] = '|';
         } else if (result[i][j] == 2) { // hallway wall
