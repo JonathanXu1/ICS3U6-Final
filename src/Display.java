@@ -2,6 +2,11 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
+import java.awt.GraphicsEnvironment;
+import java.awt.FontFormatException;
+import java.awt.Color;
+import java.io.IOException;
 
 class Display extends JFrame{
   private GamePanel gamePanel;
@@ -25,20 +30,19 @@ class Display extends JFrame{
   private double totalMem, memUsed;
   private int fps = 0;
   //Start Listeners
-  private StartListener menuStartListener, menuQuitListener;
   private CustomMouseListener mouseListener = new CustomMouseListener();
   private CustomMouseListener continueButtonMouse = new CustomMouseListener();
   private CustomMouseListener newGameButtonMouse = new CustomMouseListener();
   private CustomMouseListener loadGameButtonMouse = new CustomMouseListener();
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
-  private CustomMouseListener quitButtonMouse = new CustomMouseListener();
-  
-  
+  private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
   //Game logic
   private Tile[][] map;
   private int playerStartingX;
   private int playerStartingY;
+  //Fonts
+  Font customTitle, customHeader;
   
   Display(){
     super ("Concordia");
@@ -49,6 +53,16 @@ class Display extends JFrame{
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setFocusable(true);
     
+    //Adds fonts
+    try {
+      customTitle = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(80f);
+      customHeader = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(32f);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch(FontFormatException e) {
+      e.printStackTrace();
+    }
+  
     //Adds keylistener object
     
     //Creation of the basic game display
@@ -56,22 +70,24 @@ class Display extends JFrame{
     gamePanel.addMouseListener(mouseListener);
     
     //Creation of the menu
-    menuStartListener = new StartListener();
-    menuQuitListener = new StartListener();
     menuBgPanel = new MenuBGPanel(maxX, maxY);
+    
+    //Title
+    title.setFont(customTitle);
+    title.setForeground(Color.WHITE);
+    title.setBounds(50, -50, 800, 300);
     
     //Menu panel and buttons
     menuPanel = new MenuPanel(50, maxY/2, 300, 220);
-    title.setFont(new Font("sansserif", Font.BOLD, 72));
-    title.setBounds(10, 10, 500, 300);
+    menuPanel.setFont(customHeader);
+    
     continueButton.addMouseListener(continueButtonMouse);
     newGameButton.addMouseListener(newGameButtonMouse);
     loadGameButton.addMouseListener(loadGameButtonMouse);
     settingsButton.addMouseListener(settingsButtonMouse);
     scoreboardButton.addMouseListener(scoreboardButtonMouse);
     quitButton.addMouseListener(quitButtonMouse);
-    continueButton.addActionListener(menuStartListener);
-    quitButton.addActionListener(menuQuitListener);
+    
     //Adds everything
     menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
@@ -134,20 +150,26 @@ class Display extends JFrame{
         title.setVisible(false);
       }
       gamePanel.refresh();
-    } else if (gameState == 2) {
+    } else if (gameState == 2){
+    } else if (gameState == 3) {
       System.exit(0);
     }
   }
   //Determines if the game has begun
   public void getListen (){
-    if (menuStartListener.getStart()){
+    if (continueButtonMouse.getPressed()){
       gameState=1;
       addGamePanel =true;
-      menuStartListener.setStart (false);
-    } else if (menuQuitListener.getStart()){
-      System.exit(0);
+    } else if (newGameButtonMouse.getPressed()){
+      gameState=1;
+      addGamePanel =true;
+    } else if (loadGameButtonMouse.getPressed()){
+    } else if (settingsButtonMouse.getPressed()){
+    } else if (scoreboardButtonMouse.getPressed()){
+    } else if (quitButtonMouse.getPressed()){
+      gameState = 3;
     } else if (gamePanel.returnGameOver()) {
-      gameState = 2;
+      gameState = 3;
     }
   }
   public void setMap(Tile[][] map){
