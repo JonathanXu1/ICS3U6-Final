@@ -79,19 +79,19 @@ class Main{
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor");
-        } else if(charMap[i][j] == '5'){//Reactor Stabilizer N
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 1.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor core");
+        } else if(charMap[i][j] == 'l'){//Reactor Stabilizer N
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 0.5*Math.PI, "reactor");
         } else if(charMap[i][j] == '6'){//Reactor Stabilizer NE
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 0.5*Math.PI, "reactor");
         } else if(charMap[i][j] == '7'){//Reactor Stabilizer E
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge",  1.0*Math.PI, "reactor");
         } else if(charMap[i][j] == '8'){//Reactor Stabilizer SE
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.0*Math.PI, "reactor");
         } else if(charMap[i][j] == '9'){//Reactor Stabilizer S
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 0.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 1.5*Math.PI, "reactor");
         } else if(charMap[i][j] == 'i'){//Reactor Stabilizer SW
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 0.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.5*Math.PI, "reactor");
         } else if(charMap[i][j] == 'j'){//Reactor Stabilizer W
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", "reactor");
         } else if(charMap[i][j] == 'k'){//Reactor Stabilizer NW
@@ -109,7 +109,7 @@ class Main{
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
         } else if (charMap[i][j] == '}') { //Reactor Chasm
-          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
+          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "reactor");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {
