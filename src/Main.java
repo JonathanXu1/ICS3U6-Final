@@ -37,7 +37,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){ //
-          map[i][j]= new WallTile(POO, "../res/Garbage", "garbage");
+          map[i][j]= new FloorTile(POO, "../res/Garbage", "garbage");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
