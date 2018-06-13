@@ -15,13 +15,6 @@ class Display extends JFrame{
   private boolean addGamePanel = false;
   private int maxX, maxY;
   //Menu
-  //Buttons
-  private CustomButton continueButton = new CustomButton("Continue", 0);
-  private CustomButton newGameButton = new CustomButton("New", 0);
-  private CustomButton loadGameButton = new CustomButton("Load", 0);
-  private CustomButton settingsButton = new CustomButton("Settings", 0);
-  private CustomButton scoreboardButton = new CustomButton("Scoreboard", 0);
-  private CustomButton quitButton = new CustomButton("Quit", 0);
   //The components of the menu
   private MenuPanel menuPanel;
   private MenuBGPanel menuBgPanel;
@@ -37,12 +30,19 @@ class Display extends JFrame{
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
+  //Buttons
+  private CustomButton continueButton = new CustomButton("Continue",continueButtonMouse);
+  private CustomButton newGameButton = new CustomButton("New",newGameButtonMouse);
+  private CustomButton loadGameButton = new CustomButton("Load",loadGameButtonMouse);
+  private CustomButton settingsButton = new CustomButton("Settings",settingsButtonMouse);
+  private CustomButton scoreboardButton = new CustomButton("Scoreboard",scoreboardButtonMouse);
+  private CustomButton quitButton = new CustomButton("Quit",quitButtonMouse);
   //Game logic
   private Tile[][] map;
   private int playerStartingX;
   private int playerStartingY;
   //Fonts
-  Font customTitle, customHeader;
+  Font customTitle;
   
   Display(){
     super ("Concordia");
@@ -56,7 +56,6 @@ class Display extends JFrame{
     //Adds fonts
     try {
       customTitle = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(80f);
-      customHeader = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(32f);
     } catch (IOException e) {
       e.printStackTrace();
     } catch(FontFormatException e) {
@@ -78,15 +77,8 @@ class Display extends JFrame{
     title.setBounds(50, -50, 800, 300);
     
     //Menu panel and buttons
-    menuPanel = new MenuPanel(50, maxY/2, 300, 220);
-    menuPanel.setFont(customHeader);
-    
-    continueButton.addMouseListener(continueButtonMouse);
-    newGameButton.addMouseListener(newGameButtonMouse);
-    loadGameButton.addMouseListener(loadGameButtonMouse);
-    settingsButton.addMouseListener(settingsButtonMouse);
-    scoreboardButton.addMouseListener(scoreboardButtonMouse);
-    quitButton.addMouseListener(quitButtonMouse);
+    menuPanel = new MenuPanel(50, maxY/2, 450, 220);
+    //menuPanel.setFont(customHeader);
     
     //Adds everything
     menuPanel.add(continueButton);
@@ -104,25 +96,25 @@ class Display extends JFrame{
   public void refreshAll(){
     //Menu state
     //Setting content area is more effective than setting opacity
-    continueButton.setContentAreaFilled(false);
-    newGameButton.setContentAreaFilled(false);
-    loadGameButton.setContentAreaFilled(false);
-    settingsButton.setContentAreaFilled(false);
-    scoreboardButton.setContentAreaFilled(false);
-    quitButton.setContentAreaFilled(false);
+    continueButton.updateStyle(0);
+    newGameButton.updateStyle(0);
+    loadGameButton.updateStyle(0);
+    settingsButton.updateStyle(0);
+    scoreboardButton.updateStyle(0);
+    quitButton.updateStyle(0);
     if (gameState==0){
       if(continueButtonMouse.getHover()){
-        continueButton.setContentAreaFilled(true);
+        continueButton.updateStyle(1);
       } else if(newGameButtonMouse.getHover()){
-        newGameButton.setContentAreaFilled(true);
+        newGameButton.updateStyle(1);
       } else if(loadGameButtonMouse.getHover()){
-        loadGameButton.setContentAreaFilled(true);
+        loadGameButton.updateStyle(1);
       } else if(settingsButtonMouse.getHover()){
-        settingsButton.setContentAreaFilled(true);
+        settingsButton.updateStyle(1);
       } else if(scoreboardButtonMouse.getHover()){
-        scoreboardButton.setContentAreaFilled(true);
+        scoreboardButton.updateStyle(1);
       } else if(quitButtonMouse.getHover()){
-        quitButton.setContentAreaFilled(true);
+        quitButton.updateStyle(1);
       }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);
