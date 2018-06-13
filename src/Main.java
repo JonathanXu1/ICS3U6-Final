@@ -48,20 +48,12 @@ class Main{
           map[i][j]= new DoorTile(Color.RED, "door");
         } else if (charMap[i][j] == '~') {
           map[i][j]= new WallTile(Color.DARK_GRAY,"../res/WallTile", "hallway wall"); //Hallway wall
-<<<<<<< HEAD
-        } else if (charMap[i][j] == '|') {
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); //Room wall
-        } else if (charMap[i][j] == 'A') {
-          map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); //Airlock
-        }else if (charMap[i][j] == 'c'){
-          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
-          System.out.println (j+" "+i);
-=======
         } else if (charMap[i][j] == '|') {//Room wall
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); 
         } else if (charMap[i][j] == 'A') {//Airlock
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
->>>>>>> 1af5045bf82115c8e7fca9f324db9726d65180fd
+        }else if (charMap[i][j] == 'c'){
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -116,8 +108,8 @@ class Main{
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 1.5 * Math.PI, "reactor");
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
-        } else if (charMap[i][j] == '-') { //Reactor Chasm
-          map[i][j]= new FloorTile(Color.BLACK, "../res/Chasm", "chasm");
+        } else if (charMap[i][j] == '}') { //Reactor Chasm
+          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {
@@ -157,7 +149,6 @@ class Main{
           map[i][j]= new FloorTile(Color.GREEN, "../res/LadderUp", "spawn"); //Spawn
           playerStartingX = j;
           playerStartingY = i;
-          System.out.println ("play"+j+" "+i);
         } else if (charMap[i][j] == '#'){ //Stair down
           map[i][j]= new WallTile(Color.BLACK, "../res/LadderDown", "stair down");
         } else{
