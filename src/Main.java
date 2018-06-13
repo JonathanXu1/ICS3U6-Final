@@ -184,12 +184,12 @@ class Main{
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         disp.refreshAll();
-        counter++;
-        if (counter == 1000){
-          System.out.print ("w");
-          gamePanel = disp.getPanel();
-          gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
-        }
+   //     counter++;
+      //  if (counter == 1000){
+    //      System.out.print ("w");
+     //     gamePanel = disp.getPanel();
+      //    gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
+//        }
       }
       if (time.getSecondPassed()){
         disp.setFps(time.getFrame());
