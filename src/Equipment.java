@@ -8,7 +8,7 @@ public abstract class Equipment extends Item{
   
   Equipment(int dbty) {
     this.durability = dbty;
-    durabilityCap = 100;
+    durabilityCap = dbty;
   }
   
   public int getDurability() {

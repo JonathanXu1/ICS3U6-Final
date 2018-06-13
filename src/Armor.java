@@ -4,9 +4,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 public abstract class Armor extends Equipment {
   private int defense;
-  private boolean freezeDefense;
-  private boolean flameDefense;
-  private boolean lightningDefense;
+  private int freezeDefense;
+  private int flameDefense;
+  private int lightningDefense;
   Armor(int dbty){
     super (dbty);
   }
@@ -16,22 +16,22 @@ public abstract class Armor extends Equipment {
   public void setDefense(int defense){
     this.defense = defense;
   }
-  public boolean getFreezeDefense(){
+  public int getFreezeDefense(){
     return (freezeDefense);
   }
-  public void setFreezeDefense(boolean freezeDefense){
+  public void setFreezeDefense(int freezeDefense){
     this.freezeDefense = freezeDefense;
   }
-  public boolean getFlameDefense(){
+  public int getFlameDefense(){
     return (flameDefense);
   }
-  public void setFlameDefense(boolean flameDefense){
+  public void setFlameDefense(int flameDefense){
     this.flameDefense = flameDefense;
   }
-  public boolean getLightningDefense(){
+  public int getLightningDefense(){
     return (lightningDefense);
   }
-  public void setLightningDefense(boolean lightningDefense){
+  public void setLightningDefense(int lightningDefense){
     this.lightningDefense = lightningDefense;
   }
   abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);

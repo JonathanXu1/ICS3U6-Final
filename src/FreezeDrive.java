@@ -9,9 +9,9 @@ class FreezeDrive extends Drive{
   }
   public Item upgrade (Item chosenEquip){
     if (chosenEquip instanceof Armor){
-      ((Armor)(chosenEquip)).setFreezeDefense(true);
+      ((Armor)(chosenEquip)).setFreezeDefense(((Armor)(chosenEquip)).getFreezeDefense()+10);
     }else if (chosenEquip instanceof Weapon){
-      ((Weapon)(chosenEquip)).setFreezeChance(((Weapon)(chosenEquip)).getFreezeChance()+5);
+      ((Weapon)(chosenEquip)).setFreezeChance(((Weapon)(chosenEquip)).getFreezeChance()+10);
     }
     return (chosenEquip);
   }
@@ -24,6 +24,6 @@ class FreezeDrive extends Drive{
     g.drawImage(freezeDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This drive can increase freeze chance by 5%, breaking defense, for weapons and grants freeze immunity with armors");  
+    return ("This drive can increase freeze chance by 10%, breaking defense, for weapons and grants freeze immunity with armors");  
   }
 }

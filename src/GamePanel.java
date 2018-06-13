@@ -1,16 +1,12 @@
 //Add new mobs
 //Add enemy sprite
 //Add projectile weapons
-//Make it so that when you switch your weapon, it is no longer highlighted
-//Select one or the other, one will always be selected
-//Fix the inability to shoot below
-//Draw bars null pointer exception
+//Add chests
 
 //Others:
 //Work on displaying different levels
 //Work on increasing difficulty based on levels
 //Work on boss room generation as well as boss fight
-
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -120,6 +116,7 @@ class GamePanel extends JPanel{
   private int driveArrayY;     
   private int targetX=0;
   private int targetY=0;
+  private int playerLevel =1;
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
@@ -254,47 +251,56 @@ class GamePanel extends JPanel{
     }else{
       g.drawImage(right,maxX-(int)(BOT_HEIGHT*Y_TO_X),maxY-(int)(BOT_HEIGHT), (int)(BOT_HEIGHT*Y_TO_X), (int)(BOT_HEIGHT),this);
     }
-    g.drawImage(hotbarBelow,(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))),maxY-(int)(BOT_HEIGHT/2.0),(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT), (int)(BOT_HEIGHT/2.0),this);
+    g.drawImage(hotbarBelow,maxX/2-350,maxY-128,700,128,this);
     for (int j=0;j<6;j++){
-      xInvPixel =(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))+((BOT_HEIGHT/2.0*Y_TO_X_HOT)*12.0/778.0)+(j*BOT_HEIGHT/2.0*Y_TO_X_HOT*128.0/778.0));
-      yInvPixel = (int)(maxY-(int)(BOT_HEIGHT/2.0)+((int)(BOT_HEIGHT/2.0)*11.0/135.0));
+      xInvPixel =maxX/2-350+13+(j*114);
+      yInvPixel = maxY-114;
       g.setColor(new Color(54,53,53));
       if (inventory.getItem(j,3) instanceof Item){
         if ((j==0)||(j==1)||(j==2)){
           g.fillRect (xInvPixel, yInvPixel,  (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0));
         }
       }
-        minButtonX = xInvPixel;
-        maxButtonX= xInvPixel+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0);
-        minButtonY = yInvPixel;
-        maxButtonY = yInvPixel+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0);
-        if (j==2){
-          if (mouseListener.getPressed()){
-            if((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)&&(weaponState)){
-              weaponState = false;
-              meleeSelected  = true;
-            }
-          }
-        }else if (j==0){
-          if (mouseListener.getPressed()){
-            if((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)&&(weaponState)){
-              weaponState = false;
-              meleeSelected  = false;
-            }
+      minButtonX = xInvPixel;
+      maxButtonX= xInvPixel+101;
+      minButtonY = yInvPixel;
+      maxButtonY = yInvPixel+101;
+      if (j==2){
+        if (mouseListener.getPressed()){
+          if((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)&&(weaponState)){
+            weaponState = false;
+            meleeSelected  = true;
           }
         }
-        g.setColor(new Color(255,255,255,100));
-        if ((meleeSelected)&&(j==2)){
-          g.fillRect (xInvPixel, yInvPixel,  (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0)+3, (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0));
-        }else if ((!(meleeSelected))&&(j==0)){
-          g.fillRect (xInvPixel, yInvPixel,  (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0)+3, (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0));
+      }else if (j==0){
+        if (mouseListener.getPressed()){
+          if((mouseListener.getMouseXy()[0] > minButtonX)&&(mouseListener.getMouseXy()[0] < maxButtonX)&&(mouseListener.getMouseXy()[1] >minButtonY)&&(mouseListener.getMouseXy()[1] <maxButtonY)&&(weaponState)){
+            weaponState = false;
+            meleeSelected  = false;
+          }
         }
-        if (inventory.getItem(j,3) instanceof Item){
-          inventory.drawSelectedItem(g,j,3, xInvPixel, yInvPixel, (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), this);
-        }
+      }
+      g.setColor(new Color(255,255,255,100));
+      if ((meleeSelected)&&(j==2)){
+        g.fillRect (xInvPixel, yInvPixel, 105,105);
+      }else if ((!(meleeSelected))&&(j==0)){
+        g.fillRect (xInvPixel, yInvPixel, 105,105);
+      }
+      if (inventory.getItem(j,3) instanceof Item){
+        inventory.drawSelectedItem(g,j,3, xInvPixel, yInvPixel, (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), (int)(BOT_HEIGHT/2.0*Y_TO_X_HOT*113.0/778.0), this);
+      }
     }
-    g.drawImage(hotbar,(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))),maxY-(int)(BOT_HEIGHT/2.0),(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT), (int)(BOT_HEIGHT/2.0),this);
-      //Hp and exp bars
+    g.drawImage(hotbar,maxX/2-350,maxY-188,700,188,this);
+    g.setColor(Color.WHITE);
+    g.setFont (new Font("Serif", Font.PLAIN, 12));
+    g.drawString("LEVEL:"+playerLevel, maxX/2-350+21, maxY-145);
+    //Put in exp
+    if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
+      g.drawString("HEALTH:"+entityMap[playerCurrentY][playerCurrentX].getHealth()+"/"+entityMap[playerCurrentY][playerCurrentX].getHealthCap(), maxX/2-350+21, maxY-160);     
+      g.drawString("HUNGER:"+((Character)(entityMap[playerCurrentY][playerCurrentX])).getHunger()+"/200", maxX/2, maxY-145);
+      g.drawString("DEFENSE:"+entityMap[playerCurrentY][playerCurrentX].getArmor(), maxX/2, maxY-160);
+    }
+    //Hp and exp bars
     g.drawImage(hp,10,10, (int)(maxX*0.2),  (int)(maxX*0.2/200.0*14.0),this);
     g.drawImage(exp,10,15+ (int)(maxX*0.2/200.0*14.0),(int)(maxX*0.2), (int)(maxX*0.2/200.0*10.0),this);
     ///Draw in all the button click shading
@@ -348,7 +354,7 @@ class GamePanel extends JPanel{
       bg.setXDirection (xyDirection[0]);
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
-        bg.move();
+          bg.move();
       }
       //Make an entity move method
       for (int i =0;i<entityMap.length;i++){
@@ -587,6 +593,7 @@ class GamePanel extends JPanel{
                   if (map[tileSelectedArray[1]][tileSelectedArray[0]].getFocus()){
                     if ((inventory.getItem(0,3)) instanceof RangedWeapon){
                       if(!((mouseListener.getMouseXy()[0]>(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0))))&&(mouseListener.getMouseXy()[0]<(int)(maxX/2.0-(BOT_HEIGHT/2.0*(Y_TO_X_HOT/2.0)))+(int)(BOT_HEIGHT/2.0*Y_TO_X_HOT))&&(mouseListener.getMouseXy()[1]>maxY-(int)(BOT_HEIGHT/2.0))&&(mouseListener.getMouseXy()[1]<maxY-(int)(BOT_HEIGHT/2.0)+maxY-(int)(BOT_HEIGHT/2.0)))){
+                        ((Equipment)(inventory.getItem(0,3))).setDurability(((Equipment)(inventory.getItem(0,3))).getDurability()-1);
                         collided = false;
                         translateX = 0;
                         translateY = 0;
@@ -639,6 +646,16 @@ class GamePanel extends JPanel{
       currXp = ((Character)entityMap[playerCurrentY][playerCurrentX]).getXp();
       xpCap = ((Character)entityMap[playerCurrentY][playerCurrentX]).getXpCap();
     }
+    //System.out.print (currXp);
+    if (currXp>= xpCap){
+      currXp= currXp-xpCap;
+      ((Character)entityMap[playerCurrentY][playerCurrentX]).setXpCap(((Character)entityMap[playerCurrentY][playerCurrentX]).getXpCap()+50);
+      xpCap = ((Character)entityMap[playerCurrentY][playerCurrentX]).getXpCap();
+      //Increases health and health cap by 20
+      entityMap[playerCurrentY][playerCurrentX].setHealth (entityMap[playerCurrentY][playerCurrentX].getHealth()+20);
+      entityMap[playerCurrentY][playerCurrentX].setHealthCap (entityMap[playerCurrentY][playerCurrentX].getHealthCap()+20);
+      playerLevel++;
+    }
     //debugMessage = (Integer.toString(currHealth) + " " +  Integer.toString(healthCap));
     g.fillRect (16,16,(int)((((int)(maxX*1.0/5.0))-12)*((double)currHealth)/(double)healthCap), ((int)(maxX*1.0/5.0/200.0*14.0))-12);
     //Fill Exp, can be modified through the width
@@ -649,24 +666,24 @@ class GamePanel extends JPanel{
     int statusSkip=0;
     if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
       hunger = ((Character)entityMap[playerCurrentY][playerCurrentX]).getHunger();
-    }
-    if (hunger <= 0){
-      g.drawImage(starving,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
-      statusSkip=statusSkip+35;
-    } else if(hunger < 100){
-      g.drawImage(hungry,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
-      statusSkip=statusSkip+35;
-    }
-    if (entityMap[playerCurrentY][playerCurrentX].getLightning()){
-      g.drawImage (lightningStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
-      statusSkip=statusSkip+35;
-    }
-    if (entityMap[playerCurrentY][playerCurrentX].getFreeze()){
-      g.drawImage (freezeStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
-      statusSkip=statusSkip+35;
-    }
-    if (entityMap[playerCurrentY][playerCurrentX].getFlame()){
-      g.drawImage (flameStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+      if (hunger <= 0){
+        g.drawImage(starving,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+        statusSkip=statusSkip+35;
+      } else if(hunger < 100){
+        g.drawImage(hungry,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+        statusSkip=statusSkip+35;
+      }
+      if (entityMap[playerCurrentY][playerCurrentX].getLightning()){
+        g.drawImage (lightningStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+        statusSkip=statusSkip+35;
+      }
+      if (entityMap[playerCurrentY][playerCurrentX].getFreeze()){
+        g.drawImage (freezeStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+        statusSkip=statusSkip+35;
+      }
+      if (entityMap[playerCurrentY][playerCurrentX].getFlame()){
+        g.drawImage (flameStatus,16+statusSkip,15+ (int)(maxX*0.2/200.0*14.0)+30,30,30,this);
+      }
     }
     //Draws health bars for entities
     for (int i = 0; i < entityMap.length; i++) {
@@ -835,9 +852,22 @@ class GamePanel extends JPanel{
                     itemSelected = false;
                     entityMap[playerCurrentY][playerCurrentX] = ((MedKit)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).heal(((Character)(entityMap[playerCurrentY][playerCurrentX])));
                     inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                    tiling = true;
-                    passTurn();
-                    turnCount++;
+                    /*
+                     tiling = true;
+                     passTurn();
+                     turnCount++;
+                     */
+                  }               
+                  if (inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Food){
+                    inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
+                    itemSelected = false;
+                    entityMap[playerCurrentY][playerCurrentX] = ((Food)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).restoreHunger(((Character)(entityMap[playerCurrentY][playerCurrentX])));
+                    inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
+                    /*
+                     tiling = true;
+                     passTurn();
+                     turnCount++;
+                     */
                   }
                 }else if ((j==0)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof RangedWeapon))){
                   inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
@@ -972,7 +1002,18 @@ class GamePanel extends JPanel{
       //Cannot spawn 20 blocks in radius beside the character
       mobCount++;
       //Defense and health will both increase as the player progresses
-      entityMap[spawnY][spawnX] = new Roomba (20,20,10,1,false,false,false,Color.MAGENTA, false);
+      //Though roombas have less hp and defense, they have the ability to inflict status
+      //Roombas also have slightly more attack
+      int tempRand = (int)(Math.random()*4);
+      if (tempRand==0){
+        entityMap[spawnY][spawnX] = new FlameRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+      }else if (tempRand==1){
+        entityMap[spawnY][spawnX] = new LightningRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+      }else if (tempRand==2){
+        entityMap[spawnY][spawnX] = new FreezeRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+      }else{
+        entityMap[spawnY][spawnX] = new Brute (20,20,10,1,false,false,false,Color.MAGENTA, false);
+      }
     }
     //Damages whatever is burned
     for (int i =0;i<entityMap.length;i++){
@@ -981,6 +1022,23 @@ class GamePanel extends JPanel{
           if (entityMap[i][j].getFlame()){
             //Deals 5 damage, ignores defense
             entityMap[i][j].setHealth(entityMap[i][j].getHealth()-5);
+            if (((int)(Math.random()*100)<25)){
+              entityMap[i][j].setFlame(false);
+            }
+          }else if(entityMap[i][j].getFreeze()){
+            if (((int)(Math.random()*100)<25)){
+              entityMap[i][j].setFreeze(false);
+            }
+            if (entityMap[i][j] instanceof Roomba){
+              ///WHEN CHANGING THE STATS, THE ROOMBAS DEFENSE MUST BE UPDATED HERE AS WELL!!!!
+              entityMap[i][j].setArmor(5);
+            }else if (entityMap[i][j] instanceof Brute){
+              entityMap[i][j].setArmor(10);
+            }
+          }else if (entityMap[i][j].getLightning()){
+            if ((int)(Math.random()*100)<25){
+              entityMap[i][j].setLightning(false);
+            }
           }
         }
       }
@@ -992,37 +1050,39 @@ class GamePanel extends JPanel{
     for (int i =0;i<entityMap.length;i++){
       for(int j =0;j<entityMap[0].length;j++){
         if (entityMap[i][j] instanceof Character){
-          if((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){
+          if ((entityMap[playerCurrentY][playerCurrentX].getLightning())){
+            
+          }else if((!(blocked[0])&&(keyListener.getAllDirection()[1]<0))||(!(blocked[1])&&(keyListener.getAllDirection()[1]>0))||(!(blocked[2])&&(keyListener.getAllDirection()[0]<0))||(!(blocked[3])&&(keyListener.getAllDirection()[0]>0))){
             movementRestriction = false;
-            if (!(entityMap[i][j].getMoved())){
+            if ((!(entityMap[i][j].getMoved()))){
               //Sets the position on the map directly
               if (keyListener.getAllDirection()[0]<0){
-                playerCurrentX= playerCurrentX -1;
-                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                entityMap[i][j] =null;
+                  playerCurrentX= playerCurrentX -1;
+                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                  entityMap[i][j] =null;
                 entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else if (keyListener.getAllDirection()[0]>0){
-                playerCurrentX =playerCurrentX+1;
-                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                entityMap[i][j] =null;
-                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                  playerCurrentX =playerCurrentX+1;
+                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                  entityMap[i][j] =null;
+                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }
               if (keyListener.getAllDirection()[1]<0){
-                playerCurrentY =playerCurrentY-1;
-                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                entityMap[i][j] =null;
-                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                  playerCurrentY =playerCurrentY-1;
+                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                  entityMap[i][j] =null;
+                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else if (keyListener.getAllDirection()[1]>0){
-                playerCurrentY =playerCurrentY+1;
-                entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
-                entityMap[i][j] =null;
-                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                  playerCurrentY =playerCurrentY+1;
+                  entityMap[playerCurrentY][playerCurrentX]= entityMap[i][j];
+                  entityMap[i][j] =null;
+                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
               }else{
-                entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                  entityMap[playerCurrentY][playerCurrentX].setMoved(true);
+                }
               }
               ///Possibly make tiling true;
-            }
-          }else{
+            }else{
             movementRestriction = true;
           }
         }
@@ -1042,6 +1102,9 @@ class GamePanel extends JPanel{
                 entityMap[i][j].setMoved(true);
                 entityArrayXMod = 0;
                 entityArrayYMod = 0;
+                if ((int)(Math.random()*100)<25){
+                  entityMap[i][j].setLightning(false);
+                }
               }else{
                 if (((Enemy)(entityMap[i][j])).getEnraged()){
                   for (int k=0;k<4;k++){
@@ -1117,24 +1180,55 @@ class GamePanel extends JPanel{
                   entityMap[i][j] =null;
                 } else {
                   tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
-                  int damage;
-                  //IMPORTANT: 25 IS A TEMPORARY DAMAGE VALE, MUST MAKE A VARIABLE THAT CHANGES WITH THE LEVEL
-                  if (entityMap[playerCurrentY][playerCurrentX].getArmor()>=25){
-                    damage =(int)(Math.ceil(((double)(25))*0.2));
+                  int damage = 10;
+                  //Should increase by 7 every level
+                  //IMPORTANT: 10 IS A TEMPORARY DAMAGE VALUE, MUST MAKE A VARIABLE THAT CHANGES WITH THE LEVEL
+                  int tempArmor=entityMap[playerCurrentY][playerCurrentX].getArmor();
+                  if (entityMap[playerCurrentY][playerCurrentX].getFreeze()){
+                    entityMap[playerCurrentY][playerCurrentX].setArmor(0);
+                  }
+                  if (entityMap[playerCurrentY][playerCurrentX].getArmor()>=damage){
+                    damage =(int)(Math.ceil(((double)(damage))*0.2));
                   }else{
-                    damage =25-entityMap[playerCurrentY][playerCurrentX].getArmor();
+                    damage =damage-tempArmor;
                   }
-                  if (i + 1 == playerCurrentY && j == playerCurrentX) {
+                  if ((i + 1 == playerCurrentY && j == playerCurrentX)||(i == playerCurrentY && j - 1 == playerCurrentX)|| (i == playerCurrentY && j + 1 == playerCurrentX)|| (i - 1 == playerCurrentY && j == playerCurrentX)) {
                     entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
-                  }
-                  if (i == playerCurrentY && j + 1 == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
-                  }
-                  if (i - 1 == playerCurrentY && j == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
-                  }
-                  if (i == playerCurrentY && j - 1 == playerCurrentX) {
-                    entityMap[playerCurrentY][playerCurrentX].setHealth(tempHealth - damage);
+                    ((Equipment)(inventory.getItem(1,3))).setDurability(((Equipment)(inventory.getItem(1,3))).getDurability()-1);
+                    if (entityMap[i][j] instanceof FlameRoomba){
+                      if (((int)(Math.random()*100)<10)){
+                        if (inventory.getItem(1,3) instanceof Armor){
+                          if (((int)(Math.random()*100))<((Armor)(inventory.getItem(1,3))).getFlameDefense()){
+                          }else{
+                            entityMap[playerCurrentY][playerCurrentX].setFlame(true);  
+                          }
+                        }else{
+                          entityMap[playerCurrentY][playerCurrentX].setFlame(true);
+                        }
+                      }
+                    }else if (entityMap[i][j] instanceof FreezeRoomba){
+                      if (((int)(Math.random()*100)<10)){
+                        if (inventory.getItem(1,3) instanceof Armor){
+                          if (((int)(Math.random()*100))<((Armor)(inventory.getItem(1,3))).getFlameDefense()){
+                          }else{
+                            entityMap[playerCurrentY][playerCurrentX].setFreeze(true);  
+                          }
+                        }else{
+                          entityMap[playerCurrentY][playerCurrentX].setFreeze(true);
+                        }
+                      }
+                    }else if (entityMap[i][j] instanceof LightningRoomba){
+                      if (((int)(Math.random()*100)<10)){
+                        if (inventory.getItem(1,3) instanceof Armor){
+                          if (((int)(Math.random()*100))<((Armor)(inventory.getItem(1,3))).getFlameDefense()){
+                          }else{
+                            entityMap[playerCurrentY][playerCurrentX].setLightning(true);  
+                          }
+                        }else{
+                          entityMap[playerCurrentY][playerCurrentX].setLightning(true);
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1231,6 +1325,7 @@ class GamePanel extends JPanel{
         entityMap[arrayY][arrayX] = null;
         mobCount--;
         mobDrop(arrayX,arrayY);
+        ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
       }
     }
   }
@@ -1317,18 +1412,16 @@ class GamePanel extends JPanel{
   }
   public void spawnItems(){
     //Sets inventory default items
-    inventory.setItem(1,3,new SpaceSuit (100));
-    inventory.setItem(2,3,new Wrench (100));
-    ((Weapon)(inventory.getItem(2,3))).setFlameChance(100);
-    ((Weapon)(inventory.getItem(2,3))).setFreezeChance(100);
-    ((Weapon)(inventory.getItem(2,3))).setLightningChance(100);
+    inventory.setItem(1,3,new SpaceSuit (50));
+    inventory.setItem(2,3,new Wrench (50));
     //First initialize a random number of weapons and armors to spawn across the map
     int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    int rangedWeaponCap =((200-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int rangedWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    int foodCap =(2-((int)(Math.random()*2)));
     //Resets the spawn
     spawnX = 0;
     spawnY = 0;
@@ -1377,42 +1470,51 @@ class GamePanel extends JPanel{
       itemCount++;
       itemMap[spawnY][spawnX] = new MedKit();
     }
+    itemCount=0;
+    while(itemCount<foodCap){
+      do{
+        spawnX =(int)(Math.random()*itemMap[0].length);
+        spawnY =(int)(Math.random()*itemMap.length);
+      }while(!(itemMap[spawnY][spawnX] instanceof Item)&&(!(map[spawnY][spawnX] instanceof FloorTile)));
+      itemCount++;
+      itemMap[spawnY][spawnX] = new Food();
+    }
   }
   public void randomizeMeleeWeapon(int spawnX, int spawnY){
     
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
-      itemMap[spawnY][spawnX] = new PlasmaRapier(100);
+      itemMap[spawnY][spawnX] = new PlasmaRapier(50);
     }else if (itemRarity==4){
-      itemMap[spawnY][spawnX] = new GammaHammer(100); 
+      itemMap[spawnY][spawnX] = new GammaHammer(50); 
     }else if (itemRarity==3){
-      itemMap[spawnY][spawnX] = new KineticMace(100);
+      itemMap[spawnY][spawnX] = new KineticMace(50);
     }else{
-      itemMap[spawnY][spawnX] = new EnergySword(100);
+      itemMap[spawnY][spawnX] = new EnergySword(50);
     }
   }
   public void randomizeArmor(int spawnX, int spawnY){
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
-      itemMap[spawnY][spawnX] = new IridiumExoskeleton(100);
+      itemMap[spawnY][spawnX] = new IridiumExoskeleton(50);
     }else if (itemRarity==4){
-      itemMap[spawnY][spawnX] = new ProximityArmor(100); 
+      itemMap[spawnY][spawnX] = new ProximityArmor(50); 
     }else if (itemRarity==3){
-      itemMap[spawnY][spawnX] = new EnergySuit(100);
+      itemMap[spawnY][spawnX] = new EnergySuit(50);
     }else{
-      itemMap[spawnY][spawnX] = new AssaultVest(100);
+      itemMap[spawnY][spawnX] = new AssaultVest(50);
     }
   }
   public void randomizeRangedWeapon(int spawnX, int spawnY){
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
-      itemMap[spawnY][spawnX] = new SolarScorcher(100);
+      itemMap[spawnY][spawnX] = new SolarScorcher(50);
     }else if (itemRarity==4){
-      itemMap[spawnY][spawnX] = new PulseRailgun(100); 
+      itemMap[spawnY][spawnX] = new PulseRailgun(50); 
     }else if (itemRarity==3){
-      itemMap[spawnY][spawnX] = new PlasmaRifle(100);
+      itemMap[spawnY][spawnX] = new PlasmaRifle(50);
     }else{
-      itemMap[spawnY][spawnX] = new LaserPistol(100);
+      itemMap[spawnY][spawnX] = new LaserPistol(50);
     }
   }
   public void randomizeDrive(int spawnX, int spawnY){
@@ -1433,33 +1535,33 @@ class GamePanel extends JPanel{
     if ((targetY>0)&&(targetY<entityMap.length)&&(targetX>0)&&(targetX<entityMap[0].length)){
       if (meleeSelected){
         if ((inventory.getItem(2,3)) instanceof MeleeWeapon){
-        ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
-          if (!(entityMap[targetY][targetX].getFreeze())){
-            entityMap[targetY][targetX].setFreeze(true);
-            //Armor becomes weaker
-            entityMap[targetY][targetX].setArmor(0);
+          ((Equipment)(inventory.getItem(2,3))).setDurability(((Equipment)(inventory.getItem(2,3))).getDurability()-1);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFreezeChance()){
+            if (!(entityMap[targetY][targetX].getFreeze())){
+              entityMap[targetY][targetX].setFreeze(true);
+              //Armor becomes weaker
+              entityMap[targetY][targetX].setArmor(0);
+            }
           }
-        }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
-          if (!(entityMap[targetY][targetX].getFlame())){
-            entityMap[targetY][targetX].setFlame(true);
-            //Draw a little icon above the heads of the enemies with the status
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getFlameChance()){
+            if (!(entityMap[targetY][targetX].getFlame())){
+              entityMap[targetY][targetX].setFlame(true);
+              //Draw a little icon above the heads of the enemies with the status
+            }
           }
-        }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
-          if (!(entityMap[targetY][targetX].getLightning())){
-            entityMap[targetY][targetX].setLightning(true);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(2,3))).getLightningChance()){
+            if (!(entityMap[targetY][targetX].getLightning())){
+              entityMap[targetY][targetX].setLightning(true);
+            }
           }
-        }
-        //Defense will block up to %80 of damage
-        int damage;
-        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
-          damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
-        }else{
-          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
-        }
-        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
+          //Defense will block up to %80 of damage
+          int damage;
+          if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
+            damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
+          }else{
+            damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
+          }
+          entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
       }else if (!(meleeSelected)){
         if ((inventory.getItem(0,3)) instanceof RangedWeapon){
@@ -1471,25 +1573,25 @@ class GamePanel extends JPanel{
               entityMap[targetY][targetX].setArmor(0);
             }
           }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFlameChance()){
-          if (!(entityMap[targetY][targetX].getFlame())){
-            entityMap[targetY][targetX].setFlame(true);
-            //Draw a little icon above the heads of the enemies with the status
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFlameChance()){
+            if (!(entityMap[targetY][targetX].getFlame())){
+              entityMap[targetY][targetX].setFlame(true);
+              //Draw a little icon above the heads of the enemies with the status
+            }
           }
-        }
-        if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getLightningChance()){
-          if (!(entityMap[targetY][targetX].getLightning())){
-            entityMap[targetY][targetX].setLightning(true);
+          if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getLightningChance()){
+            if (!(entityMap[targetY][targetX].getLightning())){
+              entityMap[targetY][targetX].setLightning(true);
+            }
           }
-        }
-        //Defense will block up to %80 of damage
-        int damage;
-        if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(2,3))).getDamage()))*0.8){
-          damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(2,3))).getDamage()))*0.2)));
-        }else{
-          damage = (((Weapon)(inventory.getItem(2,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
-        }
-        entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
+          //Defense will block up to %80 of damage
+          int damage;
+          if (entityMap[targetY][targetX].getArmor()>=((double)(((Weapon)(inventory.getItem(0,3))).getDamage()))*0.8){
+            damage =(int)((Math.ceil((((double)((Weapon)(inventory.getItem(0,3))).getDamage()))*0.2)));
+          }else{
+            damage = (((Weapon)(inventory.getItem(0,3))).getDamage()-entityMap[targetY][targetX].getArmor());     
+          }
+          entityMap[targetY][targetX].setHealth(entityMap[targetY][targetX].getHealth()-damage);
         }
       }
       //Checks if the entity has been killed, so that it will not be able to attack afterwards

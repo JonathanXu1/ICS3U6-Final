@@ -5,7 +5,7 @@ import java.awt.Color;
 class Food extends Consumable{
   private Image food;
   Food(){
-    this.setName("Food");
+    this.setName("Food Pack");
   }
   public Character restoreHunger(Character player){
     if (player.getHealth()+10<player.getHealthCap()){
@@ -17,7 +17,7 @@ class Food extends Consumable{
     return (player);
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
-    food = Toolkit.getDefaultToolkit().getImage("../res/Food.png");
+    food = Toolkit.getDefaultToolkit().getImage("../res/FoodPack.png");
     if (this.getItemSelected()){
       g.setColor(new Color(255, 255, 255, 100)); 
       g.fillRect (x,y,width,height);

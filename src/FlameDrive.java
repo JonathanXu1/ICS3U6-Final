@@ -9,9 +9,9 @@ class FlameDrive extends Drive{
   }
   public Item upgrade (Item chosenEquip){
     if (chosenEquip instanceof Armor){
-      ((Armor)(chosenEquip)).setFlameDefense(true);
+      ((Armor)(chosenEquip)).setFlameDefense(((Armor)(chosenEquip)).getFlameDefense()+10);
     }else if (chosenEquip instanceof Weapon){
-      ((Weapon)(chosenEquip)).setFlameChance(((Weapon)(chosenEquip)).getFlameChance()+5);
+      ((Weapon)(chosenEquip)).setFlameChance(((Weapon)(chosenEquip)).getFlameChance()+10);
     }
     return (chosenEquip);
   }
@@ -24,6 +24,6 @@ class FlameDrive extends Drive{
     g.drawImage(flameDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-   return ("This drive can increase burn chance by 5% for weapons and grants burn immunity with armors");  
+   return ("This drive can increase burn chance by 10% for weapons and grants burn immunity with armors");  
   }
 }

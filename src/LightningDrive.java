@@ -9,9 +9,9 @@ class LightningDrive extends Drive{
   }
   public Item upgrade (Item chosenEquip){
     if (chosenEquip instanceof Armor){
-      ((Armor)(chosenEquip)).setLightningDefense(true);
+      ((Armor)(chosenEquip)).setLightningDefense(((Armor)(chosenEquip)).getLightningDefense()+10);
     }else if (chosenEquip instanceof Weapon){
-      ((Weapon)(chosenEquip)).setLightningChance(((Weapon)(chosenEquip)).getLightningChance()+5);
+      ((Weapon)(chosenEquip)).setLightningChance(((Weapon)(chosenEquip)).getLightningChance()+10);
     }
     return (chosenEquip);
   }
@@ -24,6 +24,6 @@ class LightningDrive extends Drive{
     g.drawImage(lightningDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This drive can increase paralyze chance by 5% for weapons and grants paralyze immunity with armors");
+    return ("This drive can increase paralyze chance by 10% for weapons and grants paralyze immunity with armors");
   }
 }

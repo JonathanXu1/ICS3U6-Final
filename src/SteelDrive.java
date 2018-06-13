@@ -8,7 +8,7 @@ class SteelDrive extends Drive{
     this.setName("Steel Drive");
   }
   public Item upgrade (Item chosenEquip){
-    ((Equipment)(chosenEquip)).setDurabilityCap(((Equipment)(chosenEquip)).getDurabilityCap()+50);
+    ((Equipment)(chosenEquip)).setDurabilityCap(((Equipment)(chosenEquip)).getDurabilityCap()+25);
     ((Equipment)(chosenEquip)).setDurability(((Equipment)(chosenEquip)).getDurabilityCap());
     return (chosenEquip);
   }
@@ -21,6 +21,6 @@ class SteelDrive extends Drive{
     g.drawImage(steelDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This drive will restore all lost durability and increase the durability cap by 50");
+    return ("This drive will restore all lost durability and increase the durability cap by 25");
   }
 }

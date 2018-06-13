@@ -9,7 +9,7 @@ class PulseRailgun extends RangedWeapon {
     this.setRarity(4);
     this.setDamage(15);
     this.setSPT(1);
-    this.setName("PulseRailgun");
+    this.setName("Pulse Railgun");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     pulseRailgun = Toolkit.getDefaultToolkit().getImage("../res/PulseRailgun.png");

@@ -111,4 +111,8 @@ class CustomKeyListener implements KeyListener {
       tileRight = true;
     }
   }
+  public void setToZero (){
+    xyDirection[0]=0;
+    xyDirection[1]=0;
+  }
 }

@@ -54,7 +54,10 @@ abstract class Entity {
   public int getHealthCap() {
     return this.healthCap;
   }
-  
+    
+  public void setHealthCap(int healthCap) {
+    this.healthCap=healthCap;
+  }
   public int getSpeed() {
     return this.speed;
   }

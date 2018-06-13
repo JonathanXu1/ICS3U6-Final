@@ -52,6 +52,8 @@ class Inventory{
       }
     }
     if ((inventory[positionY][positionX]) instanceof Consumable){
+      g.drawString(((Consumable)(inventory[positionY][positionX])).getEffectDescription(),xPixelPos,yPixelPos+lineSkip);
+      lineSkip = lineSkip+12;
       g.drawString("Click the item again to use",xPixelPos,yPixelPos+lineSkip);
       lineSkip = lineSkip+12;
     }
@@ -70,6 +72,20 @@ class Inventory{
         lineSkip = lineSkip+12;
       }
     }
+    if ((inventory[positionY][positionX]) instanceof Armor){
+      if (((Armor)(inventory[positionY][positionX])).getFlameDefense()!=0){
+        g.drawString("Burn defense: "+((Armor)(inventory[positionY][positionX])).getFlameDefense()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Armor)(inventory[positionY][positionX])).getFreezeDefense()!=0){
+        g.drawString("Freeze defense: "+((Armor)(inventory[positionY][positionX])).getFreezeDefense()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+      if (((Armor)(inventory[positionY][positionX])).getLightningDefense()!=0){
+        g.drawString("Paralyze defense: "+((Armor)(inventory[positionY][positionX])).getLightningDefense()+"%",xPixelPos+377,yPixelPos+lineSkip);
+        lineSkip = lineSkip+12;
+      }
+    }
   }
   public void writePending(Graphics g, int positionX,int positionY,int xPixelPos,int yPixelPos){
     g.setColor(Color.WHITE);
@@ -77,6 +93,8 @@ class Inventory{
     lineSkip = 0;
     g.drawString(((Consumable)(inventory[positionY][positionX])).getEffectDescription(), xPixelPos,yPixelPos);
     lineSkip = lineSkip+12;
-    g.drawString("Click outside the inventory or the drive again to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
+    if (((Consumable)(inventory[positionY][positionX])) instanceof Drive){
+      g.drawString("Click outside the inventory or the drive again to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
+    }
   }
 }
