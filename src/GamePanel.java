@@ -1,14 +1,13 @@
-//Add new mobs
-//Add enemy sprite
 //Add projectile weapons
-//Add chests
-
-//Others:
+//Pausing
+//Fix freeze text so it fits
 //Work on displaying different levels
 //Work on increasing difficulty based on levels
+//Make an item line so that when an item dissapears it can spawn in
 //Work on boss room generation as well as boss fight
-//Fix freeze text so it fits
-//Make a drop timer
+//Make proper captains room
+
+
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -78,7 +77,7 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 100;
+  private int MOB_CAP = 40;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
@@ -989,7 +988,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<100)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1367,6 +1366,7 @@ class GamePanel extends JPanel{
               if ((Math.abs(tileSelectedArray[0]-playerCurrentX)+Math.abs((tileSelectedArray[1]-playerCurrentY)))==1){
                 if (meleeSelected){
                   turnPasser = true;
+                  System.out.print ("w");
                   playerAttack(tileSelectedArray[0],tileSelectedArray[1]);
                 }
               }
@@ -1421,7 +1421,7 @@ class GamePanel extends JPanel{
     inventory.setItem(2,3,new Wrench (50));
     //First initialize a random number of weapons and armors to spawn across the map
     int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    int rangedWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
+    int rangedWeaponCap =200+((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
@@ -1570,6 +1570,7 @@ class GamePanel extends JPanel{
         }
       }else if (!(meleeSelected)){
         if ((inventory.getItem(0,3)) instanceof RangedWeapon){
+          System.out.print ("w");
           ((Equipment)(inventory.getItem(0,3))).setDurability(((Equipment)(inventory.getItem(0,3))).getDurability()-1);
           if ((int)(Math.random()*100)<((Weapon)(inventory.getItem(0,3))).getFreezeChance()){
             if (!(entityMap[targetY][targetX].getFreeze())){

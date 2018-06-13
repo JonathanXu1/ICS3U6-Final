@@ -25,8 +25,8 @@ class Main{
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    //char[][] charMap = gen.charMap(gen.generateMap(12,12));
-    char[][] charMap = gen.createBossRoom();
+    char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     Color POO = new Color(168,107,23);
     Color BURGANDY = new Color(160, 27, 33);
@@ -37,7 +37,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){ //
-          map[i][j]= new FloorTile(POO, "../res/Garbage", "garbage");
+          map[i][j]= new FloorTile(POO, "../res/CrackedTile", "cracked tile");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
