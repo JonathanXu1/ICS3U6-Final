@@ -38,7 +38,7 @@ class Main{
         if (charMap[i][j] == 'J'){ //
           map[i][j]= new WallTile(POO, "../res/WallTile", "garbage");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
           map[i][j]= new HallwayTile(Color.WHITE, "hallway floor");
         } else if (charMap[i][j] == 'R' || charMap[i][j] == '!' || charMap[i][j] == '&' || charMap[i][j] == '%' || charMap[i][j] == '=') { //Room floor

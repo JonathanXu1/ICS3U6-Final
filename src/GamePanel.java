@@ -292,7 +292,7 @@ class GamePanel extends JPanel{
     }
     g.drawImage(hotbar,maxX/2-350,maxY-188,700,188,this);
     g.setColor(Color.WHITE);
-    g.setFont (new Font("Serif", Font.PLAIN, 12));
+    g.setFont (new Font("Consolas", Font.PLAIN, 12));
     g.drawString("LEVEL:"+playerLevel, maxX/2-350+21, maxY-145);
     //Put in exp
     if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){

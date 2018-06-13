@@ -9,7 +9,7 @@ class Inventory{
   Item tempOriginal;
   Item tempNew;
   int lineSkip=0;
-  Font stats = new Font("Montserrat", Font.PLAIN, 12);
+  Font stats = new Font("Consolas", Font.PLAIN, 12);
   Inventory (){
   }
   public void setItem(int positionX, int positionY, Item item){
