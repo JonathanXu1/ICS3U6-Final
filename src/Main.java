@@ -29,6 +29,7 @@ class Main{
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     Color POO = new Color(168,107,23);
+    Color BURGANDY = new Color(160, 27, 33);
     
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
@@ -120,7 +121,25 @@ class Main{
         } else if (charMap[i][j] == 'P') {
           map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorChess", "crew");
         } else if (charMap[i][j] == '%'){
-          map[i][j] = new FloorTile(Color.RED, "../res/CrewFloorChess", "crew");;
+          map[i][j] = new FloorTile(Color.RED, "../res/CrewFloorChess", "crew"); //?
+        }
+        
+        // Captain's Quarters
+        
+        else if (charMap[i][j] == '$') {
+          map[i][j] = new FloorTile(BURGANDY, "../res/CaptainFloor", "capq");
+        } else if (charMap[i][j] == '3') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedTop", "capq");
+        } else if (charMap[i][j] == '4') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainBedBottom", "capq");
+        } else if (charMap[i][j] == 'y') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop", "capq");
+        } else if (charMap[i][j] == 'x') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom", "capq");
+        } else if (charMap[i][j] == '?') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorNotes", "capq");
+        } else if (charMap[i][j] == 'y') {
+          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorScratch", "capq");
         }
         
         //Key points

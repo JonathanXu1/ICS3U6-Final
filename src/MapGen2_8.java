@@ -455,7 +455,7 @@ class MapGen2_8{
           wallChests++;
         }
       }
-    } while (wallChests < 10);
+    } while (wallChests < 8);
   }
   
   public void furnishRooms() {    
@@ -587,12 +587,10 @@ class MapGen2_8{
           } 
           
           for (int cust = 2; cust < 8; cust = cust + 2) {
-            if (randomRoll(600)) {
+            if (randomRoll(300)) {
               map[i*6 - 4 + cust][j*6 - 2] = 403;
             }
-            if (randomRoll(600)) {
-              map[i*6 - 4 + cust][j*6 + 2] = 403;
-            }
+
           }   
           
           for (int i2 = -4; i2 < 5; i2++) {
@@ -650,7 +648,7 @@ class MapGen2_8{
                 if (randomRoll(50)) {
                   map[i*6 + i2][j*6 + j2] = -606;
                 }
-                if (randomRoll(50)) {
+                if (randomRoll(40)) {
                   map[i*6 + i2][j*6 + j2] = -607;
                 }
               }
