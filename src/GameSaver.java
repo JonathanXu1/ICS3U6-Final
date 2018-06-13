@@ -4,7 +4,7 @@ import java.io.File;
 import java.awt.Color;
 
 public class GameSaver {
-  private int fileCode;
+  private int fileCode;  
   
   GameSaver() {
     Scanner calibrator = new Scanner(("SaveCalibrator.txt"));
@@ -17,7 +17,7 @@ public class GameSaver {
     
     PrintWriter writer = new PrintWriter(new File("concordia_savfile_" + fileCode + ".txt"));
     PrintWriter calibrationUpdater = new PrintWriter( new File("SaveCalibrator"));
-    calibrationUpdater.println(fileCode + 1);
+    calibrationUpdater.println(fileCode + 1);        
     
     writer.println("%map save:");
     writer.println(charMap.length + " " + charMap[0].length);
@@ -35,6 +35,9 @@ public class GameSaver {
     int xCoord;
     int yCoord;
     
+    int playerHunger = 0;
+    int playerXP = 0;
+    
     writer.println("%entity save:");
     writer.println(entityMap.length + " " + entityMap[0].length);
     
@@ -46,6 +49,8 @@ public class GameSaver {
             type = 1;            
           } else if (entityMap[i][j] instanceof Character) {
             type = 0;
+            playerHunger = ((Character)entityMap[i][j]).getHunger();
+            playerXP = ((Character)entityMap[i][j]).getXp();
           } 
           recHealth = entityMap[i][j].getHealth();
           states[0] = entityMap[i][j].getFlame();
@@ -63,6 +68,8 @@ public class GameSaver {
       } 
     }
     
+    writer.println("%player values");
+    writer.println(playerHunger + " " + playerXP);
     
     writer.println("%item mapping save:");
     writer.println(itemMap.length + " " + itemMap[0].length);
