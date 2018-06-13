@@ -186,4 +186,7 @@ class Display extends JFrame{
     title.setVisible(false);
     settingsPanel.setVisible(false);
   }
+  public GamePanel getPanel(){
+    return(gamePanel);
+  }
 }

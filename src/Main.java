@@ -33,7 +33,7 @@ class Main{
     
     int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
-
+    GameSaver gameSaver=  new GameSaver();
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         if (charMap[i][j] == 'J'){ //
@@ -174,6 +174,8 @@ class Main{
     Clock time = new Clock ();
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY);
+    GamePanel gamePanel;
+    int counter=0;
     while (true){
       time.setTime();  
       if (time.getFramePassed()){
@@ -182,6 +184,12 @@ class Main{
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         disp.refreshAll();
+        counter++;
+        if (counter == 1000){
+          System.out.print ("w");
+          gamePanel = disp.getPanel();
+          gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
+        }
       }
       if (time.getSecondPassed()){
         disp.setFps(time.getFrame());

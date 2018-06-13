@@ -1683,4 +1683,14 @@ class GamePanel extends JPanel{
       return (false);
     }
   }
+  public Entity[][] getEntityMap(){
+    System.out.println(entityMap.length);
+    return (entityMap);
+  }
+  public Item[][] getItemMap(){
+    return (itemMap);
+  }
+  public Item[][] getInventory(){
+    return(inventory.getArrayInventory());
+  }
 }
