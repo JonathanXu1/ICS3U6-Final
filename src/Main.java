@@ -76,14 +76,21 @@ class Main{
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor core");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor");
         }else if(charMap[i][j] == 'h'){ //Horizontal Walkway
-          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", 0.5 * Math.PI, "horizontal walkway");
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", 0.5 * Math.PI, "walkway");
         }else if(charMap[i][j] == 'v'){ //Vertical Walkway
-          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", "vertical walkway");
+          map[i][j]= new FloorTile(Color.GREEN, "../res/Walkway", "walkway");
+        } else if (charMap[i][j] == 'a') { // reactor corner 1
+          map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.5 * Math.PI,"reactor");
+        } else if (charMap[i][j] == 'b') { // reactor corner 2
+          map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 1.0 * Math.PI, "reactor");
+        } else if (charMap[i][j] == 'c') { // reactor corner 3
+          map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 1.5 * Math.PI, "reactor");
+        } else if (charMap[i][j] == 'd') { // reactor corner 4
+          map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
         }
         // Crew's Quarters
-        
         else if (charMap[i][j] == 'Q') {
           map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloor", "crew");
         } else if (charMap[i][j] == '1') {
@@ -94,6 +101,8 @@ class Main{
           map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorShirt", "crew");
         } else if (charMap[i][j] == 'P') {
           map[i][j] = new FloorTile(Color.GREEN, "../res/CrewFloorChess", "crew");
+        } else if (charMap[i][j] == '%'){
+          map[i][j] = new FloorTile(Color.RED, "../res/CrewFloorChess", "crew");;
         }
         
         //Key points

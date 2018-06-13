@@ -842,13 +842,13 @@ class MapGen2_8{
           resultProc[i][j] = 'h';
         } else if (result[i][j] == -203) { // veritcal walkway
           resultProc[i][j] = 'v';
-        } else if (result[i][j] == -204) { // reactor corner 1
+        } else if (result[i][j] == -204) { // walkway corner 1
           resultProc[i][j] = 'a';
-        } else if (result[i][j] == -205) { // reactor corner 2
+        } else if (result[i][j] == -205) { // walkway corner 2
           resultProc[i][j] = 'b';
-        } else if (result[i][j] == -206) { // reactor corner 3
+        } else if (result[i][j] == -206) { // walkway corner 3
           resultProc[i][j] = 'c';
-        } else if (result[i][j] == -207) { // reactor corner 4
+        } else if (result[i][j] == -207) { // walkway corner 4
           resultProc[i][j] = 'd';
         } else if (result[i][j] == -301) { // lab floor
           resultProc[i][j] = '&';
