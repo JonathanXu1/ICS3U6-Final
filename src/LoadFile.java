@@ -3,12 +3,14 @@ class LoadFile {
   private Entity[][] entityMap;
   private Item[][] itemMap;
   private Item[][] inventory;
+  private int[] extraVals;
   
-  LoadFile(char[][] cM, Entity[][] eM, Item[][] iM, Item[][] iN) {
+  LoadFile(char[][] cM, Entity[][] eM, Item[][] iM, Item[][] iN, int[] eV) {
     this.charMap = cM;
     this.entityMap = eM;
     this.itemMap = iM;
     this.inventory = iN;
+    this.extraVals = eV;
   }    
   
   public char[][] returnMap() {
@@ -25,6 +27,10 @@ class LoadFile {
   
   public Item[][] returnInventory() {
     return this.inventory;
+  }
+  
+  public int[] returnExtras() {
+    return this.extraVals;
   }
 
 }

@@ -128,6 +128,7 @@ public class GameSaver {
     Entity[][] loadedEntityMap;
     Item[][] loadedItemMap;
     Item[][] loadedInventory;
+    int[] loadedExtras = new int[2];
     
     int sizeX, sizeY;
     
@@ -153,6 +154,7 @@ public class GameSaver {
     lineReader = reader.nextLine();  
     
     loadedEntityMap = new Entity[sizeY][sizeX];
+    int playerX, playerY;
     
     int type;
     int recHealth;
@@ -169,11 +171,20 @@ public class GameSaver {
         Brute loadedBrute = new Brute(recHealth,100,100,1,false,false,false,Color.PINK,false);
         loadedEntityMap[yCoord][xCoord] = loadedBrute;
       } else if (type == 0){
+        playerX = xCoord;
+        playerY = yCoord;
+        
         Character loadedCharacter = new Character(recHealth,100,100,1,false,false,false,Color.BLUE);
+        loadedEntityMap[yCoord][xCoord] = loadedCharacter;
       }
       
       lineReader = reader.nextLine();
     }
+    
+    lineReader = reader.nextLine();
+    
+    loadedExtras[0] = reader.nextInt();
+    loadedExtras[1] = reader.nextInt();
     
     lineReader = reader.nextLine();    
     sizeY = reader.nextInt();
@@ -203,14 +214,14 @@ public class GameSaver {
         GammaHammer loadedItem = new GammaHammer(loadedDurability);
         loadedItemMap[yCoord][xCoord] = loadedItem;
       } else {}
-                              
+      
       lineReader = reader.nextLine();
     }
     
     lineReader = reader.nextLine();    
     lineReader = reader.nextLine();    
-
-   
+    
+    
     loadedInventory = new Item[4][6];
     loadedItemType = "";
     loadedDurability = 0;
@@ -233,11 +244,11 @@ public class GameSaver {
         GammaHammer loadedItem = new GammaHammer(loadedDurability);
         loadedInventory[yCoord][xCoord] = loadedItem;
       } else {}
-                              
+      
       lineReader = reader.nextLine();
     } while (reader.hasNext());
     
-    LoadFile loadFile = new LoadFile(loadedCharMap,loadedEntityMap,loadedItemMap,loadedInventory);
+    LoadFile loadFile = new LoadFile(loadedCharMap,loadedEntityMap,loadedItemMap,loadedInventory,loadedExtras);
     
     return loadFile;
     
