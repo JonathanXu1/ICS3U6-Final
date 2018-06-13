@@ -51,6 +51,9 @@ class Main{
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); //Room wall
         } else if (charMap[i][j] == 'A') {
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); //Airlock
+        }else if (charMap[i][j] == 'c'){
+          map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Wall Safe
+          System.out.println (j+" "+i);
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -98,11 +101,12 @@ class Main{
         
         //Key points
         else if (charMap[i][j] == '@'){
-          map[i][j]= new FloorTile(Color.GREEN, "../res/FloorTile", "spawn"); //Spawn
+          map[i][j]= new FloorTile(Color.GREEN, "../res/LadderUp", "spawn"); //Spawn
           playerStartingX = j;
           playerStartingY = i;
+          System.out.println ("play"+j+" "+i);
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "../res/StairDown", "stair down");
+          map[i][j]= new WallTile(Color.BLACK, "../res/LadderDown", "stair down");
         } else{
           map[i][j]= null;
         }
