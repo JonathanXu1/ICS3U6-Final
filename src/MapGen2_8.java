@@ -820,12 +820,10 @@ class MapGen2_8{
           resultProc[i][j] = 'j';
         } else if (result[i][j] == 215) { // reactor stabilzer North-West
           resultProc[i][j] = 'k';
-        } else if (result[i][j] == 216) { // reactor stabilzer North
+        } else if (result[i][j] == 216) { // reactor stabilzer North //Duplicate?
           resultProc[i][j] = 'l';
         } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
-        } else if (result[i][j] == 101) { // chest room chest
-          resultProc[i][j] = 'c';
         } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
         } else if (result[i][j] == 5) { // wall safe
