@@ -136,11 +136,10 @@ class Display extends JFrame{
       gamePanel.refresh();
     } else if (gameState == 2){
       this.add(settingsPanel);
-      closeAll();
-      settingsPanel.setVisible(true);
     } else if (gameState == 3){
     } else if (gameState == 4){ //Settings
-      
+      closeAll();
+      settingsPanel.setVisible(true);
     } else if (gameState == 5){
     } else if (gameState == 6){
       System.exit(0);
