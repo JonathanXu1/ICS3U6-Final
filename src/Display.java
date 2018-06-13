@@ -31,12 +31,12 @@ class Display extends JFrame{
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
   //Buttons
-  private CustomButton continueButton = new CustomButton("Continue", 0,continueButtonMouse);
-  private CustomButton newGameButton = new CustomButton("New", 0,newGameButtonMouse);
-  private CustomButton loadGameButton = new CustomButton("Load", 0,loadGameButtonMouse);
-  private CustomButton settingsButton = new CustomButton("Settings", 0, settingsButtonMouse);
-  private CustomButton scoreboardButton = new CustomButton("Scoreboard", 0, scoreboardButtonMouse);
-  private CustomButton quitButton = new CustomButton("Quit", 0, quitButtonMouse);
+  private CustomButton continueButton = new CustomButton("Continue",continueButtonMouse);
+  private CustomButton newGameButton = new CustomButton("New",newGameButtonMouse);
+  private CustomButton loadGameButton = new CustomButton("Load",loadGameButtonMouse);
+  private CustomButton settingsButton = new CustomButton("Settings",settingsButtonMouse);
+  private CustomButton scoreboardButton = new CustomButton("Scoreboard",scoreboardButtonMouse);
+  private CustomButton quitButton = new CustomButton("Quit",quitButtonMouse);
   //Game logic
   private Tile[][] map;
   private int playerStartingX;
@@ -77,7 +77,7 @@ class Display extends JFrame{
     title.setBounds(50, -50, 800, 300);
     
     //Menu panel and buttons
-    menuPanel = new MenuPanel(50, maxY/2, 300, 220);
+    menuPanel = new MenuPanel(50, maxY/2, 450, 220);
     //menuPanel.setFont(customHeader);
     
     //Adds everything
@@ -96,25 +96,25 @@ class Display extends JFrame{
   public void refreshAll(){
     //Menu state
     //Setting content area is more effective than setting opacity
-    continueButton.setContentAreaFilled(false);
-    newGameButton.setContentAreaFilled(false);
-    loadGameButton.setContentAreaFilled(false);
-    settingsButton.setContentAreaFilled(false);
-    scoreboardButton.setContentAreaFilled(false);
-    quitButton.setContentAreaFilled(false);
+    continueButton.updateStyle(0);
+    newGameButton.updateStyle(0);
+    loadGameButton.updateStyle(0);
+    settingsButton.updateStyle(0);
+    scoreboardButton.updateStyle(0);
+    quitButton.updateStyle(0);
     if (gameState==0){
       if(continueButtonMouse.getHover()){
-        continueButton.setContentAreaFilled(true);
+        continueButton.updateStyle(1);
       } else if(newGameButtonMouse.getHover()){
-        newGameButton.setContentAreaFilled(true);
+        newGameButton.updateStyle(1);
       } else if(loadGameButtonMouse.getHover()){
-        loadGameButton.setContentAreaFilled(true);
+        loadGameButton.updateStyle(1);
       } else if(settingsButtonMouse.getHover()){
-        settingsButton.setContentAreaFilled(true);
+        settingsButton.updateStyle(1);
       } else if(scoreboardButtonMouse.getHover()){
-        scoreboardButton.setContentAreaFilled(true);
+        scoreboardButton.updateStyle(1);
       } else if(quitButtonMouse.getHover()){
-        quitButton.setContentAreaFilled(true);
+        quitButton.updateStyle(1);
       }//Custy and redundant might have to remove
       menuPanel.add(continueButton);
       menuPanel.add(newGameButton);

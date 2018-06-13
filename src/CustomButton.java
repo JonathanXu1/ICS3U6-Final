@@ -12,7 +12,7 @@ class CustomButton extends JButton{
   private Font customHeader;
   
   //Constructor, no methods required
-  CustomButton(String name, int type, CustomMouseListener listener){
+  CustomButton(String name, CustomMouseListener listener){
     label = new JLabel(name);
     try {
       customHeader = Font.createFont(Font.TRUETYPE_FONT, new File("../res/fonts/spaceage.ttf")).deriveFont(32f);
@@ -24,15 +24,24 @@ class CustomButton extends JButton{
     this.addMouseListener(listener);
     label.setForeground(Color.WHITE);
     label.setFont(customHeader);
-    this.add(label);
+    this.setLayout(new BorderLayout());
+    this.add(label, BorderLayout.WEST);
     
-    if(type == 0){
+    this.setBackground(new Color(46, 121, 132, 50));
+    this.setContentAreaFilled(false);
+  }
+  
+  public void updateStyle(int state){
+    if(state == 0){
       //Transparent button
       this.setBorderPainted(false);
-      this.setFont(new Font("sansserif", Font.BOLD, 20));
+      this.setContentAreaFilled(false);
       //this.setAlignmentX(0);
-      this.setLayout(new BorderLayout());
-      this.add(label, BorderLayout.WEST);
+      
+    } else if (state == 1){
+      //Highlighted button
+      this.setBorderPainted(true);
+      this.setContentAreaFilled(true);
     }
   }
 }
