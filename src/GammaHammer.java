@@ -2,8 +2,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+
 class GammaHammer extends MeleeWeapon{
   Image gammaHammer;
+  
   GammaHammer(int dbty) {
     super(dbty);
     this.setRarity(4);

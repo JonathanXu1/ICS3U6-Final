@@ -1355,20 +1355,25 @@ class GamePanel extends JPanel{
       }
     }
   }
+  
+  // Checks if any entities have died
   public void checkKilled(int arrayX, int arrayY){
     if ((arrayX==0)&&(arrayY==0)){
+      // runs a for through the entire entity map
       for (int i=0;i<entityMap.length;i++){
         for(int j=0;j<entityMap[0].length;j++){
           if (entityMap[i][j] instanceof Entity){
-            if (entityMap[i][j].getHealth()<=0){
+            // If there is something in the array cell, its health is checked
+            
+            if (entityMap[i][j].getHealth()<=0){ // if it's dead, it's removed
               if (entityMap[i][j] instanceof Character) {
-                gameOver = true;
+                gameOver = true; // if player dies game is over
               } else {
-                mobCount--;
+                mobCount--; // if mob dies than xp and drops are generated.
                 dropItems(j, i, 0);
                 ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
               }
-              entityMap[i][j] = null;
+              entityMap[i][j] = null; 
             }
           }
         }
