@@ -1,6 +1,6 @@
 import java.awt.Color;
 import java.io.File;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.*; //Wildcard
 
@@ -17,32 +17,45 @@ class Main{
     //Music vars
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
-     File audioFile = new File("../res/spacebackround.wav");
-     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-     Clip clip = (Clip) AudioSystem.getLine(info);
-    
+    File audioFile = new File("../res/spacebackround.wav");
+    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+    Clip clip = (Clip) AudioSystem.getLine(info);
+    //The display frame is created, and the player x and y are found
+    Display disp = new Display ();
+    GameSaver gameSaver=  new GameSaver();
+    //The Clock time keeps track of the fps
+    Clock time = new Clock ();
+    Tile [][] map = new Tile[1][1];
+    char[][] charMap;
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    char[][] charMap = gen.charMap(gen.generateMap(12,12));
+    charMap = gen.charMap(gen.generateMap(12,12));
+    map = new Tile [charMap.length][charMap[0].length];
+    map = charMapConversion(charMap, map);
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
-    Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    GameSaver gameSaver=  new GameSaver();
     map = charMapConversion(charMap, map);
     
     //   output.close();
-    //The display frame is created, and the player x and y are found
-    Display disp = new Display ();
-    //The Clock time keeps track of the fps
-    Clock time = new Clock ();
+    //Plays music
+    /*
+     try {
+     clip.open(audioStream);
+     clip.start();
+     clip.loop(Clip.LOOP_CONTINUOUSLY);
+     }catch (Exception e) {
+     e.printStackTrace();
+     }
+     */
+    
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
+    //Loads bg music
     try {
       clip.open(audioStream);
-      
     }catch (Exception e) {
       e.printStackTrace();
     }
@@ -57,11 +70,19 @@ class Main{
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         if (disp.getNewMap()){
-          charMap = gen.charMap(gen.generateMap(12,12));
-          map = charMapConversion(charMap, map);
-          disp.setMap(map);
-          disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
-          disp.setGameMap ();
+          if(disp.getLevel()==3){
+            charMap=gen.createBossRoom();
+            map= charMapConversion(charMap, map);
+            disp.setMap(map);
+            disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
+            disp.setGameMap ();
+          }else{
+            charMap = gen.charMap(gen.generateMap(12,12));
+            map = charMapConversion(charMap, map);
+            disp.setMap(map);
+            disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+            disp.setGameMap ();
+          }
         }
         disp.refreshAll();
       }
@@ -87,7 +108,6 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         Color BURGANDY = new Color(160, 27, 33);
-        
         if (charMap[i][j] == '+'){ //
           map[i][j]= new FloorTile(Color.WHITE, "../res/CrackedTile", "hallway floor");
         } else if (charMap[i][j] == 'J'){ //

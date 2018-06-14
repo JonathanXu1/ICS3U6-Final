@@ -205,9 +205,9 @@ class Display extends JFrame{
   }
   public boolean getNewMap(){
     if (gamePanel.getAnotherMap()){
-      return true;
+      return (true);
     }else{
-      return false;
+      return (false);
     }
   }
   public void setGameMap(){
@@ -215,5 +215,8 @@ class Display extends JFrame{
   }
   public boolean[] getSoundSettings(){
     return settingsPanel.getSoundSettings();
+  }
+  public int getLevel(){
+    return (gamePanel.getFloor());
   }
 }

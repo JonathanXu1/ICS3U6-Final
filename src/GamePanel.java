@@ -132,6 +132,13 @@ class GamePanel extends JPanel{
   private int xStartMod=0;
   private int loadingCount;
   private boolean loading;
+  //Sound effects
+  private String[] soundEffects = new String[2];
+  /*
+  soundEffects[0] = "../res/Walk.wav";
+  soundEffects[1] = "../res/Shoot.wav";
+  */
+  private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -159,6 +166,12 @@ class GamePanel extends JPanel{
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
     this.gameOver = false;
+    //Loads Sound Effects
+    /*
+    for (int i = 0; i < soundEffects; i++){
+      
+    }
+    */
   }
   
   //Methods that are inherited from JPanel
@@ -190,11 +203,6 @@ class GamePanel extends JPanel{
         alternateState = true;
         weaponState = true;
       }
-      if (!(tiling)){
-        if (entityMap[playerFinishingY][playerFinishingX] instanceof Character){
-          anotherMap=true;
-        }
-      }
       refreshStats();
       //Checks broken gear
       checkBroken();
@@ -204,6 +212,7 @@ class GamePanel extends JPanel{
       }
       //Checks for which entities are killed again so that dead entities cannot kill the player
       checkKilled(0,0);
+      if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
       //Draws the items
       drawItems (g);
       //Draws the entities
@@ -216,6 +225,7 @@ class GamePanel extends JPanel{
       drawMinimap(g);
       //Draw inventory
       drawInventory(g);
+      }
       //Draw the debugPanel
       if (keyListener.getDebugState()){
         drawDebugPanel(g);
@@ -333,7 +343,7 @@ class GamePanel extends JPanel{
           }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
             g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
           }
-          ///Shade in the buttons that are pressed when pausing
+          ///Shade in the buttons that are pressed when waiting
           minButtonX = maxX-142;
           maxButtonX= maxX-22;
           minButtonY = maxY-120;
@@ -351,7 +361,15 @@ class GamePanel extends JPanel{
             g.setColor(new Color(0, 0, 0, 100)); 
             g.fillRect(minButtonX, minButtonY, maxButtonX-minButtonX, maxButtonY-minButtonY);
           }
-        } 
+          reversePixelToArray(mouseListener.getMouseXy(), false);
+          if ((entityMap[playerFinishingY][playerFinishingX] instanceof Character)&&(tileSelectedArray[0]==playerFinishingX)&&(tileSelectedArray[1]==playerFinishingY)){
+            bg.setOnTile();
+            if (bg.getOnTile()){
+              anotherMap=true;
+              keyListener.setToZero();
+            }
+          } 
+        }
       }
     }
   }
@@ -368,6 +386,7 @@ class GamePanel extends JPanel{
     }
     //The first part of the code will determine if the player array can move given the key listeners
     if (tiling){
+      keyListener.setToZero();
       //A turn is set, and it is added
       //Move all of the entities slowly
       //Moving the bg is a prerequisite for everything else to move
@@ -377,7 +396,7 @@ class GamePanel extends JPanel{
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
         if (!(attacked)){
-          bg.move();
+            bg.move();
         }
       }
       //Make an entity move method
@@ -621,6 +640,8 @@ class GamePanel extends JPanel{
                         collided = false;
                         translateX = 0;
                         translateY = 0;
+                        //SoundEffect.SHOOT.play();
+                        shootSound.playSound();
                       }
                     }
                   }
@@ -642,11 +663,21 @@ class GamePanel extends JPanel{
       if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
         turnPasser = true;
-      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
-        collided = true;
-        turnPasser = true;
-        if(entityMap[bulletY][bulletX] instanceof Enemy){
-          playerAttack(bulletX, bulletY);
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy||map[bulletY][bulletX] instanceof ChestTile){
+        if (map[bulletY][bulletX] instanceof DoorTile){
+          if (!((DoorTile)(map[bulletY][bulletX])).getEntityOnDoor()){
+            collided = true;
+            turnPasser = true;
+            if(entityMap[bulletY][bulletX] instanceof Enemy){
+              playerAttack(bulletX, bulletY);
+            }
+          }
+        }else{
+          collided = true;
+          turnPasser = true;
+          if(entityMap[bulletY][bulletX] instanceof Enemy){
+            playerAttack(bulletX, bulletY);
+          }
         }
       }
     }
@@ -873,22 +904,12 @@ class GamePanel extends JPanel{
                     itemSelected = false;
                     entityMap[playerCurrentY][playerCurrentX] = ((MedKit)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).heal(((Character)(entityMap[playerCurrentY][playerCurrentX])));
                     inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                    /*
-                     tiling = true;
-                     passTurn();
-                     turnCount++;
-                     */
                   }               
                   if (inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Food){
                     inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
                     itemSelected = false;
                     entityMap[playerCurrentY][playerCurrentX] = ((Food)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).restoreHunger(((Character)(entityMap[playerCurrentY][playerCurrentX])));
                     inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                    /*
-                     tiling = true;
-                     passTurn();
-                     turnCount++;
-                     */
                   }
                 }else if ((j==0)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof RangedWeapon))){
                   inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
@@ -989,9 +1010,13 @@ class GamePanel extends JPanel{
     this.playerFinishingX = playerFinishingX;
     this.playerFinishingY =playerFinishingY;
     entityMap[playerStartingY][playerStartingX] = tempCharacter;
-    spawnItems();
     loading= true;
     loadingCount=100;
+    if (floorLevel!=4){
+      spawnItems();
+    }else{
+      //PLACE BOSS SPAWNING HERE
+    }
   }
   
   //Getters and setters
@@ -1038,7 +1063,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)&&(floorLevel!=4)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1057,13 +1082,13 @@ class GamePanel extends JPanel{
       //Roombas also have slightly more attack
       int tempRand = (int)(Math.random()*4);
       if (tempRand==0){
-        entityMap[spawnY][spawnX] = new FlameRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FlameRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==1){
-        entityMap[spawnY][spawnX] = new LightningRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new LightningRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==2){
-        entityMap[spawnY][spawnX] = new FreezeRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FreezeRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else{
-        entityMap[spawnY][spawnX] = new Brute (20,20,10,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new Brute (15+5*floorLevel,15+5*floorLevel,3*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }
     }
     //Damages whatever is burned
@@ -1081,10 +1106,9 @@ class GamePanel extends JPanel{
               entityMap[i][j].setFreeze(false);
             }
             if (entityMap[i][j] instanceof Roomba){
-              ///WHEN CHANGING THE STATS, THE ROOMBAS DEFENSE MUST BE UPDATED HERE AS WELL!!!!
-              entityMap[i][j].setArmor(5);
+              entityMap[i][j].setArmor(2*floorLevel);
             }else if (entityMap[i][j] instanceof Brute){
-              entityMap[i][j].setArmor(10);
+              entityMap[i][j].setArmor(3*floorLevel);
             }
           }else if (entityMap[i][j].getLightning()){
             if ((int)(Math.random()*100)<25){
@@ -1469,7 +1493,7 @@ class GamePanel extends JPanel{
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
-    int foodCap =(2-((int)(Math.random()*2)));
+    int foodCap =(5-((int)(Math.random()*3)));
     //Resets the spawn
     spawnX = 0;
     spawnY = 0;
@@ -1746,5 +1770,8 @@ class GamePanel extends JPanel{
     }else{
       return (false);
     }
+  }
+  public int getFloor(){
+    return (floorLevel);
   }
 }
