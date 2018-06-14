@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
 public abstract class Weapon extends Equipment {
   private int damage;
   private int freezeChance;
@@ -9,10 +10,12 @@ public abstract class Weapon extends Equipment {
   private int lightningChance;
   private boolean weaponSelect;
   
+  // Weapon is created with a duarbility constructor passed up through superclasses up to Equipment.
   Weapon(int dbty) {
     super(dbty);
   }
   
+  //Getters-Setters
   public int getDamage() {
     return this.damage;
   }
