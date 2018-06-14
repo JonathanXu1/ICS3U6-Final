@@ -204,6 +204,7 @@ class GamePanel extends JPanel{
       }
       //Checks for which entities are killed again so that dead entities cannot kill the player
       checkKilled(0,0);
+      if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
       //Draws the items
       drawItems (g);
       //Draws the entities
@@ -216,6 +217,7 @@ class GamePanel extends JPanel{
       drawMinimap(g);
       //Draw inventory
       drawInventory(g);
+      }
       //Draw the debugPanel
       if (keyListener.getDebugState()){
         drawDebugPanel(g);
@@ -1468,7 +1470,7 @@ class GamePanel extends JPanel{
     int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    int medicineCap =((2-(int)(Math.sqrt(((int)(Math.random()*4))))));
+    int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int foodCap =(2-((int)(Math.random()*2)));
     //Resets the spawn
     spawnX = 0;
@@ -1746,5 +1748,8 @@ class GamePanel extends JPanel{
     }else{
       return (false);
     }
+  }
+  public int getFloor(){
+    return (floorLevel);
   }
 }
