@@ -3,6 +3,8 @@ import javax.swing.JLabel;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 class SettingsPanel extends JPanel{
   private boolean music = false;
@@ -12,6 +14,8 @@ class SettingsPanel extends JPanel{
   private CustomCheckButton soundFxButton = new CustomCheckButton();
   private JLabel musicLabel = new JLabel("Music");
   private JLabel soundFxLabel = new JLabel("SoundFx");
+  private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg.png");
+  
   //Constructor
   SettingsPanel(int xVal, int yVal){
     this.setFocusable(true);
@@ -34,8 +38,11 @@ class SettingsPanel extends JPanel{
   
   @Override
   public void paintComponent(Graphics g){
+    /*
     g.setColor(new Color(0, 127, 127));
     g.fillRect(0, 0, xVal, yVal);
+    */
+    g.drawImage(bg,0,0,xVal,yVal,this);
   }
   
   public boolean[] getSoundSettings(){

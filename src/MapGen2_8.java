@@ -449,11 +449,12 @@ class MapGen2_8{
         if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
           map[randD][randR] = 5;
           wallChests++;
+          if (randomRoll(500)) {
+            map[randD][randR] = 7;
+          }
         }
         
-        if (randomRoll(500)) {
-          map[randD][randR] = 7;
-        }
+        
         
       }
     } while (wallChests < 16); // loop runs until a quota has been met
