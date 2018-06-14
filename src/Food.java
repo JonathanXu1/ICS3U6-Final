@@ -2,11 +2,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
-class Food extends Consumable{
-  private Image food;
+
+class Food extends Consumable{ // Food objects restore health to the player and prevent them from taking starvation damage
+  private Image food; // Image for graphics
+  
   Food(){
     this.setName("Food Pack");
   }
+  
   public Character restoreHunger(Character player){
     if (player.getHealth()+10<player.getHealthCap()){
       player.setHealth(player.getHealth()+10);
@@ -16,6 +19,7 @@ class Food extends Consumable{
     player.setHunger(200);
     return (player);
   }
+  
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     food = Toolkit.getDefaultToolkit().getImage("../res/FoodPack.png");
     if (this.getItemSelected()){

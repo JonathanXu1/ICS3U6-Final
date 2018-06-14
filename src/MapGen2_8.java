@@ -990,7 +990,7 @@ class MapGen2_8{
   
   public static void main(String[] args) { // test/demo code (try running)
     MapGen2_8 tester = new MapGen2_8();
-    visMap2(tester.charMap(tester.generateMap(24,6))); // width-depth generates a map of integers
+    visMap2(tester.createBossRoom()); // width-depth generates a map of integers
     //tester.generateMap(24,6);
   }  
 }
