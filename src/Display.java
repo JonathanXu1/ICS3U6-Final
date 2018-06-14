@@ -45,6 +45,8 @@ class Display extends JFrame{
   private boolean newMap = false;
   //Fonts
   Font customTitle;
+  //More
+  private boolean continueSave;
   
   Display(){
     super ("Concordia");
@@ -154,10 +156,12 @@ class Display extends JFrame{
   //Determines if the game has begun
   public void getListen (){
     if (continueButtonMouse.getPressed()){
+      continueSave = true;
       gameState=1;
       addGamePanel =true;
     } else if (newGameButtonMouse.getPressed()){
       gameState=2;
+      addGamePanel =true;
     } else if (loadGameButtonMouse.getPressed()){
       gameState=3;
     } else if (settingsButtonMouse.getPressed()){
@@ -212,5 +216,8 @@ class Display extends JFrame{
   }
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
+  }
+  public boolean getContinueSave(){
+    return (continueSave);
   }
 }
