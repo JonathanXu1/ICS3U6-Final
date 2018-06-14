@@ -104,7 +104,7 @@ class Display extends JFrame{
   
   /**
    *refreshAll
-   *
+   *Refreshes all the display
    *@param: 
    *@return: 
    */
@@ -194,7 +194,7 @@ class Display extends JFrame{
   }
     /**
    *closeAll
-   *
+   *Closes all panels
    *@param: 
    *@return: 
    */

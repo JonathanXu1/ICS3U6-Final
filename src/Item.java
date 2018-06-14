@@ -1,4 +1,6 @@
+/////////////////////
 import java.awt.Graphics;
+/////////////////////
 public abstract class Item{
   private int rarity;
   private String name;

@@ -1,5 +1,6 @@
+/////////////////////
 import java.awt.Graphics;
-
+/////////////////////
 public abstract class RangedWeapon extends Weapon{
   
   RangedWeapon(int dbty) {
