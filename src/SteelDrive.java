@@ -1,3 +1,13 @@
+/*
+ * [SteelDrive.java];
+ * 
+ * Buffs durability
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;

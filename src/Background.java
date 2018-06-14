@@ -1,3 +1,13 @@
+/*
+ * [Background.java];
+ * 
+ * This displays the background
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
+//Imports
 /////////////////////
 class Background{
   

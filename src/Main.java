@@ -21,6 +21,13 @@ class Main{
   private static int bossSpawnX, bossSpawnY;
 //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
+    System.out.println ("Our instructions panel got deleted at the last minute, so here are some instructions");
+    System.out.println ("Use WSAD to move");
+    System.out.println ("Use the box on the right to go to inventory");
+    System.out.println ("Click on the player when on a ladder down to descend the floor");
+    System.out.println ("Click on the crane arm on the left to pick up an item");
+    System.out.println ("Click on the clock to skip a turn");
+    System.out.println ("Click on a ranged slot or melee slot to choose which weapon to use");
 //Finds memory usage before program starts
     int mb = 1024*1024;
     Runtime runtime = Runtime.getRuntime();
