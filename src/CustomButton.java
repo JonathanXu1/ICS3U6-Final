@@ -1,3 +1,4 @@
+/////////////////////
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.BorderLayout;
@@ -7,11 +8,13 @@ import java.awt.FontFormatException;
 import java.awt.Color;
 import java.io.IOException;
 
+//Imports
+/////////////////////
 class CustomButton extends JButton{
   private JLabel label;
   private Font customHeader;
   
-  //Constructor, no methods required
+//Constructor, no methods required
   CustomButton(String name, CustomMouseListener listener){
     label = new JLabel(name);
     try {
@@ -31,15 +34,21 @@ class CustomButton extends JButton{
     this.setContentAreaFilled(false);
   }
   
+  /**
+   *updateStyle
+   *Updates the image style
+   *@param: int state
+   *@return: 
+   */
   public void updateStyle(int state){
     if(state == 0){
-      //Transparent button
+//Transparent button
       this.setBorderPainted(false);
       this.setContentAreaFilled(false);
-      //this.setAlignmentX(0);
+//this.setAlignmentX(0);
       
     } else if (state == 1){
-      //Highlighted button
+//Highlighted button
       this.setBorderPainted(true);
       this.setContentAreaFilled(true);
     }

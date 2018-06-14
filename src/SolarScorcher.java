@@ -8,10 +8,13 @@
  * 
  */
 
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+/////////////////////
+
 class SolarScorcher extends RangedWeapon {
   Image solarScorcher;
   SolarScorcher(int dbty){ 
@@ -20,6 +23,12 @@ class SolarScorcher extends RangedWeapon {
     this.setDamage(20);
     this.setName("Solar Scorcher");
   }
+  /**
+   *drawItem
+   *Draws the solar scorcher
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, and the GamePanel gamePanel
+   *@return: 
+   */
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     solarScorcher = Toolkit.getDefaultToolkit().getImage("../res/SolarScorcher.png");
     if (this.getItemSelected()){

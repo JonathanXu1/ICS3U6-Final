@@ -1,3 +1,4 @@
+/////////////////////
 class FireController {
   private int currentY, currentX; // current (leading end of a bullet)
   private int counter; // for controlling collision
@@ -13,6 +14,36 @@ class FireController {
     this.startX = sX;
   }  
   
+  
+  /**
+   *calculate
+   *Calculates the collison
+   *@param: 
+   *@return: 
+   */
+  public void calculate() {    
+    if (counter <= shotLength) {
+      trailX = currentX - (counter)*moveX;
+      trailY = currentY - (counter)*moveY;
+    } else {
+      trailY = currentX - moveY*shotLength;
+      trailX = currentX - moveX*shotLength;
+    }         
+    counter++;    
+    
+    if (!collision) {
+      currentY = currentY + moveY;
+      currentX = currentX + moveX;
+      
+    }
+  } 
+  //Getters and Setters
+  /**
+   *setupProjectile
+   *Sets the projectile
+   *@param: The int targetX, the int targetY, and the int shotLen
+   *@return: 
+   */
   public void setupProjectile(int targetX, int targetY, int shotLen) {    
     counter = 0; // counter is set to 0
     
@@ -35,8 +66,6 @@ class FireController {
     
     
     angle = Math.atan((Math.abs(deltaY)/Math.abs(deltaX))); // angle is calculated using trigonometry
-    
-       
     if (deltaX < 0 && deltaY <= 0) { //Quadrant 2 // angle is modified based on deltas
       angle = Math.PI - angle;
     } else if (deltaX <= 0 && deltaY > 0) { //Quadrant 3
@@ -44,7 +73,7 @@ class FireController {
     } else if (deltaX >= 0 && deltaY > 0) { //Quadrant 4
       angle = 2*Math.PI - angle;
     }
-
+    
     
     int moveY, moveX;
     
@@ -64,36 +93,41 @@ class FireController {
     }
   }
   
-  public void calculate() {    // calculations are ran
-    if (counter <= shotLength) {
-      trailX = currentX - (counter)*moveX;
-      trailY = currentY - (counter)*moveY;
-    } else {
-      trailY = currentX - moveY*shotLength;
-      trailX = currentX - moveX*shotLength;
-    }         
-    counter++;    
-    
-    if (!collision) {
-      currentY = currentY + moveY;
-      currentX = currentX + moveX;
-      
-    }
-  } 
+
   
+  /**
+   * getInfo
+   *Gets the info of the bullet
+   *@param: 
+   *@return: A double[]
+   */
+
   
   // returns for other parts ofthe code to use
+
   public double[] getInfo() {
     double[] returnArray = {currentX,currentY,trailX,trailY,angle};
     this.calculate();
     return returnArray;
   }
   
+  /**
+   *setCollision
+   *Sets the collision
+   *@param: boolean state
+   *@return: 
+   */
   // sets the collision
   public void setCollision(boolean state) {
     this.collision = state;
   }
   
+  /**
+   *returnAngle
+   *Returns the angle
+   *@param: 
+   *@return: A double
+   */
   // returns the angle that was calculated
   public double returnAngle() {
     return this.angle;

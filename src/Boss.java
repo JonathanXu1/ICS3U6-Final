@@ -1,16 +1,19 @@
+//Imports
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+/////////////////////
 class Boss extends Enemy{
   private BufferedImage[] sprites;
   private int lastSprite = 4;
   private int movementMod=-1;
   private int movementCount=0;
-  Boss(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor, boolean enraged){
-    super (h,hC,a,sP,freezeStatus,lightningStatus,flameStatus, minimapColor,enraged);
+  Boss(int h,int hC,int a,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor, boolean enraged){
+    super (h,hC,a,freezeStatus,lightningStatus,flameStatus, minimapColor,enraged);
     try {
       BufferedImage sheet = ImageIO.read(new File("../res/Boss.png"));
       sprites = new BufferedImage[12];
@@ -20,9 +23,14 @@ class Boss extends Enemy{
         }
       }
     }catch(Exception e) {
-      System.out.println("Error");
     }
   }
+  /**
+   *drawEntity
+   *Draws the boss
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, the int xDirection, the int yDirection, and the GamePanel gamePanel
+   *@return: 
+   */
   public void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel){
     if ((xDirection==0)&&(yDirection==0)){
       g.drawImage(sprites[lastSprite], x,y,width,height,gamePanel);

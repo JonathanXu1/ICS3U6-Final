@@ -712,14 +712,12 @@ class MapGen2_8{
     int mapSizeD = (effMapSizeD-1)*6 + 3;
     this.genTemplate(mapSizeW,mapSizeD); // Generates an empty template
     
-    //System.out.println("Initial gen pass");
     //visMap2(this.charMap(map)); 
     
     // Sets off the initial recursion
     int[] startDir = {0,6};    
     this.carvePath(6,6,startDir,500);
     
-    //System.out.println("Primary path pass");
     
     // Does more recursive calls on already-carved points to branch out the paths
     for (int i = 1; i < (Math.pow(mapSizeW,2)); i++) {
@@ -734,7 +732,6 @@ class MapGen2_8{
     }
     
     
-    //System.out.println("Secondary path pass");
     
     if (map[7][6] == 1 || map[6][7] == 1) { // cleans up the start of the recursion
       map[6][6] = -2;

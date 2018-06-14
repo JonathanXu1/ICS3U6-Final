@@ -1,3 +1,4 @@
+//Imports
 /*
  * [Armor.java];
  * 
@@ -8,7 +9,6 @@
  * 
  */ 
 
-import java.awt.Graphics;
 
 public abstract class Armor extends Equipment {
   private int defense;
@@ -20,31 +20,68 @@ public abstract class Armor extends Equipment {
   }
   
   // Getters-Setters
+  /**
+   *getDefense 
+   * Gets the defense
+   *@return: The int defense
+   */
   public int getDefense(){
     return (defense);
   }
+      /**
+   *setDefense 
+   *Sets the defense for the item
+   *@param: The int defense
+   */
   public void setDefense(int defense){
     this.defense = defense;
   }
+  /**
+   *getFreezeDefense 
+   *Gets the freeze resistance
+   *@return: The int freezeDefense
+   */
   public int getFreezeDefense(){
     return (freezeDefense);
   }
+  /**
+   *setFreezeDefense 
+   *Sets the freeze resistance
+   *@param: The int freezeDefense
+   */
   public void setFreezeDefense(int freezeDefense){
     this.freezeDefense = freezeDefense;
   }
+  /**
+   *getFlameDefense 
+   *Gets the flame resistance
+   *@return: The int flameDefense
+   */
   public int getFlameDefense(){
     return (flameDefense);
   }
+  /**
+   *setFlameDefense 
+   *Sets the flame resistance
+   *@param: The int flameDefense
+   */
   public void setFlameDefense(int flameDefense){
     this.flameDefense = flameDefense;
   }
+    /**
+   *getLightningDefense 
+   *Gets the lightning resistance
+   *@return: The int flameDefense
+   */
   public int getLightningDefense(){
     return (lightningDefense);
   }
+    /**
+   *setLightningDefense 
+   *Sets the lightning resisance
+   *@param: The int flameDefense
+   */
   public void setLightningDefense(int lightningDefense){
     this.lightningDefense = lightningDefense;
   }
-  
-  // Abstract method for drawing the object, taking in an x,y dimensions, and the gamepanel to be applied to. 
-  abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
 }

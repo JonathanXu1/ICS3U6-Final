@@ -1,8 +1,11 @@
+//Imports
+/////////////////////
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/////////////////////
 class ChestTile extends Tile{
   Image chest;
   String dir;
@@ -17,6 +20,12 @@ class ChestTile extends Tile{
     this.dir = dir;
     this.orientation = orientation;
   }
+  /**
+   *drawTile
+   *Draws the chest
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, the GamePanel gamePanel, and the boolean focus
+   *@return: 
+   */
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){
       if (open){
@@ -37,9 +46,21 @@ class ChestTile extends Tile{
       g.drawImage(chest, x,y,width,height,gamePanel);
     }
   }
+  /**
+   *setOpen
+   *Determines whether or not the chest is open
+   *@param: 
+   *@return: 
+   */
   public void setOpen(){
     open  =true;
   }
+  /**
+   *getOpen
+   *Returns whether or not the chest is open
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getOpen(){
     return (open);
   }

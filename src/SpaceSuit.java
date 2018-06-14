@@ -8,12 +8,13 @@
  * 
  */
 
-
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 
+/////////////////////
 class SpaceSuit extends Armor {
   Image spaceSuit;
   SpaceSuit(int dbty){
@@ -22,6 +23,12 @@ class SpaceSuit extends Armor {
     this.setDefense(5); 
     this.setName("Space Suit");
   }
+  /**
+   *drawItem
+   *Draws the space suit
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, and the GamePanel gamePanel
+   *@return: 
+   */
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     spaceSuit = Toolkit.getDefaultToolkit().getImage("../res/SpaceSuit.png");
     if (this.getItemSelected()){
