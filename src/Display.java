@@ -15,14 +15,10 @@ class Display extends JFrame{
   private boolean addGamePanel = false;
   private int maxX, maxY;
   //Menu
-  //The components of the menu
   private MenuPanel menuPanel;
   private MenuBGPanel menuBgPanel;
-  private JLabel title = new JLabel("CONCORDIA");
-  //Debug
-  private double totalMem, memUsed;
-  private int fps = 0;
-  //Start Listeners
+  private JLabel mainTitle = new JLabel("CONCORDIA");
+  private JLabel settingsTitle = new JLabel("Settings");
   private CustomMouseListener mouseListener = new CustomMouseListener();
   private CustomMouseListener continueButtonMouse = new CustomMouseListener();
   private CustomMouseListener newGameButtonMouse = new CustomMouseListener();
@@ -30,7 +26,6 @@ class Display extends JFrame{
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
   private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
-  //Buttons
   private CustomButton continueButton = new CustomButton("Continue",continueButtonMouse);
   private CustomButton newGameButton = new CustomButton("New",newGameButtonMouse);
   private CustomButton loadGameButton = new CustomButton("Load",loadGameButtonMouse);
@@ -39,6 +34,11 @@ class Display extends JFrame{
   private CustomButton quitButton = new CustomButton("Quit",quitButtonMouse);
   //Settings panel
   private SettingsPanel settingsPanel;
+  private CustomMouseListener backButtonMouse = new CustomMouseListener();
+  private CustomButton backButton = new CustomButton("Back",backButtonMouse);
+  //Debug
+  private double totalMem, memUsed;
+  private int fps = 0;
   //Game logic
   private Tile[][] map;
   private int playerStartingX, playerStartingY, playerFinishingX,playerFinishingY;
@@ -72,17 +72,11 @@ class Display extends JFrame{
     
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
-    //Title
-    title.setFont(customTitle);
-    title.setForeground(Color.WHITE);
-    title.setBounds(50, -50, 800, 300);
-    //Menu panel and buttons
+    mainTitle.setFont(customTitle);
+    mainTitle.setForeground(Color.WHITE);
+    mainTitle.setBounds(50, -50, 800, 300);
+    
     menuPanel = new MenuPanel(50, maxY/2, 450, 220);
-    
-    //Creation of the settings panel
-    settingsPanel = new SettingsPanel(maxX, maxY);
-    
-    //Adds everything
     menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
     menuPanel.add(loadGameButton);
@@ -90,7 +84,20 @@ class Display extends JFrame{
     menuPanel.add(scoreboardButton);
     menuPanel.add(quitButton);
     menuBgPanel.add(menuPanel);
-    menuBgPanel.add(title);
+    menuBgPanel.add(mainTitle);
+    
+    //Creation of the settings panel
+    settingsPanel = new SettingsPanel(maxX, maxY);
+    
+    settingsTitle.setFont(customTitle);
+    settingsTitle.setForeground(Color.WHITE);
+    settingsTitle.setBounds(50, -50, 800, 300);
+    
+    backButton.setBounds(50, 400, 220, 50);
+    
+    settingsPanel.add(backButton);
+    settingsPanel.add(settingsTitle);
+    
     this.add(menuBgPanel);
     this.setVisible (true);
   }
@@ -133,14 +140,12 @@ class Display extends JFrame{
         closeAll();
         gamePanel.setVisible (true);
       }
-      gamePanel.refresh();
+      gamePanel.repaint();
     } else if (gameState == 2){
-      this.add(settingsPanel);
-      closeAll();
-      settingsPanel.setVisible(true);
+      
     } else if (gameState == 3){
     } else if (gameState == 4){ //Settings
-      
+      settingsPanel.repaint();
     } else if (gameState == 5){
     } else if (gameState == 6){
       System.exit(0);
@@ -157,13 +162,22 @@ class Display extends JFrame{
       gameState=3;
     } else if (settingsButtonMouse.getPressed()){
       gameState=4;
+      this.add(settingsPanel);
+      closeAll();
+      settingsPanel.setVisible (true);
+      settingsTitle.setVisible(true);
+      backButton.setVisible(true);
     } else if (scoreboardButtonMouse.getPressed()){
       gameState=5;
     } else if (quitButtonMouse.getPressed()){
       gameState = 6;
+    } else if (backButtonMouse.getPressed()){
+      gameState = 0;
+      closeAll();
+      menuBgPanel.setVisible (true);
     } else if (gamePanel.returnGameOver()) {
       gameState = 6;
-    }
+    } 
   }
   public void setMap(Tile[][] map){
     this.map = map;
@@ -183,9 +197,7 @@ class Display extends JFrame{
   }
   public void closeAll(){
     gamePanel.setVisible (false);
-    menuPanel.setVisible(false);
     menuBgPanel.setVisible(false);
-    title.setVisible(false);
     settingsPanel.setVisible(false);
   }
   public GamePanel getPanel(){

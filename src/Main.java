@@ -85,7 +85,11 @@ class Main{
         Color DARK_BROWN = new Color(168,107,23);
         Color BURGANDY = new Color(160, 27, 33);
         if (charMap[i][j] == 'J'){ //
+<<<<<<< HEAD
           map[i][j]= new FloorTile(DARK_BROWN, "../res/CrackedTile", "cracked tile");
+=======
+          map[i][j]= new FloorTile(Color.GREEN, "../res/CrackedTile", "room floor");
+>>>>>>> 273a3e3bd16bd249f75a572edb0cb873f1043c2d
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
@@ -127,19 +131,19 @@ class Main{
         }
         //Reactor
         else if(charMap[i][j] == 'r'){//Reactor Core
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor");
-        } else if(charMap[i][j] == '5'){//Reactor Stabilizer N
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 1.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCore", "reactor core");
+        } else if(charMap[i][j] == 'l'){//Reactor Stabilizer N
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 0.5*Math.PI, "reactor");
         } else if(charMap[i][j] == '6'){//Reactor Stabilizer NE
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 0.5*Math.PI, "reactor");
         } else if(charMap[i][j] == '7'){//Reactor Stabilizer E
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge",  1.0*Math.PI, "reactor");
         } else if(charMap[i][j] == '8'){//Reactor Stabilizer SE
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.0*Math.PI, "reactor");
         } else if(charMap[i][j] == '9'){//Reactor Stabilizer S
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 0.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", 1.5*Math.PI, "reactor");
         } else if(charMap[i][j] == 'i'){//Reactor Stabilizer SW
-          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 0.5*Math.PI, "reactor");
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorCorner", 1.5*Math.PI, "reactor");
         } else if(charMap[i][j] == 'j'){//Reactor Stabilizer W
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/ReactorEdge", "reactor");
         } else if(charMap[i][j] == 'k'){//Reactor Stabilizer NW
@@ -157,7 +161,7 @@ class Main{
         } else if (charMap[i][j] == 'd') { // Walkway corner 4
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
         } else if (charMap[i][j] == '}') { //Reactor Chasm
-          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "chasm");
+          map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "reactor");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {

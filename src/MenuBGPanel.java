@@ -21,7 +21,7 @@ class MenuBGPanel extends JPanel{
   private Image station1 = Toolkit.getDefaultToolkit().getImage("../res/Station1.png");
   private Image station2 = Toolkit.getDefaultToolkit().getImage("../res/Station2.png");
   private Image ship1 = Toolkit.getDefaultToolkit().getImage("../res/Ship1.png");
-  private Star[][] stars = new Star[50][100];
+  private Star[][] stars = new Star[100][200];
   private int count = 0;
   private int stationState = 1;
   private int ship1X, ship1Y, ship1Wait;
@@ -39,17 +39,17 @@ class MenuBGPanel extends JPanel{
     this.setPreferredSize(panelSize);
     this.setLayout(null);
     
-    pixelX = xVal/100;
-    pixelY = yVal/50;
+    pixelX = xVal/200;
+    pixelY = yVal/100;
     
-    ship1Wait = rand.nextInt(200) + 30; //1 to 5 seconds
+    ship1Wait = rand.nextInt(1000) + 300; //1 to 5 seconds
     
     ActionListener drawStars = new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
         int starCount = 2; //# stars
         for (int i = 0; i <= starCount; i ++){
-          int randX = rand.nextInt(100);
-          int randY = rand.nextInt(50);
+          int randX = rand.nextInt(200);
+          int randY = rand.nextInt(100);
           if(stars[randY][randX] == null){
             stars[randY][randX] = new Star();
           }
@@ -111,7 +111,7 @@ class MenuBGPanel extends JPanel{
     }
     if(ship1Drawn && ship1X+(int)(16*pixelX)<= 1){
       ship1Drawn = false;
-      ship1Wait = rand.nextInt(200) + 30;
+      ship1Wait = rand.nextInt(1000) + 300;
       ship1Count = 0;
     } else if (ship1Drawn){
       ship1X --;

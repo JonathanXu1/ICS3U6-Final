@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.Color;
 
 class SettingsPanel extends JPanel{
   private boolean music = false;
@@ -18,6 +19,8 @@ class SettingsPanel extends JPanel{
   
   @Override
   public void paintComponent(Graphics g){
+    g.setColor(Color.RED);
+    g.fillRect(0, 0, xVal, yVal);
   }
   
   public boolean[] getSoundSettings(){

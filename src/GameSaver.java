@@ -87,33 +87,34 @@ public class GameSaver {
     
     for (int i = 0; i < entityMap.length; i++) {
       for (int j = 0; j < entityMap[0].length; j++) {
-        if (itemMap[i][j] instanceof Equipment) {
+        if (itemMap[i][j] instanceof Item) {
+          
           itemType = itemMap[i][j].getName();
           writer.print(itemType + ",");
           
-          if (itemMap[i][j] instanceof Equipment) { 
+          if (itemMap[i][j] instanceof Equipment) {                                  
             durability = ((Equipment)itemMap[i][j]).getDurability();
+            
+            if (itemMap[i][j] instanceof Weapon) { 
+              damage = (((Weapon)itemMap[i][j]).getDamage());   
+              writer.print(1);
+            } else {
+              writer.print(0);
+            }
+            
+            writer.print("," + i + " " + j  + ",");          
+            writer.print(durability + ",");          
+            writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
+            
+            if (itemMap[i][j] instanceof Weapon) { 
+              writer.print("," + damage);
+            }                              
+            
+            writer.println("");
           } else {
-            durability = -1;
+            writer.println(-1);
           }
-          
-          if (itemMap[i][j] instanceof Weapon) { 
-            damage = (((Weapon)itemMap[i][j]).getDamage());   
-            writer.print(1);
-          } else {
-            writer.print(0);
-          }
-          
-          writer.print("," + i + " " + j  + ",");          
-          writer.print(durability + ",");          
-          writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
-          
-          if (itemMap[i][j] instanceof Weapon) { 
-            writer.print("," + damage);
-          }                              
-          
-          writer.println("");
-        }
+        } 
       }
     }        
     
@@ -122,33 +123,36 @@ public class GameSaver {
     writer.println("%inventory save:");
     for (int i = 0; i < inventory.length; i++) {
       for (int j = 0; j < inventory[0].length; j++) {
-        if (itemMap[i][j] instanceof Equipment) {
+       
+        if (itemMap[i][j] instanceof Item) {
+          
           itemType = itemMap[i][j].getName();
           writer.print(itemType + ",");
           
-          if (itemMap[i][j] instanceof Equipment) { 
+          if (itemMap[i][j] instanceof Equipment) {                                  
             durability = ((Equipment)itemMap[i][j]).getDurability();
+            
+            if (itemMap[i][j] instanceof Weapon) { 
+              damage = (((Weapon)itemMap[i][j]).getDamage());   
+              writer.print(1);
+            } else {
+              writer.print(0);
+            }
+            
+            writer.print("," + i + " " + j  + ",");          
+            writer.print(durability + ",");          
+            writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
+            
+            if (itemMap[i][j] instanceof Weapon) { 
+              writer.print("," + damage);
+            }                              
+            
+            writer.println("");
           } else {
-            durability = -1;
+            writer.println(-1);
           }
-          
-          if (itemMap[i][j] instanceof Weapon) { 
-            damage = (((Weapon)itemMap[i][j]).getDamage());   
-            writer.print(1);
-          } else {
-            writer.print(0);
-          }
-          
-          writer.print("," + i + " " + j  + ",");          
-          writer.print(durability + ",");          
-          writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
-          
-          if (itemMap[i][j] instanceof Weapon) { 
-            writer.print("," + damage);
-          }                              
-          
-          writer.println("");
-        }
+        } 
+        
       }
     }  
     
@@ -233,9 +237,9 @@ public class GameSaver {
     loadedItemMap = new Item[sizeY][sizeX];
     String loadedItemType; 
     int loadedType;
-    int loadedDurability;
-    int loadedDurCap;
-    int loadedDamage;    
+    int loadedDurability = 0;
+    int loadedDurCap = 0;
+    int loadedDamage = 0;    
     
     while (lineReader.charAt(0) != '%') {
       int nameCapture = 0;
@@ -250,20 +254,87 @@ public class GameSaver {
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
-      loadedDurability = reader.nextInt();
-      loadedDurCap = reader.nextInt();
+      if (loadedType != -1) {        
+        loadedDurability = reader.nextInt();
+        loadedDurCap = reader.nextInt();        
+      }
       
       if (loadedType == 1)  {    
-        loadedDamage = reader.nextInt();    
+        loadedDamage = reader.nextInt();   
+        
         if (loadedItemType.equals("Gamma Hammer")) {
           GammaHammer loadedItem = new GammaHammer(loadedDurability);
           loadedItemMap[yCoord][xCoord] = loadedItem;
-        } else {  
-          
-        }
+        } else if (loadedItemType.equals("Wrench")) {
+          Wrench loadedItem = new Wrench(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Energy Sword")) {
+          EnergySword loadedItem = new EnergySword(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Plasma Rapier")) {
+          PlasmaRapier loadedItem = new PlasmaRapier(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Kinetic Mace")) {
+          KineticMace loadedItem = new KineticMace(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } 
+        
+        else if (loadedItemType.equals("Laser Pistol")) {
+          LaserPistol loadedItem = new LaserPistol(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Pulse Railgun")) {
+          PulseRailgun loadedItem = new PulseRailgun(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Solar Scorcher")) {
+          SolarScorcher loadedItem = new SolarScorcher(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }                        
+        
         ((Weapon)loadedItemMap[yCoord][xCoord]).setDamage(loadedDamage);
-      } else {
-      
+        ((Weapon)loadedItemMap[yCoord][xCoord]).setDurabilityCap(loadedDurCap);
+        
+      } else if (loadedType == 0) {        
+        
+        if (loadedItemType.equals("Space Suit")) {
+          SpaceSuit loadedItem = new SpaceSuit(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Assault Vest")) {
+          AssaultVest loadedItem = new AssaultVest(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Energy Suit")) {
+          EnergySuit loadedItem = new EnergySuit(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Iridium Exoskeleton")) {
+          IridiumExoskeleton loadedItem = new IridiumExoskeleton(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Proximity Armor")) {
+          ProximityArmor loadedItem = new ProximityArmor(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }
+        
+      } else if (loadedType == -1){
+        if (loadedItemType.equals("Med Kit")) {
+          MedKit loadedItem = new MedKit();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Flame Drive")) {
+          FlameDrive loadedItem = new FlameDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Steel Drive")) {
+          SteelDrive loadedItem = new SteelDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Lightning Drive")) {
+          LightningDrive loadedItem = new LightningDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Freeze Drive")) {
+          FreezeDrive loadedItem = new FreezeDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Power Drive")) {
+          PowerDrive loadedItem = new PowerDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Flame Drive")) {
+          Food loadedItem = new Food();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }
       }
       
       lineReader = reader.nextLine();
@@ -285,16 +356,93 @@ public class GameSaver {
       } while(lineReader.charAt(nameCapture) != ',');
       
       loadedItemType = lineReader.substring(0,nameCapture);
-      loadedDurability = reader.nextInt();
+      loadedType = reader.nextInt();             
       
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
+      if (loadedType != -1) {        
+        loadedDurability = reader.nextInt();
+        loadedDurCap = reader.nextInt();        
+      }
       
-      if (loadedItemType.equals("Gamma Hammer")) {
-        GammaHammer loadedItem = new GammaHammer(loadedDurability);
-        loadedInventory[yCoord][xCoord] = loadedItem;
-      } else {}
+      if (loadedType == 1)  {    
+        loadedDamage = reader.nextInt();   
+        
+        if (loadedItemType.equals("Gamma Hammer")) {
+          GammaHammer loadedItem = new GammaHammer(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Wrench")) {
+          Wrench loadedItem = new Wrench(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Energy Sword")) {
+          EnergySword loadedItem = new EnergySword(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Plasma Rapier")) {
+          PlasmaRapier loadedItem = new PlasmaRapier(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Kinetic Mace")) {
+          KineticMace loadedItem = new KineticMace(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } 
+        
+        else if (loadedItemType.equals("Laser Pistol")) {
+          LaserPistol loadedItem = new LaserPistol(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Pulse Railgun")) {
+          PulseRailgun loadedItem = new PulseRailgun(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Solar Scorcher")) {
+          SolarScorcher loadedItem = new SolarScorcher(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }                        
+        
+        ((Weapon)loadedItemMap[yCoord][xCoord]).setDamage(loadedDamage);
+        ((Weapon)loadedItemMap[yCoord][xCoord]).setDurabilityCap(loadedDurCap);
+        
+      } else if (loadedType == 0) {        
+        
+        if (loadedItemType.equals("Space Suit")) {
+          SpaceSuit loadedItem = new SpaceSuit(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Assault Vest")) {
+          AssaultVest loadedItem = new AssaultVest(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Energy Suit")) {
+          EnergySuit loadedItem = new EnergySuit(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Iridium Exoskeleton")) {
+          IridiumExoskeleton loadedItem = new IridiumExoskeleton(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Proximity Armor")) {
+          ProximityArmor loadedItem = new ProximityArmor(loadedDurability);
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }
+        
+      } else if (loadedType == -1){
+        if (loadedItemType.equals("Med Kit")) {
+          MedKit loadedItem = new MedKit();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Flame Drive")) {
+          FlameDrive loadedItem = new FlameDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Steel Drive")) {
+          SteelDrive loadedItem = new SteelDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Lightning Drive")) {
+          LightningDrive loadedItem = new LightningDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Freeze Drive")) {
+          FreezeDrive loadedItem = new FreezeDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Power Drive")) {
+          PowerDrive loadedItem = new PowerDrive();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        } else if (loadedItemType.equals("Flame Drive")) {
+          Food loadedItem = new Food();
+          loadedItemMap[yCoord][xCoord] = loadedItem;
+        }
+      }
       
       lineReader = reader.nextLine();
     } while (reader.hasNext());
