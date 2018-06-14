@@ -25,6 +25,7 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
+  private int difficulty = 2;
   
   //Listeners
   private int [] mouseXy;
@@ -70,7 +71,7 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 40;
+  private int mobCap;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
@@ -123,13 +124,6 @@ class GamePanel extends JPanel{
   private int floorLevel =0;
   private int loadingCount;
   private boolean loading;
-  //Sound effects
-  private String[] soundEffects = new String[2];
-  /*
-   soundEffects[0] = "../res/Walk.wav";
-   soundEffects[1] = "../res/Shoot.wav";
-   */
-  private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -157,12 +151,9 @@ class GamePanel extends JPanel{
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
     this.gameOver = false;
-    //Loads Sound Effects
-    /*
-     for (int i = 0; i < soundEffects; i++){
-     
-     }
-     */
+
+    //Sets mob cap based on settings
+    mobCap = 40;
   }
   
   //Methods that are inherited from JPanel
@@ -185,6 +176,14 @@ class GamePanel extends JPanel{
       playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
     
+    //Changes settings if changed
+    if(difficulty== 1){ //Easy
+      mobCap = 20;
+    } else if(difficulty == 2){ //Medium
+      mobCap = 40;
+    } else if(difficulty == 3){ //Hard
+      mobCap = 80;
+    }
     //Checks for which entities are killed, including the player
     checkKilled(0,0);
     if (!gameOver) {
@@ -1109,11 +1108,12 @@ class GamePanel extends JPanel{
    *@param: The int fps, the double totalMem, and the double memUsed
    *@return: 
    */
-  public void setDebugInfo(int fps, double totalMem, double memUsed){
+  public void setDebugInfo(int fps, double totalMem, double memUsed, int difficulty){
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
     memPercent = (memUsed/totalMem)*100;
+    this.difficulty = difficulty;
   }
   //Retrieves whether or not it is a new floor
   /**
@@ -1168,7 +1168,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)&&(floorLevel!=4)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<mobCap)&&(floorLevel!=4)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1488,20 +1488,25 @@ class GamePanel extends JPanel{
    *@param: The int arrayX, and the int arrayY
    *@return: 
    */
+  
+  // Checks if any entities have died
   public void checkKilled(int arrayX, int arrayY){
     if ((arrayX==0)&&(arrayY==0)){
+      // runs a for through the entire entity map
       for (int i=0;i<entityMap.length;i++){
         for(int j=0;j<entityMap[0].length;j++){
           if (entityMap[i][j] instanceof Entity){
-            if (entityMap[i][j].getHealth()<=0){
+            // If there is something in the array cell, its health is checked
+            
+            if (entityMap[i][j].getHealth()<=0){ // if it's dead, it's removed
               if (entityMap[i][j] instanceof Character) {
-                gameOver = true;
+                gameOver = true; // if player dies game is over
               } else {
-                mobCount--;
+                mobCount--; // if mob dies than xp and drops are generated.
                 dropItems(j, i, 0);
                 ((Character)entityMap[playerCurrentY][playerCurrentX]).changeXp(10);
               }
-              entityMap[i][j] = null;
+              entityMap[i][j] = null; 
             }
           }
         }

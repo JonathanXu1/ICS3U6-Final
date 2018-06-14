@@ -28,7 +28,6 @@ class Character extends Entity{
         }
       }
     }catch(Exception e) {
-      System.out.println("Error");
     }
   }
   /**

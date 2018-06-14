@@ -140,6 +140,8 @@ class MapGen2_8{
       int randDReal = randD*6;
       int randRReal = randR*6;
       
+      // The actual rooms are carved out now, with a chance for custom or random rooms
+      
       if (!capQPlaced) {        // captain's quarters
         for (int i = -2; i < 3; i++){
           for (int j = -3; j < 4; j++) {
@@ -149,7 +151,7 @@ class MapGen2_8{
         
         capQPlaced = true;     
         
-        map[randDReal][randRReal] = 600;   
+        map[randDReal][randRReal] = 600;   // Custom room type tag is set, for later use by other methods
         
       } else if (randomRoll(150)) { // chest room
         for (int i = -3; i < 4; i++){
@@ -710,14 +712,12 @@ class MapGen2_8{
     int mapSizeD = (effMapSizeD-1)*6 + 3;
     this.genTemplate(mapSizeW,mapSizeD); // Generates an empty template
     
-    //System.out.println("Initial gen pass");
     //visMap2(this.charMap(map)); 
     
     // Sets off the initial recursion
     int[] startDir = {0,6};    
     this.carvePath(6,6,startDir,500);
     
-    //System.out.println("Primary path pass");
     
     // Does more recursive calls on already-carved points to branch out the paths
     for (int i = 1; i < (Math.pow(mapSizeW,2)); i++) {
@@ -732,7 +732,6 @@ class MapGen2_8{
     }
     
     
-    //System.out.println("Secondary path pass");
     
     if (map[7][6] == 1 || map[6][7] == 1) { // cleans up the start of the recursion
       map[6][6] = -2;

@@ -64,6 +64,7 @@ class Display extends JFrame{
       e.printStackTrace();
     }
     
+
 //Adds keylistener object
     
 //Creation of the basic game display
@@ -86,17 +87,16 @@ class Display extends JFrame{
     menuBgPanel.add(menuPanel);
     menuBgPanel.add(mainTitle);
     
-//Creation of the settings panel
-    settingsPanel = new SettingsPanel(maxX, maxY);
-    
-    settingsTitle.setFont(customTitle);
-    settingsTitle.setForeground(Color.WHITE);
-    settingsTitle.setBounds(maxX/2-400, -100, 800, 300);
-    
-    backButton.setBounds(maxX/2-300, maxY - 200, 220, 50);
-    
+
+    //Creation of the settings panel
+    settingsPanel = new SettingsPanel(maxX, maxY);    
+    backButton.setBounds(maxX/2-100, maxY - 200, 220, 50);
     settingsPanel.add(backButton);
     settingsPanel.add(settingsTitle);
+    
+    //Creation of the basic game display
+    gamePanel = new GamePanel();
+    gamePanel.addMouseListener(mouseListener);
     
     this.add(menuBgPanel);
     this.setVisible (true);
@@ -135,7 +135,7 @@ class Display extends JFrame{
          menuBgPanel.refresh();
 // Main game state
     }else if (gameState==1){ //New game
-      gamePanel.setDebugInfo(fps, totalMem, memUsed);
+      gamePanel.setDebugInfo(fps, totalMem, memUsed, getSettings()[1]);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
         gamePanel.initial (map, playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
@@ -285,6 +285,7 @@ class Display extends JFrame{
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
   }
+
   /**
    *setBossCoords
    *Sets the boss coords in the game panel
@@ -295,21 +296,23 @@ class Display extends JFrame{
     gamePanel.setBoss(bossX,bossY);
   }
   /**
-   * getSoundSettings
-   * Returns the sound settings
+   * getSettings
+   * Returns the settings
    *@param: 
-   *@return: A boolean[]
+   *@return: A int[]
    */
-  public boolean[] getSoundSettings(){
-    return settingsPanel.getSoundSettings();
+  public int[] getSettings(){
+    return settingsPanel.getSettings();
   }
+  
   /**
    *getLevel
    *Returns the floor level
    *@param: 
    *@return: An int
    */
-  public int getLevel(){
+    public int getLevel(){
     return (gamePanel.getFloor());
   }
+
 }
