@@ -29,7 +29,7 @@ abstract class Entity {
   }
   /**
    *isDead
-   *
+   *Returns if the mob is dead
    *@param: 
    *@return: A boolean
    */
