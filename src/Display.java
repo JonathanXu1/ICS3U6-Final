@@ -220,4 +220,7 @@ class Display extends JFrame{
   public boolean getContinueSave(){
     return (continueSave);
   }
+  public boolean[] getSoundSettings(){
+    return settingsPanel.getSoundSettings();
+  }
 }

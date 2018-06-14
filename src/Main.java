@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.*; //Wildcard
 
 ///Make it so that you click again to cancel the upgrade
@@ -16,12 +17,10 @@ class Main{
     //Music vars
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
-    /*
      File audioFile = new File("../res/spacebackround.wav");
      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
      DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
      Clip clip = (Clip) AudioSystem.getLine(info);
-     */
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
     GameSaver gameSaver=  new GameSaver();
@@ -49,8 +48,17 @@ class Main{
      e.printStackTrace();
      }
      */
+
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+    
+    try {
+      clip.open(audioStream);
+      
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
+    
     GamePanel gamePanel;
     int counter=0;
     while (true){
@@ -84,6 +92,13 @@ class Main{
        clip.close();
        }
        */
+      //Plays music
+      if(disp.getSoundSettings()[0]){ //If music setting set to true
+        clip.start();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+      } else {
+        clip.stop();
+      }
     }
   }
   public static Tile[][] charMapConversion(char[][] charMap, Tile[][] map){
