@@ -70,11 +70,10 @@ class Main{
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         if (disp.getNewMap()){
-          if(disp.getLevel()==4){
+          if(disp.getLevel()==3){
             charMap=gen.createBossRoom();
-            Tile [][] bossMap=new Tile[75][75];
-            bossMap= charMapConversion(charMap, bossMap);
-            disp.setMap(bossMap);
+            map= charMapConversion(charMap, map);
+            disp.setMap(map);
             disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
             disp.setGameMap ();
           }else{
@@ -109,7 +108,6 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         Color BURGANDY = new Color(160, 27, 33);
-        
         if (charMap[i][j] == '+'){ //
           map[i][j]= new FloorTile(Color.WHITE, "../res/CrackedTile", "hallway floor");
         } else if (charMap[i][j] == 'J'){ //

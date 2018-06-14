@@ -383,6 +383,7 @@ class GamePanel extends JPanel{
     }
     //The first part of the code will determine if the player array can move given the key listeners
     if (tiling){
+      keyListener.setToZero();
       //A turn is set, and it is added
       //Move all of the entities slowly
       //Moving the bg is a prerequisite for everything else to move
@@ -392,7 +393,7 @@ class GamePanel extends JPanel{
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
         if (!(attacked)){
-          bg.move();
+            bg.move();
         }
       }
       //Make an entity move method
@@ -1005,9 +1006,11 @@ class GamePanel extends JPanel{
     this.playerFinishingX = playerFinishingX;
     this.playerFinishingY =playerFinishingY;
     entityMap[playerStartingY][playerStartingX] = tempCharacter;
-    spawnItems();
     loading= true;
     loadingCount=100;
+    if (floorLevel!=4){
+      spawnItems();
+    }
   }
   
   //Getters and setters
@@ -1054,7 +1057,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)&&(floorLevel!=4)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1073,13 +1076,13 @@ class GamePanel extends JPanel{
       //Roombas also have slightly more attack
       int tempRand = (int)(Math.random()*4);
       if (tempRand==0){
-        entityMap[spawnY][spawnX] = new FlameRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FlameRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==1){
-        entityMap[spawnY][spawnX] = new LightningRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new LightningRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==2){
-        entityMap[spawnY][spawnX] = new FreezeRoomba (15,15,5,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FreezeRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }else{
-        entityMap[spawnY][spawnX] = new Brute (20,20,10,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new Brute (15+5*floorLevel,15+5*floorLevel,3*floorLevel,1,false,false,false,Color.MAGENTA, false);
       }
     }
     //Damages whatever is burned
@@ -1097,10 +1100,9 @@ class GamePanel extends JPanel{
               entityMap[i][j].setFreeze(false);
             }
             if (entityMap[i][j] instanceof Roomba){
-              ///WHEN CHANGING THE STATS, THE ROOMBAS DEFENSE MUST BE UPDATED HERE AS WELL!!!!
-              entityMap[i][j].setArmor(5);
+              entityMap[i][j].setArmor(2*floorLevel);
             }else if (entityMap[i][j] instanceof Brute){
-              entityMap[i][j].setArmor(10);
+              entityMap[i][j].setArmor(3*floorLevel);
             }
           }else if (entityMap[i][j].getLightning()){
             if ((int)(Math.random()*100)<25){
@@ -1485,7 +1487,7 @@ class GamePanel extends JPanel{
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
-    int foodCap =(2-((int)(Math.random()*2)));
+    int foodCap =(5-((int)(Math.random()*3)));
     //Resets the spawn
     spawnX = 0;
     spawnY = 0;
