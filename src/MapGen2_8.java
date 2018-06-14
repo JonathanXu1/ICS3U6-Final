@@ -495,19 +495,19 @@ class MapGen2_8{
             }
           } 
           
-          if (map[i*6][j*6 + 5] == -2) {
+          if (map[i*6][j*6 + 5] != 3) {
             map[i*6][j*6 + 4] = -202;
             map[i*6][j*6 + 3] = -202;
           }
-          if (map[i*6][j*6 - 5] == -2) {
+          if (map[i*6][j*6 - 5] != 3) {
             map[i*6][j*6 - 4] = -202;
             map[i*6][j*6 - 3] = -202;
           }
-          if (map[i*6 + 5][j*6] == -2) {
+          if (map[i*6 + 5][j*6] != 3) {
             map[i*6 + 4][j*6] = -203;
             map[i*6 + 3][j*6] = -203;
           }
-          if (map[i*6 - 5][j*6] == -2) {
+          if (map[i*6 - 5][j*6] != 3) {
             map[i*6 - 4][j*6] = -203;
             map[i*6 - 3][j*6] = -203;
           }
@@ -886,6 +886,9 @@ class MapGen2_8{
           resultProc[i][j] = '-';
         } else if (result[i][j] == 0) { // hallway
           resultProc[i][j] = 'X';        
+          if (randomRoll(2)) {
+            resultProc[i][j] = '+';
+          }                    
         } else if (result[i][j] == -2) { // door
           resultProc[i][j] = 'D';
         } else if (result[i][j] == -1) { // room tile
