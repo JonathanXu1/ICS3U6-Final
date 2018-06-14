@@ -2,7 +2,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Graphics;
 import java.awt.Dimension;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 

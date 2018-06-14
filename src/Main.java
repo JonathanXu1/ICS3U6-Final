@@ -60,8 +60,6 @@ class Main{
       e.printStackTrace();
     }
     
-    GamePanel gamePanel;
-    int counter=0;
     while (true){
       time.setTime();  
       if (time.getFramePassed()){

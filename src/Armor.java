@@ -1,7 +1,4 @@
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 
 public abstract class Armor extends Equipment {
   private int defense;

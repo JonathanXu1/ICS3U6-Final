@@ -24,7 +24,6 @@ class MapGen2_8{
   private boolean capQPlaced; // A boolean to ensure that the captain's quarters has only been placed once
   
   MapGen2_8() {
-    boolean capQPlaced = false; //At the start, the cpatin's quarters is set to false
   }
   
     // Generates a random true/false depending on the percentage entered as argument, out of 1000
@@ -58,8 +57,7 @@ class MapGen2_8{
   public void carvePath(int dPos, int rPos, int dirState[], int probTurn) {
     map[dPos][rPos] = 0; // Sets the current spot to zero     
     int[] newDirState = new int[2];   // Initializes future movement array
-    boolean pathDead = false;
-    
+
     
     int numOpt = 0; // Determines the number of options for movement on the generation grid
     if (map[dPos + 6][rPos]  == 1) {
@@ -78,7 +76,6 @@ class MapGen2_8{
     
     if (numOpt == 0) { // if no ways to move are present, a base case is hit.
       map[dPos][rPos] = -2; // The final tile is set as a dead end, for future consideration
-      pathDead = true;
     } 
     
     else {
@@ -282,7 +279,6 @@ class MapGen2_8{
   
   // Generates doors based on the work of previous methods
   public void genDoors() {
-    int numAdj; // Initilizes the number of adjacent room tiles
     
     for (int i = 6; i < map.length - 6; i++) {
       for (int j = 6; j < map[0].length - 6; j++) {
@@ -363,7 +359,6 @@ class MapGen2_8{
   
   // Designates the walls of the map into the appropriata types
   public void designateWalls() {
-    int numAdj;        
     
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {

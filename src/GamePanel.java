@@ -27,7 +27,6 @@ class GamePanel extends JPanel{
   private String debugMessage = "NULL";
   
   //Listeners
-  private boolean mouseReleased;
   private int [] mouseXy;
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
@@ -37,7 +36,6 @@ class GamePanel extends JPanel{
   private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage, lightningStatus, flameStatus, freezeStatus, hungry, starving,hotbarBelow;
   private final double Y_TO_X = 90.0/75.0;
   private final double INVENTORY_MOD = 110.0/75.0;
-  private final double INV_Y_TO_X = 160.0/212.0;
   private final double Y_TO_X_HOT = 778.0/135.0;
   private final double BOT_HEIGHT = 250.0;
   private boolean inventoryOpen =false;
@@ -45,12 +43,8 @@ class GamePanel extends JPanel{
   private int maxButtonX;
   private int minButtonY;
   private int maxButtonY;
-  private boolean plusPressed;
-  private boolean minusPressed;
   
   //Turn tracking
-  private boolean turnStart = false;
-  private int turnCount =0;
   private boolean pauseState =false;
   private int hungerCount = 0;
   
@@ -90,7 +84,6 @@ class GamePanel extends JPanel{
   private int bossY;
   
   // Fire control
-  private int[] fireTarget;
   private FireController playerFireController;
   private boolean collided = true;
   private int translateX = 0;
@@ -120,8 +113,6 @@ class GamePanel extends JPanel{
   private int targetY=0;
   private int playerLevel =1;
   private boolean anotherMap =false;
-  private int startingXMod;
-  private int startingYMod;
   //Attacking
   private int [] tileSelectedArray = new int [2];  
   private boolean meleeSelected  = true;
@@ -130,8 +121,6 @@ class GamePanel extends JPanel{
   private boolean weaponState = true;
   private boolean attacked;
   private int floorLevel =0;
-  private int yStartMod=0;
-  private int xStartMod=0;
   private int loadingCount;
   private boolean loading;
   //Sound effects
@@ -1487,7 +1476,6 @@ class GamePanel extends JPanel{
       turnPasser = false;
       tiling = true;
       passTurn();
-      turnCount++;
     }
   }
   public void spawnItems(){

@@ -21,15 +21,18 @@ class Editor{
    *@return: void
    */
   public static void main (String[]args) throws Exception{
-    String [] fileNames = {"Armor.java","AssualtVest.java","Background.java"
+    /*
+    String [] fileNames = {"Armor.java","AssaultVest.java","Background.java"
       ,"Boss.java","Brute.java","Character.java","ChestTile.java","Clock.java","Consumable.java",
       "CustomButton.java", "CustomCheckButton.java", "CustomKeyListener.java","Display.java",
-      "DoorTile.java","Drive.java","Enemy.java","EnergySuit.java","EnergySword.java""Entity.java",
-    "Equipment.java","FCTester.java", "FireController.java","FlameDrive.java","FlameRoomba.java","GamePanel.java"
+      "DoorTile.java","Drive.java","Enemy.java","EnergySuit.java","EnergySword.java","Entity.java",
+    "Equipment.java","FCTester.java", "FireController.java","FlameDrive.java","FlameRoomba.java","GamePanel.java",
       "GammaHammer.java","HallwayTile.java","Inventory.java","IridiumExoskeleton.java","Item.java","KineticMace.java", "LaserPistol.java"
-    "LightningDrive.java","LightningRoomba.java","Main.java","MedKit.java","MeleeWeapon.java","MenuBGPanel.java","MenuPanel.java","PlasmaRapier.java"
-    "PlasmaRifle.java", "PowerDrive.java", "ProximityArmor.java", "PulseRailgun.java", "RangedWeapon.java", "Roomba.java", "SettingsPanel.java",
-    "SolarScorcher.java", "SoundEffect.java", "SoundPlayer.java", "SpaceSuit.java", "Star.java", "StartListener.java", "SteelDrive.java", "Tile.java"};
+    ,"LightningDrive.java","Main.java","MedKit.java","MeleeWeapon.java","MenuBGPanel.java","MenuPanel.java","PlasmaRapier.java"
+    ,"PlasmaRifle.java", "PowerDrive.java", "ProximityArmor.java", "PulseRailgun.java", "RangedWeapon.java", "Roomba.java", "SettingsPanel.java",
+    "SolarScorcher.java", "SoundEffect.java", "SoundPlayer.java", "SpaceSuit.java", "Star.java", "StartListener.java", "SteelDrive.java", "Tile.java","WalkableTile.java"
+    ,"WallTile.java", "Weapon.java", "Wrench.java"};
+    */
     for (int i=0;i<fileNames.length;i++){
       String currentLine="";
       String previousLine;

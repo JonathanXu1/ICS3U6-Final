@@ -1,8 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-
 public abstract class Equipment extends Item{ // Superclass for all Equipment
   private int durability; // How much any piece of euipment can last before it breaks
   private int durabilityCap; // How much durability the item starts with and how much it can be be repaired

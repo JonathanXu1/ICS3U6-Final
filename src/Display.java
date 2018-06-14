@@ -3,7 +3,6 @@ import javax.swing.JFrame;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
-import java.awt.GraphicsEnvironment;
 import java.awt.FontFormatException;
 import java.awt.Color;
 import java.io.IOException;
@@ -42,7 +41,6 @@ class Display extends JFrame{
   //Game logic
   private Tile[][] map;
   private int playerStartingX, playerStartingY, playerFinishingX,playerFinishingY, bossX, bossY;
-  private boolean newMap = false;
   //Fonts
   Font customTitle;
   

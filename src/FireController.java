@@ -1,21 +1,14 @@
 class FireController {
   private int currentY, currentX;
   private int counter;
-  private int endCounter;
-  private int ratio;
   private int trailY, trailX;
   private int moveY, moveX;
-  private int maxX, maxY;
-  private int targetY, targetX;
   private int startY, startX;
   private double angle;
-  private int projectileLength;
   private boolean collision = false;
   private int shotLength;
   
   FireController(int mX, int mY, int sX, int sY) {
-    this.maxX = mX;
-    this.maxY = mY;
     
     this.startY = sY;//maxY/2;
     this.startX = sX;//maxX/2;
@@ -23,7 +16,6 @@ class FireController {
   
   public void setupProjectile(int targetX, int targetY, int shotLen) {    
     counter = 0;
-    endCounter = 0; 
     
     this.shotLength = shotLen;
     
@@ -41,8 +33,6 @@ class FireController {
     }
     
     double slope = (deltaY/deltaX);
-    
-    double distance = Math.sqrt(Math.pow(deltaY,2) + Math.pow(deltaX,2));
     
     
     angle = Math.atan((Math.abs(deltaY)/Math.abs(deltaX)));
