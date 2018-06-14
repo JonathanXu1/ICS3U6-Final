@@ -85,9 +85,11 @@ class Main{
         Color DARK_BROWN = new Color(168,107,23);
         Color BURGANDY = new Color(160, 27, 33);
         
-        if (charMap[i][j] == 'J'){ //
+        if (charMap[i][j] == '+'){ //
+          map[i][j]= new FloorTile(Color.WHITE, "../res/CrackedTile", "hallway floor");
+        } else if (charMap[i][j] == 'J'){ //
           map[i][j]= new FloorTile(Color.GREEN, "../res/CrackedTile", "room floor");
-        } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
+        } else if (charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
           map[i][j]= new HallwayTile(Color.WHITE, "hallway floor");
@@ -101,7 +103,7 @@ class Main{
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/WallTile", "room wall"); 
         } else if (charMap[i][j] == 'A') {//Airlock
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
-        }else if (charMap[i][j] == 'c'){
+        }else if (charMap[i][j] == 'C'){
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
         }
         //Biological Breakout
@@ -159,6 +161,8 @@ class Main{
           map[i][j]= new FloorTile(Color.GREEN, "../res/WalkwayEdge", 0.0 * Math.PI, "reactor");
         } else if (charMap[i][j] == '}') { //Reactor Chasm
           map[i][j]= new WallTile(Color.BLACK, "../res/Chasm", "reactor");
+        } else if (charMap[i][j] == '^') { //Reactor wall
+          map[i][j] = new WallTile(Color.DARK_GRAY, "../res/ReactorWall", "reactor");
         }
         // Crew's Quarters
         else if (charMap[i][j] == 'Q') {
