@@ -203,11 +203,6 @@ class GamePanel extends JPanel{
         alternateState = true;
         weaponState = true;
       }
-      if (!(tiling)){
-        if (entityMap[playerFinishingY][playerFinishingX] instanceof Character){
-          anotherMap=true;
-        }
-      }
       refreshStats();
       //Checks broken gear
       checkBroken();
@@ -348,7 +343,7 @@ class GamePanel extends JPanel{
           }else if ((mouseListener.getMouseXy()[0] > 253)&&(mouseListener.getMouseXy()[0] < 287)&&(mouseListener.getMouseXy()[1] > maxY-120)&&(mouseListener.getMouseXy()[1] < maxY-10)){
             g.drawImage(leftClickedMinus,0,maxY-(int)(BOT_HEIGHT),(int)(BOT_HEIGHT*Y_TO_X),(int)(BOT_HEIGHT),this);
           }
-          ///Shade in the buttons that are pressed when pausing
+          ///Shade in the buttons that are pressed when waiting
           minButtonX = maxX-142;
           maxButtonX= maxX-22;
           minButtonY = maxY-120;
@@ -366,7 +361,14 @@ class GamePanel extends JPanel{
             g.setColor(new Color(0, 0, 0, 100)); 
             g.fillRect(minButtonX, minButtonY, maxButtonX-minButtonX, maxButtonY-minButtonY);
           }
-        } 
+          reversePixelToArray(mouseListener.getMouseXy(), false);
+          if ((entityMap[playerFinishingY][playerFinishingX] instanceof Character)&&(tileSelectedArray[0]==playerFinishingX)&&(tileSelectedArray[1]==playerFinishingY)){
+            if (bg.getOnTile()){
+              anotherMap=true;
+              keyListener.setToZero();
+            }
+          } 
+        }
       }
     }
   }
@@ -660,11 +662,21 @@ class GamePanel extends JPanel{
       if(bulletY >= map.length || bulletY < 0 || bulletX >= map[0].length || bulletX < 0){
         collided = true;
         turnPasser = true;
-      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy){
-        collided = true;
-        turnPasser = true;
-        if(entityMap[bulletY][bulletX] instanceof Enemy){
-          playerAttack(bulletX, bulletY);
+      } else if(map[bulletY][bulletX] instanceof WallTile || map[bulletY][bulletX] instanceof DoorTile || entityMap[bulletY][bulletX] instanceof Enemy||map[bulletY][bulletX] instanceof ChestTile){
+        if (map[bulletY][bulletX] instanceof DoorTile){
+          if (!((DoorTile)(map[bulletY][bulletX])).getEntityOnDoor()){
+            collided = true;
+            turnPasser = true;
+            if(entityMap[bulletY][bulletX] instanceof Enemy){
+              playerAttack(bulletX, bulletY);
+            }
+          }
+        }else{
+          collided = true;
+          turnPasser = true;
+          if(entityMap[bulletY][bulletX] instanceof Enemy){
+            playerAttack(bulletX, bulletY);
+          }
         }
       }
     }
@@ -891,22 +903,12 @@ class GamePanel extends JPanel{
                     itemSelected = false;
                     entityMap[playerCurrentY][playerCurrentX] = ((MedKit)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).heal(((Character)(entityMap[playerCurrentY][playerCurrentX])));
                     inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                    /*
-                     tiling = true;
-                     passTurn();
-                     turnCount++;
-                     */
                   }               
                   if (inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof Food){
                     inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
                     itemSelected = false;
                     entityMap[playerCurrentY][playerCurrentX] = ((Food)(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]))).restoreHunger(((Character)(entityMap[playerCurrentY][playerCurrentX])));
                     inventory.setItem(selectedItemPosition[0],selectedItemPosition[1], null);
-                    /*
-                     tiling = true;
-                     passTurn();
-                     turnCount++;
-                     */
                   }
                 }else if ((j==0)&&(i==3)&&(!(inventory.getItem(selectedItemPosition[0],selectedItemPosition[1]) instanceof RangedWeapon))){
                   inventory.setSelected(selectedItemPosition[0],selectedItemPosition[1], false);
@@ -1011,6 +1013,8 @@ class GamePanel extends JPanel{
     loadingCount=100;
     if (floorLevel!=4){
       spawnItems();
+    }else{
+      //PLACE BOSS SPAWNING HERE
     }
   }
   
