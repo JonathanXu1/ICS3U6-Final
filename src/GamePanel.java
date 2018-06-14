@@ -126,9 +126,9 @@ class GamePanel extends JPanel{
   //Sound effects
   private String[] soundEffects = new String[2];
   /*
-  soundEffects[0] = "../res/Walk.wav";
-  soundEffects[1] = "../res/Shoot.wav";
-  */
+   soundEffects[0] = "../res/Walk.wav";
+   soundEffects[1] = "../res/Shoot.wav";
+   */
   private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
@@ -159,15 +159,21 @@ class GamePanel extends JPanel{
     this.gameOver = false;
     //Loads Sound Effects
     /*
-    for (int i = 0; i < soundEffects; i++){
-      
-    }
-    */
+     for (int i = 0; i < soundEffects; i++){
+     
+     }
+     */
   }
   
   //Methods that are inherited from JPanel
   @Override
-  public void paintComponent(Graphics g){
+  /**
+   *paintComponent
+   *Draws all the seperate components, along with updating and moving according to all the listeners
+   *@param: Graphics g
+   *@return: 
+   */
+    public void paintComponent(Graphics g){
     super.paintComponent(g);
     //Required to have focus so that the listeners work
     this.requestFocusInWindow();
@@ -238,11 +244,21 @@ class GamePanel extends JPanel{
     }
   }
   //End of methods that are inherited from JPanel
-  
+  /**
+   *returnGameOver
+   *Returns whether or not the game has ended
+   *@param: 
+   *@return: A boolean
+   */
   public boolean returnGameOver() {
     return this.gameOver;
   }
-  
+  /**
+   *drawDebugPanel 
+   *Draws the debug panel, which is activated by f1
+   *@param: Graphics g
+   *@return: 
+   */
   //Drawing methods, which were split up for legibility
   public void drawDebugPanel (Graphics g){
     //Debug panel, for personal use and testing
@@ -262,6 +278,12 @@ class GamePanel extends JPanel{
     g.drawString("Mouse Click: " + " " + Integer.toString(mouseXy[0]) + "x " + Integer.toString(mouseXy[1]) + " y", maxX-300, 60);
     g.drawString("Debug Message: " + debugMessage, maxX-600, 90);
   }
+  /**
+   *drawGameComponents
+   *Draws the basic game overlay (inventory, hotbar, bars for hp/exp)
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawGameComponents(Graphics g){
     //Sees if the mouse is clicking the skip turn button
     //Bottom toolbar
@@ -364,6 +386,7 @@ class GamePanel extends JPanel{
       }
     }
   }
+  
   public void determineTiling(){
     bg.setOnTile();
     //System.out.println (blocked [0]+" | "+blocked [1]+" | "+blocked [2]+" | "+blocked [3]);
@@ -387,7 +410,7 @@ class GamePanel extends JPanel{
       bg.setYDirection (xyDirection[1]);
       if (!(movementRestriction)){
         if (!(attacked)){
-            bg.move();
+          bg.move();
         }
       }
       //Make an entity move method
@@ -415,6 +438,12 @@ class GamePanel extends JPanel{
       refreshMobs();
     }
   }
+  /**
+   *drawMap 
+   *Draws the tile map, restricting what is not necessary
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawMap (Graphics g){
     //Sets the void image
     g.setColor(Color.BLACK);
@@ -449,7 +478,12 @@ class GamePanel extends JPanel{
     //Load basic visuals last
     drawFog(playerCurrentX, playerCurrentY, 0);
   }
-  
+  /**
+   *drawFog
+   *Part of the previous method, with more parameters
+   *@param: The int x, the int y, the int count, and the int direction
+   *@return: 
+   */
   public void drawFog(int x, int y, int count){
     map[y][x].setViewed();
     map[y][x].setFocus(true);
@@ -501,6 +535,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *drawFog
+   *Draws the fog to restrict viewing recursively
+   *@param: The int x, the int y, and the int count
+   *@return: 
+   */
   public void drawFog(int x, int y, int count, int direction){
     map[y][x].setViewed();
     map[y][x].setFocus(true);
@@ -525,7 +565,12 @@ class GamePanel extends JPanel{
       }
     }
   }
-  
+  /**
+   *drawMinimap
+   *Draws the minimap
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawMinimap(Graphics g){
     g.setColor(Color.BLACK);
     g.fillRect(0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY);
@@ -570,6 +615,12 @@ class GamePanel extends JPanel{
     //Draws the frame, placed last as it covers the minimap
     g.drawImage(mapBorder,0,maxY-(int)(BOT_HEIGHT),minimapX, minimapY,this);
   }
+  /**
+   *drawItems
+   *Draws all the items on the floor
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawItems(Graphics g){
     for (int i = 0;i<itemMap.length;i++){
       for (int j = 0;j<itemMap[0].length;j++){
@@ -579,6 +630,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *drawAllEntity
+   *Draws all the entities
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawAllEntity(Graphics g){
     //System.out.println (playerCurrentX+ " and "+ playerCurrentY);
     for (int i = 0;i<entityMap.length;i++){
@@ -602,7 +659,12 @@ class GamePanel extends JPanel{
       }
     }
   }
-  
+  /**
+   *drawBullets
+   *Draws all the bullets
+   *@param: The Graphics g, and the FireController playerFireController
+   *@return: 
+   */
   public void drawBullets(Graphics g, FireController playerFireController){
     if (collided){
       reversePixelToArray(mouseListener.getMouseXy(), false);
@@ -673,7 +735,12 @@ class GamePanel extends JPanel{
     }
     //System.out.println();
   }
-  
+  /**
+   *drawBars
+   *Draws the hp and exp bars
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawBars(Graphics g){
     //Fill Hp, can be modified through the width
     g.setColor (new Color (69,218,215));
@@ -766,6 +833,12 @@ class GamePanel extends JPanel{
     }
   }
   
+  /**
+   *findBlocked
+   *Finds whats blocked so that the array can be updated
+   *@param: The int j, and the int i
+   *@return: 
+   */
   //Map manipulation
   //The first method blocks off all impossible paths so that it the player does not clip into walls
   public void findBlocked(int j, int i){
@@ -823,6 +896,12 @@ class GamePanel extends JPanel{
       blocked[3] = true;
     }
   }
+  /**
+   *drawInventory
+   *Inventory is drawn
+   *@param: Graphics g
+   *@return: 
+   */
   public void drawInventory(Graphics g){
     if (inventoryOpen){
       g.setColor(new Color(0, 0, 0, 200)); 
@@ -960,6 +1039,12 @@ class GamePanel extends JPanel{
       pendingUpgrade = false;
     }
   }
+  /**
+   *initial
+   *Sets up the map
+   *@param: The Tile [][]map, the int playerStartingX, the int playerStartingY, the int playerFinishingX, and the int playerFinishingY
+   *@return: 
+   */
   //Sets up the map so that setting the floor is easier as well
   public void initial(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     //Initializes player locations
@@ -972,13 +1057,19 @@ class GamePanel extends JPanel{
     this.playerFinishingY =playerFinishingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
-    entityMap[playerStartingY][playerStartingX]= new Character(100,100,0,1,false,false,false,Color.BLUE);
+    entityMap[playerStartingY][playerStartingX]= new Character(100,100,0,false,false,false,Color.BLUE);
     //Creates all the items on the floor
     spawnItems();
     //Sets inventory default items
     inventory.setItem(1,3,new SpaceSuit (50));
     inventory.setItem(2,3,new Wrench (50));
   }
+  /**
+   *createMap
+   *Creates a tile map for loading new levels
+   *@param: The Tile [][]map, the int playerStartingX, the int playerStartingY, the int playerFinishingX, and the int playerFinishingY
+   *@return: 
+   */
   public void createMap(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     Entity tempCharacter = entityMap[this.playerCurrentY][this.playerCurrentX];
     bg.setX(0);
@@ -1005,13 +1096,19 @@ class GamePanel extends JPanel{
     if (floorLevel!=4){
       spawnItems();
     }else{
-      entityMap[bossY][bossX] = new Boss (100,100,50,1,false,false,false,Color.RED, true);
+      entityMap[bossY][bossX] = new Boss (100,100,50,false,false,false,Color.RED, true);
     }
   }
   
   //Getters and setters
   //There is no getter for the following, as it only needs to be accessed from this class
   //Sets all the information for the debug panel
+  /**
+   *setDebugInfo
+   *The debug info is refreshed
+   *@param: The int fps, the double totalMem, and the double memUsed
+   *@return: 
+   */
   public void setDebugInfo(int fps, double totalMem, double memUsed){
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
@@ -1019,13 +1116,31 @@ class GamePanel extends JPanel{
     memPercent = (memUsed/totalMem)*100;
   }
   //Retrieves whether or not it is a new floor
+  /**
+   *getNewFloor
+   *Retrieves whether or not it is a new floor
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getNewFloor(){
     return (newFloor);
   }
+  /**
+   *setNewFloor
+   *Sends back if the floor is new or not; this is useful for understanding what code to run
+   *@param: boolean newFloor
+   *@return: 
+   */
   //Sends back if the floor is new or not; this is useful for understanding what code to run
   public void setNewFloor(boolean newFloor){
     this.newFloor = newFloor;
   }
+  /**
+   *passTurn 
+   *Passes the turn so that the game is turn based
+   *@param: 
+   *@return: 
+   */
   public void passTurn (){
     //Updates hunger and health
     hungerCount ++;
@@ -1072,13 +1187,13 @@ class GamePanel extends JPanel{
       //Roombas also have slightly more attack
       int tempRand = (int)(Math.random()*4);
       if (tempRand==0){
-        entityMap[spawnY][spawnX] = new FlameRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FlameRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==1){
-        entityMap[spawnY][spawnX] = new LightningRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new LightningRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,false,false,false,Color.MAGENTA, false);
       }else if (tempRand==2){
-        entityMap[spawnY][spawnX] = new FreezeRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new FreezeRoomba (10+5*floorLevel,10+5*floorLevel,2*floorLevel,false,false,false,Color.MAGENTA, false);
       }else{
-        entityMap[spawnY][spawnX] = new Brute (15+5*floorLevel,15+5*floorLevel,3*floorLevel,1,false,false,false,Color.MAGENTA, false);
+        entityMap[spawnY][spawnX] = new Brute (15+5*floorLevel,15+5*floorLevel,3*floorLevel,false,false,false,Color.MAGENTA, false);
       }
     }
     //Damages whatever is burned
@@ -1320,6 +1435,12 @@ class GamePanel extends JPanel{
       itemPickup = false;
     }
   }
+  /**
+   *refreshMobs
+   *Refreshes all the mobs, so that they can move again
+   *@param: 
+   *@return: 
+   */
   public void refreshMobs(){
     for (int i =0;i<entityMap.length;i++){
       for(int j =0;j<entityMap[0].length;j++){
@@ -1332,6 +1453,12 @@ class GamePanel extends JPanel{
       pathfinderDistance[k]=0;
     }
   }
+  /**
+   *reversePixelToArray 
+   *Reverses the pixel position to the array position
+   *@param: The int [] xyPixel, and the boolean melee
+   *@return: 
+   */
   public void reversePixelToArray (int [] xyPixel, boolean melee){
     if (!(melee)){
       if (xyPixel[0]<maxX/2-50){
@@ -1355,6 +1482,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *checkKilled
+   *Checks what is killed
+   *@param: The int arrayX, and the int arrayY
+   *@return: 
+   */
   public void checkKilled(int arrayX, int arrayY){
     if ((arrayX==0)&&(arrayY==0)){
       for (int i=0;i<entityMap.length;i++){
@@ -1382,6 +1515,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *updateListeners
+   *Updates all the listeners for the turn passer 
+   *@param: 
+   *@return: 
+   */
   public void updateListeners(){
     mouseXy = mouseListener.getMouseXy();
     //If the game is not paused
@@ -1478,6 +1617,12 @@ class GamePanel extends JPanel{
       passTurn();
     }
   }
+  /**
+   *spawnItems
+   *Spawns the items at the start of a new floor
+   *@param: 
+   *@return: 
+   */
   public void spawnItems(){
     //First initialize a random number of weapons and armors to spawn across the map
     int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
@@ -1545,6 +1690,12 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new Food();
     }
   }
+  /**
+   *randomizeMeleeWeapon
+   *Randomizes the possible melee weapons
+   *@param: The int spawnX, and the int spawnY
+   *@return: 
+   */
   public void randomizeMeleeWeapon(int spawnX, int spawnY){
     
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
@@ -1558,6 +1709,12 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new EnergySword(50);
     }
   }
+  /**
+   *randomizeArmor
+   *Randomizes the possible armors
+   *@param: The int spawnX, and the int spawnY
+   *@return: 
+   */
   public void randomizeArmor(int spawnX, int spawnY){
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
@@ -1570,6 +1727,12 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new AssaultVest(50);
     }
   }
+  /**
+   *randomizeRangedWeapon
+   *Randomizes the possible ranged
+   *@param: The int spawnX, and the int spawnY
+   *@return: 
+   */
   public void randomizeRangedWeapon(int spawnX, int spawnY){
     itemRarity = ((5-(int)(Math.sqrt(((int)(Math.random()*16))))));
     if (itemRarity==5){
@@ -1582,6 +1745,12 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new LaserPistol(50);
     }
   }
+  /**
+   *randomizeDrive
+   *Creates a random drive
+   *@param: The int spawnX, and the int spawnY
+   *@return: 
+   */
   public void randomizeDrive(int spawnX, int spawnY){
     driveNumber =(int)(Math.random()*5);
     if (driveNumber==0){
@@ -1596,6 +1765,12 @@ class GamePanel extends JPanel{
       itemMap[spawnY][spawnX] = new PowerDrive();      
     }
   }
+  /**
+   *playerAttack
+   *Attacks the enemies
+   *@param: The int targetX, and the int targetY
+   *@return: 
+   */
   public void playerAttack(int targetX, int targetY){
     attacked = true;
     if (checkInMap(targetX, targetY)){
@@ -1664,6 +1839,12 @@ class GamePanel extends JPanel{
       checkKilled(targetX, targetY);
     }
   }
+  /**
+   *checkBroken
+   *Breaks items
+   *@param: 
+   *@return: 
+   */
   public void checkBroken(){
     for (int i=0;i<4;i++){
       for (int j=0;j<6;j++){
@@ -1675,6 +1856,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *dropItems
+   *Drops items upon death or chests
+   *@param: The int arrayX, the int arrayY, and the int situation
+   *@return: 
+   */
   public void dropItems(int arrayX, int arrayY, int situation){
     int itemNum;
     int chance;
@@ -1707,6 +1894,12 @@ class GamePanel extends JPanel{
       }
     }
   }
+  /**
+   *refreshStats
+   *Refreshes the armor and the defense
+   *@param: 
+   *@return: 
+   */
   public void refreshStats(){
     if (inventory.getItem(1,3) instanceof Armor){
       entityMap[playerCurrentY][playerCurrentX].setArmor(((Armor)(inventory.getItem(1,3))).getDefense());
@@ -1714,6 +1907,12 @@ class GamePanel extends JPanel{
       entityMap[playerCurrentY][playerCurrentX].setArmor(0);
     }
   }
+  /**
+   *drawStatus
+   *Draws the status effects
+   *@param: The Graphics g, the int entityDirection, the int j, and the int i
+   *@return: 
+   */
   public void drawStatus(Graphics g, int entityDirection, int j, int i){
     int statusSkip = 0;
     int iMod=0;
@@ -1739,6 +1938,12 @@ class GamePanel extends JPanel{
       g.drawImage (flameStatus,statusSkip+maxX/2+(j+jMod)*TILE_SIZE-bg.getX()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingX) +(entityMap[i][j].getTileXMod()), maxY/2+(i+iMod)*TILE_SIZE-bg.getY()-(TILE_SIZE/2)-(TILE_SIZE*playerStartingY)+(entityMap[i][j].getTileYMod())-45, 30, 30,this);     
     }
   }
+  /**
+   *checkInMap
+   *Checks if the coordinates are in map
+   *@param: The int x, and the int y
+   *@return: A boolean
+   */
   public boolean checkInMap(int x, int y){
     if ((x>=0)&&(x<map[0].length)&&(y>=0)&&(y<map.length)){
       return (true);
@@ -1746,16 +1951,12 @@ class GamePanel extends JPanel{
       return (false);
     }
   }
-  public Entity[][] getEntityMap(){
-    System.out.println(entityMap.length);
-    return (entityMap);
-  }
-  public Item[][] getItemMap(){
-    return (itemMap);
-  }
-  public Item[][] getInventory(){
-    return(inventory.getArrayInventory());
-  }
+  /**
+   *getAnotherMap
+   *Returns whether or not a new map is required
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getAnotherMap(){
     if (anotherMap){
       anotherMap = false;
@@ -1764,9 +1965,21 @@ class GamePanel extends JPanel{
       return (false);
     }
   }
+  /**
+   *getFloor
+   *Gets the floor level
+   *@param: 
+   *@return: An int
+   */
   public int getFloor(){
     return (floorLevel);
   }
+  /**
+   *setBoss
+   * Sets the boss position
+   *@param: The int bossX, and the int bossY
+   *@return: 
+   */
   public void setBoss(int bossX, int bossY){
     this.bossX = bossX;
     this.bossY = bossY;

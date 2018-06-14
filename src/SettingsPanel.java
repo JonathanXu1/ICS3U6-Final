@@ -1,3 +1,4 @@
+/////////////////////
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Graphics;
@@ -5,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/////////////////////
 class SettingsPanel extends JPanel{
   private boolean music = false;
   private boolean soundfx = false;
@@ -15,7 +17,7 @@ class SettingsPanel extends JPanel{
   private JLabel soundFxLabel = new JLabel("SoundFx");
   private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg.png");
   
-  //Constructor
+//Constructor
   SettingsPanel(int xVal, int yVal){
     this.setFocusable(true);
     this.xVal = xVal;
@@ -36,14 +38,26 @@ class SettingsPanel extends JPanel{
   }
   
   @Override
-  public void paintComponent(Graphics g){
+  /**
+   *paintComponent
+   *Paints everything
+   *@param: Graphics g
+   *@return: 
+   */
+    public void paintComponent(Graphics g){
     /*
-    g.setColor(new Color(0, 127, 127));
-    g.fillRect(0, 0, xVal, yVal);
-    */
+     g.setColor(new Color(0, 127, 127));
+     g.fillRect(0, 0, xVal, yVal);
+     */
     g.drawImage(bg,0,0,xVal,yVal,this);
   }
   
+  /**
+   * getSoundSettings
+   *Retruns whether or not sound setting are required
+   *@param: 
+   *@return: A boolean[]
+   */
   public boolean[] getSoundSettings(){
     if(musicButton.isSelected()){
       music = true;

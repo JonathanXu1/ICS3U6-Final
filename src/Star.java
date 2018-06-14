@@ -1,6 +1,8 @@
+/////////////////////
 import java.util.Random;
 import java.awt.Color;
 
+/////////////////////
 public class Star{
   private int rgb, maxrgb;
   private int minrgb = 21;
@@ -12,9 +14,23 @@ public class Star{
     maxrgb = rand.nextInt(100)+75; //75 to 175
     rgb = minrgb;
   }
+  
+  //Getters and setters
+  /**
+   *getColor
+   *Returns the color of the star
+   *@param: 
+   *@return: Color
+   */
   public Color getColor(){
     return color;
   }
+  /**
+   *updateColor
+   *Updates the star colours
+   *@param: 
+   *@return: 
+   */
   public void updateColor(){
     if(rgb <= maxrgb && !peaked){
       rgb += 5;
@@ -28,6 +44,12 @@ public class Star{
     }
     color = new Color(rgb, rgb, rgb);
   }
+  /**
+   *getDied
+   *Returns if the star has died
+   *@param:
+   *@return: 
+   */
   public boolean getDied(){
     return died;
   }

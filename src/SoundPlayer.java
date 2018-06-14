@@ -1,7 +1,11 @@
+/////////////////////
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.*; // WILDCARD REEEEEEEEEEEE
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
 import java.io.File;
 
+/////////////////////
 public class SoundPlayer extends Display{
   Clip clip;
   SoundPlayer(String dir) throws Exception{
@@ -15,7 +19,12 @@ public class SoundPlayer extends Display{
       e.printStackTrace();
     }
   }
-  
+  /**
+   * playSound
+   * Plays sound depending on the clip
+   * @param:
+   * @return:
+   */
   public void playSound(){
     if (clip.isRunning()){
       clip.stop();   // Stop the player if it is still running

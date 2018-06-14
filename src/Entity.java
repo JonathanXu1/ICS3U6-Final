@@ -1,3 +1,4 @@
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Color;
 
@@ -5,7 +6,6 @@ abstract class Entity {
   private int health;
   private int healthCap;
   private int armor;
-  private int speed; 
   private boolean freezeStatus;
   private boolean lightningStatus;
   private boolean flameStatus;
@@ -15,11 +15,10 @@ abstract class Entity {
   private int tileYMod;
   private Color minimapColor;
   
-  Entity(int h,int hC,int a,int sP,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor) {
+  Entity(int h,int hC,int a,boolean freezeStatus,boolean lightningStatus,boolean flameStatus, Color minimapColor) {
     this.health = h;
     this.healthCap = hC;
     this.armor = a;
-    this.speed = sP;
     this.freezeStatus = freezeStatus;
     this.lightningStatus = lightningStatus;
     this.flameStatus = flameStatus;
@@ -28,6 +27,12 @@ abstract class Entity {
   }
   Entity(){
   }
+  /**
+   *isDead
+   *
+   *@param: 
+   *@return: A boolean
+   */
   public boolean isDead() {
     if (this.health < 1) {
       return true;
@@ -35,85 +40,204 @@ abstract class Entity {
     return false;
   }
   
+  abstract void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel);
+//0 is nothing, 1 is up, 2 is down, 3 is left, 4 is right
+  //Getters and settters
+  /**
+   *setTiling 
+   *Sets if the mob is tiling
+   *@param: int direction
+   *@return: 
+   */
+  public void setTiling (int direction){
+    this.direction = direction;
+  }
+  /**
+   *getTiling
+   *Returns how the mob is tiling
+   *@param: 
+   *@return: An int
+   */
+  public int getTiling(){
+    return (direction);
+  }
+  /**
+   *getTileXMod
+   *Gets the mod for the tiling on the x
+   *@param: 
+   *@return: An int
+   */
+  public int getTileXMod(){
+    return (tileXMod);
+  }
+  /**
+   *setTileXMod
+   *Sets the mod for the tiling on the x
+   *@param: int tileXMod
+   *@return: 
+   */
+  public void setTileXMod(int tileXMod) {
+    this.tileXMod = tileXMod;
+  }
+  /**
+   *getTileYMod
+   *Gets the mod for the tiling on the y
+   *@param: 
+   *@return: An int
+   */
+  public int getTileYMod(){
+    return (tileYMod);
+  }
+  /**
+   *setTileYMod
+   *Sets the mod for the tiling on the y
+   *@param: int tileYMod
+   *@return: 
+   */
+  public void setTileYMod(int tileYMod) {
+    this.tileYMod = tileYMod;
+  }
+  /**
+   *getMinimapColor
+   *Returns the minimap color
+   *@param: 
+   *@return: A Color
+   */
+  public Color getMinimapColor(){
+    return minimapColor;
+  }
+  //No setter as this is determined by the tile
+  /**
+   *getHealth
+   *Returns the entity health
+   *@param: 
+   *@return: An int
+   */
   public int getHealth() {
     return this.health;
   }
   
+  /**
+   *setHealth
+   *Sets the health
+   *@param: int updt
+   *@return: 
+   */
   public void setHealth(int updt) {
     this.health = updt;
   }
   
+  /**
+   *getArmor
+   *Returns the entity armor
+   *@param: 
+   *@return: An int
+   */
   public int getArmor() {
     return this.armor;
   }
   
+  /**
+   *setArmor
+   *Sets the entity armor
+   *@param: int updt
+   *@return: 
+   */
   public void setArmor(int updt) {
     this.armor = updt;
   }
   
+  /**
+   *getHealthCap
+   *Returns the entity health cap
+   *@param: 
+   *@return: An int
+   */
   public int getHealthCap() {
     return this.healthCap;
   }
-    
+  
+  /**
+   *setHealthCap
+   *Sets the entity health cap
+   *@param: int healthCap
+   *@return: 
+   */
   public void setHealthCap(int healthCap) {
     this.healthCap=healthCap;
   }
-  public int getSpeed() {
-    return this.speed;
-  }
   
-  public void setSpeed(int updt) {
-    this.speed = updt;
-  }
-  
+  /**
+   *getFlame
+   *Returns the entity flame status
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getFlame() {
     return flameStatus;
   }
+  /**
+   *setFlame
+   *Sets the entity flame status
+   *@param: boolean flameStatus
+   *@return: 
+   */
   public void setFlame(boolean flameStatus) {
     this.flameStatus = flameStatus;
   }
+  /**
+   *getFreeze
+   *Returns the entity freeze status
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getFreeze() {
     return freezeStatus;
   }
+  /**
+   *setFreeze
+   *Sets the entity freeze status
+   *@param: boolean freezeStatus
+   *@return: 
+   */
   public void setFreeze(boolean freezeStatus) {
     this.freezeStatus = freezeStatus;
   }
+  /**
+   *getLightning
+   *Returns the entity lightning status
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getLightning() {
     return lightningStatus;
   }
+  /**
+   *setLightning
+   *Sets the entity lightning status
+   *@param: boolean lightningStatus
+   *@return: 
+   */
   public void setLightning(boolean lightningStatus) {
     this.lightningStatus = lightningStatus;
   }
+  /**
+   *getMoved
+   *Returns if the entity is moved
+   *@param: 
+   *@return: A boolean
+   */
   public boolean getMoved() {
     return this.moved;
   }
   
+  /**
+   *setMoved
+   *Sets if the entity has moved
+   *@param: boolean moved
+   *@return: 
+   */
   public void setMoved(boolean moved) {
     this.moved = moved;
-  }
-  
-  
-  abstract void drawEntity(Graphics g, int x, int y, int width, int height, int xDirection, int yDirection, GamePanel gamePanel);
-  //0 is nothing, 1 is up, 2 is down, 3 is left, 4 is right
-  public void setTiling (int direction){
-    this.direction = direction;
-  }
-  public int getTiling(){
-    return (direction);
-  }
-  public int getTileXMod(){
-    return (tileXMod);
-  }
-  public void setTileXMod(int tileXMod) {
-    this.tileXMod = tileXMod;
-  }
-  public int getTileYMod(){
-    return (tileYMod);
-  }
-  public void setTileYMod(int tileYMod) {
-    this.tileYMod = tileYMod;
-  }
-  public Color getMinimapColor(){
-    return minimapColor;
   }
 }

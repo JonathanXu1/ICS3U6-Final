@@ -1,8 +1,10 @@
+/////////////////////
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/////////////////////
 class FloorTile extends WalkableTile{
   Image floor;
   String dir;
@@ -16,6 +18,12 @@ class FloorTile extends WalkableTile{
     this.dir = dir;
     this.orientation = orientation;
   }
+  /**
+   *drawTile
+   *Draws the floor tile
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, the GamePanel gamePanel, and the boolean focus
+   *@return: 
+   */
   public void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus){
     if(focus){
       floor = Toolkit.getDefaultToolkit().getImage(dir + ".png");

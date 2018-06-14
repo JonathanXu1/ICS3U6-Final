@@ -2,6 +2,8 @@
  * {Editor.java}
  * This program will read a java file and edit it
  * IMPORTANT: This program does not yet work with abstract
+ * IMPORTANT: DON'T MAKE A PUBLIC CLASS
+ * Set some finals
  * 5/14/2018
  * Will Jeong
  */
@@ -26,13 +28,17 @@ class Editor{
       ,"Boss.java","Brute.java","Character.java","ChestTile.java","Clock.java","Consumable.java",
       "CustomButton.java", "CustomCheckButton.java", "CustomKeyListener.java","Display.java",
       "DoorTile.java","Drive.java","Enemy.java","EnergySuit.java","EnergySword.java","Entity.java",
-    "Equipment.java","FCTester.java", "FireController.java","FlameDrive.java","FlameRoomba.java","GamePanel.java",
+    "Equipment.java","FCTester.java", "FireController.java","FlameDrive.java","FlameRoomba.java",
       "GammaHammer.java","HallwayTile.java","Inventory.java","IridiumExoskeleton.java","Item.java","KineticMace.java", "LaserPistol.java"
     ,"LightningDrive.java","Main.java","MedKit.java","MeleeWeapon.java","MenuBGPanel.java","MenuPanel.java","PlasmaRapier.java"
     ,"PlasmaRifle.java", "PowerDrive.java", "ProximityArmor.java", "PulseRailgun.java", "RangedWeapon.java", "Roomba.java", "SettingsPanel.java",
     "SolarScorcher.java", "SoundEffect.java", "SoundPlayer.java", "SpaceSuit.java", "Star.java", "StartListener.java", "SteelDrive.java", "Tile.java","WalkableTile.java"
     ,"WallTile.java", "Weapon.java", "Wrench.java"};
     */
+    //For some reaosn, equipment does not work
+    //Delete FC tester, make the sprite of the boss into a flying one, write out basic instructions
+    String [] fileNames = {"GamePanel.java"};
+        //Need lightningroomba, need freeze drive
     for (int i=0;i<fileNames.length;i++){
       String currentLine="";
       String previousLine;

@@ -1,7 +1,10 @@
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+
+/////////////////////
 class GammaHammer extends MeleeWeapon{
   Image gammaHammer;
   GammaHammer(int dbty) {
@@ -11,6 +14,12 @@ class GammaHammer extends MeleeWeapon{
     this.setName("Gamma Hammer");
   }
   
+  /**
+   *drawItem
+   *Draws the gamma hammer
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, and the GamePanel gamePanel
+   *@return: 
+   */
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     gammaHammer = Toolkit.getDefaultToolkit().getImage("../res/GammaHammer.png");
     if (this.getItemSelected()){

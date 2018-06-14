@@ -1,6 +1,8 @@
+/////////////////////
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+/////////////////////
 class Inventory{
   Item[][] inventory = new Item [4][6];
   boolean selected = false;
@@ -10,24 +12,42 @@ class Inventory{
   Font stats = new Font("Consolas", Font.PLAIN, 12);
   Inventory (){
   }
-  public void setItem(int positionX, int positionY, Item item){
-    inventory[positionY][positionX] = item;
-  }
-  public Item getItem (int positionX, int positionY){
-    return (inventory[positionY][positionX]);
-  }
+  /**
+   *drawSelectedItem 
+   *Draws a certain item
+   *@param: The Graphics g, the int positionX, the int positionY, the int x, the int y, the int width, the int height, and the GamePanel gamePanel
+   *@return: 
+   */
   public void drawSelectedItem ( Graphics g, int positionX, int positionY,int x, int y, int width, int height, GamePanel gamePanel){
     inventory[positionY][positionX].drawItem(g, x, y, width, height, gamePanel);
   }
+  /**
+   *setSelected 
+   *Selects a certain item
+   *@param: The int positionX, the int positionY, and the boolean selected
+   *@return: 
+   */
   public void setSelected (int positionX, int positionY, boolean selected){
     inventory[positionY][positionX].setItemSelected(selected);
   }
+  /**
+   *swap 
+   * Swaps items
+   *@param: The int x, the int y, the int newX, and the int newY
+   *@return: 
+   */
   public void swap (int x,int y,int newX,int newY){
     tempOriginal=inventory[y][x];
     tempNew= inventory[newY][newX];
     inventory[y][x] = tempNew;
     inventory[newY][newX] = tempOriginal;
   }
+  /**
+   *writeStats
+   *Writes the stats of items
+   *@param: The Graphics g, the int positionX, the int positionY, the int xPixelPos, and the int yPixelPos
+   *@return: 
+   */
   public void writeStats(Graphics g, int positionX,int positionY,int xPixelPos,int yPixelPos){
     g.setColor(Color.WHITE);
     g.setFont(stats);
@@ -85,6 +105,12 @@ class Inventory{
       }
     }
   }
+  /**
+   *writePending
+   *Writes the pending message for items
+   *@param: The Graphics g, the int positionX, the int positionY, the int xPixelPos, and the int yPixelPos
+   *@return: 
+   */
   public void writePending(Graphics g, int positionX,int positionY,int xPixelPos,int yPixelPos){
     g.setColor(Color.WHITE);
     g.setFont(stats);
@@ -95,7 +121,32 @@ class Inventory{
       g.drawString("Click outside the inventory or the drive again to cancel the upgrade",xPixelPos,yPixelPos+lineSkip);
     }
   }
+  //Getters and setters
+  /**
+   * getArrayInventory
+   *Returns the inventory as an array
+   *@param: 
+   *@return: An Item[][]
+   */
   public Item[][] getArrayInventory(){
     return (inventory);
+  }
+  /**
+   *setItem
+   *Sets a certain item to an inventory
+   *@param: The int positionX, the int positionY, and the Item item
+   *@return: 
+   */
+  public void setItem(int positionX, int positionY, Item item){
+    inventory[positionY][positionX] = item;
+  }
+  /**
+   *getItem 
+   *Gets a certain item
+   *@param: The int positionX, and the int positionY
+   *@return: An Item
+   */
+  public Item getItem (int positionX, int positionY){
+    return (inventory[positionY][positionX]);
   }
 }

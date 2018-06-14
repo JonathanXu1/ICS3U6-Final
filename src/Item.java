@@ -5,23 +5,67 @@ public abstract class Item{
   private boolean selected = false;
   Item(){      
   }
+  /**
+   *drawItem
+   *Draws the item , is an abstract method
+   *@param: The Graphics g, the int x, the int y, the int width, the int height, the GamePanel gamePanel
+   *@return: 
+   */
+  abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
+  //Getters and setters
+  
+  /**
+   *getRarity
+   *Returns the rarity of the item
+   *@param: 
+   *@return: The int rarity
+   */
   public int getRarity() {
     return this.rarity;
   }
+  /**
+   *setRarity
+   *Sets the rarity of the item
+   *@param: The int rarity
+   *@return: 
+   */
   public void setRarity(int r) {
     this.rarity = r;
   }
+  /**
+   *getName
+   *Returns the name of the item
+   *@param: 
+   *@return: The String name
+   */
   public String getName(){
     return (name);
   }
+  /**
+   *setName
+   *Sets the name of the item
+   *@param: The string name
+   *@return: 
+   */
   public void setName(String name){
     this.name = name;
   }
-  abstract public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel);
-  public void setItemSelected (boolean selected){
-    this.selected = selected;
-  }
+  /**
+   *getItemSelected
+   *Returns if the item is selected
+   *@param: 
+   *@return: The boolean selected
+   */
   public boolean getItemSelected(){
     return (selected);
+  }
+  /**
+   *setItemSelected
+   *Sets the item to be selected
+   *@param: The boolean selected
+   *@return: 
+   */
+  public void setItemSelected (boolean selected){
+    this.selected = selected;
   }
 }
