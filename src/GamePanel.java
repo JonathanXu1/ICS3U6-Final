@@ -635,7 +635,6 @@ class GamePanel extends JPanel{
                         translateX = 0;
                         translateY = 0;
                         //SoundEffect.SHOOT.play();
-                        shootSound.playSound();
                       }
                     }
                   }
