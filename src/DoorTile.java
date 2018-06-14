@@ -28,4 +28,7 @@ class DoorTile extends WalkableTile{
   public void setEntityOnDoor (boolean entityOnDoor){
     this.entityOnDoor= entityOnDoor;
   }
+  public boolean getEntityOnDoor(){
+    return (entityOnDoor);
+  }
 }

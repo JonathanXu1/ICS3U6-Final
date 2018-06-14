@@ -24,6 +24,6 @@ class LightningDrive extends Drive{
     g.drawImage(lightningDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This drive can increase paralyze chance by 10% for weapons and grants paralyze immunity with armors");
+    return ("This drive increases paralyze chance by 10% for weapons and grants paralyze immunity with armors");
   }
 }

@@ -24,6 +24,6 @@ class FlameDrive extends Drive{
     g.drawImage(flameDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-   return ("This drive can increase burn chance by 10% for weapons and grants burn immunity with armors");  
+   return ("This drive increases burn chance by 10% for weapons and grants burn immunity with armors");  
   }
 }
