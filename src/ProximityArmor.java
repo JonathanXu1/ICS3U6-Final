@@ -1,4 +1,3 @@
-/////////////////////
 /*
  * [ProximityArmor.java];
  * 
@@ -8,10 +7,13 @@
  * Developed by: Will, Artem, Jonathan
  * 
  */
+
+/////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+
 /////////////////////
 class ProximityArmor extends Armor {
   Image proximityArmor;

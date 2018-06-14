@@ -1,3 +1,12 @@
+/*
+ * [Wrench.java];
+ * 
+ * The specific class for the Wrench, the starting weapon for the player. it is a very bad item. Implements graphics
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
