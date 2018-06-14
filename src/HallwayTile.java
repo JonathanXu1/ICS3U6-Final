@@ -1,3 +1,12 @@
+/*
+ * [HallwayTile.java];
+ * 
+ * These are tiles for the hallways connecting the rooms
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Graphics;

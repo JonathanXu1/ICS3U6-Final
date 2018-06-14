@@ -1,4 +1,3 @@
-//Imports
 /*
  * [Armor.java];
  * 
@@ -9,7 +8,7 @@
  * 
  */ 
 
-
+//Imports
 public abstract class Armor extends Equipment {
   private int defense;
   private int freezeDefense;

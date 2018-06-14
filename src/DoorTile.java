@@ -1,3 +1,12 @@
+/*
+ * [DoorTile.java];
+ * 
+ * These are tiles for the doors, they can be opened and closed
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Graphics;

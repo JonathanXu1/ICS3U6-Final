@@ -1,3 +1,11 @@
+/*
+ * [Character.java];
+ * 
+ * This is the player's character
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
 //Imports
 /////////////////////
 import java.awt.Graphics;

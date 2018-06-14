@@ -1,3 +1,11 @@
+/*
+ * [ChestTile.java];
+ * 
+ * These include safes and chests to open
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
 //Imports
 /////////////////////
 import java.awt.Color;
