@@ -85,11 +85,7 @@ class Main{
         Color DARK_BROWN = new Color(168,107,23);
         Color BURGANDY = new Color(160, 27, 33);
         if (charMap[i][j] == 'J'){ //
-<<<<<<< HEAD
-          map[i][j]= new FloorTile(DARK_BROWN, "../res/CrackedTile", "cracked tile");
-=======
           map[i][j]= new FloorTile(Color.GREEN, "../res/CrackedTile", "room floor");
->>>>>>> 273a3e3bd16bd249f75a572edb0cb873f1043c2d
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor

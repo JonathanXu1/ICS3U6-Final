@@ -21,13 +21,18 @@ class MenuBGPanel extends JPanel{
   private Image station1 = Toolkit.getDefaultToolkit().getImage("../res/Station1.png");
   private Image station2 = Toolkit.getDefaultToolkit().getImage("../res/Station2.png");
   private Image ship1 = Toolkit.getDefaultToolkit().getImage("../res/Ship1.png");
+  private Image ship2 = Toolkit.getDefaultToolkit().getImage("../res/Ship2.png");
   private Star[][] stars = new Star[100][200];
   private int count = 0;
   private int stationState = 1;
   private int ship1X, ship1Y, ship1Wait;
+  private int ship2X, ship2Y, ship2Wait;
   private int ship1Count = 0;
+  private int ship2Count = 0;
   private boolean ship1Drawn = false;
+  private boolean ship2Drawn = false;
   private boolean ship1FirstDrawn = false;
+  private boolean ship2FirstDrawn = false;
   
   Random rand = new Random();
   
@@ -42,7 +47,8 @@ class MenuBGPanel extends JPanel{
     pixelX = xVal/200;
     pixelY = yVal/100;
     
-    ship1Wait = rand.nextInt(1000) + 300; //1 to 5 seconds
+    ship1Wait = rand.nextInt(500) + 300; //1 to 5 seconds
+    ship2Wait = rand.nextInt(500) + 300; //1 to 5 seconds
     
     ActionListener drawStars = new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
@@ -103,7 +109,7 @@ class MenuBGPanel extends JPanel{
       ship1Y = rand.nextInt(500) + 50 ; //50 to 550
       ship1Drawn = true;
       if(!ship1FirstDrawn){
-        ship1X = rand.nextInt(xVal/2 + 500);
+        ship1X = rand.nextInt(xVal/2) + 800;
         ship1FirstDrawn = true;
       } else {
         ship1X = xVal;
@@ -111,7 +117,7 @@ class MenuBGPanel extends JPanel{
     }
     if(ship1Drawn && ship1X+(int)(16*pixelX)<= 1){
       ship1Drawn = false;
-      ship1Wait = rand.nextInt(1000) + 300;
+      ship1Wait = rand.nextInt(500) + 300;
       ship1Count = 0;
     } else if (ship1Drawn){
       ship1X --;
@@ -126,6 +132,26 @@ class MenuBGPanel extends JPanel{
       g.drawImage(station2,0,0,xVal,yVal,this);
     }
     
+    //Draws Ship2
+    ship2Count ++;
+    if(!(ship2Drawn) && (ship2Count >= ship2Wait) || (!ship2FirstDrawn) ){
+      ship2Y = rand.nextInt(yVal - 300) + 50 ; //50 to 550
+      ship2Drawn = true;
+      if(!ship2FirstDrawn){
+        ship2X = rand.nextInt(300);
+        ship2FirstDrawn = true;
+      } else {
+        ship2X = xVal;
+      }
+    }
+    if(ship2Drawn && ship2X+(int)(25*pixelX)<= 1){
+      ship2Drawn = false;
+      ship2Wait = rand.nextInt(500) + 300;
+      ship2Count = 0;
+    } else if (ship2Drawn){
+      ship2X -= 2;
+      g.drawImage(ship2,ship2X,ship2Y,(int)(25*pixelX),(int)(8*pixelY),this);
+    }
   }
   public void refresh(){
     this.repaint();
