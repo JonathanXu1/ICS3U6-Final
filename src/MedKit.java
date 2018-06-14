@@ -1,3 +1,13 @@
+/*
+ * [Med Kit.java];
+ * 
+ * The specific class for the consumable item that restores 
+ * the players health
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;

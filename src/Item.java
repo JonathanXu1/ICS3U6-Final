@@ -1,3 +1,14 @@
+/*
+ * [Item.java];
+ * 
+ * One of the largest and most important superclasses, that encomapsses all items in the game. it is abstract and used to
+ * allow polymorphism in various item arrays such as the map and inventory
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
+
 /////////////////////
 import java.awt.Graphics;
 /////////////////////

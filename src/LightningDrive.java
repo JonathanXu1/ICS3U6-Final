@@ -1,3 +1,13 @@
+/*
+ * [LightningDrive.java];
+ * 
+ * The specific class for the consumable drive that can grant weapons a chance of inflicting lignting (paralysis effect) 
+ * or gives armor resistance to it
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;

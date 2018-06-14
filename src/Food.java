@@ -1,3 +1,13 @@
+/*
+ * [Food.java];
+ * 
+ * The consumable item that restores the players hunger to prevent starvation damage, and restores some health
+ * by itself.
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;

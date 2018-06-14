@@ -1,3 +1,14 @@
+/*
+ * [FreezeDrive.java];
+ * 
+ * The specific class for the consumable drive that can grant weapons a chance of inflicting freeze (armor reduction) 
+ * or gives armor resistance to it
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
+
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
