@@ -1,4 +1,5 @@
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Color;
@@ -8,6 +9,9 @@ class SettingsPanel extends JPanel{
   private boolean soundfx = false;
   private int xVal, yVal;
   private CustomCheckButton musicButton = new CustomCheckButton();
+  private CustomCheckButton soundFxButton = new CustomCheckButton();
+  private JLabel musicLabel = new JLabel("Music");
+  private JLabel soundFxLabel = new JLabel("SoundFx");
   //Constructor
   SettingsPanel(int xVal, int yVal){
     this.setFocusable(true);
@@ -17,9 +21,15 @@ class SettingsPanel extends JPanel{
     this.setPreferredSize(panelSize);
     this.setLayout(null);
     
-    musicButton.setBounds(xVal/2- 100, yVal/2, 200, 200);
+    musicButton.setBounds(xVal/2 - 100, yVal/2, 100, 50);
+    musicButton.add(musicLabel);
     this.add(musicButton);
     musicButton.setVisible(true);
+    
+    soundFxButton.setBounds(xVal/2, yVal/2, 100, 50);
+    soundFxButton.add(soundFxLabel);
+    this.add(soundFxButton);
+    soundFxButton.setVisible(true);
   }
   
   @Override
@@ -29,9 +39,20 @@ class SettingsPanel extends JPanel{
   }
   
   public boolean[] getSoundSettings(){
+    if(musicButton.isSelected()){
+      music = true;
+    } else{
+      music = false;
+    }
+    if(soundFxButton.isSelected()){
+      soundfx = true;
+    } else{
+      soundfx = false;
+    }
+    
     boolean[] result = new boolean[2];
-    result[1] = music;
-    result[2] = soundfx;
+    result[0] = music;
+    result[1] = soundfx;
     return result;
   }
 }
