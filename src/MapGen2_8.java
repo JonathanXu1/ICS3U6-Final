@@ -471,7 +471,11 @@ class MapGen2_8{
           map[i*6][j*6] = 102; // center is flagged as a chest          
         }
         
-        else if (map[i*6][j*6] == 200) {
+        else if (map[i*6][j*6] == 200) { // reactor room
+          
+          // since the room is much more complicated, an int template is made to simply overwrite 
+          // the previously generated blank slate
+          
           int[][] template = 
           {
             {-201,-201,-201,-201,-201,-201,-201,-201,-201},
@@ -486,12 +490,14 @@ class MapGen2_8{
           };
           
           
+          // template overwrites stuff on map
           for (int i2 = -4; i2 < 5; i2++) {
             for (int j2 = -4; j2 < 5; j2++) {
               map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 4];
             }
           } 
           
+          // generates walkways in the directions that the room can be entered in
           if (map[i*6][j*6 + 5] != 3) {
             map[i*6][j*6 + 4] = -202;
             map[i*6][j*6 + 3] = -202;
@@ -509,6 +515,7 @@ class MapGen2_8{
             map[i*6 - 3][j*6] = -203;
           }
           
+          // generates special reactor room walls
           for (int i2 = -5; i2 < 6; i2++) {
             for (int j2 = -5; j2 < 6; j2++) {
               if (map[i*6 + i2][j*6 + j2] == -201) {
@@ -524,15 +531,16 @@ class MapGen2_8{
           }                    
         }
         
-        else if (map[i*6][j*6] == 300) {
+        else if (map[i*6][j*6] == 300) { // Chemical lab
           
+          // spawns custom chemical lab floor
           for (int i2 = -2; i2 < 3; i2++) {
             for (int j2 = -4; j2 < 5; j2++) {
               map[i*6 + i2][j*6 + j2] = -301;
             }
           }                              
           
-          
+          // template is made
           int[][] template = 
           {
             { 303, 303, 303, 303,-301, 303, 303, 303, 303},
@@ -542,12 +550,14 @@ class MapGen2_8{
             { 303, 303, 303, 303,-301, 303, 303, 303, 303},
           };
           
+          // template overwrites map
           for (int i2 = -2; i2 < 3; i2++) {
             for (int j2 = -4; j2 < 5; j2++) {
               map[i*6 + i2][j*6 + j2] = template[i2 + 2][j2 + 4];
             }
           } 
           
+          // chances for side benches to spawn stuff on them 
           for (int j2 = -4; j2 < 5; j2++) {
             if (randomRoll(200)) {
               map[i*6 - 2][j*6 + j2] = 304; // notes
@@ -563,6 +573,7 @@ class MapGen2_8{
             }
           }
           
+          // chances for center table to spawn extra stuff
           for (int j2 = -3; j2 < 4; j2++) {
             if (randomRoll(200)) {
               map[i*6][j*6 + j2] = 306; // chemicals
@@ -572,10 +583,11 @@ class MapGen2_8{
             }
           }
           
+          // sides are cleared so that entries from the sides are possible
           map[i*6 - 2][j*6] = -301;
           map[i*6 + 2][j*6] = -301;
           
-        } else if (map[i*6][j*6] == 400) {
+        } else if (map[i*6][j*6] == 400) { // biological breakout room
          
           int[][] template = 
           {
@@ -589,32 +601,34 @@ class MapGen2_8{
             {-401,-401,-401,-401,-401,-401,-401},
             {-401,-401,-401,-401,-401,-401,-401},
           };
-          
+                    
           for (int i2 = -4; i2 < 5; i2++) {
             for (int j2 = -3; j2 < 4; j2++) {
               map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 3];
             }
           } 
           
-          for (int cust = 2; cust < 8; cust = cust + 2) {
+          // chance for vats to be broken
+          for (int i2 = 2; i2 < 8; i2 = i2 + 2) {
             if (randomRoll(300)) {
-              map[i*6 - 4 + cust][j*6 - 2] = 403;
+              map[i*6 - 4 + i2][j*6 - 2] = 403;
             }
 
           }   
           
+          // chance for floor to have blood or hands
           for (int i2 = -4; i2 < 5; i2++) {
             for (int j2 = -1; j2 < 2; j2++) {
               if (randomRoll(100)) {
-                map[i*6 + i2][j*6 + j2] = -402;
+                map[i*6 + i2][j*6 + j2] = -402; //blood
               } 
               if (randomRoll(100)) {
-                map[i*6 + i2][j*6 + j2] = -403; 
+                map[i*6 + i2][j*6 + j2] = -403; //hands
               }
             }
           }
         
-        } else if (map[i*6][j*6] == 500){
+        } else if (map[i*6][j*6] == 500){ // crew's quarters
           int[][] template = {
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
             {-501, 502,-501, 502,-501, 502,-501, 502,-501},
@@ -627,21 +641,23 @@ class MapGen2_8{
             {-501,-501,-501,-501,-501,-501,-501,-501,-501},
           };          
           
+          // chance for floor to have other stuff on it.
           for (int i2 = -4; i2 < 5; i2++) {
             for (int j2 = -4; j2 < 5; j2++) {
               map[i*6 + i2][j*6 + j2] = template[i2 + 4][j2 + 4];
               
               if (template[i2 + 4][j2 + 4] == -501) {
                 if (randomRoll(50)) {
-                  map[i*6 + i2][j*6 + j2] = -504;
+                  map[i*6 + i2][j*6 + j2] = -504; // shirt
                 }
                 if (randomRoll(50)) {
-                  map[i*6 + i2][j*6 + j2] = -505;
+                  map[i*6 + i2][j*6 + j2] = -505; // chess?
                 }
               }
             }
           }          
-        } else if (map[i*6][j*6] == 600){
+          
+        } else if (map[i*6][j*6] == 600){ // Captain's quarters
           int[][] template =   {
             {-601, 602,-601,-601,-601,-601, 604},
             {-601, 603,-601,-601,-601,-601, 605},
@@ -669,6 +685,7 @@ class MapGen2_8{
     }
   }
   
+  // Spawns random stuff on the map 
   public void spawnDebris() {
     int numDebris = 0;
     int randD,randR;
@@ -745,6 +762,7 @@ class MapGen2_8{
     return map;             
   }
   
+  // removes the border from the map since the border is no longer needed
   public void trimMap() {
     int[][] trimmedArray = new int[map.length - 10][map[0].length - 10];
     
@@ -758,7 +776,7 @@ class MapGen2_8{
   }    
   
   
-  
+  // creates the boss room, returning a char array
   public char[][] createBossRoom() {
     char[][] returnArray = new char[75][75];
     
@@ -817,6 +835,7 @@ class MapGen2_8{
     return returnArray;                
   }
   
+  // converts the integers to characheters for ease of testing and further use
   public char[][] charMap(int[][] result) {
     char[][] resultProc = new char[result.length][result[0].length];
     for (int i = 0; i < result.length; i++) {
@@ -848,8 +867,6 @@ class MapGen2_8{
           resultProc[i][j] = 'n';
         } else if (result[i][j] == 303) { // lab table
           resultProc[i][j] = 't';
-        } else if (result[i][j] == 208) { // reactor stabilzer North
-          resultProc[i][j] = '5';
         } else if (result[i][j] == 209) { // reactor stabilzer North-East
           resultProc[i][j] = '6';
         } else if (result[i][j] == 210) { // reactor stabilzer East
@@ -947,6 +964,7 @@ class MapGen2_8{
     return resultProc;
   }
   
+  // for visualizing the map on console
   public static void visMap2(char[][] map) {
     for (int i = 0; i < map.length; i++) {
       for (int j = 0; j < map[0].length; j++) {
@@ -956,7 +974,7 @@ class MapGen2_8{
     }
   }
   
-  public static void main(String[] args) {
+  public static void main(String[] args) { // test/demo code (try running)
     MapGen2_8 tester = new MapGen2_8();
     visMap2(tester.charMap(tester.generateMap(24,6))); // width-depth generates a map of integers
     //tester.generateMap(24,6);

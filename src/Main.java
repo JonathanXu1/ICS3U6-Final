@@ -31,7 +31,7 @@ class Main{
     //Converts the map into a tile map
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
     GameSaver gameSaver=  new GameSaver();
-    map= charMapConversion(charMap, map);
+    map = charMapConversion(charMap, map);
     
     //   output.close();
     //Plays music
@@ -61,7 +61,7 @@ class Main{
         disp.getListen();
         if (disp.getNewMap()){
           charMap = gen.charMap(gen.generateMap(12,12));
-          map= charMapConversion(charMap, map);
+          map = charMapConversion(charMap, map);
           disp.setMap(map);
           disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
           disp.setGameMap ();
@@ -83,6 +83,7 @@ class Main{
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
         Color BURGANDY = new Color(160, 27, 33);
+        
         if (charMap[i][j] == 'J'){ //
           map[i][j]= new FloorTile(Color.GREEN, "../res/CrackedTile", "room floor");
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe

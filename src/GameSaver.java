@@ -50,13 +50,20 @@ public class GameSaver {
       for (int j = 0; j < entityMap[0].length; j++) {
         if (entityMap[i][j] instanceof Entity) {
           type = -1;
-          if (entityMap[i][j] instanceof Enemy) {
+          if (entityMap[i][j] instanceof Brute) {
             type = 1;            
           } else if (entityMap[i][j] instanceof Character) {
             type = 0;
             playerHunger = ((Character)entityMap[i][j]).getHunger();
             playerXP = ((Character)entityMap[i][j]).getXp();
-          } 
+          } else if (entityMap[i][j] instanceof FlameRoomba) {
+            type = 2;
+          } else if (entityMap[i][j] instanceof LightningRoomba) {
+            type = 3;
+          } else if (entityMap[i][j] instanceof FreezeRoomba) {
+            type = 4;
+          }
+            
           recHealth = entityMap[i][j].getHealth();
           states[0] = entityMap[i][j].getFlame();
           states[1] = entityMap[i][j].getFreeze();
@@ -209,9 +216,18 @@ public class GameSaver {
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
-      if (type == 1) {
-        Brute loadedBrute = new Brute(recHealth,100,100,1,false,false,false,Color.PINK,false);
-        loadedEntityMap[yCoord][xCoord] = loadedBrute;
+      if (type == 4) {
+        FreezeRoomba loadedEntity= new FreezeRoomba(recHealth,100,100,1,false,false,false,Color.PINK,false);
+        loadedEntityMap[yCoord][xCoord] = loadedEntity;
+      } else if (type == 3) {
+        LightningRoomba loadedEntity= new LightningRoomba(recHealth,100,100,1,false,false,false,Color.PINK,false);
+        loadedEntityMap[yCoord][xCoord] = loadedEntity;
+      } else if (type == 2) {
+        FlameRoomba loadedEntity= new FlameRoomba(recHealth,100,100,1,false,false,false,Color.PINK,false);
+        loadedEntityMap[yCoord][xCoord] = loadedEntity;
+      } else if (type == 1) {
+        Brute loadedEntity = new Brute(recHealth,100,100,1,false,false,false,Color.PINK,false);
+        loadedEntityMap[yCoord][xCoord] = loadedEntity;
       } else if (type == 0){
         playerX = xCoord;
         playerY = yCoord;
