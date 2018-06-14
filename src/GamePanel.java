@@ -363,6 +363,7 @@ class GamePanel extends JPanel{
           }
           reversePixelToArray(mouseListener.getMouseXy(), false);
           if ((entityMap[playerFinishingY][playerFinishingX] instanceof Character)&&(tileSelectedArray[0]==playerFinishingX)&&(tileSelectedArray[1]==playerFinishingY)){
+            bg.setOnTile();
             if (bg.getOnTile()){
               anotherMap=true;
               keyListener.setToZero();
