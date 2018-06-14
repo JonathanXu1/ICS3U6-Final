@@ -20,14 +20,14 @@
 
 
 class MapGen2_8{
-  // Generates a random true/false depending on the percentage entered as argument, out of 1000
-  private int[][] map;
-  private boolean capQPlaced;
+  private int[][] map; // the map that the generator works to create
+  private boolean capQPlaced; // A boolean to ensure that the captain's quarters has only been placed once
   
   MapGen2_8() {
-    boolean capQPlaced = false; 
+    boolean capQPlaced = false; //At the start, the cpatin's quarters is set to false
   }
   
+    // Generates a random true/false depending on the percentage entered as argument, out of 1000
   public static boolean randomRoll(int chance) {
     if (Math.random()*1000 < chance) {
       return true;
@@ -259,15 +259,6 @@ class MapGen2_8{
     }
     
     if (numOpt > 1) { // If there is more than one option, the dead end is removed alredy and a base case is hit
-      /*
-       for (int i = 0; i < map.length; i++) {
-       for (int j = 0; j < map[0].length; j++) {
-       if (map[i][j] == 3) {
-       map[i][j] = 1;
-       }
-       }
-       } 
-       */
     } else { // Otherwise, the current square is blotted out and the recursion moves onto the next square
       // The next step is set above, and we know it was only set once
       map[dPos][rPos] = 1;
@@ -316,8 +307,7 @@ class MapGen2_8{
   }
   
   // Takes in a map, coordinates, and a target tile type
-  // determines if the coordinates are fully surrounded by the target tile, and returns a boolean
-  
+  // determines how many adjacent tiles surround the target tile (4 adjacent tiles), and returns a int 
   public static int adjMatrixFlower(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     
@@ -337,6 +327,8 @@ class MapGen2_8{
     return numAdj;
   }
   
+  // Takes in a map, coordinates, and a target tile type
+  // determines how many adjacent tiles surround the target tile (9 adjacent tiles + target itself), and returns a int 
   public static int adjMatrixSquare(int[][] map, int target, int dPos, int rPos) {
     int numAdj = 0;
     for (int i = -1; i < 2; i++) {
@@ -369,12 +361,13 @@ class MapGen2_8{
     map[randD*6][randR*6] = -4;
   }
   
+  // Designates the walls of the map into the appropriata types
   public void designateWalls() {
     int numAdj;        
     
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
-        if (map[i][j] == 0) {
+        if (map[i][j] == 0) { // if a tile is a hallway, and one of the 9 adjacent tiles is a void, that tiles becomes a hallway wall
           for (int i2 = -1; i2 < 2; i2++) {
             for (int j2  = -1; j2 < 2; j2++) {
               if (map[i + i2][j + j2] == 1) {
@@ -388,7 +381,7 @@ class MapGen2_8{
     
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
-        if (map[i][j] == -1) {
+        if (map[i][j] == -1) { //if a tile is a room tile, and one of the 9 adjacent tiles is a void, that tiles becomes a room wall
           for (int i2 = -1; i2 < 2; i2++) {
             for (int j2  = -1; j2 < 2; j2++) {
               if (map[i + i2][j + j2] == 1 || map[i + i2][j + j2] == 2) {
@@ -401,7 +394,7 @@ class MapGen2_8{
     }
   }
   
-  public void removeDudRooms() {
+  public void removeDudRooms() { // removes singular room tiles that pop up as a result of generation
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
         
@@ -412,10 +405,11 @@ class MapGen2_8{
     }   
   }
   
-  public void finalizeDesignations() {
+  public void finalizeDesignations() { // adds extra designations such as removing double doors and adding airlocks
     for (int i = 5; i < map.length - 5; i++) {
       for (int j = 5; j < map[0].length - 5; j++) {
-        if (map[i][j] == -1) {
+        if (map[i][j] == -1) { // if there is a single-tile gap between rooms and there is no door there,
+                               // a door is placed
           if (map[i + 1][j] == -1 && map[i - 1][j] == -1 && map[i][j + 1] > 0 && map[i][j - 1] > 0) {
             map[i][j] = -2;
           } 
@@ -425,53 +419,56 @@ class MapGen2_8{
         }         
         
         if (adjMatrixFlower(map,-2,i,j) == 1 && map[i][j] == -2) {
-          map[i][j] = -1;
+          map[i][j] = -1; // if there is a door that is near another door, it is removed.
         }
         
         if (adjMatrixFlower(map,-1,i,j) == 0 && map[i][j] == -1) {
-          map[i][j] = 0;
+          map[i][j] = 0; // if there is zero adjacent room tiles to a room tile, that tile is designated a hallway
         }
         
         if (map[i][j] == 0) {
           if (adjMatrixFlower(map,-2,i,j) == 2 && adjMatrixFlower(map,0,i,j) == 0) {
-            map[i][j] = -5;
+            map[i][j] = -5; // Style designation: if there are two doors and one piece of hallway in the middle,
+                            // that gets marked as an airlock
           }    
         }
       }      
     }
   }
   
-  public void spawnChests() {
-    int randD,randR;                    
-    int wallChests = 0;
+  public void spawnChests() { // spawsn safes in the walls of the map that are acessible
+    int randD,randR;  // for generating random numbers                  
+    int wallChests = 0; // to track how many chests have been placed
     
     do {
-      randD = getRand(2,(map.length-3));
+      randD = getRand(2,(map.length-3)); // random place on map is picked
       randR = getRand(2,(map[0].length-3));
       
-      if (map[randD][randR] == 3) {
+      if (map[randD][randR] == 3) { // if there are exactly three wall tiles, three void tiles, and three room tiles, the places is acessible
+                                    // and a chest is placed there
         if (adjMatrixSquare(map,3,randD,randR) == 3 && adjMatrixSquare(map,1,randD,randR) == 3 && adjMatrixSquare(map,-1,randD,randR) == 3) {
           map[randD][randR] = 5;
           wallChests++;
         }
       }
-    } while (wallChests < 8);
+    } while (wallChests < 8); // loop runs until a quota has been met
   }
   
+  // In previously chosen places, implement the custom designs of the custom made rooms  
   public void furnishRooms() {    
     for (int i = 1; i < (map.length-3)/6; i++) {
       for (int j = 1; j < (map[0].length - 3)/6; j++) {
         
-        if (map[i*6][j*6] == 100) {
+        if (map[i*6][j*6] == 100) { // chest room
           
+          // size is pre-set for room type
           for (int i2 = -3; i2 < 4; i2++) {
             for (int j2 = -3; j2 < 4; j2++) {
-              map[i*6 + i2][j*6 + j2] = -101;
+              map[i*6 + i2][j*6 + j2] = -101; // chest room floor
             }
           }
           
-          map[i*6][j*6] = 102;
-          
+          map[i*6][j*6] = 102; // center is flagged as a chest          
         }
         
         else if (map[i*6][j*6] == 200) {
@@ -688,6 +685,7 @@ class MapGen2_8{
       }     
     } while (numDebris < 10);
   }
+  
   // Main method that uses the the previously created methods in conjuction to generate a complete map
   public int[][] generateMap(int effMapSizeW, int effMapSizeD) {   
     int mapSizeW = (effMapSizeW-1)*6 + 3; // Initalizes map size
@@ -888,7 +886,8 @@ class MapGen2_8{
           resultProc[i][j] = 'X';        
           if (randomRoll(2)) {
             resultProc[i][j] = '+';
-          }                    
+          }
+                    
         } else if (result[i][j] == -2) { // door
           resultProc[i][j] = 'D';
         } else if (result[i][j] == -1) { // room tile
