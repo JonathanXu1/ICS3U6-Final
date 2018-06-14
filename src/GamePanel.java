@@ -215,18 +215,18 @@ class GamePanel extends JPanel{
       //Checks for which entities are killed again so that dead entities cannot kill the player
       checkKilled(0,0);
       if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
-      //Draws the items
-      drawItems (g);
-      //Draws the entities
-      drawAllEntity (g);
-      //Draw the health and exp
-      drawBars(g);
-      //Draw the game components
-      drawGameComponents(g);
-      //Draws the minimap
-      drawMinimap(g);
-      //Draw inventory
-      drawInventory(g);
+        //Draws the items
+        drawItems (g);
+        //Draws the entities
+        drawAllEntity (g);
+        //Draw the health and exp
+        drawBars(g);
+        //Draw the game components
+        drawGameComponents(g);
+        //Draws the minimap
+        drawMinimap(g);
+        //Draw inventory
+        drawInventory(g);
       }
       //Draw the debugPanel
       if (keyListener.getDebugState()){

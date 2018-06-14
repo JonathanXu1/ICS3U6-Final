@@ -76,6 +76,7 @@ class Main{
             map= charMapConversion(charMap, map);
             disp.setMap(map);
             disp.setBossLocation(bossSpawnX,bossSpawnY);
+            disp.setBossCoords();
             disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
             disp.setGameMap ();
           }else{
@@ -135,8 +136,8 @@ class Main{
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
         }else if (charMap[i][j] == 'W'){//Enemy spawnpoint
           map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood");
-          bossSpawnX = i;
-          bossSpawnY = j;
+          bossSpawnX = j;
+          bossSpawnY = i;
         }else if (charMap[i][j] == 'V'){ //Ventillation
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Ventilation", "chest"); //Chest
         }
