@@ -17,7 +17,7 @@ class MenuBGPanel extends JPanel{
   private int xVal;
   private int yVal;
   private double pixelX, pixelY;
-  private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg2.png");
+  private Image bg = Toolkit.getDefaultToolkit().getImage("../res/Bg.png");
   private Image station1 = Toolkit.getDefaultToolkit().getImage("../res/Station1.png");
   private Image station2 = Toolkit.getDefaultToolkit().getImage("../res/Station2.png");
   private Image ship1 = Toolkit.getDefaultToolkit().getImage("../res/Ship1.png");
