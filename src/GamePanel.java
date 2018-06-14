@@ -118,7 +118,8 @@ class GamePanel extends JPanel{
   private int targetY=0;
   private int playerLevel =1;
   private boolean anotherMap =false;
-  
+  private int startingXMod;
+  private int startingYMod;
   //Attacking
   private int [] tileSelectedArray = new int [2];  
   private boolean meleeSelected  = true;
@@ -127,6 +128,10 @@ class GamePanel extends JPanel{
   private boolean weaponState = true;
   private boolean attacked;
   private int floorLevel =0;
+  private int yStartMod=0;
+  private int xStartMod=0;
+  private int loadingCount;
+  private boolean loading;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -173,6 +178,14 @@ class GamePanel extends JPanel{
     //Checks for which entities are killed, including the player
     checkKilled(0,0);
     if (!gameOver) {
+      //Draw map (background)
+      drawMap(g);
+      if (!(loading)){
+        if ((collided)){
+          updateListeners();
+          determineTiling(); 
+        }
+      }
       if (!(mouseListener.getPressed())){
         alternateState = true;
         weaponState = true;
@@ -185,12 +198,6 @@ class GamePanel extends JPanel{
       refreshStats();
       //Checks broken gear
       checkBroken();
-      //Draw map (background)
-      drawMap(g);
-      if ((collided)){
-        updateListeners();
-        determineTiling(); 
-      }
       //Draws bullet sprites
       if (!(meleeSelected)){
         drawBullets (g, playerFireController);
@@ -218,6 +225,15 @@ class GamePanel extends JPanel{
       this.setVisible(true);
     }else{
       System.out.println("You suck!");    
+    }
+    if (loadingCount>=1){
+      g.setColor(new Color(0,0,0,(int)(255.0*((double)loadingCount/250.0))));
+      g.fillRect(0,0,maxX,maxY);
+      loadingCount--;
+      keyListener.setToZero();
+    }else if(loadingCount==0){
+      keyListener.setToZero();
+      loading = false;
     }
   }
   //End of methods that are inherited from JPanel
@@ -296,12 +312,14 @@ class GamePanel extends JPanel{
     g.drawImage(hotbar,maxX/2-350,maxY-188,700,188,this);
     g.setColor(Color.WHITE);
     g.setFont (new Font("Consolas", Font.PLAIN, 12));
-    g.drawString("LEVEL:"+playerLevel, maxX/2-350+21, maxY-145);
+    g.drawString("PLAYER LEVEL:"+playerLevel, maxX/2-329, maxY-145);
+    g.drawString("EXP:"+((Character)entityMap[playerCurrentY][playerCurrentX]).getXp()+"/"+((Character)entityMap[playerCurrentY][playerCurrentX]).getXpCap(), maxX/2-329, maxY-160);
     //Put in exp
     if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
-      g.drawString("HEALTH:"+entityMap[playerCurrentY][playerCurrentX].getHealth()+"/"+entityMap[playerCurrentY][playerCurrentX].getHealthCap(), maxX/2-350+21, maxY-160);     
-      g.drawString("HUNGER:"+((Character)(entityMap[playerCurrentY][playerCurrentX])).getHunger()+"/200", maxX/2, maxY-145);
-      g.drawString("DEFENSE:"+entityMap[playerCurrentY][playerCurrentX].getArmor(), maxX/2, maxY-160);
+      g.drawString("HEALTH:"+entityMap[playerCurrentY][playerCurrentX].getHealth()+"/"+entityMap[playerCurrentY][playerCurrentX].getHealthCap(), maxX/2-60, maxY-145);     
+      g.drawString("DEFENSE:"+entityMap[playerCurrentY][playerCurrentX].getArmor(), maxX/2-60, maxY-160);
+      g.drawString("HUNGER:"+((Character)(entityMap[playerCurrentY][playerCurrentX])).getHunger()+"/200", maxX/2+200, maxY-145);
+      g.drawString("FLOOR LEVEL:"+(floorLevel+1), maxX/2+200, maxY-160);
     }
     //Hp and exp bars
     g.drawImage(hp,10,10, (int)(maxX*0.2),  (int)(maxX*0.2/200.0*14.0),this);
@@ -949,6 +967,10 @@ class GamePanel extends JPanel{
   }
   public void createMap(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     Entity tempCharacter = entityMap[this.playerCurrentY][this.playerCurrentX];
+    bg.setX(0);
+    bg.setY(0);
+    bg.setXDirection(0);
+    bg.setYDirection(0);
     this.map = map;
     for (int i =0;i<map.length;i++){
       for(int j =0;j<map[0].length;j++){
@@ -956,6 +978,7 @@ class GamePanel extends JPanel{
         itemMap[i][j]= null;
       }
     }
+    floorLevel++;
     this.playerStartingX = playerStartingX;
     this.playerStartingY =playerStartingY;
     this.playerCurrentX = playerStartingX;
@@ -964,6 +987,8 @@ class GamePanel extends JPanel{
     this.playerFinishingY =playerFinishingY;
     entityMap[playerStartingY][playerStartingX] = tempCharacter;
     spawnItems();
+    loading= true;
+    loadingCount=250;
   }
   
   //Getters and setters
