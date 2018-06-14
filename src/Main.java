@@ -93,11 +93,7 @@ class Main{
         disp.setFps(time.getFrame());
         time.setFrame(0);
       }
-      /*
-       if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
-       clip.close();
-       }
-       */
+
       //Plays music
       if(disp.getSettings()[0] == 1){ //No music
         for (int i = 0; i < audioClips.length; i ++){

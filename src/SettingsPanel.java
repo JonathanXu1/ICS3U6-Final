@@ -1,3 +1,4 @@
+/////////////////////
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Graphics;
@@ -11,7 +12,7 @@ import java.awt.FontFormatException;
 import java.io.IOException;
 import java.awt.Color;
 import java.awt.GridLayout;
-
+/////////////////////
 class SettingsPanel extends JPanel{
   private int xVal, yVal;
   /*
