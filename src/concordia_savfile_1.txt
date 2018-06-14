@@ -71,18 +71,18 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %entity save:
 69 69
-0,100,false,false,false49,22
+0 0 100 false false false 49 22
 %player values
 192 0
 %item mapping save:
 69 69
-Solar Scorcher,1,3 42,50,50,20
-Kinetic Mace,1,10 47,50,50,15
-Plasma Rifle,1,12 55,50,50,10
-Gamma Hammer,1,16 42,50,50,20
-Gamma Hammer,1,37 64,50,50,20
-Laser Pistol,1,38 33,50,50,5
-Assault Vest,0,48 18,50,50
-Plasma Rifle,1,51 20,50,50,10
-Energy Suit,0,64 15,50,50
+0 1 3 42 50 50 20 [Solar Scorcher 
+0 1 10 47 50 50 15 [Kinetic Mace
+0 1 12 55 50 50 10 [Plasma Rifle
+0 1 16 42 50 50 20 [Gamma Hammer
+0 1 37 64 50 50 20 [Gamma Hammer
+0 1 38 33 50 50 5 [Laser Pistol 
+0 0 48 18 50 50 [Assault Vest
+0 1 51 20 50 50 10 [Plasma Rifle
+0 0 64 15 50 50 [Energy Suit
 %inventory save:

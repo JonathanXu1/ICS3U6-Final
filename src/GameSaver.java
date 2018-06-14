@@ -8,7 +8,7 @@ public class GameSaver {
   //private String tester;
   
   GameSaver() throws Exception{
-    Scanner calibrator = new Scanner(new File("SaveCalibrator.txt"));
+    Scanner calibrator = new Scanner(new File("SaveCalibrator.txt")); // Sets the fileCode to make sure it doesn't overwrite other saves
     //this.tester = calibrator.nextLine();
     this.fileCode = calibrator.nextInt();
     //System.out.println(tester);
@@ -71,10 +71,10 @@ public class GameSaver {
           yCoord = i;
           xCoord = j;                                    
           
-          writer.print(type + ",");
-          writer.print(recHealth + ",");
-          writer.print(states[0] + "," + states[1] + "," + states[2]);
-          writer.print(xCoord + "," + yCoord);   
+          writer.print(type + " ");
+          writer.print(recHealth + " ");
+          writer.print(states[0] + " " + states[1] + " " + states[2] + " ");
+          writer.print(xCoord + " " + yCoord);   
           writer.println("");
         }
       } 
@@ -97,7 +97,7 @@ public class GameSaver {
         if (itemMap[i][j] instanceof Item) {
           
           itemType = itemMap[i][j].getName();
-          writer.print(itemType + ",");
+          writer.print(itemType + "] ");
           
           if (itemMap[i][j] instanceof Equipment) {                                  
             durability = ((Equipment)itemMap[i][j]).getDurability();
@@ -109,12 +109,12 @@ public class GameSaver {
               writer.print(0);
             }
             
-            writer.print("," + i + " " + j  + ",");          
-            writer.print(durability + ",");          
+            writer.print(" " + i + " " + j  + " ");          
+            writer.print(durability + " ");          
             writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
             
             if (itemMap[i][j] instanceof Weapon) { 
-              writer.print("," + damage);
+              writer.print(" " + damage);
             }                              
             
             writer.println("");
@@ -134,7 +134,7 @@ public class GameSaver {
         if (itemMap[i][j] instanceof Item) {
           
           itemType = itemMap[i][j].getName();
-          writer.print(itemType + ",");
+          writer.print(itemType + " ");
           
           if (itemMap[i][j] instanceof Equipment) {                                  
             durability = ((Equipment)itemMap[i][j]).getDurability();
@@ -146,12 +146,12 @@ public class GameSaver {
               writer.print(0);
             }
             
-            writer.print("," + i + " " + j  + ",");          
-            writer.print(durability + ",");          
+            writer.print(" " + i + " " + j  + " ");          
+            writer.print(durability + " ");          
             writer.print(((Equipment)itemMap[i][j]).getDurabilityCap());
             
             if (itemMap[i][j] instanceof Weapon) { 
-              writer.print("," + damage);
+              writer.print(" " + damage);
             }                              
             
             writer.println("");
@@ -181,9 +181,13 @@ public class GameSaver {
     
     int sizeX, sizeY;
     
-    lineReader = reader.nextLine();    
+    lineReader = reader.nextLine();
+    //System.out.println(lineReader);
     sizeY = reader.nextInt();
     sizeX = reader.nextInt();
+    
+    //System.out.println(sizeY + " " + sizeX);
+    
     lineReader = reader.nextLine();    
     lineReader = reader.nextLine();  
     
@@ -196,23 +200,33 @@ public class GameSaver {
       lineReader = reader.nextLine(); 
     }
     
-    lineReader = reader.nextLine();    
+    
+    //lineReader = reader.nextLine();
+    //lineReader = reader.nextLine(); 
+    //System.out.println(lineReader);
     sizeY = reader.nextInt();
     sizeX = reader.nextInt();
     lineReader = reader.nextLine();    
-    lineReader = reader.nextLine();  
+    //lineReader = reader.nextLine();  
     
     loadedEntityMap = new Entity[sizeY][sizeX];
     int playerX, playerY;
     
     int type;
     int recHealth;
-    int xCoord;
-    int yCoord;
+    int xCoord = 0;
+    int yCoord = 0;
     
-    while (lineReader.charAt(0) != '%') {
+    boolean burn;
+    
+    //System.out.println(lineReader);
+    //System.out.println(reader.next());
+    while((reader.next().charAt(0)) != '%') {
       type = reader.nextInt();
       recHealth = reader.nextInt();
+      burn = reader.nextBoolean();
+      burn = reader.nextBoolean();
+      burn = reader.nextBoolean();
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
@@ -239,12 +253,17 @@ public class GameSaver {
       lineReader = reader.nextLine();
     }
     
-    lineReader = reader.nextLine();
+    //lineReader = reader.nextLine();
     
+    System.out.println(reader.next());
     loadedExtras[0] = reader.nextInt();
     loadedExtras[1] = reader.nextInt();
+    System.out.println(loadedExtras[0] + " " + loadedExtras[1]);
     
-    lineReader = reader.nextLine();    
+    
+    lineReader = reader.nextLine(); 
+    lineReader = reader.nextLine();
+    
     sizeY = reader.nextInt();
     sizeX = reader.nextInt();
     lineReader = reader.nextLine();    
@@ -257,15 +276,14 @@ public class GameSaver {
     int loadedDurCap = 0;
     int loadedDamage = 0;    
     
-    while (lineReader.charAt(0) != '%') {
-      int nameCapture = 0;
+    while ((reader.next().charAt(0)) != '%') {
+      int nameCapture = 0;      
       
-      do {
-        nameCapture++;
-      } while(lineReader.charAt(nameCapture) != ',');
+      System.out.println("yay");
+      System.out.println(" ir " + lineReader);            
       
-      loadedItemType = lineReader.substring(0,nameCapture);
       loadedType = reader.nextInt();             
+      
       
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
@@ -275,8 +293,17 @@ public class GameSaver {
         loadedDurCap = reader.nextInt();        
       }
       
-      if (loadedType == 1)  {    
+      if (loadedType == 1)  {  
+        //System.out.println(reader.next());
         loadedDamage = reader.nextInt();   
+        
+        lineReader = reader.nextLine();
+        nameCapture = lineReader.length();
+        do {
+          nameCapture--;
+        } while(lineReader.charAt(nameCapture) != '[');      
+        loadedItemType = lineReader.substring(nameCapture + 1,lineReader.length());
+        System.out.println(loadedItemType);
         
         if (loadedItemType.equals("Gamma Hammer")) {
           GammaHammer loadedItem = new GammaHammer(loadedDurability);
@@ -306,10 +333,20 @@ public class GameSaver {
           loadedItemMap[yCoord][xCoord] = loadedItem;
         }                        
         
+        System.out.println(loadedItemMap.length + " " + loadedItemMap[0].length);
         ((Weapon)loadedItemMap[yCoord][xCoord]).setDamage(loadedDamage);
         ((Weapon)loadedItemMap[yCoord][xCoord]).setDurabilityCap(loadedDurCap);
         
-      } else if (loadedType == 0) {        
+      } else if (loadedType == 0) { 
+        
+        
+        lineReader = reader.nextLine();
+        nameCapture = lineReader.length();
+        do {
+          nameCapture--;
+        } while(lineReader.charAt(nameCapture) != '[');      
+        loadedItemType = lineReader.substring(nameCapture + 1,lineReader.length());
+        
         
         if (loadedItemType.equals("Space Suit")) {
           SpaceSuit loadedItem = new SpaceSuit(loadedDurability);
@@ -326,9 +363,16 @@ public class GameSaver {
         } else if (loadedItemType.equals("Proximity Armor")) {
           ProximityArmor loadedItem = new ProximityArmor(loadedDurability);
           loadedItemMap[yCoord][xCoord] = loadedItem;
-        }
-        
+        }                
       } else if (loadedType == -1){
+        
+        lineReader = reader.nextLine();
+        nameCapture = lineReader.length();
+        do {
+          nameCapture--;
+        } while(lineReader.charAt(nameCapture) != '[');      
+        loadedItemType = lineReader.substring(nameCapture + 1,lineReader.length());
+                
         if (loadedItemType.equals("Med Kit")) {
           MedKit loadedItem = new MedKit();
           loadedItemMap[yCoord][xCoord] = loadedItem;
@@ -353,7 +397,7 @@ public class GameSaver {
         }
       }
       
-      lineReader = reader.nextLine();
+      //lineReader = reader.nextLine();
     }
     
     lineReader = reader.nextLine();    
@@ -369,11 +413,12 @@ public class GameSaver {
       
       do {
         nameCapture++;
-      } while(lineReader.charAt(nameCapture) != ',');
+      } while(lineReader.charAt(nameCapture) != ']');
       
       loadedItemType = lineReader.substring(0,nameCapture);
       loadedType = reader.nextInt();             
       
+      System.out.println(loadedItemType);
       xCoord = reader.nextInt();
       yCoord = reader.nextInt();
       
