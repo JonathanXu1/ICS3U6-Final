@@ -128,6 +128,8 @@ class Main{
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
         }else if (charMap[i][j] == 'C'){
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
+        }else if (charMap[i][j] == 'V'){ //Ventillation
+          map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Ventilation", "chest"); //Chest
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
