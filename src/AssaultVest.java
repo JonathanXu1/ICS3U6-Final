@@ -3,7 +3,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 class AssaultVest extends Armor {
-  Image assaultVest;
+  Image assaultVest; // Image for drawing graphics
+  
   AssaultVest(int dbty){
     super(dbty); // pass durability to Armor Superclass
     this.setRarity(2); // set rarity

@@ -140,6 +140,8 @@ class MapGen2_8{
       int randDReal = randD*6;
       int randRReal = randR*6;
       
+      // The actual rooms are carved out now, with a chance for custom or random rooms
+      
       if (!capQPlaced) {        // captain's quarters
         for (int i = -2; i < 3; i++){
           for (int j = -3; j < 4; j++) {
@@ -149,7 +151,7 @@ class MapGen2_8{
         
         capQPlaced = true;     
         
-        map[randDReal][randRReal] = 600;   
+        map[randDReal][randRReal] = 600;   // Custom room type tag is set, for later use by other methods
         
       } else if (randomRoll(150)) { // chest room
         for (int i = -3; i < 4; i++){

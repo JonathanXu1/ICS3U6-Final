@@ -8,7 +8,6 @@ class PulseRailgun extends RangedWeapon {
     super(dbty);
     this.setRarity(4);
     this.setDamage(15);
-    this.setSPT(1);
     this.setName("Pulse Railgun");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
