@@ -7,6 +7,7 @@ import javax.sound.sampled.*; //Wildcard
 ///Make it so that you click again to cancel the upgrade
 class Main{
   private static int playerStartingX=0, playerStartingY =0, playerFinishingX=0, playerFinishingY=0;
+  private static int bossSpawnX, bossSpawnY;
   //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
@@ -74,6 +75,7 @@ class Main{
             charMap=gen.createBossRoom();
             map= charMapConversion(charMap, map);
             disp.setMap(map);
+            disp.setBossLocation(bossSpawnX,bossSpawnY);
             disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
             disp.setGameMap ();
           }else{
@@ -128,6 +130,10 @@ class Main{
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
         }else if (charMap[i][j] == 'C'){
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
+        }else if (charMap[i][j] == 'W'){//Enemy spawnpoint
+          map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood");
+          bossSpawnX = i;
+          bossSpawnY = j;
         }
         //Biological Breakout
         else if (charMap[i][j] == 'B'){//BrokenSpecimen Container
@@ -139,7 +145,7 @@ class Main{
         } else if (charMap[i][j] == 'H'){//Blood
           map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood");
         }
-        //Lab
+          //Lab
         else if (charMap[i][j] == 't'){ //Lab table
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab", "lab");
         } else if (charMap[i][j] == 'm' ){ //Lab table w/ chemicals
@@ -214,10 +220,8 @@ class Main{
           map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop", "capq");
         } else if (charMap[i][j] == 'x') {
           map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom", "capq");
-        } else if (charMap[i][j] == '?') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorNotes", "capq");
-        } else if (charMap[i][j] == 'y') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorScratch", "capq");
+        } else if ((charMap[i][j] == '?')||(charMap[i][j] == 'y')){
+          map[i][j] = new FloorTile(Color.YELLOW, "../res/CaptainFloorNotes", "capq");
         }
         
         //Key points

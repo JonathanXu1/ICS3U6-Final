@@ -21,7 +21,7 @@ class Editor{
    *@return: void
    */
   public static void main (String[]args) throws Exception{
-    String [] fileNames = {"CustomButton.java","CustomKeyListener.java","DebugPanel.java","Display.java","DisplayTest.java","GamePanel.java","MenuBGPanel.java","MenuPanel.java","StartListener.java"};
+    String [] fileNames = {"Armor.java","AssualtVest.java","Background.java","Boss.java","Brute.java","Character.java","ChestTile.java","Clock.java","Consumable.java"};
     for (int i=0;i<fileNames.length;i++){
       String currentLine="";
       String previousLine;

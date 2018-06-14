@@ -41,7 +41,7 @@ class Display extends JFrame{
   private int fps = 0;
   //Game logic
   private Tile[][] map;
-  private int playerStartingX, playerStartingY, playerFinishingX,playerFinishingY;
+  private int playerStartingX, playerStartingY, playerFinishingX,playerFinishingY, bossX, bossY;
   private boolean newMap = false;
   //Fonts
   Font customTitle;
@@ -196,6 +196,10 @@ class Display extends JFrame{
     this.playerFinishingX = playerFinishingX;
     this.playerFinishingY = playerFinishingY;
   }
+  public void setBossLocation (int bossX, int bossY){
+    this.bossX = bossX;
+    this.bossY=bossY;
+  }
   public void closeAll(){
     gamePanel.setVisible (false);
     menuBgPanel.setVisible(false);
@@ -213,6 +217,9 @@ class Display extends JFrame{
   }
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
+  }
+  public void setBossCoords(){
+    gamePanel.setBoss(bossX,bossY);
   }
   public boolean[] getSoundSettings(){
     return settingsPanel.getSoundSettings();

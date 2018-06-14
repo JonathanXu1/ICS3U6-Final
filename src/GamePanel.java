@@ -86,6 +86,8 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   private boolean acceptableSpawn = false;
+  private int bossX;
+  private int bossY;
   
   // Fire control
   private int[] fireTarget;
@@ -1014,7 +1016,7 @@ class GamePanel extends JPanel{
     if (floorLevel!=4){
       spawnItems();
     }else{
-      //PLACE BOSS SPAWNING HERE
+      entityMap[bossY][bossX] = new Boss (100,100,50,1,false,false,false,Color.RED, true);
     }
   }
   
@@ -1254,9 +1256,13 @@ class GamePanel extends JPanel{
                   entityMap[i][j] =null;
                 } else {
                   tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
-                  int damage = 10;
+                  int damage;
+                  if (entityMap[i][j] instanceof Boss){
+                    damage= 25;
+                  }else{
+                    damage= 5+5*floorLevel;
+                  }
                   //Should increase by 7 every level
-                  //IMPORTANT: 10 IS A TEMPORARY DAMAGE VALUE, MUST MAKE A VARIABLE THAT CHANGES WITH THE LEVEL
                   int tempArmor=entityMap[playerCurrentY][playerCurrentX].getArmor();
                   if (entityMap[playerCurrentY][playerCurrentX].getFreeze()){
                     entityMap[playerCurrentY][playerCurrentX].setArmor(0);
@@ -1772,5 +1778,9 @@ class GamePanel extends JPanel{
   }
   public int getFloor(){
     return (floorLevel);
+  }
+  public void setBoss(int bossX, int bossY){
+    this.bossX = bossX;
+    this.bossY = bossY;
   }
 }
