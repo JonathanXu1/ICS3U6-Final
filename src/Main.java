@@ -24,7 +24,6 @@ class Main{
     Clip clip = (Clip) AudioSystem.getLine(info);
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
-    GameSaver gameSaver=  new GameSaver();
     //The Clock time keeps track of the fps
     Clock time = new Clock ();
     Tile [][] map = new Tile[1][1];

@@ -5,10 +5,10 @@ import java.awt.Color;
 class AssaultVest extends Armor {
   Image assaultVest;
   AssaultVest(int dbty){
-    super(dbty);
-    this.setRarity(2);
-    this.setDefense(10); 
-    this.setName("Assault Vest");
+    super(dbty); // pass durability to Armor Superclass
+    this.setRarity(2); // set rarity
+    this.setDefense(10); // set defense
+    this.setName("Assault Vest"); // set name
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     assaultVest = Toolkit.getDefaultToolkit().getImage("../res/AssaultVest.png");

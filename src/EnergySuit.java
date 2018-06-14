@@ -5,10 +5,10 @@ import java.awt.Color;
 class EnergySuit extends Armor {
   Image energySuit;
   EnergySuit(int dbty){
-    super(dbty);
-    this.setRarity(3);
-    this.setDefense(15); 
-    this.setName("Energy Suit");
+    super(dbty); // Pass durability to Armor superclass
+    this.setRarity(3); // Set rarity to 3
+    this.setDefense(15); // set defense to 15
+    this.setName("Energy Suit"); // set name 
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     energySuit = Toolkit.getDefaultToolkit().getImage("../res/EnergySuit.png");
