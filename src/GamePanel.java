@@ -25,6 +25,7 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
+  private int difficulty = 2;
   
   //Listeners
   private int [] mouseXy;
@@ -70,7 +71,7 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 40;
+  private int mobCap;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
@@ -124,12 +125,12 @@ class GamePanel extends JPanel{
   private int loadingCount;
   private boolean loading;
   //Sound effects
-  private String[] soundEffects = new String[2];
+  //private String[] soundEffects = new String[2];
   /*
   soundEffects[0] = "../res/Walk.wav";
   soundEffects[1] = "../res/Shoot.wav";
   */
-  private SoundPlayer shootSound;
+  //private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -157,12 +158,9 @@ class GamePanel extends JPanel{
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
     this.gameOver = false;
-    //Loads Sound Effects
-    /*
-    for (int i = 0; i < soundEffects; i++){
-      
-    }
-    */
+    //Sets mob cap based on settings
+    mobCap = 40;
+    System.out.println(mobCap);
   }
   
   //Methods that are inherited from JPanel
@@ -179,6 +177,14 @@ class GamePanel extends JPanel{
       playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
     
+    //Changes settings if changed
+    if(difficulty== 1){ //Easy
+      mobCap = 20;
+    } else if(difficulty == 2){ //Medium
+      mobCap = 40;
+    } else if(difficulty == 3){ //Hard
+      mobCap = 80;
+    }
     //Checks for which entities are killed, including the player
     checkKilled(0,0);
     if (!gameOver) {
@@ -1012,11 +1018,12 @@ class GamePanel extends JPanel{
   //Getters and setters
   //There is no getter for the following, as it only needs to be accessed from this class
   //Sets all the information for the debug panel
-  public void setDebugInfo(int fps, double totalMem, double memUsed){
+  public void setDebugInfo(int fps, double totalMem, double memUsed, int difficulty){
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
     memPercent = (memUsed/totalMem)*100;
+    this.difficulty = difficulty;
   }
   //Retrieves whether or not it is a new floor
   public boolean getNewFloor(){
@@ -1053,7 +1060,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)&&(floorLevel!=4)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<mobCap)&&(floorLevel!=4)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);

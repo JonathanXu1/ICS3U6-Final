@@ -18,10 +18,23 @@ class Main{
     //Music vars
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
+    Clip[] audioClips = new Clip[3];
+    
     File audioFile = new File("../res/spacebackround.wav");
-    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-    Clip clip = (Clip) AudioSystem.getLine(info);
+    AudioInputStream basicStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, basicStream.getFormat());
+    audioClips[0] = (Clip) AudioSystem.getLine(info);
+    
+    audioFile = new File("../res/interstellar.wav");
+    AudioInputStream interstellarStream = AudioSystem.getAudioInputStream(audioFile);
+    info = new DataLine.Info(Clip.class, interstellarStream.getFormat());
+    audioClips[1] = (Clip) AudioSystem.getLine(info);
+    
+    audioFile = new File("../res/africa.wav");
+    AudioInputStream africaStream = AudioSystem.getAudioInputStream(audioFile);
+    info = new DataLine.Info(Clip.class, africaStream.getFormat());
+    audioClips[2] = (Clip) AudioSystem.getLine(info);
+    
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
     //The Clock time keeps track of the fps
@@ -38,24 +51,15 @@ class Main{
     //Converts the map into a tile map
     map = charMapConversion(charMap, map);
     
-    //   output.close();
-    //Plays music
-    /*
-     try {
-     clip.open(audioStream);
-     clip.start();
-     clip.loop(Clip.LOOP_CONTINUOUSLY);
-     }catch (Exception e) {
-     e.printStackTrace();
-     }
-     */
     
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
     //Loads bg music
     try {
-      clip.open(audioStream);
+      audioClips[0].open(basicStream);
+      audioClips[1].open(interstellarStream);
+      audioClips[2].open(africaStream);
     }catch (Exception e) {
       e.printStackTrace();
     }
@@ -96,11 +100,22 @@ class Main{
        }
        */
       //Plays music
-      if(disp.getSoundSettings()[0]){ //If music setting set to true
-        clip.start();
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+      if(disp.getSettings()[0] == 1){ //No music
+        for (int i = 0; i < audioClips.length; i ++){
+          if (audioClips[i].isRunning()){
+            audioClips[i].stop();
+          }
+        }
       } else {
-        clip.stop();
+        for (int i = 0; i < audioClips.length; i ++){
+          if ((audioClips[i].isRunning()) && (audioClips[disp.getSettings()[0]-2] != audioClips[i]) && (disp.getSettings()[0] != 1)){ //If clip is playing and isn't selected
+            audioClips[i].stop();
+          } else if (!audioClips[i].isRunning() && audioClips[disp.getSettings()[0]-2] == audioClips[i]){
+            System.out.println(disp.getSettings()[0]-2);
+            audioClips[i].start();
+            audioClips[i].loop(Clip.LOOP_CONTINUOUSLY);
+          }
+        }
       }
     }
   }

@@ -64,10 +64,6 @@ class Display extends JFrame{
   
     //Adds keylistener object
     
-    //Creation of the basic game display
-    gamePanel = new GamePanel();
-    gamePanel.addMouseListener(mouseListener);
-    
     //Creation of the menu
     menuBgPanel = new MenuBGPanel(maxX, maxY);
     mainTitle.setFont(customTitle);
@@ -85,16 +81,14 @@ class Display extends JFrame{
     menuBgPanel.add(mainTitle);
     
     //Creation of the settings panel
-    settingsPanel = new SettingsPanel(maxX, maxY);
-    
-    settingsTitle.setFont(customTitle);
-    settingsTitle.setForeground(Color.WHITE);
-    settingsTitle.setBounds(maxX/2-400, -100, 800, 300);
-    
-    backButton.setBounds(maxX/2-300, maxY - 200, 220, 50);
-    
+    settingsPanel = new SettingsPanel(maxX, maxY);    
+    backButton.setBounds(maxX/2-100, maxY - 200, 220, 50);
     settingsPanel.add(backButton);
     settingsPanel.add(settingsTitle);
+    
+    //Creation of the basic game display
+    gamePanel = new GamePanel();
+    gamePanel.addMouseListener(mouseListener);
     
     this.add(menuBgPanel);
     this.setVisible (true);
@@ -127,7 +121,7 @@ class Display extends JFrame{
       menuBgPanel.refresh();
       // Main game state
     }else if (gameState==1){ //New game
-      gamePanel.setDebugInfo(fps, totalMem, memUsed);
+      gamePanel.setDebugInfo(fps, totalMem, memUsed, getSettings()[1]);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
         gamePanel.initial (map, playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
@@ -216,12 +210,15 @@ class Display extends JFrame{
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
   }
+  
+  public int[] getSettings(){
+    return settingsPanel.getSettings();
+  }
+  
   public void setBossCoords(){
     gamePanel.setBoss(bossX,bossY);
   }
-  public boolean[] getSoundSettings(){
-    return settingsPanel.getSoundSettings();
-  }
+  
   public int getLevel(){
     return (gamePanel.getFloor());
   }

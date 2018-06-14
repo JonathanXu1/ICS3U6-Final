@@ -1,8 +1,3 @@
-//Add custom font to buttons
-//Have better button highlight effects
-//Add ships
-//Allign pixels to bg
-
 import javax.swing.JPanel;
 import java.awt.Image;
 import java.awt.Toolkit;
