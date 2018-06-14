@@ -101,7 +101,7 @@ class Main{
        }
        */
       //Plays music
-      if(disp.getSettings()[0]){ //If music setting set to true
+      if(disp.getSoundSettings()[0]){ //If music setting set to true
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
       } else {

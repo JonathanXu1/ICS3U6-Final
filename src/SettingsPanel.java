@@ -7,7 +7,6 @@ import java.awt.Color;
 class SettingsPanel extends JPanel{
   private boolean music = false;
   private boolean soundfx = false;
-  private boolean fs = false;
   private int xVal, yVal;
   private CustomCheckButton musicButton = new CustomCheckButton();
   private CustomCheckButton soundFxButton = new CustomCheckButton();
@@ -22,7 +21,7 @@ class SettingsPanel extends JPanel{
     this.setPreferredSize(panelSize);
     this.setLayout(null);
     
-    musicButton.setBounds(xVal/2 - 120, yVal/2, 100, 50);
+    musicButton.setBounds(xVal/2 - 100, yVal/2, 100, 50);
     musicButton.add(musicLabel);
     this.add(musicButton);
     musicButton.setVisible(true);
@@ -31,7 +30,6 @@ class SettingsPanel extends JPanel{
     soundFxButton.add(soundFxLabel);
     this.add(soundFxButton);
     soundFxButton.setVisible(true);
-    
   }
   
   @Override
@@ -40,7 +38,7 @@ class SettingsPanel extends JPanel{
     g.fillRect(0, 0, xVal, yVal);
   }
   
-  public boolean[] getSettings(){
+  public boolean[] getSoundSettings(){
     if(musicButton.isSelected()){
       music = true;
     } else{
