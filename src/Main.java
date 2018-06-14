@@ -239,10 +239,10 @@ class Main{
           ///
           playerStartingX = j;
           playerStartingY = i;
-          playerFinishingX = j+1;
-          playerFinishingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
           map[i][j]= new FloorTile(Color.BLACK, "../res/LadderDown", "ladder down");
+          playerFinishingX = j;
+          playerFinishingY = i;
         } else{
           map[i][j]= null;
         }
