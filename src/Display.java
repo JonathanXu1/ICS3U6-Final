@@ -207,11 +207,11 @@ class Display extends JFrame{
   public GamePanel getPanel(){
     return(gamePanel);
   }
-  public boolean getNewMap(){
+  public int getNewMap(){
     if (gamePanel.getAnotherMap()){
-      return true;
+      return (gamePanel.getCurrentFloor());
     }else{
-      return false;
+      return (0);
     }
   }
   public void setGameMap(){
