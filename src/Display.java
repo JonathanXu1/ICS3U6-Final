@@ -213,7 +213,7 @@ class Display extends JFrame{
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
   }
-  public boolean[] getSoundSettings(){
-    return settingsPanel.getSoundSettings();
+  public boolean[] getSettings(){
+    return settingsPanel.getSettings();
   }
 }
