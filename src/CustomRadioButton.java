@@ -1,7 +1,5 @@
 import javax.swing.JRadioButton;
-import java.awt.Color;
 import java.awt.FontFormatException;
-import java.awt.Color;
 import java.io.IOException;
 import java.awt.Font;
 import java.io.File;

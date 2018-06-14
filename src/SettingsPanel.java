@@ -10,8 +10,6 @@ import java.io.File;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.awt.Color;
-
-import java.awt.LayoutManager;
 import java.awt.GridLayout;
 
 class SettingsPanel extends JPanel{

@@ -125,12 +125,12 @@ class GamePanel extends JPanel{
   private int loadingCount;
   private boolean loading;
   //Sound effects
-  private String[] soundEffects = new String[2];
+  //private String[] soundEffects = new String[2];
   /*
   soundEffects[0] = "../res/Walk.wav";
   soundEffects[1] = "../res/Shoot.wav";
   */
-  private SoundPlayer shootSound;
+  //private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
     //Adds the listeners
