@@ -1,3 +1,12 @@
+/*
+ * [Display.java];
+ * 
+ * This is for setting up all the panels, and this is the main frame
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import javax.swing.JLabel;
 import javax.swing.JFrame;

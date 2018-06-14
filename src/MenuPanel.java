@@ -1,3 +1,13 @@
+/*
+ * [MenuPanel.java];
+ * 
+ * This holds the info for the menu itself
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
+/////////////////////
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 

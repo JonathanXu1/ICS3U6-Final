@@ -1,4 +1,14 @@
 
+/*
+ * [LightningRoomba.java];
+ * 
+ * This enemy can paralyze the character
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
+//Imports
 
 /////////////////////
 import java.awt.Graphics;

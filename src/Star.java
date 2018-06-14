@@ -1,3 +1,12 @@
+/*
+ * [Star.java];
+ * 
+ * These are the stars in the background
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.util.Random;
 import java.awt.Color;

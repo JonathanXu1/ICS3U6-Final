@@ -1,3 +1,12 @@
+/*
+ * [FloorTile.java];
+ * 
+ * The player can step on these tiles
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Graphics;

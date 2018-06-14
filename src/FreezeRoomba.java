@@ -1,3 +1,12 @@
+/*
+ * [FreezeRoomba.java];
+ * 
+ * This is a special roomba that can freeze the player
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Color;

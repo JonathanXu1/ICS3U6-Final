@@ -1,3 +1,13 @@
+/*
+ * [CustomRadioButton.java];
+ * 
+ * This creates the sound
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
+/////////////////////
 import javax.swing.JRadioButton;
 import java.awt.FontFormatException;
 import java.io.IOException;

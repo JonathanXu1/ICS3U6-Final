@@ -1,14 +1,13 @@
-//Add projectile weapons
-//Pausing
-//Fix freeze text so it fits
-//Work on displaying different levels
-//Work on increasing difficulty based on levels
-//Make an item line so that when an item dissapears it can spawn in
-//Work on boss room generation as well as boss fight
-//Make proper captains room
-//Make chest rooms unable to shoot beyond
-
-
+/*
+ * [GamePanel.java];
+ * 
+ * The main game frame, much of the logic, listening, and graphics are done here
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
+/////////////////////
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;

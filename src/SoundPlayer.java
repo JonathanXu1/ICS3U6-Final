@@ -1,3 +1,12 @@
+/*
+ * [SoundPlayer.java];
+ * 
+ * This is responsible for playing sound
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.DataLine;
