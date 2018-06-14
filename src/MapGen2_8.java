@@ -778,7 +778,7 @@ class MapGen2_8{
   
   // creates the boss room, returning a char array
   public char[][] createBossRoom() {
-    char[][] returnArray = new char[75][75];
+    char[][] returnArray = new char[69][69];
     
     for (int i = 0; i < returnArray.length; i++) {
       for (int j = 0; j < returnArray[0].length; j++) {
