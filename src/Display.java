@@ -20,17 +20,17 @@ class Display extends JFrame{
   private JLabel mainTitle = new JLabel("CONCORDIA");
   private JLabel settingsTitle = new JLabel("Settings");
   private CustomMouseListener mouseListener = new CustomMouseListener();
-  private CustomMouseListener continueButtonMouse = new CustomMouseListener();
+  //private CustomMouseListener continueButtonMouse = new CustomMouseListener();
   private CustomMouseListener newGameButtonMouse = new CustomMouseListener();
-  private CustomMouseListener loadGameButtonMouse = new CustomMouseListener();
+  //private CustomMouseListener loadGameButtonMouse = new CustomMouseListener();
   private CustomMouseListener settingsButtonMouse = new CustomMouseListener();
-  private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
+  //private CustomMouseListener scoreboardButtonMouse = new CustomMouseListener();
   private CustomMouseListener quitButtonMouse = new CustomMouseListener();  
-  private CustomButton continueButton = new CustomButton("Continue",continueButtonMouse);
+  //private CustomButton continueButton = new CustomButton("Continue",continueButtonMouse);
   private CustomButton newGameButton = new CustomButton("New",newGameButtonMouse);
-  private CustomButton loadGameButton = new CustomButton("Load",loadGameButtonMouse);
+  //private CustomButton loadGameButton = new CustomButton("Load",loadGameButtonMouse);
   private CustomButton settingsButton = new CustomButton("Settings",settingsButtonMouse);
-  private CustomButton scoreboardButton = new CustomButton("Scoreboard",scoreboardButtonMouse);
+  //private CustomButton scoreboardButton = new CustomButton("Scoreboard",scoreboardButtonMouse);
   private CustomButton quitButton = new CustomButton("Quit",quitButtonMouse);
   //Settings panel
   private SettingsPanel settingsPanel;
@@ -77,11 +77,11 @@ class Display extends JFrame{
     mainTitle.setBounds(50, -50, 800, 300);
     
     menuPanel = new MenuPanel(50, maxY/2, 450, 220);
-    menuPanel.add(continueButton);
+    //menuPanel.add(continueButton);
     menuPanel.add(newGameButton);
-    menuPanel.add(loadGameButton);
+    //menuPanel.add(loadGameButton);
     menuPanel.add(settingsButton);
-    menuPanel.add(scoreboardButton);
+    //menuPanel.add(scoreboardButton);
     menuPanel.add(quitButton);
     menuBgPanel.add(menuPanel);
     menuBgPanel.add(mainTitle);
@@ -106,28 +106,29 @@ class Display extends JFrame{
     if (gameState==0){
       //Menu state
       //Setting content area is more effective than setting opacity
-      continueButton.updateStyle(0);
+      //continueButton.updateStyle(0);
       newGameButton.updateStyle(0);
-      loadGameButton.updateStyle(0);
+      //loadGameButton.updateStyle(0);
       settingsButton.updateStyle(0);
-      scoreboardButton.updateStyle(0);
+      //scoreboardButton.updateStyle(0);
       quitButton.updateStyle(0);
+      /*
       if(continueButtonMouse.getHover()){
         continueButton.updateStyle(1);
-      } else if(newGameButtonMouse.getHover()){
+      } else*/ if(newGameButtonMouse.getHover()){
         newGameButton.updateStyle(1);
-      } else if(loadGameButtonMouse.getHover()){
+      } /*else if(loadGameButtonMouse.getHover()){
         loadGameButton.updateStyle(1);
-      } else if(settingsButtonMouse.getHover()){
+      } */else if(settingsButtonMouse.getHover()){
         settingsButton.updateStyle(1);
-      } else if(scoreboardButtonMouse.getHover()){
+      } /*else if(scoreboardButtonMouse.getHover()){
         scoreboardButton.updateStyle(1);
-      } else if(quitButtonMouse.getHover()){
+      } */else if(quitButtonMouse.getHover()){
         quitButton.updateStyle(1);
       }//Custy and redundant might have to remove
       menuBgPanel.refresh();
       // Main game state
-    }else if (gameState==1){
+    }else if (gameState==1){ //New game
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
@@ -141,35 +142,35 @@ class Display extends JFrame{
         gamePanel.setVisible (true);
       }
       gamePanel.repaint();
-    } else if (gameState == 2){
+    } /*else if (gameState == 2){ //continue
       
-    } else if (gameState == 3){
-    } else if (gameState == 4){ //Settings
+    } else if (gameState == 3){ //Load
+    } */else if (gameState == 4){ //Settings
       settingsPanel.repaint();
-    } else if (gameState == 5){
-    } else if (gameState == 6){
+    } /*else if (gameState == 5){ //Scoreboard
+    } */else if (gameState == 6){ //Quit
       System.exit(0);
     }
   }
   //Determines if the game has begun
   public void getListen (){
-    if (continueButtonMouse.getPressed()){
+    /*if (continueButtonMouse.getPressed()){
+      gameState = 2
+    } else */if (newGameButtonMouse.getPressed()){
       gameState=1;
       addGamePanel =true;
-    } else if (newGameButtonMouse.getPressed()){
-      gameState=2;
-    } else if (loadGameButtonMouse.getPressed()){
+    } /*else if (loadGameButtonMouse.getPressed()){
       gameState=3;
-    } else if (settingsButtonMouse.getPressed()){
+    } */else if (settingsButtonMouse.getPressed()){
       gameState=4;
       this.add(settingsPanel);
       closeAll();
       settingsPanel.setVisible (true);
       settingsTitle.setVisible(true);
       backButton.setVisible(true);
-    } else if (scoreboardButtonMouse.getPressed()){
+    } /*else if (scoreboardButtonMouse.getPressed()){
       gameState=5;
-    } else if (quitButtonMouse.getPressed()){
+    } */else if (quitButtonMouse.getPressed()){
       gameState = 6;
     } else if (backButtonMouse.getPressed()){
       gameState = 0;

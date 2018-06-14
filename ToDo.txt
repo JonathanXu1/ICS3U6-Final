@@ -1,17 +1,15 @@
 This is just some scrap text file, you can change it however you like.
 
 Jonathan
--more room sprites
--Implement revamped fow
--Settings panel
--Tell artem why some hall walls not seen
+-Make settings more aethetics
+-Delete scoreboard, new, load
+-Make instructions panel
 
 Will
+-Commenting game panel
+-Png for generic panel
+
 
 Artem
-- Broken floors
-- Broken Walls
-- ventillation
-- T joints
-- fix reactor gen
-- reactor wall
+-Create boss room spawning point
+-Ventillation
