@@ -1,6 +1,6 @@
 import java.awt.Color;
 import java.io.File;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.*; //Wildcard
 
@@ -17,18 +17,25 @@ class Main{
     //Music vars
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
-     File audioFile = new File("../res/spacebackround.wav");
-     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-     Clip clip = (Clip) AudioSystem.getLine(info);
+    File audioFile = new File("../res/spacebackround.wav");
+    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+    Clip clip = (Clip) AudioSystem.getLine(info);
+    //The display frame is created, and the player x and y are found
+    Display disp = new Display ();
+    GameSaver gameSaver=  new GameSaver();
+    //The Clock time keeps track of the fps
+    Clock time = new Clock ();
+    Tile [][] map = new Tile[1][1];
+    char[][] charMap;
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    char[][]charMap = gen.charMap(gen.generateMap(12,12));
+    charMap = gen.charMap(gen.generateMap(12,12));
+    map = new Tile [charMap.length][charMap[0].length];
+    map = charMapConversion(charMap, map);
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
-    Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    GameSaver gameSaver=  new GameSaver();
     map = charMapConversion(charMap, map);
     
     //   output.close();
@@ -42,16 +49,13 @@ class Main{
      e.printStackTrace();
      }
      */
-    //The display frame is created, and the player x and y are found
-    Display disp = new Display ();
-    //The Clock time keeps track of the fps
-    Clock time = new Clock ();
+    
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
+    //Loads bg music
     try {
       clip.open(audioStream);
-      
     }catch (Exception e) {
       e.printStackTrace();
     }

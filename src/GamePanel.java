@@ -132,6 +132,13 @@ class GamePanel extends JPanel{
   private int xStartMod=0;
   private int loadingCount;
   private boolean loading;
+  //Sound effects
+  private String[] soundEffects = new String[2];
+  /*
+  soundEffects[0] = "../res/Walk.wav";
+  soundEffects[1] = "../res/Shoot.wav";
+  */
+  private SoundPlayer shootSound;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -159,6 +166,12 @@ class GamePanel extends JPanel{
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
     this.gameOver = false;
+    //Loads Sound Effects
+    /*
+    for (int i = 0; i < soundEffects; i++){
+      
+    }
+    */
   }
   
   //Methods that are inherited from JPanel
@@ -623,6 +636,8 @@ class GamePanel extends JPanel{
                         collided = false;
                         translateX = 0;
                         translateY = 0;
+                        //SoundEffect.SHOOT.play();
+                        shootSound.playSound();
                       }
                     }
                   }
