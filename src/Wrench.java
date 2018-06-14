@@ -19,7 +19,7 @@ class Wrench extends MeleeWeapon{
   Wrench(int dbty) {
     super(dbty);
     this.setRarity(1);
-    this.setDamage(500);    
+    this.setDamage(5);    
     this.setName("Wrench");
   }
   
