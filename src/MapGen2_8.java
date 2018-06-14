@@ -450,8 +450,13 @@ class MapGen2_8{
           map[randD][randR] = 5;
           wallChests++;
         }
+        
+        if (randomRoll(500)) {
+          map[randD][randR] = 7;
+        }
+        
       }
-    } while (wallChests < 8); // loop runs until a quota has been met
+    } while (wallChests < 16); // loop runs until a quota has been met
   }
   
   // In previously chosen places, implement the custom designs of the custom made rooms  
@@ -759,6 +764,7 @@ class MapGen2_8{
     this.spawnDebris();
     
     this.trimMap();
+    
     return map;             
   }
   
@@ -778,6 +784,7 @@ class MapGen2_8{
   
   // creates the boss room, returning a char array
   public char[][] createBossRoom() {
+    int randD, randR;
     char[][] returnArray = new char[75][75];
     
     for (int i = 0; i < returnArray.length; i++) {
@@ -786,6 +793,8 @@ class MapGen2_8{
       }
     }
     
+    randD = getRand(2,38);
+    randR = getRand(2,28);
     
     
     for (int i = 1; i < 40; i++) {
@@ -793,6 +802,8 @@ class MapGen2_8{
         returnArray[i][j] = 'R';                
       }
     }
+    
+    returnArray[randD][randR] = 'W';
     
     for (int j = 30; j < 45; j++) {
       //returnArray[21][j] = 'X';
@@ -885,10 +896,12 @@ class MapGen2_8{
           resultProc[i][j] = 'l';
         } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
-        } else if (result[i][j] == 218) { // reactor core
+        } else if (result[i][j] == 218) { // reactor wall
           resultProc[i][j] = '^';
         } else if (result[i][j] == 102) { // chest room chest
           resultProc[i][j] = 'C';
+        }else if (result[i][j] == 7) { // chest room chest
+          resultProc[i][j] = 'V';
         } else if (result[i][j] == 6) { // junk spawn
           resultProc[i][j] = 'J';
         } else if (result[i][j] == 5) { // wall safe
@@ -903,8 +916,7 @@ class MapGen2_8{
           resultProc[i][j] = 'X';        
           if (randomRoll(2)) {
             resultProc[i][j] = '+';
-          }
-                    
+          }                    
         } else if (result[i][j] == -2) { // door
           resultProc[i][j] = 'D';
         } else if (result[i][j] == -1) { // room tile
