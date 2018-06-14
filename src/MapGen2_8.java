@@ -512,6 +512,19 @@ class MapGen2_8{
             map[i*6 - 3][j*6] = -203;
           }
           
+          for (int i2 = -5; i2 < 6; i2++) {
+            for (int j2 = -5; j2 < 6; j2++) {
+              if (map[i*6 + i2][j*6 + j2] == -201) {
+                for (int i3 = -1; i3 < 2; i3++) {
+                  for (int j3 = -1; j3 < 2; j3++) {
+                    if (map[i*6 + i2 + i3][j*6 + j2 + j3] == 3) {
+                      map[i*6 + i2 + i3][j*6 + j2 + j3] = 218;
+                    }
+                  }
+                }                                
+              }
+            }
+          }                    
         }
         
         else if (map[i*6][j*6] == 300) {
@@ -857,6 +870,8 @@ class MapGen2_8{
           resultProc[i][j] = 'l';
         } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
+        } else if (result[i][j] == 218) { // reactor core
+          resultProc[i][j] = '&';
         } else if (result[i][j] == 102) { // chest room chest
           resultProc[i][j] = 'C';
         } else if (result[i][j] == 6) { // junk spawn
