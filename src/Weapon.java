@@ -1,3 +1,13 @@
+/*
+ * [Weapon.java];
+ * 
+ * The overall superclass for all weapons in the game, ranged and melee alike. This stores many of the values for 
+ * combat logic and sets upcode for graphics
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 import java.awt.Graphics;
 
 public abstract class Weapon extends Equipment {

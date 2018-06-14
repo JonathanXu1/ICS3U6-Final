@@ -1,3 +1,13 @@
+/*
+ * [PulseRailgun.java];
+ * 
+ * The specific class for the Pulse Railgun, a rare ranged weapon. It has very high damage.
+ * It sets all the stats in the constructor and has code for graphics.
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;

@@ -162,7 +162,7 @@ class MapGen2_8{
         
         map[randDReal][randRReal] = 100;        
         
-      } else if (randomRoll(100)) { // reactor room
+      } else if (randomRoll(0)) { // reactor room
         for (int i = -4; i < 5; i++){
           for (int j = -4; j < 5; j++) {
             map[randDReal + i][randRReal + j] = -1;
