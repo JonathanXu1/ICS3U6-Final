@@ -91,9 +91,9 @@ class Display extends JFrame{
     
     settingsTitle.setFont(customTitle);
     settingsTitle.setForeground(Color.WHITE);
-    settingsTitle.setBounds(50, -50, 800, 300);
+    settingsTitle.setBounds(maxX/2-400, -100, 800, 300);
     
-    backButton.setBounds(50, 400, 220, 50);
+    backButton.setBounds(maxX/2-300, maxY - 200, 220, 50);
     
     settingsPanel.add(backButton);
     settingsPanel.add(settingsTitle);

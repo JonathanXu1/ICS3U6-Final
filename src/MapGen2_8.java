@@ -886,7 +886,7 @@ class MapGen2_8{
         } else if (result[i][j] == 217) { // reactor core
           resultProc[i][j] = 'r';
         } else if (result[i][j] == 218) { // reactor core
-          resultProc[i][j] = '&';
+          resultProc[i][j] = '^';
         } else if (result[i][j] == 102) { // chest room chest
           resultProc[i][j] = 'C';
         } else if (result[i][j] == 6) { // junk spawn
