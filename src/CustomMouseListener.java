@@ -1,4 +1,4 @@
-//Mouse imports
+ //Mouse imports
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
@@ -7,7 +7,6 @@ class CustomMouseListener implements MouseListener {
   private int[] xy = new int [2];
   //The following booleans control the state of the mouse
   private boolean pressed, hover;
-  private boolean inventoryMove = false;
   
   //Methods that are implemented from MouseListener
   public void mouseClicked(MouseEvent e) {

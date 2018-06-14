@@ -8,7 +8,6 @@ class LaserPistol extends RangedWeapon {
     super(dbty);
     this.setRarity(2);
     this.setDamage(5);
-    this.setSPT(1);
     this.setName("Laser Pistol");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){

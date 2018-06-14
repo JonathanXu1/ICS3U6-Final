@@ -7,6 +7,7 @@ import javax.sound.sampled.*; //Wildcard
 ///Make it so that you click again to cancel the upgrade
 class Main{
   private static int playerStartingX=0, playerStartingY =0, playerFinishingX=0, playerFinishingY=0;
+  private static int bossSpawnX, bossSpawnY;
   //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
@@ -36,7 +37,6 @@ class Main{
     
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
-    GameSaver gameSaver=  new GameSaver();
     //The Clock time keeps track of the fps
     Clock time = new Clock ();
     Tile [][] map = new Tile[1][1];
@@ -64,8 +64,6 @@ class Main{
       e.printStackTrace();
     }
     
-    GamePanel gamePanel;
-    int counter=0;
     while (true){
       time.setTime();  
       if (time.getFramePassed()){
@@ -78,6 +76,8 @@ class Main{
             charMap=gen.createBossRoom();
             map= charMapConversion(charMap, map);
             disp.setMap(map);
+            disp.setBossLocation(bossSpawnX,bossSpawnY);
+            disp.setBossCoords();
             disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
             disp.setGameMap ();
           }else{
@@ -145,6 +145,10 @@ class Main{
           map[i][j]= new HallwayTile(Color.ORANGE, "airlock"); 
         }else if (charMap[i][j] == 'C'){
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/Chest", "chest"); //Chest
+        }else if (charMap[i][j] == 'W'){//Enemy spawnpoint
+          map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood");
+          bossSpawnX = j;
+          bossSpawnY = i;
         }else if (charMap[i][j] == 'V'){ //Ventillation
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Ventilation", "chest"); //Chest
         }
@@ -158,7 +162,7 @@ class Main{
         } else if (charMap[i][j] == 'H'){//Blood
           map[i][j]= new FloorTile(Color.GREEN, "../res/BloodFloor", "blood");
         }
-        //Lab
+          //Lab
         else if (charMap[i][j] == 't'){ //Lab table
           map[i][j]= new WallTile(Color.LIGHT_GRAY, "../res/Lab", "lab");
         } else if (charMap[i][j] == 'm' ){ //Lab table w/ chemicals
@@ -233,10 +237,8 @@ class Main{
           map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskTop", "capq");
         } else if (charMap[i][j] == 'x') {
           map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainDeskBottom", "capq");
-        } else if (charMap[i][j] == '?') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorNotes", "capq");
-        } else if (charMap[i][j] == 'y') {
-          map[i][j] = new WallTile(Color.YELLOW, "../res/CaptainFloorScratch", "capq");
+        } else if ((charMap[i][j] == '?')||(charMap[i][j] == 'y')){
+          map[i][j] = new FloorTile(Color.YELLOW, "../res/CaptainFloorNotes", "capq");
         }
         
         //Key points
@@ -249,10 +251,10 @@ class Main{
           ///
           playerStartingX = j;
           playerStartingY = i;
-          playerFinishingX = j+1;
-          playerFinishingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
           map[i][j]= new FloorTile(Color.BLACK, "../res/LadderDown", "ladder down");
+          playerFinishingX = j;
+          playerFinishingY = i;
         } else{
           map[i][j]= null;
         }

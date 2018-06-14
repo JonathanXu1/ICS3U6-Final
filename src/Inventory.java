@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 class Inventory{
   Item[][] inventory = new Item [4][6];
   boolean selected = false;

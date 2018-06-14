@@ -2,7 +2,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Graphics;
 import java.awt.Dimension;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.ButtonGroup;
@@ -10,6 +9,7 @@ import java.awt.Font;
 import java.io.File;
 import java.awt.FontFormatException;
 import java.io.IOException;
+import java.awt.Color;
 
 import java.awt.LayoutManager;
 import java.awt.GridLayout;
@@ -38,8 +38,8 @@ class SettingsPanel extends JPanel{
   
   private Font customTitle, customHeader;
   
-  private int difficulty = 2;
-  private int music = 1;
+  private int difficulty;
+  private int music;
   
   //Constructor
   SettingsPanel(int xVal, int yVal){
@@ -67,6 +67,10 @@ class SettingsPanel extends JPanel{
     difficultyGroup.add(easyButton);
     difficultyGroup.add(mediumButton);
     difficultyGroup.add(hardButton);
+    
+    //Sets initial music and difficulty settings
+    basicButton.setSelected(true);
+    mediumButton.setSelected(true);
     
     difficultyLabel.setFont(customHeader);
     difficultyLabel.setForeground(Color.WHITE);

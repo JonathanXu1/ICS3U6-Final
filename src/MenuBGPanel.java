@@ -1,8 +1,3 @@
-//Add custom font to buttons
-//Have better button highlight effects
-//Add ships
-//Allign pixels to bg
-
 import javax.swing.JPanel;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -23,7 +18,6 @@ class MenuBGPanel extends JPanel{
   private Image ship1 = Toolkit.getDefaultToolkit().getImage("../res/Ship1.png");
   private Image ship2 = Toolkit.getDefaultToolkit().getImage("../res/Ship2.png");
   private Star[][] stars = new Star[100][200];
-  private int count = 0;
   private int stationState = 1;
   private int ship1X, ship1Y, ship1Wait;
   private int ship2X, ship2Y, ship2Wait;

@@ -25,9 +25,9 @@ class GamePanel extends JPanel{
   private Font menuFont = new Font("Courier New", Font.PLAIN, 20);
   private double totalMem, memUsed, memPercent;
   private String debugMessage = "NULL";
+  private int difficulty = 2;
   
   //Listeners
-  private boolean mouseReleased;
   private int [] mouseXy;
   private CustomKeyListener keyListener = new CustomKeyListener();
   private CustomMouseListener mouseListener = new CustomMouseListener();
@@ -37,7 +37,6 @@ class GamePanel extends JPanel{
   private Image left, leftClickedPlus, leftClickedMinus, right, rightClicked, exp, hp, hotbar,mapBorder, inventoryImage, lightningStatus, flameStatus, freezeStatus, hungry, starving,hotbarBelow;
   private final double Y_TO_X = 90.0/75.0;
   private final double INVENTORY_MOD = 110.0/75.0;
-  private final double INV_Y_TO_X = 160.0/212.0;
   private final double Y_TO_X_HOT = 778.0/135.0;
   private final double BOT_HEIGHT = 250.0;
   private boolean inventoryOpen =false;
@@ -45,12 +44,8 @@ class GamePanel extends JPanel{
   private int maxButtonX;
   private int minButtonY;
   private int maxButtonY;
-  private boolean plusPressed;
-  private boolean minusPressed;
   
   //Turn tracking
-  private boolean turnStart = false;
-  private int turnCount =0;
   private boolean pauseState =false;
   private int hungerCount = 0;
   
@@ -76,7 +71,7 @@ class GamePanel extends JPanel{
   private Entity [][] entityMap;
   private int spawnX;
   private int spawnY;
-  private int MOB_CAP = 40;
+  private int mobCap;
   private int mobCount =0;
   private int directionRand;
   private int entityArrayXMod = 0;
@@ -86,9 +81,10 @@ class GamePanel extends JPanel{
   private int closestDirection;
   private int []pathfinderPriority = new int [5];
   private boolean acceptableSpawn = false;
+  private int bossX;
+  private int bossY;
   
   // Fire control
-  private int[] fireTarget;
   private FireController playerFireController;
   private boolean collided = true;
   private int translateX = 0;
@@ -118,8 +114,6 @@ class GamePanel extends JPanel{
   private int targetY=0;
   private int playerLevel =1;
   private boolean anotherMap =false;
-  private int startingXMod;
-  private int startingYMod;
   //Attacking
   private int [] tileSelectedArray = new int [2];  
   private boolean meleeSelected  = true;
@@ -128,8 +122,6 @@ class GamePanel extends JPanel{
   private boolean weaponState = true;
   private boolean attacked;
   private int floorLevel =0;
-  private int yStartMod=0;
-  private int xStartMod=0;
   private int loadingCount;
   private boolean loading;
   //Sound effects
@@ -166,12 +158,9 @@ class GamePanel extends JPanel{
     this.minimapX = (int)(BOT_HEIGHT);
     this.minimapY = (int)(BOT_HEIGHT);
     this.gameOver = false;
-    //Loads Sound Effects
-    /*
-    for (int i = 0; i < soundEffects; i++){
-      
-    }
-    */
+    //Sets mob cap based on settings
+    mobCap = 40;
+    System.out.println(mobCap);
   }
   
   //Methods that are inherited from JPanel
@@ -188,6 +177,14 @@ class GamePanel extends JPanel{
       playerFireController = new FireController(maxX, maxY, maxX/2, maxY/2);
     }
     
+    //Changes settings if changed
+    if(difficulty== 1){ //Easy
+      mobCap = 20;
+    } else if(difficulty == 2){ //Medium
+      mobCap = 40;
+    } else if(difficulty == 3){ //Hard
+      mobCap = 80;
+    }
     //Checks for which entities are killed, including the player
     checkKilled(0,0);
     if (!gameOver) {
@@ -213,18 +210,18 @@ class GamePanel extends JPanel{
       //Checks for which entities are killed again so that dead entities cannot kill the player
       checkKilled(0,0);
       if (entityMap[playerCurrentY][playerCurrentX] instanceof Character){
-      //Draws the items
-      drawItems (g);
-      //Draws the entities
-      drawAllEntity (g);
-      //Draw the health and exp
-      drawBars(g);
-      //Draw the game components
-      drawGameComponents(g);
-      //Draws the minimap
-      drawMinimap(g);
-      //Draw inventory
-      drawInventory(g);
+        //Draws the items
+        drawItems (g);
+        //Draws the entities
+        drawAllEntity (g);
+        //Draw the health and exp
+        drawBars(g);
+        //Draw the game components
+        drawGameComponents(g);
+        //Draws the minimap
+        drawMinimap(g);
+        //Draw inventory
+        drawInventory(g);
       }
       //Draw the debugPanel
       if (keyListener.getDebugState()){
@@ -1014,18 +1011,19 @@ class GamePanel extends JPanel{
     if (floorLevel!=4){
       spawnItems();
     }else{
-      //PLACE BOSS SPAWNING HERE
+      entityMap[bossY][bossX] = new Boss (100,100,50,1,false,false,false,Color.RED, true);
     }
   }
   
   //Getters and setters
   //There is no getter for the following, as it only needs to be accessed from this class
   //Sets all the information for the debug panel
-  public void setDebugInfo(int fps, double totalMem, double memUsed){
+  public void setDebugInfo(int fps, double totalMem, double memUsed, int difficulty){
     this.fps = Integer.toString(fps);
     this.totalMem = totalMem;
     this.memUsed = memUsed;
     memPercent = (memUsed/totalMem)*100;
+    this.difficulty = difficulty;
   }
   //Retrieves whether or not it is a new floor
   public boolean getNewFloor(){
@@ -1062,7 +1060,7 @@ class GamePanel extends JPanel{
     }
     //5 % chance to spawn
     //Spawning method, this is the first thing that will occur
-    if (((int)(Math.random()*100)<5)&&(mobCount<MOB_CAP)&&(floorLevel!=4)){
+    if (((int)(Math.random()*100)<5)&&(mobCount<mobCap)&&(floorLevel!=4)){
       //Resets the spawn
       while(!(acceptableSpawn)){
         spawnX =(int)(Math.random()*entityMap[0].length);
@@ -1254,9 +1252,13 @@ class GamePanel extends JPanel{
                   entityMap[i][j] =null;
                 } else {
                   tempHealth = entityMap[playerCurrentY][playerCurrentX].getHealth();
-                  int damage = 10;
+                  int damage;
+                  if (entityMap[i][j] instanceof Boss){
+                    damage= 25;
+                  }else{
+                    damage= 5+5*floorLevel;
+                  }
                   //Should increase by 7 every level
-                  //IMPORTANT: 10 IS A TEMPORARY DAMAGE VALUE, MUST MAKE A VARIABLE THAT CHANGES WITH THE LEVEL
                   int tempArmor=entityMap[playerCurrentY][playerCurrentX].getArmor();
                   if (entityMap[playerCurrentY][playerCurrentX].getFreeze()){
                     entityMap[playerCurrentY][playerCurrentX].setArmor(0);
@@ -1481,7 +1483,6 @@ class GamePanel extends JPanel{
       turnPasser = false;
       tiling = true;
       passTurn();
-      turnCount++;
     }
   }
   public void spawnItems(){
@@ -1772,5 +1773,9 @@ class GamePanel extends JPanel{
   }
   public int getFloor(){
     return (floorLevel);
+  }
+  public void setBoss(int bossX, int bossY){
+    this.bossX = bossX;
+    this.bossY = bossY;
   }
 }

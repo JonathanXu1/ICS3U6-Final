@@ -8,7 +8,7 @@ class PlasmaRifle extends RangedWeapon {
     super(dbty);
     this.setRarity(3);
     this.setDamage(10);
-    this.setSPT(1);
+
     this.setName("Plasma Rifle");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){

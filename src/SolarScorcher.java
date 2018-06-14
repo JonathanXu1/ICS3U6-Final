@@ -8,7 +8,6 @@ class SolarScorcher extends RangedWeapon {
     super(dbty);
     this.setRarity(5);
     this.setDamage(20);
-    this.setSPT(1);
     this.setName("Solar Scorcher");
   }
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
