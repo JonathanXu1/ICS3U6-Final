@@ -1,3 +1,12 @@
+/*
+ * [FireController.java];
+ * 
+ * This is used for controlling the fire in game panel
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 class FireController {
   private int currentY, currentX; // current (leading end of a bullet)

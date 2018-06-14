@@ -1,3 +1,12 @@
+/*
+ * [SettingsPanel.java];
+ * 
+ * This allows the user to access the settings
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import javax.swing.JPanel;
 import javax.swing.JLabel;

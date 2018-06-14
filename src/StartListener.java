@@ -1,3 +1,12 @@
+/*
+ * [StartListener.java];
+ * 
+ * This is the player's character
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

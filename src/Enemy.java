@@ -1,3 +1,12 @@
+/*
+ * [Enemy.java];
+ * 
+ * This is the super class for all the enemies
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 

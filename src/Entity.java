@@ -1,3 +1,12 @@
+/*
+ * [Entity.java];
+ * 
+ * This is the super class for all the characters, bosses, and enemies
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Color;

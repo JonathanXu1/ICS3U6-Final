@@ -1,9 +1,12 @@
-
-//Add custom font to buttons
-//Have better button highlight effects
-//Add ships
-//Allign pixels to bg
-
+/*
+ * [MenuBGPanel.java];
+ * 
+ * This displays the menu
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 
 import javax.swing.JPanel;

@@ -1,5 +1,12 @@
+/*
+ * [CustomKeyListener.java];
+ * 
+ * This is the is for registering key inputs
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
 //Imports
-//Keyboard imports
 /////////////////////
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

@@ -1,4 +1,12 @@
-//Mouse imports
+/*
+ * [CustomMouseListener.java];
+ * 
+ * This senses the mouse motion
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;

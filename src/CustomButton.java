@@ -1,3 +1,12 @@
+/*
+ * [CustomButton.java];
+ * 
+ * This is used for all of our buttons
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import javax.swing.JButton;
 import java.awt.Font;

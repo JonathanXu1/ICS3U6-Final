@@ -1,3 +1,12 @@
+/*
+ * [FlameRoomba.java];
+ * 
+ * This is an enemy which can set the player on fire
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Color;

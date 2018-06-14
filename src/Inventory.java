@@ -1,3 +1,12 @@
+/*
+ * [Inventory.java];
+ * 
+ * This holds the inventory of the player in a 2d array
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Font;

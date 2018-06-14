@@ -1,3 +1,12 @@
+/*
+ * [Main.java];
+ * 
+ * This is required to run everything
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.io.File;
@@ -6,7 +15,6 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.*; //Wildcard
 
-///Make it so that you click again to cancel the upgrade
 /////////////////////
 class Main{
   private static int playerStartingX=0, playerStartingY =0, playerFinishingX=0, playerFinishingY=0;
