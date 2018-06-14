@@ -5,6 +5,7 @@ import javax.sound.sampled.*; //Wildcard
 
 ///Make it so that you click again to cancel the upgrade
 class Main{
+  private static int playerStartingX=0, playerStartingY =0, playerFinishingX=0, playerFinishingY=0;
   //These variables are required to be able to set starting position of the character
   public static void main (String[] args) throws Exception{
     //Finds memory usage before program starts
@@ -16,28 +17,79 @@ class Main{
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
     /*
-    File audioFile = new File("../res/spacebackround.wav");
-    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-    Clip clip = (Clip) AudioSystem.getLine(info);
-    */
-   
+     File audioFile = new File("../res/spacebackround.wav");
+     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+     Clip clip = (Clip) AudioSystem.getLine(info);
+     */
+    
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
     char[][] charMap = gen.charMap(gen.generateMap(12,12));
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
-    Color POO = new Color(168,107,23);
-    Color BURGANDY = new Color(160, 27, 33);
-    
-    int playerStartingX=0, playerStartingY =0;
     Tile [][] map = new Tile [charMap.length][charMap[0].length];
     GameSaver gameSaver=  new GameSaver();
+    map= charMapConversion(charMap, map);
+    
+    //   output.close();
+    //Plays music
+    /*
+     try {
+     clip.open(audioStream);
+     clip.start();
+     clip.loop(Clip.LOOP_CONTINUOUSLY);
+     }catch (Exception e) {
+     e.printStackTrace();
+     }
+     */
+    //The display frame is created, and the player x and y are found
+    Display disp = new Display ();
+    //The Clock time keeps track of the fps
+    Clock time = new Clock ();
+    disp.setMap(map);
+    disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+    GamePanel gamePanel;
+    int counter=0;
+    while (true){
+      time.setTime();  
+      if (time.getFramePassed()){
+        //Finds memory usage after code execution    
+        usedMem = runtime.totalMemory() - runtime.freeMemory();
+        disp.setMem(maxMem/mb, usedMem/mb);
+        disp.getListen();
+        if (disp.getNewMap()){
+          charMap = gen.charMap(gen.generateMap(12,12));
+          map= charMapConversion(charMap, map);
+          disp.setMap(map);
+          disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+          disp.setGameMap ();
+        }
+        disp.refreshAll();
+      }
+      if (time.getSecondPassed()){
+        disp.setFps(time.getFrame());
+        time.setFrame(0);
+      }
+      /*
+       if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
+       clip.close();
+       }
+       */
+    }
+  }
+  public static Tile[][] charMapConversion(char[][] charMap, Tile[][] map){
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
+        Color DARK_BROWN = new Color(168,107,23);
+        Color BURGANDY = new Color(160, 27, 33);
         if (charMap[i][j] == 'J'){ //
+<<<<<<< HEAD
+          map[i][j]= new FloorTile(DARK_BROWN, "../res/CrackedTile", "cracked tile");
+=======
           map[i][j]= new FloorTile(Color.GREEN, "../res/CrackedTile", "room floor");
+>>>>>>> 273a3e3bd16bd249f75a572edb0cb873f1043c2d
         } else if (charMap[i][j] == 'C'|| charMap[i][j] == 'S'){ //Wall safe
           map[i][j]= new ChestTile(Color.LIGHT_GRAY, "../res/WallSafe", "wall safe"); //Wall Safe
         } else if (charMap[i][j] == 'X'){//Hallway floor
@@ -147,59 +199,22 @@ class Main{
         //Key points
         else if (charMap[i][j] == '@'){
           map[i][j]= new FloorTile(Color.GREEN, "../res/LadderUp", "spawn"); //Spawn
+          ///
+          ///THE PLAYER STARTING STUFF IS ONLY TEMP!!!!!
+          ///
+          ///
+          ///
           playerStartingX = j;
           playerStartingY = i;
+          playerFinishingX = j+1;
+          playerFinishingY = i;
         } else if (charMap[i][j] == '#'){ //Stair down
-          map[i][j]= new WallTile(Color.BLACK, "../res/LadderDown", "stair down");
+          map[i][j]= new FloorTile(Color.BLACK, "../res/LadderDown", "ladder down");
         } else{
           map[i][j]= null;
         }
       }
     }
-    
-   //   output.close();
-      //Plays music
-    /*
-    try {
-      clip.open(audioStream);
-      clip.start();
-      clip.loop(Clip.LOOP_CONTINUOUSLY);
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
-    */
-    //The display frame is created, and the player x and y are found
-    Display disp = new Display ();
-    //The Clock time keeps track of the fps
-    Clock time = new Clock ();
-    disp.setMap(map);
-    disp.setPlayerLocation (playerStartingX, playerStartingY);
-    GamePanel gamePanel;
-    int counter=0;
-    while (true){
-      time.setTime();  
-      if (time.getFramePassed()){
-        //Finds memory usage after code execution    
-        usedMem = runtime.totalMemory() - runtime.freeMemory();
-        disp.setMem(maxMem/mb, usedMem/mb);
-        disp.getListen();
-        disp.refreshAll();
-   //     counter++;
-      //  if (counter == 1000){
-    //      System.out.print ("w");
-     //     gamePanel = disp.getPanel();
-      //    gameSaver.saveGame(charMap,gamePanel.getEntityMap(), gamePanel.getItemMap(), gamePanel.getInventory());
-//        }
-      }
-      if (time.getSecondPassed()){
-        disp.setFps(time.getFrame());
-        time.setFrame(0);
-      }
-      /*
-      if(clip.getMicrosecondLength() == clip.getMicrosecondPosition()){
-        clip.close();
-      }
-      */
-    }
+    return map;
   }
 }

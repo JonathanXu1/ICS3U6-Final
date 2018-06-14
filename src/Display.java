@@ -41,8 +41,8 @@ class Display extends JFrame{
   private int fps = 0;
   //Game logic
   private Tile[][] map;
-  private int playerStartingX;
-  private int playerStartingY;
+  private int playerStartingX, playerStartingY, playerFinishingX,playerFinishingY;
+  private boolean newMap = false;
   //Fonts
   Font customTitle;
   
@@ -131,7 +131,7 @@ class Display extends JFrame{
       gamePanel.setDebugInfo(fps, totalMem, memUsed);
       if (gamePanel.getNewFloor()){
         gamePanel.setNewFloor(false);
-        gamePanel.createMap (map, playerStartingX, playerStartingY);
+        gamePanel.initial (map, playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
       }
       //Only refreshes once, keep this seperate from the line above
       if (addGamePanel){
@@ -189,9 +189,11 @@ class Display extends JFrame{
     this.totalMem = totalMem;
     this.memUsed = memUsed;
   }
-  public void setPlayerLocation (int playerStartingX, int playerStartingY){
+  public void setPlayerLocation (int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     this.playerStartingX = playerStartingX;
     this.playerStartingY = playerStartingY;
+    this.playerFinishingX = playerFinishingX;
+    this.playerFinishingY = playerFinishingY;
   }
   public void closeAll(){
     gamePanel.setVisible (false);
@@ -200,5 +202,15 @@ class Display extends JFrame{
   }
   public GamePanel getPanel(){
     return(gamePanel);
+  }
+  public boolean getNewMap(){
+    if (gamePanel.getAnotherMap()){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  public void setGameMap(){
+    gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
   }
 }

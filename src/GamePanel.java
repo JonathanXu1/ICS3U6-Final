@@ -67,8 +67,7 @@ class GamePanel extends JPanel{
   private boolean tiling = false;
   
   //Coordinate control
-  private int playerStartingX, playerStartingY;
-  private int playerCurrentX, playerCurrentY;
+  private int playerStartingX, playerStartingY,playerCurrentX, playerCurrentY, playerFinishingX, playerFinishingY;
   private boolean [] blocked = new boolean [4];
   private int [] xyDirection = new int [2];
   private boolean alternateState;
@@ -118,6 +117,7 @@ class GamePanel extends JPanel{
   private int targetX=0;
   private int targetY=0;
   private int playerLevel =1;
+  private boolean anotherMap =false;
   
   //Attacking
   private int [] tileSelectedArray = new int [2];  
@@ -126,7 +126,7 @@ class GamePanel extends JPanel{
   private boolean gameOver;
   private boolean weaponState = true;
   private boolean attacked;
-  
+  private int floorLevel =0;
   //Constructor
   GamePanel(){
     //Adds the listeners
@@ -177,6 +177,11 @@ class GamePanel extends JPanel{
         alternateState = true;
         weaponState = true;
       }
+      if (!(tiling)){
+        if (entityMap[playerFinishingY][playerFinishingX] instanceof Character){
+          anotherMap=true;
+        }
+      }
       refreshStats();
       //Checks broken gear
       checkBroken();
@@ -211,7 +216,7 @@ class GamePanel extends JPanel{
         g.fillRect(maxX/2, maxY/2, 2, 2);
       }
       this.setVisible(true);
-    } else {
+    }else{
       System.out.println("You suck!");    
     }
   }
@@ -927,17 +932,37 @@ class GamePanel extends JPanel{
     }
   }
   //Sets up the map so that setting the floor is easier as well
-  public void createMap(Tile [][]map, int playerStartingX, int playerStartingY){
+  public void initial(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     //Initializes player locations
     this.map = map;
     this.entityMap = new Entity [map.length][map[0].length];
     this.itemMap = new Item [map.length][map[0].length];
     this.playerStartingX = playerStartingX;
     this.playerStartingY =playerStartingY;
+    this.playerFinishingX = playerFinishingX;
+    this.playerFinishingY =playerFinishingY;
     playerCurrentX = playerStartingX;
     playerCurrentY = playerStartingY;
     entityMap[playerStartingY][playerStartingX]= new Character(100,100,0,1,false,false,false,Color.BLUE);
     //Creates all the items on the floor
+    spawnItems();
+  }
+  public void createMap(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
+    Entity tempCharacter = entityMap[this.playerCurrentY][this.playerCurrentX];
+    this.map = map;
+    for (int i =0;i<map.length;i++){
+      for(int j =0;j<map[0].length;j++){
+        entityMap[i][j]= null;
+        itemMap[i][j]= null;
+      }
+    }
+    this.playerStartingX = playerStartingX;
+    this.playerStartingY =playerStartingY;
+    this.playerCurrentX = playerStartingX;
+    this.playerCurrentY = playerStartingY;
+    this.playerFinishingX = playerFinishingX;
+    this.playerFinishingY =playerFinishingY;
+    entityMap[playerStartingY][playerStartingX] = tempCharacter;
     spawnItems();
   }
   
@@ -1688,5 +1713,13 @@ class GamePanel extends JPanel{
   }
   public Item[][] getInventory(){
     return(inventory.getArrayInventory());
+  }
+  public boolean getAnotherMap(){
+    if (anotherMap){
+      anotherMap = false;
+      return (true);
+    }else{
+      return (false);
+    }
   }
 }
