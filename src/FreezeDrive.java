@@ -24,6 +24,6 @@ class FreezeDrive extends Drive{
     g.drawImage(freezeDrive, x,y,width,height,gamePanel);
   }
   public String getEffectDescription(){
-    return ("This drive can increase freeze chance by 10%, breaking defense, for weapons and grants freeze immunity with armors");  
+    return ("This drive increases freeze chance by 10%, breaking defense for weapons and grants freeze immunity with armors");  
   }
 }
