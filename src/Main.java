@@ -36,9 +36,20 @@ class Main{
     map = charMapConversion(charMap, map);
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
+    map = charMapConversion(charMap, map);
     
     //   output.close();
-
+    //Plays music
+    /*
+     try {
+     clip.open(audioStream);
+     clip.start();
+     clip.loop(Clip.LOOP_CONTINUOUSLY);
+     }catch (Exception e) {
+     e.printStackTrace();
+     }
+     */
+    
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
@@ -52,24 +63,27 @@ class Main{
     GamePanel gamePanel;
     int counter=0;
     while (true){
-      time.setTime();
+      time.setTime();  
       if (time.getFramePassed()){
-        if (disp.getContinueSave()){
-          LoadFile load;
-          load= gameSaver.loadGame("concordia_savfile_1");
-          map =charMapConversion(load.returnMap(), map);
-          disp.setMap(map);
-        }
         //Finds memory usage after code execution    
         usedMem = runtime.totalMemory() - runtime.freeMemory();
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
         if (disp.getNewMap()){
-          charMap = gen.charMap(gen.generateMap(12,12));
-          map = charMapConversion(charMap, map);
-          disp.setMap(map);
-          disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
-          disp.setGameMap ();
+          if(disp.getLevel()==4){
+            charMap=gen.createBossRoom();
+            Tile [][] bossMap=new Tile[75][75];
+            bossMap= charMapConversion(charMap, bossMap);
+            disp.setMap(bossMap);
+            disp.setPlayerLocation (playerStartingX, playerStartingY, 0, 0);
+            disp.setGameMap ();
+          }else{
+            charMap = gen.charMap(gen.generateMap(12,12));
+            map = charMapConversion(charMap, map);
+            disp.setMap(map);
+            disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+            disp.setGameMap ();
+          }
         }
         disp.refreshAll();
       }
@@ -83,7 +97,7 @@ class Main{
        }
        */
       //Plays music
-      if(disp.getSettings()[0]){ //If music setting set to true
+      if(disp.getSoundSettings()[0]){ //If music setting set to true
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
       } else {
