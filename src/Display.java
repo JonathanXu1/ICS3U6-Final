@@ -87,12 +87,7 @@ class Display extends JFrame{
     menuBgPanel.add(mainTitle);
     
     //Creation of the settings panel
-    settingsPanel = new SettingsPanel(maxX, maxY);
-    
-    settingsTitle.setFont(customTitle);
-    settingsTitle.setForeground(Color.WHITE);
-    settingsTitle.setBounds(maxX/2-400, -100, 800, 300);
-    
+    settingsPanel = new SettingsPanel(maxX, maxY);    
     backButton.setBounds(maxX/2-300, maxY - 200, 220, 50);
     
     settingsPanel.add(backButton);
@@ -214,8 +209,8 @@ class Display extends JFrame{
   public void setGameMap(){
     gamePanel.createMap(map,playerStartingX,playerStartingY,playerFinishingX,playerFinishingY);
   }
-  public boolean[] getSoundSettings(){
-    return settingsPanel.getSoundSettings();
+  public int[] getSettings(){
+    return settingsPanel.getSettings();
   }
   public int getLevel(){
     return (gamePanel.getFloor());
