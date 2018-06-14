@@ -82,7 +82,6 @@ class Main{
   public static Tile[][] charMapConversion(char[][] charMap, Tile[][] map){
     for (int i = 0; i < charMap.length; i++){
       for(int j = 0; j < charMap[0].length; j++){
-        Color DARK_BROWN = new Color(168,107,23);
         Color BURGANDY = new Color(160, 27, 33);
         
         if (charMap[i][j] == '+'){ //
