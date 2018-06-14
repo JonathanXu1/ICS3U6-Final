@@ -1,4 +1,3 @@
-
 /*
  * [EnergySword.java];
  * 

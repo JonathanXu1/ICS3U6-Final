@@ -59,6 +59,7 @@ abstract class Tile {
    *@return:
    */
   abstract void drawTile(Graphics g, int x, int y, int width, int height, GamePanel gamePanel, boolean focus);
+  
   //Getters and setters
   /**
    *getMinimapColor

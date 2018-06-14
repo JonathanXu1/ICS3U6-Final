@@ -120,7 +120,12 @@ class SettingsPanel extends JPanel{
   public void paintComponent(Graphics g){
     g.drawImage(bg,0,0,xVal,yVal,this);
   }
-  
+  /*
+   * getSettings
+   * Returns information from the settings panel regarding music selection and difficulty level
+   * @param
+   * @return an int array, representing the settings states
+  */
   public int[] getSettings(){
     if(noneButton.isSelected()){
       music = 1;
