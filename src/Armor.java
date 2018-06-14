@@ -1,5 +1,14 @@
 //Imports
-import java.awt.Graphics;
+/*
+ * [Armor.java];
+ * 
+ * The superclass for all the armor in the game, which contains the various resistances to elements and the defense 
+ * that negates damage to the player. Also sets up graphics implementationas as an astract.
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
 
 public abstract class Armor extends Equipment {
   private int defense;

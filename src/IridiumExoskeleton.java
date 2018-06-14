@@ -1,10 +1,20 @@
 /////////////////////
+/*
+ * [IridiumExoskeleton.java];
+ * 
+ * The specific class for the iridium exoskeleton, the rarest and best armor in the game. It is very
+ * effective at negating damage. It sets all the stats in the constructor and has code for graphics
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
 
-/////////////////////
 class IridiumExoskeleton extends Armor {
   Image iridiumExoskeleton;
   IridiumExoskeleton(int dbty){

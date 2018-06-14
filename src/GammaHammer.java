@@ -9,10 +9,10 @@ class GammaHammer extends MeleeWeapon{
   Image gammaHammer;
   
   GammaHammer(int dbty) {
-    super(dbty);
-    this.setRarity(4);
-    this.setDamage(20);
-    this.setName("Gamma Hammer");
+    super(dbty); // sends the durability back up to equipment
+    this.setRarity(4); // sets rarity of item to 4
+    this.setDamage(20); // sets damage of tem to 20 per hit
+    this.setName("Gamma Hammer"); // sets name for inventory display
   }
   
   /**

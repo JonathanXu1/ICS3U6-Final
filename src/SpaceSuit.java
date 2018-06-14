@@ -1,4 +1,15 @@
 /////////////////////
+
+/*
+ * [SpaceSuit.java];
+ * 
+ * The specific class for the space suit, the starting armor that the player has. It is poor
+ * at negating damage. It sets all the stats in the constructor and has code for graphics.
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
