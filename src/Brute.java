@@ -1,3 +1,12 @@
+/*
+ * [Brute.java];
+ * 
+ * This is the typical tank enemy
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Color;

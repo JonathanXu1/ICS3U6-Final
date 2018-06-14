@@ -1,3 +1,12 @@
+/*
+ * [WalkableTile.java];
+ * 
+ * These can be stepped on, and are a superclass for floors
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 

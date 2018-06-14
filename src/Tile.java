@@ -1,3 +1,12 @@
+/*
+ * [Tile.java];
+ * 
+ * These are the abstract superclass for all tiles
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Graphics;

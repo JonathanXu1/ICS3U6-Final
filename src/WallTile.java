@@ -1,3 +1,12 @@
+/*
+ * [WallTile.java];
+ * 
+ * These are tiles for walls, and they cannot be stepped on
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 /////////////////////
 import java.awt.Color;
 import java.awt.Graphics;

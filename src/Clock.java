@@ -1,3 +1,11 @@
+/*
+ * [Clock.java];
+ * 
+ * This is used for the fps
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
 //Imports
 /////////////////////
 class Clock{

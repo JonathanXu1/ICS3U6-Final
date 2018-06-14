@@ -1,5 +1,13 @@
-//Imports
 /////////////////////
+/*
+ * [Boss.java];
+ * 
+ * This is the final boss on the last level
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+//Imports
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
