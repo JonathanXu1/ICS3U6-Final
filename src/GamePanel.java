@@ -227,7 +227,7 @@ class GamePanel extends JPanel{
       System.out.println("You suck!");    
     }
     if (loadingCount>=1){
-      g.setColor(new Color(0,0,0,(int)(255.0*((double)loadingCount/250.0))));
+      g.setColor(new Color(0,0,0,(int)(255.0*((double)loadingCount/100.0))));
       g.fillRect(0,0,maxX,maxY);
       loadingCount--;
       keyListener.setToZero();
@@ -964,6 +964,9 @@ class GamePanel extends JPanel{
     entityMap[playerStartingY][playerStartingX]= new Character(100,100,0,1,false,false,false,Color.BLUE);
     //Creates all the items on the floor
     spawnItems();
+    //Sets inventory default items
+    inventory.setItem(1,3,new SpaceSuit (50));
+    inventory.setItem(2,3,new Wrench (50));
   }
   public void createMap(Tile [][]map, int playerStartingX, int playerStartingY, int playerFinishingX, int playerFinishingY){
     Entity tempCharacter = entityMap[this.playerCurrentY][this.playerCurrentX];
@@ -988,7 +991,7 @@ class GamePanel extends JPanel{
     entityMap[playerStartingY][playerStartingX] = tempCharacter;
     spawnItems();
     loading= true;
-    loadingCount=250;
+    loadingCount=100;
   }
   
   //Getters and setters
@@ -1459,9 +1462,6 @@ class GamePanel extends JPanel{
     }
   }
   public void spawnItems(){
-    //Sets inventory default items
-    inventory.setItem(1,3,new SpaceSuit (50));
-    inventory.setItem(2,3,new Wrench (50));
     //First initialize a random number of weapons and armors to spawn across the map
     int meleeWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     int rangedWeaponCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
