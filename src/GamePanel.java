@@ -1747,7 +1747,4 @@ class GamePanel extends JPanel{
       return (false);
     }
   }
-  public int getCurrentFloor(){
-    return (floorLevel);
-  }
 }

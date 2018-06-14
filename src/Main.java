@@ -31,10 +31,10 @@ class Main{
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-   //charMap = gen.createBossRoom();
-     charMap = gen.charMap(gen.generateMap(12,12));
+      charMap = gen.charMap(gen.generateMap(12,12));
       map = new Tile [charMap.length][charMap[0].length];
       map = charMapConversion(charMap, map);
+    //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     
     //   output.close();
@@ -64,32 +64,24 @@ class Main{
     while (true){
       time.setTime();
       if (time.getFramePassed()){
-//        if (disp.getContinueSave()){
-//          LoadFile load;
-//          load= gameSaver.loadGame("concordia_savfile_1");
-//          map =charMapConversion(load.returnMap(), map);
-//          disp.setMap(map);
-//        }
+        if (disp.getContinueSave()){
+          LoadFile load;
+          load= gameSaver.loadGame("concordia_savfile_1");
+          map =charMapConversion(load.returnMap(), map);
+          disp.setMap(map);
+        }
         //Finds memory usage after code execution    
         usedMem = runtime.totalMemory() - runtime.freeMemory();
         disp.setMem(maxMem/mb, usedMem/mb);
         disp.getListen();
-        if (disp.getNewMap()!=0){
-          if (disp.getNewMap()!=4){
-            charMap = gen.charMap(gen.generateMap(12,12));
-            map = charMapConversion(charMap, map);
-            disp.setMap(map);
-            disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
-            disp.setGameMap ();
-          }else{
-            charMap = gen.createBossRoom();
-            map = charMapConversion(charMap, map);
-            disp.setMap(map);
-            disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
-            disp.setGameMap ();
-          }
-          disp.refreshAll();
+        if (disp.getNewMap()){
+          charMap = gen.charMap(gen.generateMap(12,12));
+          map = charMapConversion(charMap, map);
+          disp.setMap(map);
+          disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
+          disp.setGameMap ();
         }
+        disp.refreshAll();
       }
       if (time.getSecondPassed()){
         disp.setFps(time.getFrame());
