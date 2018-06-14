@@ -15,6 +15,8 @@ class LightningDrive extends Drive{
     }
     return (chosenEquip);
   }
+  
+  
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     lightningDrive = Toolkit.getDefaultToolkit().getImage("../res/LightningDrive.png");
     if (this.getItemSelected()){

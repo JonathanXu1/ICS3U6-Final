@@ -4,8 +4,10 @@ import java.awt.Toolkit;
 import java.awt.Color;
 class KineticMace extends MeleeWeapon{
   Image kineticMace;
+  
+  
   KineticMace(int dbty) {
-    super(dbty);
+    super(dbty); //
     this.setRarity(3);
     this.setDamage(15);    
     this.setName("Kinetic Mace");

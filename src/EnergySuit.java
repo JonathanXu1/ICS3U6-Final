@@ -1,3 +1,14 @@
+/*
+ * [EnergySuit.java];
+ * 
+ * The specific class for the energy suit, a mid-tier armor. It is not
+ * that effective at negating damage, but better than the space suit and assault vest. 
+ * It sets all the stats in the constructor and has code for graphics
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;

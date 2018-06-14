@@ -10,6 +10,7 @@ class LaserPistol extends RangedWeapon {
     this.setDamage(5);
     this.setName("Laser Pistol");
   }
+  
   public void drawItem(Graphics g, int x, int y, int width, int height, GamePanel gamePanel){
     laserPistol = Toolkit.getDefaultToolkit().getImage("../res/LaserPistol.png");
     if (this.getItemSelected()){

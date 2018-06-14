@@ -1,10 +1,20 @@
+/*
+ * [AssaultVest.java];
+ * 
+ * The specific class for the assault vest, one of the more common armors the player can find. It is not
+ * that effective at negating damage. It sets all the stats in the constructor and has code for graphics
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Color;
+
 class AssaultVest extends Armor {
-  Image assaultVest; // Image for drawing graphics
-  
+  Image assaultVest;
   AssaultVest(int dbty){
     super(dbty); // pass durability to Armor Superclass
     this.setRarity(2); // set rarity
