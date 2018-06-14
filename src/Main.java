@@ -1,6 +1,6 @@
 import java.awt.Color;
 import java.io.File;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.*; //Wildcard
 
@@ -17,10 +17,10 @@ class Main{
     //Music vars
     //File mappo = new File ("map.txt");
     //PrintWriter output = new PrintWriter (mappo);
-     File audioFile = new File("../res/spacebackround.wav");
-     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-     DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
-     Clip clip = (Clip) AudioSystem.getLine(info);
+    File audioFile = new File("../res/spacebackround.wav");
+    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
+    Clip clip = (Clip) AudioSystem.getLine(info);
     //The display frame is created, and the player x and y are found
     Display disp = new Display ();
     GameSaver gameSaver=  new GameSaver();
@@ -31,30 +31,20 @@ class Main{
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-      charMap = gen.charMap(gen.generateMap(12,12));
-      map = new Tile [charMap.length][charMap[0].length];
-      map = charMapConversion(charMap, map);
+    charMap = gen.charMap(gen.generateMap(12,12));
+    map = new Tile [charMap.length][charMap[0].length];
+    map = charMapConversion(charMap, map);
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
     
     //   output.close();
-    //Plays music
-    /*
-     try {
-     clip.open(audioStream);
-     clip.start();
-     clip.loop(Clip.LOOP_CONTINUOUSLY);
-     }catch (Exception e) {
-     e.printStackTrace();
-     }
-     */
 
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
+    //Loads bg music
     try {
       clip.open(audioStream);
-      
     }catch (Exception e) {
       e.printStackTrace();
     }
