@@ -29,7 +29,7 @@ class Editor{
       "GammaHammer.java","HallwayTile.java","Inventory.java","IridiumExoskeleton.java","Item.java","KineticMace.java", "LaserPistol.java"
     "LightningDrive.java","LightningRoomba.java","Main.java","MedKit.java","MeleeWeapon.java","MenuBGPanel.java","MenuPanel.java","PlasmaRapier.java"
     "PlasmaRifle.java", "PowerDrive.java", "ProximityArmor.java", "PulseRailgun.java", "RangedWeapon.java", "Roomba.java", "SettingsPanel.java",
-    "SolarScorcher"};
+    "SolarScorcher.java", "SoundEffect.java", "SoundPlayer.java", "SpaceSuit.java", "Star.java", "StartListener.java", "SteelDrive.java", "Tile.java"};
     for (int i=0;i<fileNames.length;i++){
       String currentLine="";
       String previousLine;
