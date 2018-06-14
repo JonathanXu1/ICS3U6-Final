@@ -1,3 +1,13 @@
+/*
+ * [PowerDrive.java];
+ * 
+ * This boosts the power of equipment
+ * 
+ * Developed by: Will, Artem, Jonathan
+ * 
+ */ 
+
+//Imports
 /////////////////////
 import java.awt.Graphics;
 import java.awt.Image;
