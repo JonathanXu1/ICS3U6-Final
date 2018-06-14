@@ -215,10 +215,6 @@ class GamePanel extends JPanel{
       System.out.println("You suck!");    
     }
   }
-  
-  public void refresh(){
-    this.repaint();
-  }
   //End of methods that are inherited from JPanel
   
   public boolean returnGameOver() {
