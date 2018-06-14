@@ -21,22 +21,34 @@ class Main{
      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
      DataLine.Info info = new DataLine.Info(Clip.class, audioStream.getFormat());
      Clip clip = (Clip) AudioSystem.getLine(info);
-    
+    //The display frame is created, and the player x and y are found
+    Display disp = new Display ();
+    GameSaver gameSaver=  new GameSaver();
+    //The Clock time keeps track of the fps
+    Clock time = new Clock ();
+    Tile [][] map = new Tile[1][1];
+    char[][] charMap;
     //Creates the map generator object
     MapGen2_8 gen = new MapGen2_8();
     //A tile map will be created based off the tile map
-    char[][] charMap = gen.charMap(gen.generateMap(12,12));
+      charMap = gen.charMap(gen.generateMap(12,12));
+      map = new Tile [charMap.length][charMap[0].length];
+      map = charMapConversion(charMap, map);
     //char[][] charMap = gen.createBossRoom();
     //Converts the map into a tile map
-    Tile [][] map = new Tile [charMap.length][charMap[0].length];
-    GameSaver gameSaver=  new GameSaver();
-    map = charMapConversion(charMap, map);
     
     //   output.close();
-    //The display frame is created, and the player x and y are found
-    Display disp = new Display ();
-    //The Clock time keeps track of the fps
-    Clock time = new Clock ();
+    //Plays music
+    /*
+     try {
+     clip.open(audioStream);
+     clip.start();
+     clip.loop(Clip.LOOP_CONTINUOUSLY);
+     }catch (Exception e) {
+     e.printStackTrace();
+     }
+     */
+
     disp.setMap(map);
     disp.setPlayerLocation (playerStartingX, playerStartingY, playerFinishingX, playerFinishingY);
     
@@ -50,8 +62,14 @@ class Main{
     GamePanel gamePanel;
     int counter=0;
     while (true){
-      time.setTime();  
+      time.setTime();
       if (time.getFramePassed()){
+        if (disp.getContinueSave()){
+          LoadFile load;
+          load= gameSaver.loadGame("concordia_savfile_1");
+          map =charMapConversion(load.returnMap(), map);
+          disp.setMap(map);
+        }
         //Finds memory usage after code execution    
         usedMem = runtime.totalMemory() - runtime.freeMemory();
         disp.setMem(maxMem/mb, usedMem/mb);

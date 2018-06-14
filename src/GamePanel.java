@@ -1468,7 +1468,7 @@ class GamePanel extends JPanel{
     int armorCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
     int driveCap =((5-(int)(Math.sqrt(((int)(Math.random()*9))))));
     //medicineCap =((4-(int)(Math.sqrt(((int)(Math.random()*9))))));
-    int medicineCap =((7-(int)(Math.sqrt(((int)(Math.random()*49))))));
+    int medicineCap =((2-(int)(Math.sqrt(((int)(Math.random()*4))))));
     int foodCap =(2-((int)(Math.random()*2)));
     //Resets the spawn
     spawnX = 0;
