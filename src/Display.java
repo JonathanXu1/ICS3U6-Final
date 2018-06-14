@@ -82,7 +82,7 @@ class Display extends JFrame{
     
     //Creation of the settings panel
     settingsPanel = new SettingsPanel(maxX, maxY);    
-    backButton.setBounds(maxX/2-300, maxY - 200, 220, 50);
+    backButton.setBounds(maxX/2-100, maxY - 200, 220, 50);
     settingsPanel.add(backButton);
     settingsPanel.add(settingsTitle);
     

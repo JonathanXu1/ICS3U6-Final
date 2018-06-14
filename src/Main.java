@@ -108,9 +108,10 @@ class Main{
         }
       } else {
         for (int i = 0; i < audioClips.length; i ++){
-          if (audioClips[i].isRunning() && audioClips[disp.getSettings()[0]-2] != audioClips[i]){ //If clip is playing and isn't selected
+          if ((audioClips[i].isRunning()) && (audioClips[disp.getSettings()[0]-2] != audioClips[i]) && (disp.getSettings()[0] != 1)){ //If clip is playing and isn't selected
             audioClips[i].stop();
           } else if (!audioClips[i].isRunning() && audioClips[disp.getSettings()[0]-2] == audioClips[i]){
+            System.out.println(disp.getSettings()[0]-2);
             audioClips[i].start();
             audioClips[i].loop(Clip.LOOP_CONTINUOUSLY);
           }

@@ -77,7 +77,7 @@ class SettingsPanel extends JPanel{
     
     JPanel musicPanel = new JPanel();
     musicPanel.setLayout(new GridLayout(5, 1));
-    musicPanel.setBounds(xVal/2-600, 300, 600, 300);
+    musicPanel.setBounds(xVal/2-400, 300, 600, 300);
     musicPanel.setOpaque(false);
     musicPanel.add(musicLabel);
     musicPanel.add(noneButton);
@@ -87,7 +87,7 @@ class SettingsPanel extends JPanel{
     
     JPanel difficultyPanel = new JPanel();
     difficultyPanel.setLayout(new GridLayout(4, 1));
-    difficultyPanel.setBounds(xVal/2, 300, 600, 300);
+    difficultyPanel.setBounds(xVal/2 + 200, 300, 600, 300);
     difficultyPanel.setOpaque(false);
     difficultyPanel.add(difficultyLabel);
     difficultyPanel.add(easyButton);
@@ -96,7 +96,7 @@ class SettingsPanel extends JPanel{
     
     settingsTitle.setFont(customTitle);
     settingsTitle.setForeground(Color.WHITE);
-    settingsTitle.setBounds(xVal/2-400, -100, 800, 300);
+    settingsTitle.setBounds(xVal/2-250, 0, 800, 300);
       
     this.add(settingsTitle);
     settingsTitle.setVisible(true);
